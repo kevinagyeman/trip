@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { auth } from "@/server/auth";
 import { Button } from "@/components/ui/button";
+import { SignOutButton } from "@/app/_components/sign-out-button";
 
 export async function Navigation() {
 	const session = await auth();
@@ -32,11 +33,7 @@ export async function Navigation() {
 						<span className="text-sm text-muted-foreground">
 							{session.user.name || session.user.email}
 						</span>
-						<form action="/api/auth/signout" method="POST">
-							<Button type="submit" variant="outline" size="sm">
-								Sign Out
-							</Button>
-						</form>
+						<SignOutButton />
 					</div>
 				</div>
 			</div>
