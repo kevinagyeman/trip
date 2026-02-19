@@ -131,3 +131,25 @@ export const protectedProcedure = t.procedure
 			},
 		});
 	});
+
+/**
+ * Admin-only procedure
+ *
+ * Requires user to be logged in AND have ADMIN role.
+ * Use this for operations that should only be accessible to administrators.
+ *
+ * @see https://trpc.io/docs/procedures
+ */
+export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+	if (ctx.session.user.role !== "ADMIN") {
+		throw new TRPCError({
+			code: "FORBIDDEN",
+			message: "Admin access required"
+		});
+	}
+	return next({
+		ctx: {
+			session: ctx.session,
+		},
+	});
+});

@@ -15,6 +15,28 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+// Enums for the trip management system
+enum UserRole {
+    USER
+    ADMIN
+}
+
+enum TripRequestStatus {
+    PENDING
+    QUOTED
+    ACCEPTED
+    REJECTED
+    COMPLETED
+    CANCELLED
+}
+
+enum QuotationStatus {
+    DRAFT
+    SENT
+    ACCEPTED
+    REJECTED
+}
+
 model Post {
     id        Int      @id @default(autoincrement())
     name      String
@@ -56,14 +78,17 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?        @unique
     emailVerified DateTime?
     image         String?
+    role          UserRole       @default(USER)
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    tripRequests  TripRequest[]
+    quotations    Quotation[]
 }
 
 model VerificationToken {
@@ -72,4 +97,49 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// Trip management models
+model TripRequest {
+    id             String            @id @default(cuid())
+    destination    String
+    startDate      DateTime
+    endDate        DateTime
+    passengerCount Int
+    description    String?           @db.Text
+    status         TripRequestStatus @default(PENDING)
+    createdAt      DateTime          @default(now())
+    updatedAt      DateTime          @updatedAt
+
+    userId     String
+    user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    quotations Quotation[]
+
+    @@index([userId])
+    @@index([status])
+    @@index([createdAt])
+}
+
+model Quotation {
+    id            String          @id @default(cuid())
+    price         Decimal         @db.Decimal(10, 2)
+    currency      String          @default("USD")
+    description   String?         @db.Text
+    validUntil    DateTime?
+    status        QuotationStatus @default(DRAFT)
+    internalNotes String?         @db.Text
+    sentAt        DateTime?
+    respondedAt   DateTime?
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+
+    tripRequestId String
+    tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)
+
+    createdById String
+    createdBy   User   @relation(fields: [createdById], references: [id])
+
+    @@index([tripRequestId])
+    @@index([status])
+    @@index([createdAt])
 }

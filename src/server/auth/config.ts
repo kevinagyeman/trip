@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import type { UserRole } from "../../../generated/prisma";
 
 import { db } from "@/server/db";
 
@@ -14,15 +15,13 @@ declare module "next-auth" {
 	interface Session extends DefaultSession {
 		user: {
 			id: string;
-			// ...other properties
-			// role: UserRole;
+			role: UserRole;
 		} & DefaultSession["user"];
 	}
 
-	// interface User {
-	//   // ...other properties
-	//   // role: UserRole;
-	// }
+	interface User {
+		role: UserRole;
+	}
 }
 
 /**
@@ -43,6 +42,7 @@ export const authConfig = {
 		 * @see https://next-auth.js.org/providers/github
 		 */
 	],
+	// @ts-expect-error - PrismaAdapter type mismatch with NextAuth beta version
 	adapter: PrismaAdapter(db),
 	callbacks: {
 		session: ({ session, user }) => ({
@@ -50,6 +50,7 @@ export const authConfig = {
 			user: {
 				...session.user,
 				id: user.id,
+				role: user.role,
 			},
 		}),
 	},
