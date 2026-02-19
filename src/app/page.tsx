@@ -3,6 +3,7 @@ import Link from "next/link";
 import { LatestPost } from "@/app/_components/post";
 import { auth } from "@/server/auth";
 import { api, HydrateClient } from "@/trpc/server";
+import { Button } from '@/components/ui/button';
 
 export default async function Home() {
 	const hello = await api.post.hello({ text: "from tRPC" });
@@ -31,6 +32,7 @@ export default async function Home() {
 								database and authentication.
 							</div>
 						</Link>
+						<Button>ddd</Button>
 						<Link
 							className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
 							href="https://create.t3.gg/en/introduction"
