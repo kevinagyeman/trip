@@ -1,0 +1,329 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
+
+interface ConfirmTripFormProps {
+	requestId: string;
+}
+
+export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
+	const router = useRouter();
+	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
+		id: requestId,
+	});
+
+	// Arrival flight details
+	const [arrivalFlightDate, setArrivalFlightDate] = useState<Date | undefined>(
+		request?.arrivalFlightDate
+			? new Date(request.arrivalFlightDate)
+			: undefined,
+	);
+	const [arrivalFlightTime, setArrivalFlightTime] = useState(
+		request?.arrivalFlightTime ?? "",
+	);
+	const [arrivalFlightNumber, setArrivalFlightNumber] = useState(
+		request?.arrivalFlightNumber ?? "",
+	);
+
+	// Departure flight details
+	const [departureFlightDate, setDepartureFlightDate] = useState<
+		Date | undefined
+	>(
+		request?.departureFlightDate
+			? new Date(request.departureFlightDate)
+			: undefined,
+	);
+	const [departureFlightTime, setDepartureFlightTime] = useState(
+		request?.departureFlightTime ?? "",
+	);
+	const [departureFlightNumber, setDepartureFlightNumber] = useState(
+		request?.departureFlightNumber ?? "",
+	);
+
+	const confirmTrip = api.tripRequest.confirm.useMutation({
+		onSuccess: () => {
+			router.push(`/dashboard/requests/${requestId}`);
+		},
+	});
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+
+		confirmTrip.mutate({
+			id: requestId,
+			arrivalFlightDate: arrivalFlightDate,
+			arrivalFlightTime: arrivalFlightTime || undefined,
+			arrivalFlightNumber: arrivalFlightNumber || undefined,
+			departureFlightDate: departureFlightDate,
+			departureFlightTime: departureFlightTime || undefined,
+			departureFlightNumber: departureFlightNumber || undefined,
+		});
+	};
+
+	if (isLoading) return <div>Loading...</div>;
+	if (!request) return <div>Not found</div>;
+
+	const serviceTypeLabel =
+		SERVICE_TYPES.find((t) => t.value === request.serviceType)?.label ??
+		request.serviceType;
+	const showArrivalFields =
+		request.serviceType === "both" || request.serviceType === "arrival";
+	const showDepartureFields =
+		request.serviceType === "both" || request.serviceType === "departure";
+
+	const getAirportLabel = (code: string | null) => {
+		if (!code) return "";
+		return AIRPORTS.find((a) => a.value === code)?.label ?? code;
+	};
+
+	return (
+		<div className="space-y-6">
+			<Button variant="outline" onClick={() => router.back()}>
+				Back
+			</Button>
+
+			<div className="rounded-lg bg-blue-50 p-4">
+				<h2 className="mb-2 text-lg font-semibold">
+					Trip Confirmation - Step 2
+				</h2>
+				<p className="text-sm text-muted-foreground">
+					Please provide your complete flight details to confirm your trip
+					booking.
+				</p>
+			</div>
+
+			{/* Read-only trip information */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Trip Information (Read-Only)</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-4">
+					<div className="grid grid-cols-2 gap-4">
+						<div>
+							<p className="text-sm text-muted-foreground">Service Type</p>
+							<p className="font-medium">{serviceTypeLabel}</p>
+						</div>
+						<div>
+							<p className="text-sm text-muted-foreground">Language</p>
+							<p className="font-medium">{request.language}</p>
+						</div>
+						<div>
+							<p className="text-sm text-muted-foreground">Name</p>
+							<p className="font-medium">
+								{request.firstName} {request.lastName}
+							</p>
+						</div>
+						<div>
+							<p className="text-sm text-muted-foreground">Phone</p>
+							<p className="font-medium">{request.phone}</p>
+						</div>
+						<div>
+							<p className="text-sm text-muted-foreground">Adults</p>
+							<p className="font-medium">{request.numberOfAdults}</p>
+						</div>
+						{request.areThereChildren && (
+							<div>
+								<p className="text-sm text-muted-foreground">Children</p>
+								<p className="font-medium">
+									{request.numberOfChildren} ({request.ageOfChildren})
+								</p>
+							</div>
+						)}
+					</div>
+
+					{showArrivalFields && (
+						<div className="rounded-lg border p-3">
+							<p className="mb-2 font-semibold">Arrival</p>
+							<div className="grid gap-2">
+								{request.arrivalAirport && (
+									<p className="text-sm">
+										<span className="text-muted-foreground">Airport: </span>
+										{getAirportLabel(request.arrivalAirport)}
+									</p>
+								)}
+								{request.destinationAddress && (
+									<p className="text-sm">
+										<span className="text-muted-foreground">
+											Destination:{" "}
+										</span>
+										{request.destinationAddress}
+									</p>
+								)}
+							</div>
+						</div>
+					)}
+
+					{showDepartureFields && (
+						<div className="rounded-lg border p-3">
+							<p className="mb-2 font-semibold">Departure</p>
+							<div className="grid gap-2">
+								{request.pickupAddress && (
+									<p className="text-sm">
+										<span className="text-muted-foreground">Pickup: </span>
+										{request.pickupAddress}
+									</p>
+								)}
+								{request.departureAirport && (
+									<p className="text-sm">
+										<span className="text-muted-foreground">Airport: </span>
+										{getAirportLabel(request.departureAirport)}
+									</p>
+								)}
+							</div>
+						</div>
+					)}
+				</CardContent>
+			</Card>
+
+			{/* Flight details form */}
+			<form onSubmit={handleSubmit} className="space-y-6">
+				{showArrivalFields && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Arrival Flight Details *</CardTitle>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div>
+								<Label>Flight Date *</Label>
+								<Popover>
+									<PopoverTrigger asChild>
+										<Button
+											variant="outline"
+											className={cn(
+												"w-full justify-start text-left font-normal",
+												!arrivalFlightDate && "text-muted-foreground",
+											)}
+										>
+											<CalendarIcon className="mr-2 h-4 w-4" />
+											{arrivalFlightDate
+												? format(arrivalFlightDate, "PPP")
+												: "Pick arrival date"}
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent className="w-auto p-0">
+										<Calendar
+											mode="single"
+											selected={arrivalFlightDate}
+											onSelect={setArrivalFlightDate}
+										/>
+									</PopoverContent>
+								</Popover>
+							</div>
+
+							<div>
+								<Label htmlFor="arrivalFlightTime">Flight Time *</Label>
+								<Input
+									id="arrivalFlightTime"
+									value={arrivalFlightTime}
+									onChange={(e) => setArrivalFlightTime(e.target.value)}
+									placeholder="e.g., 14:30"
+									required
+								/>
+							</div>
+
+							<div>
+								<Label htmlFor="arrivalFlightNumber">Flight Number *</Label>
+								<Input
+									id="arrivalFlightNumber"
+									value={arrivalFlightNumber}
+									onChange={(e) => setArrivalFlightNumber(e.target.value)}
+									placeholder="e.g., FR1234"
+									required
+								/>
+							</div>
+						</CardContent>
+					</Card>
+				)}
+
+				{showDepartureFields && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Departure Flight Details *</CardTitle>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div>
+								<Label>Flight Date *</Label>
+								<Popover>
+									<PopoverTrigger asChild>
+										<Button
+											variant="outline"
+											className={cn(
+												"w-full justify-start text-left font-normal",
+												!departureFlightDate && "text-muted-foreground",
+											)}
+										>
+											<CalendarIcon className="mr-2 h-4 w-4" />
+											{departureFlightDate
+												? format(departureFlightDate, "PPP")
+												: "Pick departure date"}
+										</Button>
+									</PopoverTrigger>
+									<PopoverContent className="w-auto p-0">
+										<Calendar
+											mode="single"
+											selected={departureFlightDate}
+											onSelect={setDepartureFlightDate}
+										/>
+									</PopoverContent>
+								</Popover>
+							</div>
+
+							<div>
+								<Label htmlFor="departureFlightTime">Flight Time *</Label>
+								<Input
+									id="departureFlightTime"
+									value={departureFlightTime}
+									onChange={(e) => setDepartureFlightTime(e.target.value)}
+									placeholder="e.g., 18:45"
+									required
+								/>
+							</div>
+
+							<div>
+								<Label htmlFor="departureFlightNumber">Flight Number *</Label>
+								<Input
+									id="departureFlightNumber"
+									value={departureFlightNumber}
+									onChange={(e) => setDepartureFlightNumber(e.target.value)}
+									placeholder="e.g., FR5678"
+									required
+								/>
+							</div>
+						</CardContent>
+					</Card>
+				)}
+
+				<Button
+					type="submit"
+					disabled={confirmTrip.isPending}
+					className="w-full"
+					size="lg"
+				>
+					{confirmTrip.isPending ? "Confirming..." : "Confirm Trip Booking"}
+				</Button>
+
+				{confirmTrip.error && (
+					<p className="text-sm text-destructive">
+						{confirmTrip.error.message}
+					</p>
+				)}
+			</form>
+		</div>
+	);
+}

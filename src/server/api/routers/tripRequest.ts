@@ -12,20 +12,51 @@ export const tripRequestRouter = createTRPCRouter({
 	create: protectedProcedure
 		.input(
 			z.object({
-				destination: z.string().min(1, "Destination is required"),
-				startDate: z.date(),
-				endDate: z.date(),
-				passengerCount: z.number().int().min(1).max(100),
-				description: z.string().optional(),
+				serviceType: z.enum(["both", "arrival", "departure"]),
+				// Arrival info
+				arrivalAirport: z.string().optional(),
+				destinationAddress: z.string().optional(),
+				arrivalFlightDate: z.date().optional(),
+				arrivalFlightTime: z.string().optional(),
+				arrivalFlightNumber: z.string().optional(),
+				// Departure info
+				pickupAddress: z.string().optional(),
+				departureAirport: z.string().optional(),
+				departureFlightDate: z.date().optional(),
+				departureFlightTime: z.string().optional(),
+				departureFlightNumber: z.string().optional(),
+				// Travel info
+				language: z.enum(["English", "Italian"]),
+				firstName: z.string().min(1),
+				lastName: z.string().min(1),
+				phone: z.string().min(1),
+				numberOfAdults: z.number().int().min(1),
+				areThereChildren: z.boolean(),
+				numberOfChildren: z.number().int().optional(),
+				ageOfChildren: z.string().optional(),
+				numberOfChildSeats: z.number().int().optional(),
+				additionalInfo: z.string().optional(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			// Validate dates
-			if (input.endDate <= input.startDate) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "End date must be after start date",
-				});
+			// Validate arrival fields if service includes arrival
+			if (input.serviceType === "both" || input.serviceType === "arrival") {
+				if (!input.arrivalAirport || !input.destinationAddress) {
+					throw new TRPCError({
+						code: "BAD_REQUEST",
+						message: "Arrival airport and destination address are required for arrival service",
+					});
+				}
+			}
+
+			// Validate departure fields if service includes departure
+			if (input.serviceType === "both" || input.serviceType === "departure") {
+				if (!input.pickupAddress || !input.departureAirport) {
+					throw new TRPCError({
+						code: "BAD_REQUEST",
+						message: "Pickup address and departure airport are required for departure service",
+					});
+				}
 			}
 
 			return ctx.db.tripRequest.create({
@@ -179,6 +210,45 @@ export const tripRequestRouter = createTRPCRouter({
 			return ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { status: input.status },
+			});
+		}),
+
+	// USER: Confirm trip with flight details after accepting quotation
+	confirm: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				arrivalFlightDate: z.date().optional(),
+				arrivalFlightTime: z.string().optional(),
+				arrivalFlightNumber: z.string().optional(),
+				departureFlightDate: z.date().optional(),
+				departureFlightTime: z.string().optional(),
+				departureFlightNumber: z.string().optional(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { id, ...data } = input;
+
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id },
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			// Verify user owns the trip request
+			if (tripRequest.userId !== ctx.session.user.id) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
+
+			// Update trip request with flight details and mark as confirmed
+			return ctx.db.tripRequest.update({
+				where: { id },
+				data: {
+					...data,
+					isConfirmed: true,
+				},
 			});
 		}),
 });

@@ -7078,21 +7078,42 @@ export namespace Prisma {
   }
 
   export type TripRequestAvgAggregateOutputType = {
-    passengerCount: number | null
+    numberOfAdults: number | null
+    numberOfChildren: number | null
+    numberOfChildSeats: number | null
   }
 
   export type TripRequestSumAggregateOutputType = {
-    passengerCount: number | null
+    numberOfAdults: number | null
+    numberOfChildren: number | null
+    numberOfChildSeats: number | null
   }
 
   export type TripRequestMinAggregateOutputType = {
     id: string | null
-    destination: string | null
-    startDate: Date | null
-    endDate: Date | null
-    passengerCount: number | null
-    description: string | null
     status: $Enums.TripRequestStatus | null
+    serviceType: string | null
+    arrivalAirport: string | null
+    destinationAddress: string | null
+    arrivalFlightDate: Date | null
+    arrivalFlightTime: string | null
+    arrivalFlightNumber: string | null
+    pickupAddress: string | null
+    departureAirport: string | null
+    departureFlightDate: Date | null
+    departureFlightTime: string | null
+    departureFlightNumber: string | null
+    language: string | null
+    firstName: string | null
+    lastName: string | null
+    phone: string | null
+    numberOfAdults: number | null
+    areThereChildren: boolean | null
+    numberOfChildren: number | null
+    ageOfChildren: string | null
+    numberOfChildSeats: number | null
+    additionalInfo: string | null
+    isConfirmed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7100,12 +7121,29 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateOutputType = {
     id: string | null
-    destination: string | null
-    startDate: Date | null
-    endDate: Date | null
-    passengerCount: number | null
-    description: string | null
     status: $Enums.TripRequestStatus | null
+    serviceType: string | null
+    arrivalAirport: string | null
+    destinationAddress: string | null
+    arrivalFlightDate: Date | null
+    arrivalFlightTime: string | null
+    arrivalFlightNumber: string | null
+    pickupAddress: string | null
+    departureAirport: string | null
+    departureFlightDate: Date | null
+    departureFlightTime: string | null
+    departureFlightNumber: string | null
+    language: string | null
+    firstName: string | null
+    lastName: string | null
+    phone: string | null
+    numberOfAdults: number | null
+    areThereChildren: boolean | null
+    numberOfChildren: number | null
+    ageOfChildren: string | null
+    numberOfChildSeats: number | null
+    additionalInfo: string | null
+    isConfirmed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7113,12 +7151,29 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateOutputType = {
     id: number
-    destination: number
-    startDate: number
-    endDate: number
-    passengerCount: number
-    description: number
     status: number
+    serviceType: number
+    arrivalAirport: number
+    destinationAddress: number
+    arrivalFlightDate: number
+    arrivalFlightTime: number
+    arrivalFlightNumber: number
+    pickupAddress: number
+    departureAirport: number
+    departureFlightDate: number
+    departureFlightTime: number
+    departureFlightNumber: number
+    language: number
+    firstName: number
+    lastName: number
+    phone: number
+    numberOfAdults: number
+    areThereChildren: number
+    numberOfChildren: number
+    ageOfChildren: number
+    numberOfChildSeats: number
+    additionalInfo: number
+    isConfirmed: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -7127,21 +7182,42 @@ export namespace Prisma {
 
 
   export type TripRequestAvgAggregateInputType = {
-    passengerCount?: true
+    numberOfAdults?: true
+    numberOfChildren?: true
+    numberOfChildSeats?: true
   }
 
   export type TripRequestSumAggregateInputType = {
-    passengerCount?: true
+    numberOfAdults?: true
+    numberOfChildren?: true
+    numberOfChildSeats?: true
   }
 
   export type TripRequestMinAggregateInputType = {
     id?: true
-    destination?: true
-    startDate?: true
-    endDate?: true
-    passengerCount?: true
-    description?: true
     status?: true
+    serviceType?: true
+    arrivalAirport?: true
+    destinationAddress?: true
+    arrivalFlightDate?: true
+    arrivalFlightTime?: true
+    arrivalFlightNumber?: true
+    pickupAddress?: true
+    departureAirport?: true
+    departureFlightDate?: true
+    departureFlightTime?: true
+    departureFlightNumber?: true
+    language?: true
+    firstName?: true
+    lastName?: true
+    phone?: true
+    numberOfAdults?: true
+    areThereChildren?: true
+    numberOfChildren?: true
+    ageOfChildren?: true
+    numberOfChildSeats?: true
+    additionalInfo?: true
+    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7149,12 +7225,29 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateInputType = {
     id?: true
-    destination?: true
-    startDate?: true
-    endDate?: true
-    passengerCount?: true
-    description?: true
     status?: true
+    serviceType?: true
+    arrivalAirport?: true
+    destinationAddress?: true
+    arrivalFlightDate?: true
+    arrivalFlightTime?: true
+    arrivalFlightNumber?: true
+    pickupAddress?: true
+    departureAirport?: true
+    departureFlightDate?: true
+    departureFlightTime?: true
+    departureFlightNumber?: true
+    language?: true
+    firstName?: true
+    lastName?: true
+    phone?: true
+    numberOfAdults?: true
+    areThereChildren?: true
+    numberOfChildren?: true
+    ageOfChildren?: true
+    numberOfChildSeats?: true
+    additionalInfo?: true
+    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7162,12 +7255,29 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateInputType = {
     id?: true
-    destination?: true
-    startDate?: true
-    endDate?: true
-    passengerCount?: true
-    description?: true
     status?: true
+    serviceType?: true
+    arrivalAirport?: true
+    destinationAddress?: true
+    arrivalFlightDate?: true
+    arrivalFlightTime?: true
+    arrivalFlightNumber?: true
+    pickupAddress?: true
+    departureAirport?: true
+    departureFlightDate?: true
+    departureFlightTime?: true
+    departureFlightNumber?: true
+    language?: true
+    firstName?: true
+    lastName?: true
+    phone?: true
+    numberOfAdults?: true
+    areThereChildren?: true
+    numberOfChildren?: true
+    ageOfChildren?: true
+    numberOfChildSeats?: true
+    additionalInfo?: true
+    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7262,12 +7372,29 @@ export namespace Prisma {
 
   export type TripRequestGroupByOutputType = {
     id: string
-    destination: string
-    startDate: Date
-    endDate: Date
-    passengerCount: number
-    description: string | null
     status: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport: string | null
+    destinationAddress: string | null
+    arrivalFlightDate: Date | null
+    arrivalFlightTime: string | null
+    arrivalFlightNumber: string | null
+    pickupAddress: string | null
+    departureAirport: string | null
+    departureFlightDate: Date | null
+    departureFlightTime: string | null
+    departureFlightNumber: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren: boolean
+    numberOfChildren: number | null
+    ageOfChildren: string | null
+    numberOfChildSeats: number | null
+    additionalInfo: string | null
+    isConfirmed: boolean
     createdAt: Date
     updatedAt: Date
     userId: string
@@ -7294,12 +7421,29 @@ export namespace Prisma {
 
   export type TripRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    destination?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    passengerCount?: boolean
-    description?: boolean
     status?: boolean
+    serviceType?: boolean
+    arrivalAirport?: boolean
+    destinationAddress?: boolean
+    arrivalFlightDate?: boolean
+    arrivalFlightTime?: boolean
+    arrivalFlightNumber?: boolean
+    pickupAddress?: boolean
+    departureAirport?: boolean
+    departureFlightDate?: boolean
+    departureFlightTime?: boolean
+    departureFlightNumber?: boolean
+    language?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    phone?: boolean
+    numberOfAdults?: boolean
+    areThereChildren?: boolean
+    numberOfChildren?: boolean
+    ageOfChildren?: boolean
+    numberOfChildSeats?: boolean
+    additionalInfo?: boolean
+    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7310,12 +7454,29 @@ export namespace Prisma {
 
   export type TripRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    destination?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    passengerCount?: boolean
-    description?: boolean
     status?: boolean
+    serviceType?: boolean
+    arrivalAirport?: boolean
+    destinationAddress?: boolean
+    arrivalFlightDate?: boolean
+    arrivalFlightTime?: boolean
+    arrivalFlightNumber?: boolean
+    pickupAddress?: boolean
+    departureAirport?: boolean
+    departureFlightDate?: boolean
+    departureFlightTime?: boolean
+    departureFlightNumber?: boolean
+    language?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    phone?: boolean
+    numberOfAdults?: boolean
+    areThereChildren?: boolean
+    numberOfChildren?: boolean
+    ageOfChildren?: boolean
+    numberOfChildSeats?: boolean
+    additionalInfo?: boolean
+    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7324,12 +7485,29 @@ export namespace Prisma {
 
   export type TripRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    destination?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    passengerCount?: boolean
-    description?: boolean
     status?: boolean
+    serviceType?: boolean
+    arrivalAirport?: boolean
+    destinationAddress?: boolean
+    arrivalFlightDate?: boolean
+    arrivalFlightTime?: boolean
+    arrivalFlightNumber?: boolean
+    pickupAddress?: boolean
+    departureAirport?: boolean
+    departureFlightDate?: boolean
+    departureFlightTime?: boolean
+    departureFlightNumber?: boolean
+    language?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    phone?: boolean
+    numberOfAdults?: boolean
+    areThereChildren?: boolean
+    numberOfChildren?: boolean
+    ageOfChildren?: boolean
+    numberOfChildSeats?: boolean
+    additionalInfo?: boolean
+    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -7338,18 +7516,35 @@ export namespace Prisma {
 
   export type TripRequestSelectScalar = {
     id?: boolean
-    destination?: boolean
-    startDate?: boolean
-    endDate?: boolean
-    passengerCount?: boolean
-    description?: boolean
     status?: boolean
+    serviceType?: boolean
+    arrivalAirport?: boolean
+    destinationAddress?: boolean
+    arrivalFlightDate?: boolean
+    arrivalFlightTime?: boolean
+    arrivalFlightNumber?: boolean
+    pickupAddress?: boolean
+    departureAirport?: boolean
+    departureFlightDate?: boolean
+    departureFlightTime?: boolean
+    departureFlightNumber?: boolean
+    language?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    phone?: boolean
+    numberOfAdults?: boolean
+    areThereChildren?: boolean
+    numberOfChildren?: boolean
+    ageOfChildren?: boolean
+    numberOfChildSeats?: boolean
+    additionalInfo?: boolean
+    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "destination" | "startDate" | "endDate" | "passengerCount" | "description" | "status" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "serviceType" | "arrivalAirport" | "destinationAddress" | "arrivalFlightDate" | "arrivalFlightTime" | "arrivalFlightNumber" | "pickupAddress" | "departureAirport" | "departureFlightDate" | "departureFlightTime" | "departureFlightNumber" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "isConfirmed" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
@@ -7370,12 +7565,29 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      destination: string
-      startDate: Date
-      endDate: Date
-      passengerCount: number
-      description: string | null
       status: $Enums.TripRequestStatus
+      serviceType: string
+      arrivalAirport: string | null
+      destinationAddress: string | null
+      arrivalFlightDate: Date | null
+      arrivalFlightTime: string | null
+      arrivalFlightNumber: string | null
+      pickupAddress: string | null
+      departureAirport: string | null
+      departureFlightDate: Date | null
+      departureFlightTime: string | null
+      departureFlightNumber: string | null
+      language: string
+      firstName: string
+      lastName: string
+      phone: string
+      numberOfAdults: number
+      areThereChildren: boolean
+      numberOfChildren: number | null
+      ageOfChildren: string | null
+      numberOfChildSeats: number | null
+      additionalInfo: string | null
+      isConfirmed: boolean
       createdAt: Date
       updatedAt: Date
       userId: string
@@ -7805,12 +8017,29 @@ export namespace Prisma {
    */
   interface TripRequestFieldRefs {
     readonly id: FieldRef<"TripRequest", 'String'>
-    readonly destination: FieldRef<"TripRequest", 'String'>
-    readonly startDate: FieldRef<"TripRequest", 'DateTime'>
-    readonly endDate: FieldRef<"TripRequest", 'DateTime'>
-    readonly passengerCount: FieldRef<"TripRequest", 'Int'>
-    readonly description: FieldRef<"TripRequest", 'String'>
     readonly status: FieldRef<"TripRequest", 'TripRequestStatus'>
+    readonly serviceType: FieldRef<"TripRequest", 'String'>
+    readonly arrivalAirport: FieldRef<"TripRequest", 'String'>
+    readonly destinationAddress: FieldRef<"TripRequest", 'String'>
+    readonly arrivalFlightDate: FieldRef<"TripRequest", 'DateTime'>
+    readonly arrivalFlightTime: FieldRef<"TripRequest", 'String'>
+    readonly arrivalFlightNumber: FieldRef<"TripRequest", 'String'>
+    readonly pickupAddress: FieldRef<"TripRequest", 'String'>
+    readonly departureAirport: FieldRef<"TripRequest", 'String'>
+    readonly departureFlightDate: FieldRef<"TripRequest", 'DateTime'>
+    readonly departureFlightTime: FieldRef<"TripRequest", 'String'>
+    readonly departureFlightNumber: FieldRef<"TripRequest", 'String'>
+    readonly language: FieldRef<"TripRequest", 'String'>
+    readonly firstName: FieldRef<"TripRequest", 'String'>
+    readonly lastName: FieldRef<"TripRequest", 'String'>
+    readonly phone: FieldRef<"TripRequest", 'String'>
+    readonly numberOfAdults: FieldRef<"TripRequest", 'Int'>
+    readonly areThereChildren: FieldRef<"TripRequest", 'Boolean'>
+    readonly numberOfChildren: FieldRef<"TripRequest", 'Int'>
+    readonly ageOfChildren: FieldRef<"TripRequest", 'String'>
+    readonly numberOfChildSeats: FieldRef<"TripRequest", 'Int'>
+    readonly additionalInfo: FieldRef<"TripRequest", 'String'>
+    readonly isConfirmed: FieldRef<"TripRequest", 'Boolean'>
     readonly createdAt: FieldRef<"TripRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly userId: FieldRef<"TripRequest", 'String'>
@@ -8276,8 +8505,9 @@ export namespace Prisma {
     id: string | null
     price: Decimal | null
     currency: string | null
-    description: string | null
-    validUntil: Date | null
+    isPriceEachWay: boolean | null
+    areCarSeatsIncluded: boolean | null
+    quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     internalNotes: string | null
     sentAt: Date | null
@@ -8292,8 +8522,9 @@ export namespace Prisma {
     id: string | null
     price: Decimal | null
     currency: string | null
-    description: string | null
-    validUntil: Date | null
+    isPriceEachWay: boolean | null
+    areCarSeatsIncluded: boolean | null
+    quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     internalNotes: string | null
     sentAt: Date | null
@@ -8308,8 +8539,9 @@ export namespace Prisma {
     id: number
     price: number
     currency: number
-    description: number
-    validUntil: number
+    isPriceEachWay: number
+    areCarSeatsIncluded: number
+    quotationAdditionalInfo: number
     status: number
     internalNotes: number
     sentAt: number
@@ -8334,8 +8566,9 @@ export namespace Prisma {
     id?: true
     price?: true
     currency?: true
-    description?: true
-    validUntil?: true
+    isPriceEachWay?: true
+    areCarSeatsIncluded?: true
+    quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
     sentAt?: true
@@ -8350,8 +8583,9 @@ export namespace Prisma {
     id?: true
     price?: true
     currency?: true
-    description?: true
-    validUntil?: true
+    isPriceEachWay?: true
+    areCarSeatsIncluded?: true
+    quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
     sentAt?: true
@@ -8366,8 +8600,9 @@ export namespace Prisma {
     id?: true
     price?: true
     currency?: true
-    description?: true
-    validUntil?: true
+    isPriceEachWay?: true
+    areCarSeatsIncluded?: true
+    quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
     sentAt?: true
@@ -8469,8 +8704,9 @@ export namespace Prisma {
     id: string
     price: Decimal
     currency: string
-    description: string | null
-    validUntil: Date | null
+    isPriceEachWay: boolean
+    areCarSeatsIncluded: boolean
+    quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus
     internalNotes: string | null
     sentAt: Date | null
@@ -8504,8 +8740,9 @@ export namespace Prisma {
     id?: boolean
     price?: boolean
     currency?: boolean
-    description?: boolean
-    validUntil?: boolean
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
     sentAt?: boolean
@@ -8522,8 +8759,9 @@ export namespace Prisma {
     id?: boolean
     price?: boolean
     currency?: boolean
-    description?: boolean
-    validUntil?: boolean
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
     sentAt?: boolean
@@ -8540,8 +8778,9 @@ export namespace Prisma {
     id?: boolean
     price?: boolean
     currency?: boolean
-    description?: boolean
-    validUntil?: boolean
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
     sentAt?: boolean
@@ -8558,8 +8797,9 @@ export namespace Prisma {
     id?: boolean
     price?: boolean
     currency?: boolean
-    description?: boolean
-    validUntil?: boolean
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
     sentAt?: boolean
@@ -8570,7 +8810,7 @@ export namespace Prisma {
     createdById?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "description" | "validUntil" | "status" | "internalNotes" | "sentAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "internalNotes" | "sentAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -8594,8 +8834,9 @@ export namespace Prisma {
       id: string
       price: Prisma.Decimal
       currency: string
-      description: string | null
-      validUntil: Date | null
+      isPriceEachWay: boolean
+      areCarSeatsIncluded: boolean
+      quotationAdditionalInfo: string | null
       status: $Enums.QuotationStatus
       internalNotes: string | null
       sentAt: Date | null
@@ -9032,8 +9273,9 @@ export namespace Prisma {
     readonly id: FieldRef<"Quotation", 'String'>
     readonly price: FieldRef<"Quotation", 'Decimal'>
     readonly currency: FieldRef<"Quotation", 'String'>
-    readonly description: FieldRef<"Quotation", 'String'>
-    readonly validUntil: FieldRef<"Quotation", 'DateTime'>
+    readonly isPriceEachWay: FieldRef<"Quotation", 'Boolean'>
+    readonly areCarSeatsIncluded: FieldRef<"Quotation", 'Boolean'>
+    readonly quotationAdditionalInfo: FieldRef<"Quotation", 'String'>
     readonly status: FieldRef<"Quotation", 'QuotationStatus'>
     readonly internalNotes: FieldRef<"Quotation", 'String'>
     readonly sentAt: FieldRef<"Quotation", 'DateTime'>
@@ -9534,12 +9776,29 @@ export namespace Prisma {
 
   export const TripRequestScalarFieldEnum: {
     id: 'id',
-    destination: 'destination',
-    startDate: 'startDate',
-    endDate: 'endDate',
-    passengerCount: 'passengerCount',
-    description: 'description',
     status: 'status',
+    serviceType: 'serviceType',
+    arrivalAirport: 'arrivalAirport',
+    destinationAddress: 'destinationAddress',
+    arrivalFlightDate: 'arrivalFlightDate',
+    arrivalFlightTime: 'arrivalFlightTime',
+    arrivalFlightNumber: 'arrivalFlightNumber',
+    pickupAddress: 'pickupAddress',
+    departureAirport: 'departureAirport',
+    departureFlightDate: 'departureFlightDate',
+    departureFlightTime: 'departureFlightTime',
+    departureFlightNumber: 'departureFlightNumber',
+    language: 'language',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    phone: 'phone',
+    numberOfAdults: 'numberOfAdults',
+    areThereChildren: 'areThereChildren',
+    numberOfChildren: 'numberOfChildren',
+    ageOfChildren: 'ageOfChildren',
+    numberOfChildSeats: 'numberOfChildSeats',
+    additionalInfo: 'additionalInfo',
+    isConfirmed: 'isConfirmed',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId'
@@ -9552,8 +9811,9 @@ export namespace Prisma {
     id: 'id',
     price: 'price',
     currency: 'currency',
-    description: 'description',
-    validUntil: 'validUntil',
+    isPriceEachWay: 'isPriceEachWay',
+    areCarSeatsIncluded: 'areCarSeatsIncluded',
+    quotationAdditionalInfo: 'quotationAdditionalInfo',
     status: 'status',
     internalNotes: 'internalNotes',
     sentAt: 'sentAt',
@@ -9663,6 +9923,13 @@ export namespace Prisma {
    * Reference to a field of type 'TripRequestStatus[]'
    */
   export type ListEnumTripRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TripRequestStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -10041,12 +10308,29 @@ export namespace Prisma {
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
     id?: StringFilter<"TripRequest"> | string
-    destination?: StringFilter<"TripRequest"> | string
-    startDate?: DateTimeFilter<"TripRequest"> | Date | string
-    endDate?: DateTimeFilter<"TripRequest"> | Date | string
-    passengerCount?: IntFilter<"TripRequest"> | number
-    description?: StringNullableFilter<"TripRequest"> | string | null
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
+    serviceType?: StringFilter<"TripRequest"> | string
+    arrivalAirport?: StringNullableFilter<"TripRequest"> | string | null
+    destinationAddress?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    arrivalFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    pickupAddress?: StringNullableFilter<"TripRequest"> | string | null
+    departureAirport?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    language?: StringFilter<"TripRequest"> | string
+    firstName?: StringFilter<"TripRequest"> | string
+    lastName?: StringFilter<"TripRequest"> | string
+    phone?: StringFilter<"TripRequest"> | string
+    numberOfAdults?: IntFilter<"TripRequest"> | number
+    areThereChildren?: BoolFilter<"TripRequest"> | boolean
+    numberOfChildren?: IntNullableFilter<"TripRequest"> | number | null
+    ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
+    numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
+    additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringFilter<"TripRequest"> | string
@@ -10056,12 +10340,29 @@ export namespace Prisma {
 
   export type TripRequestOrderByWithRelationInput = {
     id?: SortOrder
-    destination?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    passengerCount?: SortOrder
-    description?: SortOrderInput | SortOrder
     status?: SortOrder
+    serviceType?: SortOrder
+    arrivalAirport?: SortOrderInput | SortOrder
+    destinationAddress?: SortOrderInput | SortOrder
+    arrivalFlightDate?: SortOrderInput | SortOrder
+    arrivalFlightTime?: SortOrderInput | SortOrder
+    arrivalFlightNumber?: SortOrderInput | SortOrder
+    pickupAddress?: SortOrderInput | SortOrder
+    departureAirport?: SortOrderInput | SortOrder
+    departureFlightDate?: SortOrderInput | SortOrder
+    departureFlightTime?: SortOrderInput | SortOrder
+    departureFlightNumber?: SortOrderInput | SortOrder
+    language?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    phone?: SortOrder
+    numberOfAdults?: SortOrder
+    areThereChildren?: SortOrder
+    numberOfChildren?: SortOrderInput | SortOrder
+    ageOfChildren?: SortOrderInput | SortOrder
+    numberOfChildSeats?: SortOrderInput | SortOrder
+    additionalInfo?: SortOrderInput | SortOrder
+    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -10074,12 +10375,29 @@ export namespace Prisma {
     AND?: TripRequestWhereInput | TripRequestWhereInput[]
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
-    destination?: StringFilter<"TripRequest"> | string
-    startDate?: DateTimeFilter<"TripRequest"> | Date | string
-    endDate?: DateTimeFilter<"TripRequest"> | Date | string
-    passengerCount?: IntFilter<"TripRequest"> | number
-    description?: StringNullableFilter<"TripRequest"> | string | null
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
+    serviceType?: StringFilter<"TripRequest"> | string
+    arrivalAirport?: StringNullableFilter<"TripRequest"> | string | null
+    destinationAddress?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    arrivalFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    pickupAddress?: StringNullableFilter<"TripRequest"> | string | null
+    departureAirport?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    language?: StringFilter<"TripRequest"> | string
+    firstName?: StringFilter<"TripRequest"> | string
+    lastName?: StringFilter<"TripRequest"> | string
+    phone?: StringFilter<"TripRequest"> | string
+    numberOfAdults?: IntFilter<"TripRequest"> | number
+    areThereChildren?: BoolFilter<"TripRequest"> | boolean
+    numberOfChildren?: IntNullableFilter<"TripRequest"> | number | null
+    ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
+    numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
+    additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringFilter<"TripRequest"> | string
@@ -10089,12 +10407,29 @@ export namespace Prisma {
 
   export type TripRequestOrderByWithAggregationInput = {
     id?: SortOrder
-    destination?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    passengerCount?: SortOrder
-    description?: SortOrderInput | SortOrder
     status?: SortOrder
+    serviceType?: SortOrder
+    arrivalAirport?: SortOrderInput | SortOrder
+    destinationAddress?: SortOrderInput | SortOrder
+    arrivalFlightDate?: SortOrderInput | SortOrder
+    arrivalFlightTime?: SortOrderInput | SortOrder
+    arrivalFlightNumber?: SortOrderInput | SortOrder
+    pickupAddress?: SortOrderInput | SortOrder
+    departureAirport?: SortOrderInput | SortOrder
+    departureFlightDate?: SortOrderInput | SortOrder
+    departureFlightTime?: SortOrderInput | SortOrder
+    departureFlightNumber?: SortOrderInput | SortOrder
+    language?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    phone?: SortOrder
+    numberOfAdults?: SortOrder
+    areThereChildren?: SortOrder
+    numberOfChildren?: SortOrderInput | SortOrder
+    ageOfChildren?: SortOrderInput | SortOrder
+    numberOfChildSeats?: SortOrderInput | SortOrder
+    additionalInfo?: SortOrderInput | SortOrder
+    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -10110,12 +10445,29 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereWithAggregatesInput[]
     NOT?: TripRequestScalarWhereWithAggregatesInput | TripRequestScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TripRequest"> | string
-    destination?: StringWithAggregatesFilter<"TripRequest"> | string
-    startDate?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
-    endDate?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
-    passengerCount?: IntWithAggregatesFilter<"TripRequest"> | number
-    description?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     status?: EnumTripRequestStatusWithAggregatesFilter<"TripRequest"> | $Enums.TripRequestStatus
+    serviceType?: StringWithAggregatesFilter<"TripRequest"> | string
+    arrivalAirport?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    destinationAddress?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    arrivalFlightDate?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
+    arrivalFlightTime?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    arrivalFlightNumber?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    pickupAddress?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    departureAirport?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    departureFlightDate?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
+    departureFlightTime?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    departureFlightNumber?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    language?: StringWithAggregatesFilter<"TripRequest"> | string
+    firstName?: StringWithAggregatesFilter<"TripRequest"> | string
+    lastName?: StringWithAggregatesFilter<"TripRequest"> | string
+    phone?: StringWithAggregatesFilter<"TripRequest"> | string
+    numberOfAdults?: IntWithAggregatesFilter<"TripRequest"> | number
+    areThereChildren?: BoolWithAggregatesFilter<"TripRequest"> | boolean
+    numberOfChildren?: IntNullableWithAggregatesFilter<"TripRequest"> | number | null
+    ageOfChildren?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    numberOfChildSeats?: IntNullableWithAggregatesFilter<"TripRequest"> | number | null
+    additionalInfo?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    isConfirmed?: BoolWithAggregatesFilter<"TripRequest"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringWithAggregatesFilter<"TripRequest"> | string
@@ -10128,8 +10480,9 @@ export namespace Prisma {
     id?: StringFilter<"Quotation"> | string
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
-    description?: StringNullableFilter<"Quotation"> | string | null
-    validUntil?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    isPriceEachWay?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
     sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -10146,8 +10499,9 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-    description?: SortOrderInput | SortOrder
-    validUntil?: SortOrderInput | SortOrder
+    isPriceEachWay?: SortOrder
+    areCarSeatsIncluded?: SortOrder
+    quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     internalNotes?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -10167,8 +10521,9 @@ export namespace Prisma {
     NOT?: QuotationWhereInput | QuotationWhereInput[]
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
-    description?: StringNullableFilter<"Quotation"> | string | null
-    validUntil?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    isPriceEachWay?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
     sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -10185,8 +10540,9 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-    description?: SortOrderInput | SortOrder
-    validUntil?: SortOrderInput | SortOrder
+    isPriceEachWay?: SortOrder
+    areCarSeatsIncluded?: SortOrder
+    quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     internalNotes?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -10209,8 +10565,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Quotation"> | string
     price?: DecimalWithAggregatesFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringWithAggregatesFilter<"Quotation"> | string
-    description?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
-    validUntil?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
+    isPriceEachWay?: BoolWithAggregatesFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolWithAggregatesFilter<"Quotation"> | boolean
+    quotationAdditionalInfo?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     sentAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
@@ -10566,12 +10923,29 @@ export namespace Prisma {
 
   export type TripRequestCreateInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTripRequestsInput
@@ -10580,12 +10954,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -10594,12 +10985,29 @@ export namespace Prisma {
 
   export type TripRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTripRequestsNestedInput
@@ -10608,12 +11016,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -10622,12 +11047,29 @@ export namespace Prisma {
 
   export type TripRequestCreateManyInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -10635,24 +11077,58 @@ export namespace Prisma {
 
   export type TripRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type TripRequestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -10662,8 +11138,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -10678,8 +11155,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -10694,8 +11172,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10710,8 +11189,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10726,8 +11206,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -10742,8 +11223,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10756,8 +11238,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -11191,31 +11674,72 @@ export namespace Prisma {
     not?: NestedEnumTripRequestStatusFilter<$PrismaModel> | $Enums.TripRequestStatus
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type TripRequestCountOrderByAggregateInput = {
     id?: SortOrder
-    destination?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    passengerCount?: SortOrder
-    description?: SortOrder
     status?: SortOrder
+    serviceType?: SortOrder
+    arrivalAirport?: SortOrder
+    destinationAddress?: SortOrder
+    arrivalFlightDate?: SortOrder
+    arrivalFlightTime?: SortOrder
+    arrivalFlightNumber?: SortOrder
+    pickupAddress?: SortOrder
+    departureAirport?: SortOrder
+    departureFlightDate?: SortOrder
+    departureFlightTime?: SortOrder
+    departureFlightNumber?: SortOrder
+    language?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    phone?: SortOrder
+    numberOfAdults?: SortOrder
+    areThereChildren?: SortOrder
+    numberOfChildren?: SortOrder
+    ageOfChildren?: SortOrder
+    numberOfChildSeats?: SortOrder
+    additionalInfo?: SortOrder
+    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
   }
 
   export type TripRequestAvgOrderByAggregateInput = {
-    passengerCount?: SortOrder
+    numberOfAdults?: SortOrder
+    numberOfChildren?: SortOrder
+    numberOfChildSeats?: SortOrder
   }
 
   export type TripRequestMaxOrderByAggregateInput = {
     id?: SortOrder
-    destination?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    passengerCount?: SortOrder
-    description?: SortOrder
     status?: SortOrder
+    serviceType?: SortOrder
+    arrivalAirport?: SortOrder
+    destinationAddress?: SortOrder
+    arrivalFlightDate?: SortOrder
+    arrivalFlightTime?: SortOrder
+    arrivalFlightNumber?: SortOrder
+    pickupAddress?: SortOrder
+    departureAirport?: SortOrder
+    departureFlightDate?: SortOrder
+    departureFlightTime?: SortOrder
+    departureFlightNumber?: SortOrder
+    language?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    phone?: SortOrder
+    numberOfAdults?: SortOrder
+    areThereChildren?: SortOrder
+    numberOfChildren?: SortOrder
+    ageOfChildren?: SortOrder
+    numberOfChildSeats?: SortOrder
+    additionalInfo?: SortOrder
+    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -11223,19 +11747,38 @@ export namespace Prisma {
 
   export type TripRequestMinOrderByAggregateInput = {
     id?: SortOrder
-    destination?: SortOrder
-    startDate?: SortOrder
-    endDate?: SortOrder
-    passengerCount?: SortOrder
-    description?: SortOrder
     status?: SortOrder
+    serviceType?: SortOrder
+    arrivalAirport?: SortOrder
+    destinationAddress?: SortOrder
+    arrivalFlightDate?: SortOrder
+    arrivalFlightTime?: SortOrder
+    arrivalFlightNumber?: SortOrder
+    pickupAddress?: SortOrder
+    departureAirport?: SortOrder
+    departureFlightDate?: SortOrder
+    departureFlightTime?: SortOrder
+    departureFlightNumber?: SortOrder
+    language?: SortOrder
+    firstName?: SortOrder
+    lastName?: SortOrder
+    phone?: SortOrder
+    numberOfAdults?: SortOrder
+    areThereChildren?: SortOrder
+    numberOfChildren?: SortOrder
+    ageOfChildren?: SortOrder
+    numberOfChildSeats?: SortOrder
+    additionalInfo?: SortOrder
+    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
   }
 
   export type TripRequestSumOrderByAggregateInput = {
-    passengerCount?: SortOrder
+    numberOfAdults?: SortOrder
+    numberOfChildren?: SortOrder
+    numberOfChildSeats?: SortOrder
   }
 
   export type EnumTripRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11246,6 +11789,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTripRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumTripRequestStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -11275,8 +11826,9 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-    description?: SortOrder
-    validUntil?: SortOrder
+    isPriceEachWay?: SortOrder
+    areCarSeatsIncluded?: SortOrder
+    quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
     sentAt?: SortOrder
@@ -11295,8 +11847,9 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-    description?: SortOrder
-    validUntil?: SortOrder
+    isPriceEachWay?: SortOrder
+    areCarSeatsIncluded?: SortOrder
+    quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
     sentAt?: SortOrder
@@ -11311,8 +11864,9 @@ export namespace Prisma {
     id?: SortOrder
     price?: SortOrder
     currency?: SortOrder
-    description?: SortOrder
-    validUntil?: SortOrder
+    isPriceEachWay?: SortOrder
+    areCarSeatsIncluded?: SortOrder
+    quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
     sentAt?: SortOrder
@@ -11665,6 +12219,10 @@ export namespace Prisma {
     set?: $Enums.TripRequestStatus
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type UserUpdateOneRequiredWithoutTripRequestsNestedInput = {
     create?: XOR<UserCreateWithoutTripRequestsInput, UserUncheckedCreateWithoutTripRequestsInput>
     connectOrCreate?: UserCreateOrConnectWithoutTripRequestsInput
@@ -11953,6 +12511,11 @@ export namespace Prisma {
     not?: NestedEnumTripRequestStatusFilter<$PrismaModel> | $Enums.TripRequestStatus
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumTripRequestStatusWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.TripRequestStatus | EnumTripRequestStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TripRequestStatus[] | ListEnumTripRequestStatusFieldRefInput<$PrismaModel>
@@ -11961,6 +12524,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTripRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumTripRequestStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -12310,12 +12881,29 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutUserInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
@@ -12323,12 +12911,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateWithoutUserInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
@@ -12348,8 +12953,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -12363,8 +12969,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -12493,12 +13100,29 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereInput[]
     NOT?: TripRequestScalarWhereInput | TripRequestScalarWhereInput[]
     id?: StringFilter<"TripRequest"> | string
-    destination?: StringFilter<"TripRequest"> | string
-    startDate?: DateTimeFilter<"TripRequest"> | Date | string
-    endDate?: DateTimeFilter<"TripRequest"> | Date | string
-    passengerCount?: IntFilter<"TripRequest"> | number
-    description?: StringNullableFilter<"TripRequest"> | string | null
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
+    serviceType?: StringFilter<"TripRequest"> | string
+    arrivalAirport?: StringNullableFilter<"TripRequest"> | string | null
+    destinationAddress?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    arrivalFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    arrivalFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    pickupAddress?: StringNullableFilter<"TripRequest"> | string | null
+    departureAirport?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureFlightTime?: StringNullableFilter<"TripRequest"> | string | null
+    departureFlightNumber?: StringNullableFilter<"TripRequest"> | string | null
+    language?: StringFilter<"TripRequest"> | string
+    firstName?: StringFilter<"TripRequest"> | string
+    lastName?: StringFilter<"TripRequest"> | string
+    phone?: StringFilter<"TripRequest"> | string
+    numberOfAdults?: IntFilter<"TripRequest"> | number
+    areThereChildren?: BoolFilter<"TripRequest"> | boolean
+    numberOfChildren?: IntNullableFilter<"TripRequest"> | number | null
+    ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
+    numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
+    additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringFilter<"TripRequest"> | string
@@ -12527,8 +13151,9 @@ export namespace Prisma {
     id?: StringFilter<"Quotation"> | string
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
-    description?: StringNullableFilter<"Quotation"> | string | null
-    validUntil?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    isPriceEachWay?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
     sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -12576,8 +13201,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -12591,8 +13217,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -12669,12 +13296,29 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutQuotationsInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutTripRequestsInput
@@ -12682,12 +13326,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateWithoutQuotationsInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId: string
@@ -12744,12 +13405,29 @@ export namespace Prisma {
 
   export type TripRequestUpdateWithoutQuotationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTripRequestsNestedInput
@@ -12757,12 +13435,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateWithoutQuotationsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
@@ -12837,12 +13532,29 @@ export namespace Prisma {
 
   export type TripRequestCreateManyUserInput = {
     id?: string
-    destination: string
-    startDate: Date | string
-    endDate: Date | string
-    passengerCount: number
-    description?: string | null
     status?: $Enums.TripRequestStatus
+    serviceType: string
+    arrivalAirport?: string | null
+    destinationAddress?: string | null
+    arrivalFlightDate?: Date | string | null
+    arrivalFlightTime?: string | null
+    arrivalFlightNumber?: string | null
+    pickupAddress?: string | null
+    departureAirport?: string | null
+    departureFlightDate?: Date | string | null
+    departureFlightTime?: string | null
+    departureFlightNumber?: string | null
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12851,8 +13563,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -12947,12 +13660,29 @@ export namespace Prisma {
 
   export type TripRequestUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
@@ -12960,12 +13690,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
@@ -12973,12 +13720,29 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
-    destination?: StringFieldUpdateOperationsInput | string
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    passengerCount?: IntFieldUpdateOperationsInput | number
-    description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    serviceType?: StringFieldUpdateOperationsInput | string
+    arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    destinationAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    arrivalFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    arrivalFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    departureAirport?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureFlightTime?: NullableStringFieldUpdateOperationsInput | string | null
+    departureFlightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12987,8 +13751,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13002,8 +13767,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13017,8 +13783,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13032,8 +13799,9 @@ export namespace Prisma {
     id?: string
     price: Decimal | DecimalJsLike | number | string
     currency?: string
-    description?: string | null
-    validUntil?: Date | string | null
+    isPriceEachWay?: boolean
+    areCarSeatsIncluded?: boolean
+    quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
     sentAt?: Date | string | null
@@ -13047,8 +13815,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13062,8 +13831,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13077,8 +13847,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    validUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

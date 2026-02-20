@@ -7,15 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
 import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AIRPORTS, SERVICE_TYPES, LANGUAGES } from "@/lib/airports";
 
 interface CreateTripRequestFormProps {
 	onSuccess?: () => void;
@@ -25,11 +25,35 @@ export function CreateTripRequestForm({
 	onSuccess,
 }: CreateTripRequestFormProps) {
 	const router = useRouter();
-	const [destination, setDestination] = useState("");
-	const [startDate, setStartDate] = useState<Date>();
-	const [endDate, setEndDate] = useState<Date>();
-	const [passengerCount, setPassengerCount] = useState(1);
-	const [description, setDescription] = useState("");
+
+	// Service Type
+	const [serviceType, setServiceType] = useState<
+		"both" | "arrival" | "departure"
+	>("both");
+
+	// Arrival Information
+	const [arrivalAirport, setArrivalAirport] = useState("");
+	const [destinationAddress, setDestinationAddress] = useState("");
+
+	// Departure Information
+	const [pickupAddress, setPickupAddress] = useState("");
+	const [departureAirport, setDepartureAirport] = useState("");
+
+	// Travel Information
+	const [language, setLanguage] = useState<"English" | "Italian">("English");
+	const [firstName, setFirstName] = useState("");
+	const [lastName, setLastName] = useState("");
+	const [phone, setPhone] = useState("");
+	const [numberOfAdults, setNumberOfAdults] = useState(1);
+
+	// Children Information
+	const [areThereChildren, setAreThereChildren] = useState(false);
+	const [numberOfChildren, setNumberOfChildren] = useState(0);
+	const [ageOfChildren, setAgeOfChildren] = useState("");
+	const [numberOfChildSeats, setNumberOfChildSeats] = useState(0);
+
+	// Additional Information
+	const [additionalInfo, setAdditionalInfo] = useState("");
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
@@ -41,106 +65,289 @@ export function CreateTripRequestForm({
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		if (!startDate || !endDate) return;
-
 		createRequest.mutate({
-			destination,
-			startDate,
-			endDate,
-			passengerCount,
-			description: description || undefined,
+			serviceType,
+			arrivalAirport: arrivalAirport || undefined,
+			destinationAddress: destinationAddress || undefined,
+			pickupAddress: pickupAddress || undefined,
+			departureAirport: departureAirport || undefined,
+			language,
+			firstName,
+			lastName,
+			phone,
+			numberOfAdults,
+			areThereChildren,
+			numberOfChildren: areThereChildren ? numberOfChildren : undefined,
+			ageOfChildren: areThereChildren && ageOfChildren ? ageOfChildren : undefined,
+			numberOfChildSeats: areThereChildren ? numberOfChildSeats : undefined,
+			additionalInfo: additionalInfo || undefined,
 		});
 	};
 
+	const showArrivalFields =
+		serviceType === "both" || serviceType === "arrival";
+	const showDepartureFields =
+		serviceType === "both" || serviceType === "departure";
+
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4">
-			<div>
-				<Label htmlFor="destination">Destination</Label>
-				<Input
-					id="destination"
-					value={destination}
-					onChange={(e) => setDestination(e.target.value)}
-					placeholder="e.g., Paris, France"
-					required
-				/>
-			</div>
-
-			<div className="grid grid-cols-2 gap-4">
+		<form onSubmit={handleSubmit} className="space-y-6">
+			{/* Service Type Section */}
+			<div className="space-y-4">
+				<h3 className="text-lg font-semibold">Service Type</h3>
 				<div>
-					<Label>Start Date</Label>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant="outline"
-								className={cn(
-									"w-full justify-start text-left font-normal",
-									!startDate && "text-muted-foreground",
-								)}
-							>
-								<CalendarIcon className="mr-2 h-4 w-4" />
-								{startDate ? format(startDate, "PPP") : "Pick a date"}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="w-auto p-0">
-							<Calendar
-								mode="single"
-								selected={startDate}
-								onSelect={setStartDate}
-								disabled={(date) => date < new Date()}
-							/>
-						</PopoverContent>
-					</Popover>
-				</div>
-
-				<div>
-					<Label>End Date</Label>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant="outline"
-								className={cn(
-									"w-full justify-start text-left font-normal",
-									!endDate && "text-muted-foreground",
-								)}
-							>
-								<CalendarIcon className="mr-2 h-4 w-4" />
-								{endDate ? format(endDate, "PPP") : "Pick a date"}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="w-auto p-0">
-							<Calendar
-								mode="single"
-								selected={endDate}
-								onSelect={setEndDate}
-								disabled={(date) => !startDate || date < startDate}
-							/>
-						</PopoverContent>
-					</Popover>
+					<Label htmlFor="serviceType">What service do you need?</Label>
+					<Select
+						value={serviceType}
+						onValueChange={(value) =>
+							setServiceType(value as "both" | "arrival" | "departure")
+						}
+					>
+						<SelectTrigger id="serviceType">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							{SERVICE_TYPES.map((type) => (
+								<SelectItem key={type.value} value={type.value}>
+									{type.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
 				</div>
 			</div>
 
-			<div>
-				<Label htmlFor="passengerCount">Number of Passengers</Label>
-				<Input
-					id="passengerCount"
-					type="number"
-					min={1}
-					max={100}
-					value={passengerCount}
-					onChange={(e) => setPassengerCount(parseInt(e.target.value))}
-					required
-				/>
+			{/* Arrival Information Section */}
+			{showArrivalFields && (
+				<div className="space-y-4 rounded-lg border p-4">
+					<h3 className="text-lg font-semibold">Arrival Information</h3>
+					<div>
+						<Label htmlFor="arrivalAirport">Arrival Airport *</Label>
+						<Select value={arrivalAirport} onValueChange={setArrivalAirport}>
+							<SelectTrigger id="arrivalAirport">
+								<SelectValue placeholder="Select arrival airport" />
+							</SelectTrigger>
+							<SelectContent>
+								{AIRPORTS.map((airport) => (
+									<SelectItem key={airport.value} value={airport.value}>
+										{airport.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+
+					<div>
+						<Label htmlFor="destinationAddress">Destination Address *</Label>
+						<Input
+							id="destinationAddress"
+							value={destinationAddress}
+							onChange={(e) => setDestinationAddress(e.target.value)}
+							placeholder="Enter your destination address"
+						/>
+					</div>
+				</div>
+			)}
+
+			{/* Departure Information Section */}
+			{showDepartureFields && (
+				<div className="space-y-4 rounded-lg border p-4">
+					<h3 className="text-lg font-semibold">Departure Information</h3>
+					<div>
+						<Label htmlFor="pickupAddress">Pickup Address *</Label>
+						<Input
+							id="pickupAddress"
+							value={pickupAddress}
+							onChange={(e) => setPickupAddress(e.target.value)}
+							placeholder="Enter pickup address"
+						/>
+					</div>
+
+					<div>
+						<Label htmlFor="departureAirport">Departure Airport *</Label>
+						<Select
+							value={departureAirport}
+							onValueChange={setDepartureAirport}
+						>
+							<SelectTrigger id="departureAirport">
+								<SelectValue placeholder="Select departure airport" />
+							</SelectTrigger>
+							<SelectContent>
+								{AIRPORTS.map((airport) => (
+									<SelectItem key={airport.value} value={airport.value}>
+										{airport.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</div>
+				</div>
+			)}
+
+			{/* Travel Information Section */}
+			<div className="space-y-4 rounded-lg border p-4">
+				<h3 className="text-lg font-semibold">Travel Information</h3>
+
+				<div>
+					<Label htmlFor="language">Preferred Language</Label>
+					<Select
+						value={language}
+						onValueChange={(value) =>
+							setLanguage(value as "English" | "Italian")
+						}
+					>
+						<SelectTrigger id="language">
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							{LANGUAGES.map((lang) => (
+								<SelectItem key={lang.value} value={lang.value}>
+									{lang.label}
+								</SelectItem>
+							))}
+						</SelectContent>
+					</Select>
+				</div>
+
+				<div className="grid grid-cols-2 gap-4">
+					<div>
+						<Label htmlFor="firstName">First Name *</Label>
+						<Input
+							id="firstName"
+							value={firstName}
+							onChange={(e) => setFirstName(e.target.value)}
+							placeholder="First name"
+							required
+						/>
+					</div>
+					<div>
+						<Label htmlFor="lastName">Last Name *</Label>
+						<Input
+							id="lastName"
+							value={lastName}
+							onChange={(e) => setLastName(e.target.value)}
+							placeholder="Last name"
+							required
+						/>
+					</div>
+				</div>
+
+				<div>
+					<Label htmlFor="phone">Phone Number (with country code) *</Label>
+					<Input
+						id="phone"
+						value={phone}
+						onChange={(e) => setPhone(e.target.value)}
+						placeholder="+39 123 456 7890"
+						required
+					/>
+				</div>
+
+				<div>
+					<Label htmlFor="numberOfAdults">Number of Adults *</Label>
+					<Input
+						id="numberOfAdults"
+						type="number"
+						min={1}
+						max={100}
+						value={numberOfAdults}
+						onChange={(e) => setNumberOfAdults(parseInt(e.target.value) || 1)}
+						required
+					/>
+				</div>
 			</div>
 
-			<div>
-				<Label htmlFor="description">Additional Details (Optional)</Label>
-				<Textarea
-					id="description"
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-					placeholder="Any special requirements or preferences..."
-					rows={4}
-				/>
+			{/* Children Information Section */}
+			<div className="space-y-4 rounded-lg border p-4">
+				<h3 className="text-lg font-semibold">Children Information</h3>
+
+				<div>
+					<Label>Are there children traveling? *</Label>
+					<RadioGroup
+						value={areThereChildren ? "yes" : "no"}
+						onValueChange={(value) => setAreThereChildren(value === "yes")}
+					>
+						<div className="flex items-center space-x-2">
+							<RadioGroupItem value="yes" id="children-yes" />
+							<Label htmlFor="children-yes" className="font-normal">
+								Yes
+							</Label>
+						</div>
+						<div className="flex items-center space-x-2">
+							<RadioGroupItem value="no" id="children-no" />
+							<Label htmlFor="children-no" className="font-normal">
+								No
+							</Label>
+						</div>
+					</RadioGroup>
+				</div>
+
+				{areThereChildren && (
+					<>
+						<div>
+							<Label htmlFor="numberOfChildren">
+								Number of Children (0-10 years)
+							</Label>
+							<Input
+								id="numberOfChildren"
+								type="number"
+								min={0}
+								max={20}
+								value={numberOfChildren}
+								onChange={(e) =>
+									setNumberOfChildren(parseInt(e.target.value) || 0)
+								}
+							/>
+						</div>
+
+						<div>
+							<Label htmlFor="ageOfChildren">Age of Children</Label>
+							<Input
+								id="ageOfChildren"
+								value={ageOfChildren}
+								onChange={(e) => setAgeOfChildren(e.target.value)}
+								placeholder="e.g., 3 years, 7 years"
+							/>
+						</div>
+
+						<div>
+							<Label htmlFor="numberOfChildSeats">Number of Child Seats</Label>
+							<Input
+								id="numberOfChildSeats"
+								type="number"
+								min={0}
+								max={20}
+								value={numberOfChildSeats}
+								onChange={(e) =>
+									setNumberOfChildSeats(parseInt(e.target.value) || 0)
+								}
+							/>
+						</div>
+					</>
+				)}
+			</div>
+
+			{/* Additional Information Section */}
+			<div className="space-y-4">
+				<h3 className="text-lg font-semibold">Additional Information</h3>
+				<div>
+					<Label htmlFor="additionalInfo">
+						Special Requests (Optional)
+					</Label>
+					<Textarea
+						id="additionalInfo"
+						value={additionalInfo}
+						onChange={(e) => setAdditionalInfo(e.target.value)}
+						placeholder="Any special requests or additional information..."
+						rows={4}
+					/>
+				</div>
+			</div>
+
+			<div className="rounded-lg bg-muted p-4 text-sm">
+				<p>
+					* Flight details (dates, times, numbers) can be added later after you
+					receive and accept a quotation.
+				</p>
 			</div>
 
 			<Button
@@ -148,7 +355,7 @@ export function CreateTripRequestForm({
 				disabled={createRequest.isPending}
 				className="w-full"
 			>
-				{createRequest.isPending ? "Creating..." : "Submit Request"}
+				{createRequest.isPending ? "Submitting..." : "Submit Quotation Request"}
 			</Button>
 
 			{createRequest.error && (

@@ -102,15 +102,43 @@ model VerificationToken {
 
 // Trip management models
 model TripRequest {
-    id             String            @id @default(cuid())
-    destination    String
-    startDate      DateTime
-    endDate        DateTime
-    passengerCount Int
-    description    String?           @db.Text
-    status         TripRequestStatus @default(PENDING)
-    createdAt      DateTime          @default(now())
-    updatedAt      DateTime          @updatedAt
+    id     String            @id @default(cuid())
+    status TripRequestStatus @default(PENDING)
+
+    // Service type
+    serviceType String // "Arrivo e Partenza", "Solo Arrivo", "Solo Partenza"
+
+    // Arrival information (if applicable)
+    arrivalAirport         String?
+    destinationAddress     String?
+    arrivalFlightDate      DateTime?
+    arrivalFlightTime      String?
+    arrivalFlightNumber    String?
+
+    // Departure information (if applicable)
+    pickupAddress          String?
+    departureAirport       String?
+    departureFlightDate    DateTime?
+    departureFlightTime    String?
+    departureFlightNumber  String?
+
+    // Travel information
+    language               String // "English", "Italian"
+    firstName              String
+    lastName               String
+    phone                  String
+    numberOfAdults         Int
+    areThereChildren       Boolean @default(false)
+    numberOfChildren       Int?
+    ageOfChildren          String? @db.Text
+    numberOfChildSeats     Int?
+    additionalInfo         String? @db.Text
+
+    // Confirmation status - true if user confirmed with flight details
+    isConfirmed            Boolean @default(false)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
     userId     String
     user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -122,17 +150,18 @@ model TripRequest {
 }
 
 model Quotation {
-    id            String          @id @default(cuid())
-    price         Decimal         @db.Decimal(10, 2)
-    currency      String          @default("USD")
-    description   String?         @db.Text
-    validUntil    DateTime?
-    status        QuotationStatus @default(DRAFT)
-    internalNotes String?         @db.Text
-    sentAt        DateTime?
-    respondedAt   DateTime?
-    createdAt     DateTime        @default(now())
-    updatedAt     DateTime        @updatedAt
+    id                       String          @id @default(cuid())
+    price                    Decimal         @db.Decimal(10, 2)
+    currency                 String          @default("EUR")
+    isPriceEachWay           Boolean         @default(false)
+    areCarSeatsIncluded      Boolean         @default(false)
+    quotationAdditionalInfo  String?         @db.Text
+    status                   QuotationStatus @default(DRAFT)
+    internalNotes            String?         @db.Text
+    sentAt                   DateTime?
+    respondedAt              DateTime?
+    createdAt                DateTime        @default(now())
+    updatedAt                DateTime        @updatedAt
 
     tripRequestId String
     tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)

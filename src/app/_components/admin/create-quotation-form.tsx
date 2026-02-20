@@ -6,15 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-	Popover,
-	PopoverContent,
-	PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
+
+const DEFAULT_ADDITIONAL_INFO = `If the transfer time is between 22:00 and 06:00 (italian time)
+the price will be increased by 20%.
+If you need more information don't hesitate to contact us.
+
+Se l'orario del transfer è fra le 22:00 e le 06:00 (Ora italiana)
+il prezzo subirà una maggiorazione del 20%.
+Se dovesse aver bisogno di ulteriori informazioni, la prego di contattarci.`;
 
 interface CreateQuotationFormProps {
 	tripRequestId: string;
@@ -27,17 +27,21 @@ export function CreateQuotationForm({
 }: CreateQuotationFormProps) {
 	const utils = api.useUtils();
 	const [price, setPrice] = useState("");
-	const [description, setDescription] = useState("");
+	const [isPriceEachWay, setIsPriceEachWay] = useState(false);
+	const [areCarSeatsIncluded, setAreCarSeatsIncluded] = useState(false);
+	const [quotationAdditionalInfo, setQuotationAdditionalInfo] = useState(
+		DEFAULT_ADDITIONAL_INFO,
+	);
 	const [internalNotes, setInternalNotes] = useState("");
-	const [validUntil, setValidUntil] = useState<Date>();
 
 	const createQuotation = api.quotation.create.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: tripRequestId });
 			setPrice("");
-			setDescription("");
+			setIsPriceEachWay(false);
+			setAreCarSeatsIncluded(false);
+			setQuotationAdditionalInfo(DEFAULT_ADDITIONAL_INFO);
 			setInternalNotes("");
-			setValidUntil(undefined);
 			onSuccess?.();
 		},
 	});
@@ -48,16 +52,18 @@ export function CreateQuotationForm({
 		createQuotation.mutate({
 			tripRequestId,
 			price: parseFloat(price),
-			description: description || undefined,
+			currency: "EUR",
+			isPriceEachWay,
+			areCarSeatsIncluded,
+			quotationAdditionalInfo: quotationAdditionalInfo || undefined,
 			internalNotes: internalNotes || undefined,
-			validUntil: validUntil,
 		});
 	};
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div>
-				<Label htmlFor="price">Price (USD)</Label>
+				<Label htmlFor="price">Price (EUR) *</Label>
 				<Input
 					id="price"
 					type="number"
@@ -65,19 +71,49 @@ export function CreateQuotationForm({
 					min="0"
 					value={price}
 					onChange={(e) => setPrice(e.target.value)}
-					placeholder="1000.00"
+					placeholder="150.00"
 					required
 				/>
 			</div>
 
+			<div className="flex items-center justify-between rounded-lg border p-4">
+				<div className="space-y-0.5">
+					<Label htmlFor="isPriceEachWay">Is price for each way?</Label>
+					<p className="text-sm text-muted-foreground">
+						If enabled, the price applies to each direction separately
+					</p>
+				</div>
+				<Switch
+					id="isPriceEachWay"
+					checked={isPriceEachWay}
+					onCheckedChange={setIsPriceEachWay}
+				/>
+			</div>
+
+			<div className="flex items-center justify-between rounded-lg border p-4">
+				<div className="space-y-0.5">
+					<Label htmlFor="areCarSeatsIncluded">Are car seats included?</Label>
+					<p className="text-sm text-muted-foreground">
+						If enabled, child car seats are included in the price
+					</p>
+				</div>
+				<Switch
+					id="areCarSeatsIncluded"
+					checked={areCarSeatsIncluded}
+					onCheckedChange={setAreCarSeatsIncluded}
+				/>
+			</div>
+
 			<div>
-				<Label htmlFor="description">Description (Visible to Customer)</Label>
+				<Label htmlFor="quotationAdditionalInfo">
+					Additional Information (Visible to Customer)
+				</Label>
 				<Textarea
-					id="description"
-					value={description}
-					onChange={(e) => setDescription(e.target.value)}
-					placeholder="Describe what's included in this quotation..."
-					rows={4}
+					id="quotationAdditionalInfo"
+					value={quotationAdditionalInfo}
+					onChange={(e) => setQuotationAdditionalInfo(e.target.value)}
+					placeholder="Additional terms and conditions..."
+					rows={8}
 				/>
 			</div>
 
@@ -90,32 +126,6 @@ export function CreateQuotationForm({
 					placeholder="Notes for other admins..."
 					rows={3}
 				/>
-			</div>
-
-			<div>
-				<Label>Valid Until (Optional)</Label>
-				<Popover>
-					<PopoverTrigger asChild>
-						<Button
-							variant="outline"
-							className={cn(
-								"w-full justify-start text-left font-normal",
-								!validUntil && "text-muted-foreground",
-							)}
-						>
-							<CalendarIcon className="mr-2 h-4 w-4" />
-							{validUntil ? format(validUntil, "PPP") : "No expiry"}
-						</Button>
-					</PopoverTrigger>
-					<PopoverContent className="w-auto p-0">
-						<Calendar
-							mode="single"
-							selected={validUntil}
-							onSelect={setValidUntil}
-							disabled={(date) => date < new Date()}
-						/>
-					</PopoverContent>
-				</Popover>
 			</div>
 
 			<Button

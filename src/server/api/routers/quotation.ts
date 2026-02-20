@@ -14,9 +14,10 @@ export const quotationRouter = createTRPCRouter({
 			z.object({
 				tripRequestId: z.string(),
 				price: z.number().positive(),
-				currency: z.string().default("USD"),
-				description: z.string().optional(),
-				validUntil: z.date().optional(),
+				currency: z.string().default("EUR"),
+				isPriceEachWay: z.boolean().default(false),
+				areCarSeatsIncluded: z.boolean().default(false),
+				quotationAdditionalInfo: z.string().optional(),
 				internalNotes: z.string().optional(),
 			})
 		)
@@ -49,8 +50,9 @@ export const quotationRouter = createTRPCRouter({
 				id: z.string(),
 				price: z.number().positive().optional(),
 				currency: z.string().optional(),
-				description: z.string().optional(),
-				validUntil: z.date().optional(),
+				isPriceEachWay: z.boolean().optional(),
+				areCarSeatsIncluded: z.boolean().optional(),
+				quotationAdditionalInfo: z.string().optional(),
 				internalNotes: z.string().optional(),
 			})
 		)
