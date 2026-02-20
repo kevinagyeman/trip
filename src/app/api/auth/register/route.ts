@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { createElement } from "react";
 import { db } from "@/server/db";
+import { sendEmail, APP_URL } from "@/server/email";
+import { VerifyEmailTemplate } from "@/emails/verify-email";
 
 export async function POST(request: Request) {
 	try {
@@ -66,16 +69,21 @@ export async function POST(request: Request) {
 			},
 		});
 
-		// TODO: Send verification email
-		// For now, we'll just return the token in development
-		// In production, you would send this via email
+		// Send verification email
+		const verificationUrl = `${APP_URL}/api/auth/verify-email?token=${verificationToken.token}`;
+		await sendEmail({
+			to: email,
+			subject: "Verify your Trip Manager account",
+			react: createElement(VerifyEmailTemplate, {
+				verificationUrl,
+				userName: name || undefined,
+			}),
+		});
 
 		return NextResponse.json(
 			{
 				message: "Registration successful. Please check your email to verify your account.",
 				userId: user.id,
-				// Remove this in production - only for development
-				verificationToken: verificationToken.token,
 			},
 			{ status: 201 },
 		);

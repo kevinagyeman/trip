@@ -6,6 +6,10 @@ import {
 	adminProcedure,
 } from "@/server/api/trpc";
 import { QuotationStatus, TripRequestStatus } from "../../../../generated/prisma";
+import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
+import { QuotationSentEmail } from "@/emails/quotation-sent";
+import { QuotationResponseEmail } from "@/emails/quotation-response";
+import { createElement } from "react";
 
 export const quotationRouter = createTRPCRouter({
 	// ADMIN: Create quotation (draft)
@@ -22,7 +26,6 @@ export const quotationRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			// Verify trip request exists
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.tripRequestId },
 			});
@@ -59,10 +62,7 @@ export const quotationRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { id, ...data } = input;
 
-			// Check if quotation is still a draft
-			const quotation = await ctx.db.quotation.findUnique({
-				where: { id },
-			});
+			const quotation = await ctx.db.quotation.findUnique({ where: { id } });
 
 			if (!quotation) {
 				throw new TRPCError({ code: "NOT_FOUND" });
@@ -75,10 +75,7 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			return ctx.db.quotation.update({
-				where: { id },
-				data,
-			});
+			return ctx.db.quotation.update({ where: { id }, data });
 		}),
 
 	// ADMIN: Send quotation to user
@@ -87,7 +84,13 @@ export const quotationRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
-				include: { tripRequest: true },
+				include: {
+					tripRequest: {
+						include: {
+							user: { select: { email: true, name: true } },
+						},
+					},
+				},
 			});
 
 			if (!quotation) {
@@ -101,14 +104,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			// Update quotation and trip request in transaction
-			return ctx.db.$transaction(async (tx) => {
-				const updated = await tx.quotation.update({
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
 					where: { id: input.id },
-					data: {
-						status: QuotationStatus.SENT,
-						sentAt: new Date(),
-					},
+					data: { status: QuotationStatus.SENT, sentAt: new Date() },
 				});
 
 				await tx.tripRequest.update({
@@ -116,8 +115,28 @@ export const quotationRouter = createTRPCRouter({
 					data: { status: TripRequestStatus.QUOTED },
 				});
 
-				return updated;
+				return result;
 			});
+
+			// Send email notification to the customer
+			const userEmail = quotation.tripRequest.user.email;
+			if (userEmail) {
+				await sendEmail({
+					to: userEmail,
+					subject: `Your quotation is ready — ${quotation.currency} ${quotation.price}`,
+					react: createElement(QuotationSentEmail, {
+						firstName: quotation.tripRequest.firstName,
+						price: quotation.price.toString(),
+						currency: quotation.currency,
+						isPriceEachWay: quotation.isPriceEachWay,
+						areCarSeatsIncluded: quotation.areCarSeatsIncluded,
+						additionalInfo: quotation.quotationAdditionalInfo ?? undefined,
+						dashboardUrl: `${APP_URL}/en/dashboard/requests/${quotation.tripRequestId}`,
+					}),
+				});
+			}
+
+			return updated;
 		}),
 
 	// USER: Accept quotation
@@ -126,14 +145,19 @@ export const quotationRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
-				include: { tripRequest: true },
+				include: {
+					tripRequest: {
+						include: {
+							user: { select: { email: true, name: true } },
+						},
+					},
+				},
 			});
 
 			if (!quotation) {
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			// Verify user owns the trip request
 			if (quotation.tripRequest.userId !== ctx.session.user.id) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
@@ -145,7 +169,6 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			// Check if expired
 			if (quotation.validUntil && quotation.validUntil < new Date()) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
@@ -153,13 +176,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			return ctx.db.$transaction(async (tx) => {
-				const updated = await tx.quotation.update({
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
 					where: { id: input.id },
-					data: {
-						status: QuotationStatus.ACCEPTED,
-						respondedAt: new Date(),
-					},
+					data: { status: QuotationStatus.ACCEPTED, respondedAt: new Date() },
 				});
 
 				await tx.tripRequest.update({
@@ -167,8 +187,27 @@ export const quotationRouter = createTRPCRouter({
 					data: { status: TripRequestStatus.ACCEPTED },
 				});
 
-				return updated;
+				return result;
 			});
+
+			// Notify admin
+			if (ADMIN_EMAIL) {
+				const user = quotation.tripRequest.user;
+				await sendEmail({
+					to: ADMIN_EMAIL,
+					subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+					react: createElement(QuotationResponseEmail, {
+						accepted: true,
+						customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						customerEmail: user.email ?? "",
+						price: quotation.price.toString(),
+						currency: quotation.currency,
+						adminUrl: `${APP_URL}/en/admin/requests/${quotation.tripRequestId}`,
+					}),
+				});
+			}
+
+			return updated;
 		}),
 
 	// USER: Reject quotation
@@ -177,14 +216,19 @@ export const quotationRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
-				include: { tripRequest: true },
+				include: {
+					tripRequest: {
+						include: {
+							user: { select: { email: true, name: true } },
+						},
+					},
+				},
 			});
 
 			if (!quotation) {
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			// Verify user owns the trip request
 			if (quotation.tripRequest.userId !== ctx.session.user.id) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
@@ -196,13 +240,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			return ctx.db.$transaction(async (tx) => {
-				const updated = await tx.quotation.update({
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
 					where: { id: input.id },
-					data: {
-						status: QuotationStatus.REJECTED,
-						respondedAt: new Date(),
-					},
+					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
 				});
 
 				await tx.tripRequest.update({
@@ -210,8 +251,27 @@ export const quotationRouter = createTRPCRouter({
 					data: { status: TripRequestStatus.REJECTED },
 				});
 
-				return updated;
+				return result;
 			});
+
+			// Notify admin
+			if (ADMIN_EMAIL) {
+				const user = quotation.tripRequest.user;
+				await sendEmail({
+					to: ADMIN_EMAIL,
+					subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+					react: createElement(QuotationResponseEmail, {
+						accepted: false,
+						customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						customerEmail: user.email ?? "",
+						price: quotation.price.toString(),
+						currency: quotation.currency,
+						adminUrl: `${APP_URL}/en/admin/requests/${quotation.tripRequestId}`,
+					}),
+				});
+			}
+
+			return updated;
 		}),
 
 	// ADMIN: Delete draft quotation
@@ -233,8 +293,6 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			return ctx.db.quotation.delete({
-				where: { id: input.id },
-			});
+			return ctx.db.quotation.delete({ where: { id: input.id } });
 		}),
 });

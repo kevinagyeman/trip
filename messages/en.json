@@ -1,0 +1,61 @@
+{
+	"navigation": {
+		"brand": "Trip Manager",
+		"myTrips": "My Trips",
+		"adminDashboard": "Admin Dashboard",
+		"signOut": "Sign Out"
+	},
+	"home": {
+		"title": "Welcome to Trip Manager",
+		"subtitle": "Plan your perfect trip! Request customized travel packages and get personalized quotations from our team.",
+		"getStarted": "Get Started",
+		"signIn": "Sign In",
+		"accountPrompt": "Create an account to start requesting trips",
+		"requestTrips": "Request Trips",
+		"requestTripsDesc": "Tell us your destination, dates, and preferences",
+		"getQuotations": "Get Quotations",
+		"getQuotationsDesc": "Receive personalized quotes from our travel experts",
+		"bookTravel": "Book & Travel",
+		"bookTravelDesc": "Accept your quote and start your adventure"
+	},
+	"auth": {
+		"welcomeBack": "Welcome Back",
+		"signInSubtitle": "Sign in to your Trip Manager account",
+		"email": "Email",
+		"password": "Password",
+		"signingIn": "Signing in...",
+		"signIn": "Sign In",
+		"noAccount": "Don't have an account?",
+		"register": "Register",
+		"or": "Or",
+		"continueWithDiscord": "Continue with Discord",
+		"emailVerified": "Email verified successfully! You can now sign in.",
+		"registrationSuccess": "Registration successful! Please verify your email to sign in.",
+		"verifyEmail": "Please verify your email before signing in.",
+		"invalidCredentials": "Invalid email or password.",
+		"unexpectedError": "An unexpected error occurred.",
+		"createAccount": "Create an Account",
+		"registerSubtitle": "Enter your details to register for Trip Manager",
+		"name": "Name (Optional)",
+		"confirmPassword": "Confirm Password *",
+		"passwordRequired": "Password *",
+		"registering": "Creating Account...",
+		"alreadyHaveAccount": "Already have an account?",
+		"passwordMismatch": "Passwords do not match",
+		"passwordTooShort": "Password must be at least 6 characters long",
+		"registrationFailed": "Registration failed",
+		"verificationLinkDev": "DEVELOPMENT MODE - Verification Link:",
+		"clickToVerify": "Click here to verify your email",
+		"verificationEmailSent": "A verification email has been sent to",
+		"checkEmail": "Please check your email and click the verification link to activate your account.",
+		"redirectingSignIn": "Redirecting to sign-in page in a few seconds...",
+		"clickToSignIn": "Or click here to sign in now",
+		"registrationSuccessTitle": "Registration Successful!",
+		"verifyEmailSubtitle": "Please verify your email address",
+		"productionNote": "(In production, this link would be sent via email)"
+	},
+	"dashboard": {
+		"title": "My Trip Requests",
+		"adminTitle": "Admin Dashboard"
+	}
+}

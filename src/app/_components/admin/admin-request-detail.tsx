@@ -1,17 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import {
 	Select,
 	SelectContent,
@@ -19,16 +11,17 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { CreateQuotationForm } from "./create-quotation-form";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
+	const locale = useLocale();
 	const utils = api.useUtils();
-	const [dialogOpen, setDialogOpen] = useState(false);
 
 	const { data: request, isLoading } =
 		api.tripRequest.getByIdAdmin.useQuery({ id: requestId });
@@ -314,20 +307,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			<div className="space-y-4">
 				<div className="flex items-center justify-between">
 					<h2 className="text-xl font-bold">Quotations</h2>
-					<Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-						<DialogTrigger asChild>
-							<Button>Create Quotation</Button>
-						</DialogTrigger>
-						<DialogContent className="max-h-[90vh] overflow-y-auto">
-							<DialogHeader>
-								<DialogTitle>Create New Quotation</DialogTitle>
-							</DialogHeader>
-							<CreateQuotationForm
-								tripRequestId={requestId}
-								onSuccess={() => setDialogOpen(false)}
-							/>
-						</DialogContent>
-					</Dialog>
+					<Link href={`/admin/requests/${requestId}/quotations/new`}>
+						<Button>Create Quotation</Button>
+					</Link>
 				</div>
 
 				{request.quotations.length === 0 ? (
@@ -409,7 +391,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									)}
 									{quotation.respondedAt && (
 										<p className="text-sm text-muted-foreground">
-											Responded: {format(new Date(quotation.respondedAt), "PPP")}
+											Responded:{" "}
+											{format(new Date(quotation.respondedAt), "PPP")}
 										</p>
 									)}
 								</div>

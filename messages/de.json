@@ -1,0 +1,61 @@
+{
+	"navigation": {
+		"brand": "Reisemanager",
+		"myTrips": "Meine Reisen",
+		"adminDashboard": "Admin-Dashboard",
+		"signOut": "Abmelden"
+	},
+	"home": {
+		"title": "Willkommen beim Reisemanager",
+		"subtitle": "Planen Sie Ihre perfekte Reise! Fordern Sie maßgeschneiderte Reisepakete an und erhalten Sie persönliche Angebote von unserem Team.",
+		"getStarted": "Loslegen",
+		"signIn": "Anmelden",
+		"accountPrompt": "Erstellen Sie ein Konto, um Reisen anzufragen",
+		"requestTrips": "Reisen anfragen",
+		"requestTripsDesc": "Teilen Sie uns Ihr Ziel, Ihre Daten und Vorlieben mit",
+		"getQuotations": "Angebote erhalten",
+		"getQuotationsDesc": "Erhalten Sie persönliche Angebote von unseren Reiseexperten",
+		"bookTravel": "Buchen & Reisen",
+		"bookTravelDesc": "Akzeptieren Sie Ihr Angebot und beginnen Sie Ihr Abenteuer"
+	},
+	"auth": {
+		"welcomeBack": "Willkommen zurück",
+		"signInSubtitle": "Melden Sie sich bei Ihrem Reisemanager-Konto an",
+		"email": "E-Mail",
+		"password": "Passwort",
+		"signingIn": "Anmeldung läuft...",
+		"signIn": "Anmelden",
+		"noAccount": "Noch kein Konto?",
+		"register": "Registrieren",
+		"or": "Oder",
+		"continueWithDiscord": "Mit Discord fortfahren",
+		"emailVerified": "E-Mail erfolgreich verifiziert! Sie können sich jetzt anmelden.",
+		"registrationSuccess": "Registrierung erfolgreich! Bitte verifizieren Sie Ihre E-Mail zum Anmelden.",
+		"verifyEmail": "Bitte verifizieren Sie Ihre E-Mail vor der Anmeldung.",
+		"invalidCredentials": "Ungültige E-Mail oder Passwort.",
+		"unexpectedError": "Ein unerwarteter Fehler ist aufgetreten.",
+		"createAccount": "Konto erstellen",
+		"registerSubtitle": "Geben Sie Ihre Daten ein, um sich beim Reisemanager zu registrieren",
+		"name": "Name (Optional)",
+		"confirmPassword": "Passwort bestätigen *",
+		"passwordRequired": "Passwort *",
+		"registering": "Konto wird erstellt...",
+		"alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+		"passwordMismatch": "Passwörter stimmen nicht überein",
+		"passwordTooShort": "Das Passwort muss mindestens 6 Zeichen lang sein",
+		"registrationFailed": "Registrierung fehlgeschlagen",
+		"verificationLinkDev": "ENTWICKLUNGSMODUS - Verifizierungslink:",
+		"clickToVerify": "Klicken Sie hier, um Ihre E-Mail zu verifizieren",
+		"verificationEmailSent": "Eine Verifizierungs-E-Mail wurde gesendet an",
+		"checkEmail": "Bitte überprüfen Sie Ihre E-Mail und klicken Sie auf den Verifizierungslink, um Ihr Konto zu aktivieren.",
+		"redirectingSignIn": "Weiterleitung zur Anmeldeseite in wenigen Sekunden...",
+		"clickToSignIn": "Oder klicken Sie hier, um sich jetzt anzumelden",
+		"registrationSuccessTitle": "Registrierung Erfolgreich!",
+		"verifyEmailSubtitle": "Bitte verifizieren Sie Ihre E-Mail-Adresse",
+		"productionNote": "(In der Produktion würde dieser Link per E-Mail gesendet)"
+	},
+	"dashboard": {
+		"title": "Meine Reiseanfragen",
+		"adminTitle": "Admin-Dashboard"
+	}
+}

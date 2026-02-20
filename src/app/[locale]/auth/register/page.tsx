@@ -1,11 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
 	Card,
 	CardContent,
@@ -13,13 +8,19 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function RegisterPage() {
 	const router = useRouter();
+	const t = useTranslations("auth");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
-	const [name, setName] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
@@ -31,16 +32,14 @@ export default function RegisterPage() {
 		setError("");
 		setSuccess(false);
 
-		// Validate passwords match
 		if (password !== confirmPassword) {
-			setError("Passwords do not match");
+			setError(t("passwordMismatch"));
 			setIsLoading(false);
 			return;
 		}
 
-		// Validate password length
 		if (password.length < 6) {
-			setError("Password must be at least 6 characters long");
+			setError(t("passwordTooShort"));
 			setIsLoading(false);
 			return;
 		}
@@ -54,24 +53,22 @@ export default function RegisterPage() {
 				body: JSON.stringify({
 					email,
 					password,
-					name: name || undefined,
 				}),
 			});
 
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data.error || "Registration failed");
+				setError(data.error || t("registrationFailed"));
 			} else {
 				setSuccess(true);
 				setVerificationToken(data.verificationToken || "");
-				// Redirect to sign-in after 3 seconds
 				setTimeout(() => {
 					router.push("/auth/signin?registered=true");
 				}, 5000);
 			}
-		} catch (err) {
-			setError("An unexpected error occurred");
+		} catch {
+			setError(t("unexpectedError"));
 		} finally {
 			setIsLoading(false);
 		}
@@ -79,50 +76,48 @@ export default function RegisterPage() {
 
 	if (success) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+			<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
 				<Card className="w-full max-w-md">
 					<CardHeader className="space-y-1">
-						<CardTitle className="text-2xl font-bold text-center text-green-600">
-							Registration Successful!
+						<CardTitle className="text-center text-2xl font-bold text-green-600">
+							{t("registrationSuccessTitle")}
 						</CardTitle>
 						<CardDescription className="text-center">
-							Please verify your email address
+							{t("verifyEmailSubtitle")}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<div className="bg-green-50 border border-green-200 rounded-md p-4">
+						<div className="rounded-md border border-green-200 bg-green-50 p-4">
 							<p className="text-sm text-green-800">
-								A verification email has been sent to <strong>{email}</strong>
+								{t("verificationEmailSent")} <strong>{email}</strong>
 							</p>
-							<p className="text-sm text-green-800 mt-2">
-								Please check your email and click the verification link to
-								activate your account.
-							</p>
+							<p className="mt-2 text-sm text-green-800">{t("checkEmail")}</p>
 						</div>
 
 						{verificationToken && (
-							<div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-								<p className="text-xs text-yellow-800 font-semibold mb-1">
-									DEVELOPMENT MODE - Verification Link:
+							<div className="rounded-md border border-yellow-200 bg-yellow-50 p-4">
+								<p className="mb-1 text-xs font-semibold text-yellow-800">
+									{t("verificationLinkDev")}
 								</p>
 								<a
 									href={`/api/auth/verify-email?token=${verificationToken}`}
-									className="text-xs text-blue-600 underline break-all"
+									className="break-all text-xs text-blue-600 underline"
 								>
-									Click here to verify your email
+									{t("clickToVerify")}
 								</a>
-								<p className="text-xs text-yellow-600 mt-2">
-									(In production, this link would be sent via email)
-								</p>
+								<p className="mt-2 text-xs text-yellow-600">{t("productionNote")}</p>
 							</div>
 						)}
 
 						<div className="text-center">
 							<p className="text-sm text-muted-foreground">
-								Redirecting to sign-in page in a few seconds...
+								{t("redirectingSignIn")}
 							</p>
-							<Link href="/auth/signin" className="text-sm text-blue-600 hover:underline mt-2 block">
-								Or click here to sign in now
+							<Link
+								href="/auth/signin"
+								className="mt-2 block text-sm text-blue-600 hover:underline"
+							>
+								{t("clickToSignIn")}
 							</Link>
 						</div>
 					</CardContent>
@@ -132,20 +127,20 @@ export default function RegisterPage() {
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
-					<CardTitle className="text-2xl font-bold text-center">
-						Create an Account
+					<CardTitle className="text-center text-2xl font-bold">
+						{t("createAccount")}
 					</CardTitle>
 					<CardDescription className="text-center">
-						Enter your details to register for Trip Manager
+						{t("registerSubtitle")}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
 					<form onSubmit={handleSubmit} className="space-y-4">
 						<div className="space-y-2">
-							<Label htmlFor="email">Email *</Label>
+							<Label htmlFor="email">{t("email")} *</Label>
 							<Input
 								id="email"
 								type="email"
@@ -158,23 +153,10 @@ export default function RegisterPage() {
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="name">Name (Optional)</Label>
-							<Input
-								id="name"
-								type="text"
-								placeholder="John Doe"
-								value={name}
-								onChange={(e) => setName(e.target.value)}
-								disabled={isLoading}
-							/>
-						</div>
-
-						<div className="space-y-2">
-							<Label htmlFor="password">Password *</Label>
+							<Label htmlFor="password">{t("passwordRequired")}</Label>
 							<Input
 								id="password"
 								type="password"
-								placeholder="At least 6 characters"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required
@@ -184,11 +166,10 @@ export default function RegisterPage() {
 						</div>
 
 						<div className="space-y-2">
-							<Label htmlFor="confirmPassword">Confirm Password *</Label>
+							<Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
 							<Input
 								id="confirmPassword"
 								type="password"
-								placeholder="Re-enter your password"
 								value={confirmPassword}
 								onChange={(e) => setConfirmPassword(e.target.value)}
 								required
@@ -198,24 +179,21 @@ export default function RegisterPage() {
 						</div>
 
 						{error && (
-							<div className="bg-destructive/10 text-destructive text-sm p-3 rounded-md">
+							<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
 								{error}
 							</div>
 						)}
 
 						<Button type="submit" className="w-full" disabled={isLoading}>
-							{isLoading ? "Creating Account..." : "Register"}
+							{isLoading ? t("registering") : t("createAccount")}
 						</Button>
 
 						<div className="text-center text-sm">
 							<span className="text-muted-foreground">
-								Already have an account?{" "}
+								{t("alreadyHaveAccount")}{" "}
 							</span>
-							<Link
-								href="/auth/signin"
-								className="text-blue-600 hover:underline"
-							>
-								Sign In
+							<Link href="/auth/signin" className="text-blue-600 hover:underline">
+								{t("signIn")}
 							</Link>
 						</div>
 					</form>

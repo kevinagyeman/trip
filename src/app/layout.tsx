@@ -3,8 +3,8 @@ import "@/styles/globals.css";
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 
+import { ThemeProvider } from "@/components/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Navigation } from "@/app/_components/navigation";
 
 export const metadata: Metadata = {
 	title: "Trip Manager",
@@ -21,11 +21,17 @@ export default function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html className={`${geist.variable}`} lang="en">
+		<html className={geist.variable} suppressHydrationWarning>
 			<body>
 				<TRPCReactProvider>
-					<Navigation />
-					{children}
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="system"
+						enableSystem
+						disableTransitionOnChange
+					>
+						{children}
+					</ThemeProvider>
 				</TRPCReactProvider>
 			</body>
 		</html>

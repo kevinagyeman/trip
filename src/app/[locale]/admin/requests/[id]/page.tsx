@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { api, HydrateClient } from "@/trpc/server";
 import { AdminRequestDetail } from "@/app/_components/admin/admin-request-detail";
@@ -6,18 +7,19 @@ import { AdminRequestDetail } from "@/app/_components/admin/admin-request-detail
 export default async function AdminRequestPage({
 	params,
 }: {
-	params: Promise<{ id: string }>;
+	params: Promise<{ locale: string; id: string }>;
 }) {
+	const { locale, id } = await params;
+	setRequestLocale(locale);
+
 	const session = await auth();
 
 	if (!session?.user || session.user.role !== "ADMIN") {
-		redirect("/");
+		redirect(`/${locale}`);
 	}
 
-	const { id } = await params;
-
 	try {
-		void api.tripRequest.getByIdAdmin.prefetch({ id });
+		await api.tripRequest.getByIdAdmin.prefetch({ id });
 	} catch {
 		notFound();
 	}

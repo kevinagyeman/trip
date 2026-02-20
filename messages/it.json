@@ -1,0 +1,61 @@
+{
+	"navigation": {
+		"brand": "Gestione Viaggi",
+		"myTrips": "I Miei Viaggi",
+		"adminDashboard": "Dashboard Admin",
+		"signOut": "Esci"
+	},
+	"home": {
+		"title": "Benvenuto su Gestione Viaggi",
+		"subtitle": "Pianifica il tuo viaggio perfetto! Richiedi pacchetti di viaggio personalizzati e ottieni preventivi personalizzati dal nostro team.",
+		"getStarted": "Inizia",
+		"signIn": "Accedi",
+		"accountPrompt": "Crea un account per iniziare a richiedere viaggi",
+		"requestTrips": "Richiedi Viaggi",
+		"requestTripsDesc": "Dicci la tua destinazione, le date e le preferenze",
+		"getQuotations": "Ottieni Preventivi",
+		"getQuotationsDesc": "Ricevi preventivi personalizzati dai nostri esperti di viaggio",
+		"bookTravel": "Prenota & Viaggia",
+		"bookTravelDesc": "Accetta il tuo preventivo e inizia la tua avventura"
+	},
+	"auth": {
+		"welcomeBack": "Bentornato",
+		"signInSubtitle": "Accedi al tuo account Gestione Viaggi",
+		"email": "Email",
+		"password": "Password",
+		"signingIn": "Accesso in corso...",
+		"signIn": "Accedi",
+		"noAccount": "Non hai un account?",
+		"register": "Registrati",
+		"or": "Oppure",
+		"continueWithDiscord": "Continua con Discord",
+		"emailVerified": "Email verificata con successo! Puoi ora accedere.",
+		"registrationSuccess": "Registrazione riuscita! Verifica la tua email per accedere.",
+		"verifyEmail": "Verifica la tua email prima di accedere.",
+		"invalidCredentials": "Email o password non validi.",
+		"unexpectedError": "Si è verificato un errore imprevisto.",
+		"createAccount": "Crea un Account",
+		"registerSubtitle": "Inserisci i tuoi dati per registrarti su Gestione Viaggi",
+		"name": "Nome (Opzionale)",
+		"confirmPassword": "Conferma Password *",
+		"passwordRequired": "Password *",
+		"registering": "Creazione account...",
+		"alreadyHaveAccount": "Hai già un account?",
+		"passwordMismatch": "Le password non coincidono",
+		"passwordTooShort": "La password deve essere di almeno 6 caratteri",
+		"registrationFailed": "Registrazione fallita",
+		"verificationLinkDev": "MODALITÀ SVILUPPO - Link di verifica:",
+		"clickToVerify": "Clicca qui per verificare la tua email",
+		"verificationEmailSent": "Un'email di verifica è stata inviata a",
+		"checkEmail": "Controlla la tua email e clicca sul link di verifica per attivare il tuo account.",
+		"redirectingSignIn": "Reindirizzamento alla pagina di accesso tra pochi secondi...",
+		"clickToSignIn": "Oppure clicca qui per accedere ora",
+		"registrationSuccessTitle": "Registrazione Riuscita!",
+		"verifyEmailSubtitle": "Verifica il tuo indirizzo email",
+		"productionNote": "(In produzione, questo link verrebbe inviato via email)"
+	},
+	"dashboard": {
+		"title": "Le Mie Richieste di Viaggio",
+		"adminTitle": "Dashboard Admin"
+	}
+}

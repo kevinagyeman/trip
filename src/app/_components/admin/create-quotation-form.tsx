@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,13 +20,11 @@ Se dovesse aver bisogno di ulteriori informazioni, la prego di contattarci.`;
 
 interface CreateQuotationFormProps {
 	tripRequestId: string;
-	onSuccess?: () => void;
 }
 
-export function CreateQuotationForm({
-	tripRequestId,
-	onSuccess,
-}: CreateQuotationFormProps) {
+export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps) {
+	const router = useRouter();
+	const locale = useLocale();
 	const utils = api.useUtils();
 	const [price, setPrice] = useState("");
 	const [isPriceEachWay, setIsPriceEachWay] = useState(false);
@@ -37,12 +37,7 @@ export function CreateQuotationForm({
 	const createQuotation = api.quotation.create.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: tripRequestId });
-			setPrice("");
-			setIsPriceEachWay(false);
-			setAreCarSeatsIncluded(false);
-			setQuotationAdditionalInfo(DEFAULT_ADDITIONAL_INFO);
-			setInternalNotes("");
-			onSuccess?.();
+			router.push(`/${locale}/admin/requests/${tripRequestId}`);
 		},
 	});
 

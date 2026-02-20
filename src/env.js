@@ -17,6 +17,10 @@ export const env = createEnv({
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
+		RESEND_API_KEY: z.string(),
+		RESEND_FROM_EMAIL: z.string().email().optional(),
+		ADMIN_EMAIL: z.string().email().optional(),
+		APP_URL: z.string().url().optional(),
 	},
 
 	/**
@@ -38,6 +42,10 @@ export const env = createEnv({
 		AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
 		DATABASE_URL: process.env.DATABASE_URL,
 		NODE_ENV: process.env.NODE_ENV,
+		RESEND_API_KEY: process.env.RESEND_API_KEY,
+		RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL,
+		ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+		APP_URL: process.env.APP_URL,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

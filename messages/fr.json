@@ -1,0 +1,61 @@
+{
+	"navigation": {
+		"brand": "Gestionnaire de Voyages",
+		"myTrips": "Mes Voyages",
+		"adminDashboard": "Tableau de Bord Admin",
+		"signOut": "Se Déconnecter"
+	},
+	"home": {
+		"title": "Bienvenue sur Gestionnaire de Voyages",
+		"subtitle": "Planifiez votre voyage parfait ! Demandez des forfaits de voyage personnalisés et obtenez des devis de notre équipe.",
+		"getStarted": "Commencer",
+		"signIn": "Se Connecter",
+		"accountPrompt": "Créez un compte pour commencer à demander des voyages",
+		"requestTrips": "Demander des Voyages",
+		"requestTripsDesc": "Dites-nous votre destination, vos dates et vos préférences",
+		"getQuotations": "Obtenir des Devis",
+		"getQuotationsDesc": "Recevez des devis personnalisés de nos experts en voyages",
+		"bookTravel": "Réserver & Voyager",
+		"bookTravelDesc": "Acceptez votre devis et commencez votre aventure"
+	},
+	"auth": {
+		"welcomeBack": "Bon Retour",
+		"signInSubtitle": "Connectez-vous à votre compte Gestionnaire de Voyages",
+		"email": "Email",
+		"password": "Mot de passe",
+		"signingIn": "Connexion en cours...",
+		"signIn": "Se Connecter",
+		"noAccount": "Vous n'avez pas de compte ?",
+		"register": "S'inscrire",
+		"or": "Ou",
+		"continueWithDiscord": "Continuer avec Discord",
+		"emailVerified": "Email vérifié avec succès ! Vous pouvez maintenant vous connecter.",
+		"registrationSuccess": "Inscription réussie ! Veuillez vérifier votre email pour vous connecter.",
+		"verifyEmail": "Veuillez vérifier votre email avant de vous connecter.",
+		"invalidCredentials": "Email ou mot de passe invalide.",
+		"unexpectedError": "Une erreur inattendue s'est produite.",
+		"createAccount": "Créer un Compte",
+		"registerSubtitle": "Entrez vos coordonnées pour vous inscrire sur Gestionnaire de Voyages",
+		"name": "Nom (Optionnel)",
+		"confirmPassword": "Confirmer le mot de passe *",
+		"passwordRequired": "Mot de passe *",
+		"registering": "Création du compte...",
+		"alreadyHaveAccount": "Vous avez déjà un compte ?",
+		"passwordMismatch": "Les mots de passe ne correspondent pas",
+		"passwordTooShort": "Le mot de passe doit comporter au moins 6 caractères",
+		"registrationFailed": "L'inscription a échoué",
+		"verificationLinkDev": "MODE DÉVELOPPEMENT - Lien de vérification :",
+		"clickToVerify": "Cliquez ici pour vérifier votre email",
+		"verificationEmailSent": "Un email de vérification a été envoyé à",
+		"checkEmail": "Veuillez vérifier votre email et cliquer sur le lien de vérification pour activer votre compte.",
+		"redirectingSignIn": "Redirection vers la page de connexion dans quelques secondes...",
+		"clickToSignIn": "Ou cliquez ici pour vous connecter maintenant",
+		"registrationSuccessTitle": "Inscription Réussie !",
+		"verifyEmailSubtitle": "Veuillez vérifier votre adresse email",
+		"productionNote": "(En production, ce lien serait envoyé par email)"
+	},
+	"dashboard": {
+		"title": "Mes Demandes de Voyage",
+		"adminTitle": "Tableau de Bord Admin"
+	}
+}

@@ -6,6 +6,11 @@ import {
 	adminProcedure,
 } from "@/server/api/trpc";
 import { TripRequestStatus } from "../../../../generated/prisma";
+import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
+import { NewRequestEmail } from "@/emails/new-request";
+import { TripConfirmedEmail } from "@/emails/trip-confirmed";
+import { createElement } from "react";
+import { format } from "date-fns";
 
 export const tripRequestRouter = createTRPCRouter({
 	// USER: Create new trip request
@@ -39,7 +44,6 @@ export const tripRequestRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			// Validate arrival fields if service includes arrival
 			if (input.serviceType === "both" || input.serviceType === "arrival") {
 				if (!input.arrivalAirport || !input.destinationAddress) {
 					throw new TRPCError({
@@ -49,7 +53,6 @@ export const tripRequestRouter = createTRPCRouter({
 				}
 			}
 
-			// Validate departure fields if service includes departure
 			if (input.serviceType === "both" || input.serviceType === "departure") {
 				if (!input.pickupAddress || !input.departureAirport) {
 					throw new TRPCError({
@@ -59,13 +62,34 @@ export const tripRequestRouter = createTRPCRouter({
 				}
 			}
 
-			return ctx.db.tripRequest.create({
+			const tripRequest = await ctx.db.tripRequest.create({
 				data: {
 					...input,
 					userId: ctx.session.user.id,
 					status: TripRequestStatus.PENDING,
 				},
 			});
+
+			// Notify admin of new request
+			if (ADMIN_EMAIL) {
+				await sendEmail({
+					to: ADMIN_EMAIL,
+					subject: `New trip request from ${input.firstName} ${input.lastName}`,
+					react: createElement(NewRequestEmail, {
+						requestId: tripRequest.id,
+						userName: ctx.session.user.name ?? ctx.session.user.email ?? "",
+						userEmail: ctx.session.user.email ?? "",
+						serviceType: input.serviceType,
+						firstName: input.firstName,
+						lastName: input.lastName,
+						phone: input.phone,
+						numberOfAdults: input.numberOfAdults,
+						adminUrl: `${APP_URL}/en/admin/requests/${tripRequest.id}`,
+					}),
+				});
+			}
+
+			return tripRequest;
 		}),
 
 	// USER: Get own trip requests
@@ -93,7 +117,7 @@ export const tripRequestRouter = createTRPCRouter({
 				orderBy: { createdAt: "desc" },
 				include: {
 					quotations: {
-						where: { status: { not: "DRAFT" } }, // Hide draft quotations
+						where: { status: { not: "DRAFT" } },
 						orderBy: { createdAt: "desc" },
 					},
 				},
@@ -126,7 +150,6 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			// Users can only see their own requests
 			if (tripRequest.userId !== ctx.session.user.id) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
@@ -157,12 +180,8 @@ export const tripRequestRouter = createTRPCRouter({
 				cursor: cursor ? { id: cursor } : undefined,
 				orderBy: { createdAt: "desc" },
 				include: {
-					user: {
-						select: { id: true, name: true, email: true },
-					},
-					quotations: {
-						orderBy: { createdAt: "desc" },
-					},
+					user: { select: { id: true, name: true, email: true } },
+					quotations: { orderBy: { createdAt: "desc" } },
 				},
 			});
 
@@ -182,12 +201,8 @@ export const tripRequestRouter = createTRPCRouter({
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
 				include: {
-					user: {
-						select: { id: true, name: true, email: true, image: true },
-					},
-					quotations: {
-						orderBy: { createdAt: "desc" },
-					},
+					user: { select: { id: true, name: true, email: true, image: true } },
+					quotations: { orderBy: { createdAt: "desc" } },
 				},
 			});
 
@@ -229,26 +244,45 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { id, ...data } = input;
 
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { id },
-			});
+			const tripRequest = await ctx.db.tripRequest.findUnique({ where: { id } });
 
 			if (!tripRequest) {
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			// Verify user owns the trip request
 			if (tripRequest.userId !== ctx.session.user.id) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
-			// Update trip request with flight details and mark as confirmed
-			return ctx.db.tripRequest.update({
+			const updated = await ctx.db.tripRequest.update({
 				where: { id },
-				data: {
-					...data,
-					isConfirmed: true,
-				},
+				data: { ...data, isConfirmed: true },
 			});
+
+			// Notify admin of confirmed trip
+			if (ADMIN_EMAIL) {
+				await sendEmail({
+					to: ADMIN_EMAIL,
+					subject: `✈️ ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
+					react: createElement(TripConfirmedEmail, {
+						customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
+						customerEmail: ctx.session.user.email ?? "",
+						serviceType: tripRequest.serviceType,
+						arrivalFlightDate: data.arrivalFlightDate
+							? format(data.arrivalFlightDate, "PPP")
+							: undefined,
+						arrivalFlightTime: data.arrivalFlightTime,
+						arrivalFlightNumber: data.arrivalFlightNumber,
+						departureFlightDate: data.departureFlightDate
+							? format(data.departureFlightDate, "PPP")
+							: undefined,
+						departureFlightTime: data.departureFlightTime,
+						departureFlightNumber: data.departureFlightNumber,
+						adminUrl: `${APP_URL}/en/admin/requests/${id}`,
+					}),
+				});
+			}
+
+			return updated;
 		}),
 });

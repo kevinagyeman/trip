@@ -1,4 +1,5 @@
 import { notFound, redirect } from "next/navigation";
+import { setRequestLocale } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { api, HydrateClient } from "@/trpc/server";
 import { TripRequestDetail } from "@/app/_components/trip-requests/trip-request-detail";
@@ -6,18 +7,19 @@ import { TripRequestDetail } from "@/app/_components/trip-requests/trip-request-
 export default async function TripRequestPage({
 	params,
 }: {
-	params: Promise<{ id: string }>;
+	params: Promise<{ locale: string; id: string }>;
 }) {
+	const { locale, id } = await params;
+	setRequestLocale(locale);
+
 	const session = await auth();
 
 	if (!session?.user) {
-		redirect("/");
+		redirect(`/${locale}`);
 	}
 
-	const { id } = await params;
-
 	try {
-		void api.tripRequest.getById.prefetch({ id });
+		await api.tripRequest.getById.prefetch({ id });
 	} catch {
 		notFound();
 	}
