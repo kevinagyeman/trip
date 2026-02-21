@@ -5,9 +5,6 @@
 	"type": "module",
 	"scripts": {
 		"build": "next build",
-		"check": "biome check .",
-		"check:unsafe": "biome check --write --unsafe .",
-		"check:write": "biome check --write .",
 		"db:generate": "prisma migrate dev",
 		"db:migrate": "prisma migrate deploy",
 		"db:push": "prisma db push",
@@ -16,7 +13,11 @@
 		"postinstall": "prisma generate",
 		"preview": "next build && next start",
 		"start": "next start",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome lint",
+    	"lint:error": "biome lint --diagnostic-level=error",
+    	"format": "biome format --write",
+    	"check:fix": "biome check --write"
 	},
 	"dependencies": {
 		"@auth/prisma-adapter": "^2.7.2",
@@ -47,7 +48,7 @@
 		"zod": "^3.24.2"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.2.5",
+		"@biomejs/biome": "2.3.6",
 		"@tailwindcss/postcss": "^4.0.15",
 		"@types/bcryptjs": "^2.4.6",
 		"@types/node": "^20.14.10",

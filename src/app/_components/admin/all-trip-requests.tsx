@@ -17,9 +17,9 @@ import { useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 export function AllTripRequests() {
-	const [statusFilter, setStatusFilter] = useState<
-		TripRequestStatus | "ALL"
-	>("ALL");
+	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
+		"ALL",
+	);
 
 	const { data, isLoading } = api.tripRequest.getAllRequests.useQuery({
 		status: statusFilter === "ALL" ? undefined : statusFilter,
@@ -69,9 +69,15 @@ export function AllTripRequests() {
 									<p className="text-xs text-muted-foreground">
 										{request.serviceType} ·{" "}
 										{request.arrivalFlightDate
-											? format(new Date(request.arrivalFlightDate), "MMM dd, yyyy")
+											? format(
+													new Date(request.arrivalFlightDate),
+													"MMM dd, yyyy",
+												)
 											: request.departureFlightDate
-												? format(new Date(request.departureFlightDate), "MMM dd, yyyy")
+												? format(
+														new Date(request.departureFlightDate),
+														"MMM dd, yyyy",
+													)
 												: format(new Date(request.createdAt), "MMM dd, yyyy")}
 									</p>
 								</div>

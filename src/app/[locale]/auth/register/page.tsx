@@ -105,7 +105,9 @@ export default function RegisterPage() {
 								>
 									{t("clickToVerify")}
 								</a>
-								<p className="mt-2 text-xs text-yellow-600">{t("productionNote")}</p>
+								<p className="mt-2 text-xs text-yellow-600">
+									{t("productionNote")}
+								</p>
 							</div>
 						)}
 
@@ -192,7 +194,10 @@ export default function RegisterPage() {
 							<span className="text-muted-foreground">
 								{t("alreadyHaveAccount")}{" "}
 							</span>
-							<Link href="/auth/signin" className="text-blue-600 hover:underline">
+							<Link
+								href="/auth/signin"
+								className="text-blue-600 hover:underline"
+							>
 								{t("signIn")}
 							</Link>
 						</div>

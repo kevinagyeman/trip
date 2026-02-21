@@ -21,7 +21,9 @@ interface CreateQuotationFormProps {
 	tripRequestId: string;
 }
 
-export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps) {
+export function CreateQuotationForm({
+	tripRequestId,
+}: CreateQuotationFormProps) {
 	const router = useRouter();
 	const utils = api.useUtils();
 	const [price, setPrice] = useState("");

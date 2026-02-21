@@ -21,8 +21,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const utils = api.useUtils();
 
-	const { data: request, isLoading } =
-		api.tripRequest.getByIdAdmin.useQuery({ id: requestId });
+	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
+		id: requestId,
+	});
 
 	const updateStatus = api.tripRequest.updateStatus.useMutation({
 		onSuccess: async () => {
@@ -102,7 +103,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									<SelectItem value="CANCELLED">Cancelled</SelectItem>
 								</SelectContent>
 							</Select>
-							{request.isConfirmed && <Badge variant="outline">Confirmed</Badge>}
+							{request.isConfirmed && (
+								<Badge variant="outline">Confirmed</Badge>
+							)}
 						</div>
 					</div>
 				</CardHeader>

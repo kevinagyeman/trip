@@ -5,7 +5,10 @@ import {
 	protectedProcedure,
 	adminProcedure,
 } from "@/server/api/trpc";
-import { QuotationStatus, TripRequestStatus } from "../../../../generated/prisma";
+import {
+	QuotationStatus,
+	TripRequestStatus,
+} from "../../../../generated/prisma";
 import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
 import { QuotationSentEmail } from "@/emails/quotation-sent";
 import { QuotationResponseEmail } from "@/emails/quotation-response";
@@ -23,7 +26,7 @@ export const quotationRouter = createTRPCRouter({
 				areCarSeatsIncluded: z.boolean().default(false),
 				quotationAdditionalInfo: z.string().optional(),
 				internalNotes: z.string().optional(),
-			})
+			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
@@ -57,7 +60,7 @@ export const quotationRouter = createTRPCRouter({
 				areCarSeatsIncluded: z.boolean().optional(),
 				quotationAdditionalInfo: z.string().optional(),
 				internalNotes: z.string().optional(),
-			})
+			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			const { id, ...data } = input;

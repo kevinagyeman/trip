@@ -64,7 +64,9 @@ export async function POST(request: Request) {
 		const verificationToken = await db.verificationToken.create({
 			data: {
 				identifier: email,
-				token: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+				token:
+					Math.random().toString(36).substring(2, 15) +
+					Math.random().toString(36).substring(2, 15),
 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
 			},
 		});
@@ -82,7 +84,8 @@ export async function POST(request: Request) {
 
 		return NextResponse.json(
 			{
-				message: "Registration successful. Please check your email to verify your account.",
+				message:
+					"Registration successful. Please check your email to verify your account.",
 				userId: user.id,
 			},
 			{ status: 201 },

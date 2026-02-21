@@ -90,10 +90,27 @@ const container = {
 	maxWidth: "560px",
 };
 const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
-const subheadingGreen = { color: "#166534", fontSize: "20px", margin: "24px 0 8px" };
-const subheadingRed = { color: "#991b1b", fontSize: "20px", margin: "24px 0 8px" };
-const text = { color: "#4a4a4a", fontSize: "15px", lineHeight: "24px", margin: "0 0 16px" };
-const footer = { color: "#888888", fontSize: "12px", textAlign: "center" as const };
+const subheadingGreen = {
+	color: "#166534",
+	fontSize: "20px",
+	margin: "24px 0 8px",
+};
+const subheadingRed = {
+	color: "#991b1b",
+	fontSize: "20px",
+	margin: "24px 0 8px",
+};
+const text = {
+	color: "#4a4a4a",
+	fontSize: "15px",
+	lineHeight: "24px",
+	margin: "0 0 16px",
+};
+const footer = {
+	color: "#888888",
+	fontSize: "12px",
+	textAlign: "center" as const,
+};
 const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
 const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
 const button = {

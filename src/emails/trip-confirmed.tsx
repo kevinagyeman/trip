@@ -44,7 +44,9 @@ export function TripConfirmedEmail({
 	return (
 		<Html>
 			<Head />
-			<Preview>✈️ {customerName} confirmed their trip with flight details</Preview>
+			<Preview>
+				✈️ {customerName} confirmed their trip with flight details
+			</Preview>
 			<Body style={body}>
 				<Container style={container}>
 					<Heading style={heading}>Trip Manager</Heading>
@@ -53,8 +55,8 @@ export function TripConfirmedEmail({
 						✈️ Trip Confirmed
 					</Heading>
 					<Text style={text}>
-						<strong>{customerName}</strong> ({customerEmail}) has confirmed their
-						booking and submitted flight details.
+						<strong>{customerName}</strong> ({customerEmail}) has confirmed
+						their booking and submitted flight details.
 					</Text>
 
 					{showArrival && (arrivalFlightDate ?? arrivalFlightNumber) && (
@@ -129,8 +131,17 @@ const container = {
 };
 const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
 const subheading = { color: "#1a1a1a", fontSize: "20px", margin: "24px 0 8px" };
-const text = { color: "#4a4a4a", fontSize: "15px", lineHeight: "24px", margin: "0 0 16px" };
-const footer = { color: "#888888", fontSize: "12px", textAlign: "center" as const };
+const text = {
+	color: "#4a4a4a",
+	fontSize: "15px",
+	lineHeight: "24px",
+	margin: "0 0 16px",
+};
+const footer = {
+	color: "#888888",
+	fontSize: "12px",
+	textAlign: "center" as const,
+};
 const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
 const card = {
 	backgroundColor: "#f6f9fc",
@@ -138,9 +149,24 @@ const card = {
 	padding: "16px",
 	margin: "0 0 16px",
 };
-const cardTitle = { color: "#1a1a1a", fontSize: "14px", fontWeight: "600", margin: "0 0 12px" };
-const label = { color: "#888888", fontSize: "13px", width: "100px", padding: "3px 0" };
-const value = { color: "#1a1a1a", fontSize: "14px", fontWeight: "500", padding: "3px 0" };
+const cardTitle = {
+	color: "#1a1a1a",
+	fontSize: "14px",
+	fontWeight: "600",
+	margin: "0 0 12px",
+};
+const label = {
+	color: "#888888",
+	fontSize: "13px",
+	width: "100px",
+	padding: "3px 0",
+};
+const value = {
+	color: "#1a1a1a",
+	fontSize: "14px",
+	fontWeight: "500",
+	padding: "3px 0",
+};
 const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
 const button = {
 	backgroundColor: "#000000",

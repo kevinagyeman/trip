@@ -159,9 +159,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 								)}
 								{request.destinationAddress && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">
-											Destination:{" "}
-										</span>
+										<span className="text-muted-foreground">Destination: </span>
 										{request.destinationAddress}
 									</p>
 								)}

@@ -48,6 +48,7 @@ export function CreateTripRequestForm() {
 
 	// Additional Information
 	const [additionalInfo, setAdditionalInfo] = useState("");
+	const [submitted, setSubmitted] = useState(false);
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
@@ -57,6 +58,14 @@ export function CreateTripRequestForm() {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		setSubmitted(true);
+
+		if (showArrivalFields && (!arrivalAirport || !destinationAddress)) {
+			return;
+		}
+		if (showDepartureFields && (!pickupAddress || !departureAirport)) {
+			return;
+		}
 
 		createRequest.mutate({
 			serviceType,
@@ -71,14 +80,14 @@ export function CreateTripRequestForm() {
 			numberOfAdults,
 			areThereChildren,
 			numberOfChildren: areThereChildren ? numberOfChildren : undefined,
-			ageOfChildren: areThereChildren && ageOfChildren ? ageOfChildren : undefined,
+			ageOfChildren:
+				areThereChildren && ageOfChildren ? ageOfChildren : undefined,
 			numberOfChildSeats: areThereChildren ? numberOfChildSeats : undefined,
 			additionalInfo: additionalInfo || undefined,
 		});
 	};
 
-	const showArrivalFields =
-		serviceType === "both" || serviceType === "arrival";
+	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
 	const showDepartureFields =
 		serviceType === "both" || serviceType === "departure";
 
@@ -116,7 +125,12 @@ export function CreateTripRequestForm() {
 					<div>
 						<Label htmlFor="arrivalAirport">Arrival Airport *</Label>
 						<Select value={arrivalAirport} onValueChange={setArrivalAirport}>
-							<SelectTrigger id="arrivalAirport">
+							<SelectTrigger
+								id="arrivalAirport"
+								className={
+									submitted && !arrivalAirport ? "border-destructive" : ""
+								}
+							>
 								<SelectValue placeholder="Select arrival airport" />
 							</SelectTrigger>
 							<SelectContent>
@@ -127,6 +141,11 @@ export function CreateTripRequestForm() {
 								))}
 							</SelectContent>
 						</Select>
+						{submitted && !arrivalAirport && (
+							<p className="mt-1 text-sm text-destructive">
+								Please select an airport
+							</p>
+						)}
 					</div>
 
 					<div>
@@ -136,7 +155,15 @@ export function CreateTripRequestForm() {
 							value={destinationAddress}
 							onChange={(e) => setDestinationAddress(e.target.value)}
 							placeholder="Enter your destination address"
+							className={
+								submitted && !destinationAddress ? "border-destructive" : ""
+							}
 						/>
+						{submitted && !destinationAddress && (
+							<p className="mt-1 text-sm text-destructive">
+								Please enter a destination address
+							</p>
+						)}
 					</div>
 				</div>
 			)}
@@ -323,9 +350,7 @@ export function CreateTripRequestForm() {
 			<div className="space-y-4">
 				<h3 className="text-lg font-semibold">Additional Information</h3>
 				<div>
-					<Label htmlFor="additionalInfo">
-						Special Requests (Optional)
-					</Label>
+					<Label htmlFor="additionalInfo">Special Requests (Optional)</Label>
 					<Textarea
 						id="additionalInfo"
 						value={additionalInfo}

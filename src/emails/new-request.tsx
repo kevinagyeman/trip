@@ -46,7 +46,9 @@ export function NewRequestEmail({
 	return (
 		<Html>
 			<Head />
-			<Preview>New trip request from {firstName} {lastName}</Preview>
+			<Preview>
+				New trip request from {firstName} {lastName}
+			</Preview>
 			<Body style={body}>
 				<Container style={container}>
 					<Heading style={heading}>Trip Manager</Heading>
@@ -55,7 +57,8 @@ export function NewRequestEmail({
 						New Trip Request
 					</Heading>
 					<Text style={text}>
-						A new trip request has been submitted and is waiting for a quotation.
+						A new trip request has been submitted and is waiting for a
+						quotation.
 					</Text>
 
 					<Section style={card}>
@@ -107,8 +110,17 @@ const container = {
 };
 const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
 const subheading = { color: "#1a1a1a", fontSize: "20px", margin: "24px 0 8px" };
-const text = { color: "#4a4a4a", fontSize: "15px", lineHeight: "24px", margin: "0 0 16px" };
-const footer = { color: "#888888", fontSize: "12px", textAlign: "center" as const };
+const text = {
+	color: "#4a4a4a",
+	fontSize: "15px",
+	lineHeight: "24px",
+	margin: "0 0 16px",
+};
+const footer = {
+	color: "#888888",
+	fontSize: "12px",
+	textAlign: "center" as const,
+};
 const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
 const card = {
 	backgroundColor: "#f6f9fc",
@@ -116,8 +128,18 @@ const card = {
 	padding: "16px",
 	margin: "0 0 24px",
 };
-const label = { color: "#888888", fontSize: "13px", width: "120px", padding: "4px 0" };
-const value = { color: "#1a1a1a", fontSize: "14px", fontWeight: "500", padding: "4px 0" };
+const label = {
+	color: "#888888",
+	fontSize: "13px",
+	width: "120px",
+	padding: "4px 0",
+};
+const value = {
+	color: "#1a1a1a",
+	fontSize: "14px",
+	fontWeight: "500",
+	padding: "4px 0",
+};
 const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
 const button = {
 	backgroundColor: "#000000",

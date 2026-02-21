@@ -16,7 +16,10 @@ interface VerifyEmailProps {
 	userName?: string;
 }
 
-export function VerifyEmailTemplate({ verificationUrl, userName }: VerifyEmailProps) {
+export function VerifyEmailTemplate({
+	verificationUrl,
+	userName,
+}: VerifyEmailProps) {
 	return (
 		<Html>
 			<Head />
@@ -28,9 +31,7 @@ export function VerifyEmailTemplate({ verificationUrl, userName }: VerifyEmailPr
 					<Heading as="h2" style={subheading}>
 						Verify your email address
 					</Heading>
-					<Text style={text}>
-						Hi{userName ? ` ${userName}` : ""},
-					</Text>
+					<Text style={text}>Hi{userName ? ` ${userName}` : ""},</Text>
 					<Text style={text}>
 						Thanks for signing up! Please verify your email address by clicking
 						the button below. The link is valid for 24 hours.
@@ -44,7 +45,9 @@ export function VerifyEmailTemplate({ verificationUrl, userName }: VerifyEmailPr
 						If you didn't create an account, you can safely ignore this email.
 					</Text>
 					<Hr style={hr} />
-					<Text style={footer}>Trip Manager · Secure travel transfer service</Text>
+					<Text style={footer}>
+						Trip Manager · Secure travel transfer service
+					</Text>
 				</Container>
 			</Body>
 		</Html>
@@ -61,9 +64,18 @@ const container = {
 };
 const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
 const subheading = { color: "#1a1a1a", fontSize: "20px", margin: "24px 0 8px" };
-const text = { color: "#4a4a4a", fontSize: "15px", lineHeight: "24px", margin: "0 0 16px" };
+const text = {
+	color: "#4a4a4a",
+	fontSize: "15px",
+	lineHeight: "24px",
+	margin: "0 0 16px",
+};
 const hint = { color: "#888888", fontSize: "13px", lineHeight: "20px" };
-const footer = { color: "#888888", fontSize: "12px", textAlign: "center" as const };
+const footer = {
+	color: "#888888",
+	fontSize: "12px",
+	textAlign: "center" as const,
+};
 const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
 const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
 const button = {

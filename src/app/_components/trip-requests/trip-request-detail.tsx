@@ -337,14 +337,18 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{quotation.status === "SENT" && (
 									<div className="flex gap-2">
 										<Button
-											onClick={() => acceptQuotation.mutate({ id: quotation.id })}
+											onClick={() =>
+												acceptQuotation.mutate({ id: quotation.id })
+											}
 											disabled={acceptQuotation.isPending}
 										>
 											Accept Quotation
 										</Button>
 										<Button
 											variant="destructive"
-											onClick={() => rejectQuotation.mutate({ id: quotation.id })}
+											onClick={() =>
+												rejectQuotation.mutate({ id: quotation.id })
+											}
 											disabled={rejectQuotation.isPending}
 										>
 											Reject

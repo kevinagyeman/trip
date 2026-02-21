@@ -46,9 +46,15 @@ export function MyTripRequests() {
 								<p className="text-sm text-muted-foreground">
 									{request.serviceType} ·{" "}
 									{request.arrivalFlightDate
-										? format(new Date(request.arrivalFlightDate), "MMM dd, yyyy")
+										? format(
+												new Date(request.arrivalFlightDate),
+												"MMM dd, yyyy",
+											)
 										: request.departureFlightDate
-											? format(new Date(request.departureFlightDate), "MMM dd, yyyy")
+											? format(
+													new Date(request.departureFlightDate),
+													"MMM dd, yyyy",
+												)
 											: format(new Date(request.createdAt), "MMM dd, yyyy")}
 								</p>
 							</div>

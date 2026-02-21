@@ -41,14 +41,15 @@ export const tripRequestRouter = createTRPCRouter({
 				ageOfChildren: z.string().optional(),
 				numberOfChildSeats: z.number().int().optional(),
 				additionalInfo: z.string().optional(),
-			})
+			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			if (input.serviceType === "both" || input.serviceType === "arrival") {
 				if (!input.arrivalAirport || !input.destinationAddress) {
 					throw new TRPCError({
 						code: "BAD_REQUEST",
-						message: "Arrival airport and destination address are required for arrival service",
+						message:
+							"Arrival airport and destination address are required for arrival service",
 					});
 				}
 			}
@@ -57,7 +58,8 @@ export const tripRequestRouter = createTRPCRouter({
 				if (!input.pickupAddress || !input.departureAirport) {
 					throw new TRPCError({
 						code: "BAD_REQUEST",
-						message: "Pickup address and departure airport are required for departure service",
+						message:
+							"Pickup address and departure airport are required for departure service",
 					});
 				}
 			}
@@ -101,7 +103,7 @@ export const tripRequestRouter = createTRPCRouter({
 					limit: z.number().min(1).max(100).default(50),
 					cursor: z.string().optional(),
 				})
-				.optional()
+				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
 			const limit = input?.limit ?? 50;
@@ -166,7 +168,7 @@ export const tripRequestRouter = createTRPCRouter({
 					limit: z.number().min(1).max(100).default(50),
 					cursor: z.string().optional(),
 				})
-				.optional()
+				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
 			const limit = input?.limit ?? 50;
@@ -219,7 +221,7 @@ export const tripRequestRouter = createTRPCRouter({
 			z.object({
 				id: z.string(),
 				status: z.nativeEnum(TripRequestStatus),
-			})
+			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			return ctx.db.tripRequest.update({
@@ -239,12 +241,14 @@ export const tripRequestRouter = createTRPCRouter({
 				departureFlightDate: z.date().optional(),
 				departureFlightTime: z.string().optional(),
 				departureFlightNumber: z.string().optional(),
-			})
+			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			const { id, ...data } = input;
 
-			const tripRequest = await ctx.db.tripRequest.findUnique({ where: { id } });
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id },
+			});
 
 			if (!tripRequest) {
 				throw new TRPCError({ code: "NOT_FOUND" });

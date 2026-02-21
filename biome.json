@@ -1,0 +1,46 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.6/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": [
+			"src/**/*",
+			"tests/**/*",
+			"!src/components/ui",
+			"!src/components/kibo-ui",
+			"!src/styles"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab"
+	},
+	"linter": {
+		"rules": {
+			"correctness": {
+				"noUnusedImports": "off",
+				"useExhaustiveDependencies": "off",
+				"noUnusedVariables": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"recommended": true,
+				"noLabelWithoutControl": "off"
+			}
+		}
+	},
+	"assist": {
+		"enabled": true,
+		"actions": {
+			"source": {
+				"organizeImports": "off",
+				"recommended": true
+			}
+		}
+	}
+}
