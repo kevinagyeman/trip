@@ -1,5 +1,6 @@
 import { LanguageSwitcher } from "@/app/_components/language-switcher";
 import { SignOutButton } from "@/app/_components/sign-out-button";
+import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/server/auth";
@@ -37,7 +38,7 @@ export async function Navigation() {
 							{session.user.name ?? session.user.email}
 						</span>
 						<LanguageSwitcher />
-						{/* <ThemeToggle /> */}
+						<ThemeToggle />
 						<SignOutButton />
 					</div>
 				</div>

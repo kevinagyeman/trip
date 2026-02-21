@@ -1,8 +1,14 @@
 "use client";
 
-import { useLocale } from "next-intl";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { usePathname, useRouter } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
+import { useLocale } from "next-intl";
 
 const locales = [
 	{ code: "en", label: "EN" },
@@ -17,22 +23,22 @@ export function LanguageSwitcher() {
 	const pathname = usePathname();
 
 	return (
-		<div className="flex items-center rounded-md border p-0.5">
-			{locales.map((l) => (
-				<button
-					key={l.code}
-					type="button"
-					onClick={() => router.replace(pathname, { locale: l.code })}
-					className={cn(
-						"rounded px-2 py-0.5 text-xs font-medium transition-colors",
-						locale === l.code
-							? "bg-primary text-primary-foreground"
-							: "text-muted-foreground hover:bg-muted hover:text-foreground",
-					)}
-				>
-					{l.label}
-				</button>
-			))}
-		</div>
+		<Select
+			value={locale}
+			onValueChange={(value) =>
+				router.replace(pathname, { locale: value })
+			}
+		>
+			<SelectTrigger className="w-20">
+				<SelectValue />
+			</SelectTrigger>
+			<SelectContent>
+				{locales.map((l) => (
+					<SelectItem key={l.code} value={l.code}>
+						{l.label}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
 	);
 }
