@@ -17,6 +17,22 @@ import { Link } from "@/i18n/navigation";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
+const statusColors: Record<string, string> = {
+	PENDING: "bg-yellow-500",
+	QUOTED: "bg-blue-500",
+	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
+	COMPLETED: "bg-gray-500",
+	CANCELLED: "bg-gray-400",
+};
+
+const quotationStatusColors: Record<string, string> = {
+	DRAFT: "bg-gray-400",
+	SENT: "bg-blue-500",
+	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
+};
+
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const utils = api.useUtils();
@@ -334,7 +350,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											</p>
 										)}
 									</div>
-									<Badge>{quotation.status}</Badge>
+									<Badge className={quotationStatusColors[quotation.status]}>{quotation.status}</Badge>
 								</div>
 							</CardHeader>
 							<CardContent className="space-y-4">

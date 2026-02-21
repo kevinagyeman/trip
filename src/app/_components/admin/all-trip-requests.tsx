@@ -16,6 +16,15 @@ import { format } from "date-fns";
 import { useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
+const statusColors: Record<string, string> = {
+	PENDING: "bg-yellow-500",
+	QUOTED: "bg-blue-500",
+	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
+	COMPLETED: "bg-gray-500",
+	CANCELLED: "bg-gray-400",
+};
+
 export function AllTripRequests() {
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
@@ -81,7 +90,7 @@ export function AllTripRequests() {
 												: format(new Date(request.createdAt), "MMM dd, yyyy")}
 									</p>
 								</div>
-								<Badge>{request.status}</Badge>
+								<Badge className={statusColors[request.status]}>{request.status}</Badge>
 							</div>
 						</CardHeader>
 						<CardContent>

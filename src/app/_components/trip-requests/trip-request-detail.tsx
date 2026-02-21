@@ -8,6 +8,22 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 
+const statusColors: Record<string, string> = {
+	PENDING: "bg-yellow-500",
+	QUOTED: "bg-blue-500",
+	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
+	COMPLETED: "bg-gray-500",
+	CANCELLED: "bg-gray-400",
+};
+
+const quotationStatusColors: Record<string, string> = {
+	DRAFT: "bg-gray-400",
+	SENT: "bg-blue-500",
+	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
+};
+
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const utils = api.useUtils();
@@ -67,7 +83,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							<p className="text-muted-foreground">{serviceTypeLabel}</p>
 						</div>
 						<div className="flex gap-2">
-							<Badge>{request.status}</Badge>
+							<Badge className={statusColors[request.status]}>{request.status}</Badge>
 							{request.isConfirmed && (
 								<Badge variant="outline">Confirmed</Badge>
 							)}
@@ -308,7 +324,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											</p>
 										)}
 									</div>
-									<Badge>{quotation.status}</Badge>
+									<Badge className={quotationStatusColors[quotation.status]}>{quotation.status}</Badge>
 								</div>
 							</CardHeader>
 							<CardContent className="space-y-4">
