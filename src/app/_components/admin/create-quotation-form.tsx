@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import CustomInput from "@/app/_components/ui/custom-input";
+import { createQuotationSchema, type CreateQuotationFormValues } from "@/lib/schemas/quotation";
 
 const DEFAULT_ADDITIONAL_INFO = `If the transfer time is between 22:00 and 06:00 (italian time)
 the price will be increased by 20%.
@@ -21,18 +23,24 @@ interface CreateQuotationFormProps {
 	tripRequestId: string;
 }
 
-export function CreateQuotationForm({
-	tripRequestId,
-}: CreateQuotationFormProps) {
+export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps) {
 	const router = useRouter();
 	const utils = api.useUtils();
-	const [price, setPrice] = useState("");
-	const [isPriceEachWay, setIsPriceEachWay] = useState(false);
-	const [areCarSeatsIncluded, setAreCarSeatsIncluded] = useState(false);
-	const [quotationAdditionalInfo, setQuotationAdditionalInfo] = useState(
-		DEFAULT_ADDITIONAL_INFO,
-	);
-	const [internalNotes, setInternalNotes] = useState("");
+
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm<CreateQuotationFormValues>({
+		resolver: zodResolver(createQuotationSchema),
+		defaultValues: {
+			isPriceEachWay: false,
+			areCarSeatsIncluded: false,
+			quotationAdditionalInfo: DEFAULT_ADDITIONAL_INFO,
+			internalNotes: "",
+		},
+	});
 
 	const createQuotation = api.quotation.create.useMutation({
 		onSuccess: async () => {
@@ -41,83 +49,73 @@ export function CreateQuotationForm({
 		},
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-
+	const onSubmit = (values: CreateQuotationFormValues) => {
 		createQuotation.mutate({
 			tripRequestId,
-			price: parseFloat(price),
+			price: values.price,
 			currency: "EUR",
-			isPriceEachWay,
-			areCarSeatsIncluded,
-			quotationAdditionalInfo: quotationAdditionalInfo || undefined,
-			internalNotes: internalNotes || undefined,
+			isPriceEachWay: values.isPriceEachWay,
+			areCarSeatsIncluded: values.areCarSeatsIncluded,
+			quotationAdditionalInfo: values.quotationAdditionalInfo || undefined,
+			internalNotes: values.internalNotes || undefined,
 		});
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4">
-			<div>
-				<Label htmlFor="price">Price (EUR) *</Label>
-				<Input
-					id="price"
-					type="number"
-					step="0.01"
-					min="0"
-					value={price}
-					onChange={(e) => setPrice(e.target.value)}
-					placeholder="150.00"
-					required
-				/>
-			</div>
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+			<CustomInput
+				labelText="Price (EUR) *"
+				inputType="number"
+				placeholder="150.00"
+				error={errors.price?.message}
+				inputProps={{ ...register("price"), step: "0.01", min: "0" }}
+			/>
 
 			<div className="flex items-center justify-between rounded-lg border p-4">
 				<div className="space-y-0.5">
-					<Label htmlFor="isPriceEachWay">Is price for each way?</Label>
+					<Label>Is price for each way?</Label>
 					<p className="text-sm text-muted-foreground">
 						If enabled, the price applies to each direction separately
 					</p>
 				</div>
-				<Switch
-					id="isPriceEachWay"
-					checked={isPriceEachWay}
-					onCheckedChange={setIsPriceEachWay}
+				<Controller
+					name="isPriceEachWay"
+					control={control}
+					render={({ field }) => (
+						<Switch checked={field.value} onCheckedChange={field.onChange} />
+					)}
 				/>
 			</div>
 
 			<div className="flex items-center justify-between rounded-lg border p-4">
 				<div className="space-y-0.5">
-					<Label htmlFor="areCarSeatsIncluded">Are car seats included?</Label>
+					<Label>Are car seats included?</Label>
 					<p className="text-sm text-muted-foreground">
 						If enabled, child car seats are included in the price
 					</p>
 				</div>
-				<Switch
-					id="areCarSeatsIncluded"
-					checked={areCarSeatsIncluded}
-					onCheckedChange={setAreCarSeatsIncluded}
+				<Controller
+					name="areCarSeatsIncluded"
+					control={control}
+					render={({ field }) => (
+						<Switch checked={field.value} onCheckedChange={field.onChange} />
+					)}
 				/>
 			</div>
 
 			<div>
-				<Label htmlFor="quotationAdditionalInfo">
-					Additional Information (Visible to Customer)
-				</Label>
+				<Label>Additional Information (Visible to Customer)</Label>
 				<Textarea
-					id="quotationAdditionalInfo"
-					value={quotationAdditionalInfo}
-					onChange={(e) => setQuotationAdditionalInfo(e.target.value)}
+					{...register("quotationAdditionalInfo")}
 					placeholder="Additional terms and conditions..."
 					rows={8}
 				/>
 			</div>
 
 			<div>
-				<Label htmlFor="internalNotes">Internal Notes (Admin Only)</Label>
+				<Label>Internal Notes (Admin Only)</Label>
 				<Textarea
-					id="internalNotes"
-					value={internalNotes}
-					onChange={(e) => setInternalNotes(e.target.value)}
+					{...register("internalNotes")}
 					placeholder="Notes for other admins..."
 					rows={3}
 				/>

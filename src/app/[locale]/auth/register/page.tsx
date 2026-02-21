@@ -1,5 +1,11 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -8,69 +14,46 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import CustomInput from "@/app/_components/ui/custom-input";
+import { registerSchema, type RegisterFormValues } from "@/lib/schemas/auth";
 
 export default function RegisterPage() {
 	const router = useRouter();
 	const t = useTranslations("auth");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
+	const [serverError, setServerError] = useState("");
 	const [success, setSuccess] = useState(false);
-	const [verificationToken, setVerificationToken] = useState("");
+	const [registeredEmail, setRegisteredEmail] = useState("");
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setIsLoading(true);
-		setError("");
-		setSuccess(false);
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+	} = useForm<RegisterFormValues>({
+		resolver: zodResolver(registerSchema),
+	});
 
-		if (password !== confirmPassword) {
-			setError(t("passwordMismatch"));
-			setIsLoading(false);
-			return;
-		}
-
-		if (password.length < 6) {
-			setError(t("passwordTooShort"));
-			setIsLoading(false);
-			return;
-		}
-
+	const onSubmit = async (values: RegisterFormValues) => {
+		setServerError("");
 		try {
 			const response = await fetch("/api/auth/register", {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					email,
-					password,
-				}),
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email: values.email, password: values.password }),
 			});
 
 			const data = await response.json();
 
 			if (!response.ok) {
-				setError(data.error || t("registrationFailed"));
+				setServerError(data.error || t("registrationFailed"));
 			} else {
+				setRegisteredEmail(values.email);
 				setSuccess(true);
-				setVerificationToken(data.verificationToken || "");
 				setTimeout(() => {
 					router.push("/auth/signin?registered=true");
 				}, 5000);
 			}
 		} catch {
-			setError(t("unexpectedError"));
-		} finally {
-			setIsLoading(false);
+			setServerError(t("unexpectedError"));
 		}
 	};
 
@@ -89,28 +72,10 @@ export default function RegisterPage() {
 					<CardContent className="space-y-4">
 						<div className="rounded-md border border-green-200 bg-green-50 p-4">
 							<p className="text-sm text-green-800">
-								{t("verificationEmailSent")} <strong>{email}</strong>
+								{t("verificationEmailSent")} <strong>{registeredEmail}</strong>
 							</p>
 							<p className="mt-2 text-sm text-green-800">{t("checkEmail")}</p>
 						</div>
-
-						{verificationToken && (
-							<div className="rounded-md border border-yellow-200 bg-yellow-50 p-4">
-								<p className="mb-1 text-xs font-semibold text-yellow-800">
-									{t("verificationLinkDev")}
-								</p>
-								<a
-									href={`/api/auth/verify-email?token=${verificationToken}`}
-									className="break-all text-xs text-blue-600 underline"
-								>
-									{t("clickToVerify")}
-								</a>
-								<p className="mt-2 text-xs text-yellow-600">
-									{t("productionNote")}
-								</p>
-							</div>
-						)}
-
 						<div className="text-center">
 							<p className="text-sm text-muted-foreground">
 								{t("redirectingSignIn")}
@@ -140,64 +105,47 @@ export default function RegisterPage() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form onSubmit={handleSubmit} className="space-y-4">
-						<div className="space-y-2">
-							<Label htmlFor="email">{t("email")} *</Label>
-							<Input
-								id="email"
-								type="email"
-								placeholder="your@email.com"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								required
-								disabled={isLoading}
-							/>
-						</div>
+					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+						<CustomInput
+							labelText={`${t("email")} *`}
+							inputType="email"
+							placeholder="your@email.com"
+							error={errors.email?.message}
+							inputProps={{ ...register("email"), disabled: isSubmitting }}
+						/>
 
-						<div className="space-y-2">
-							<Label htmlFor="password">{t("passwordRequired")}</Label>
-							<Input
-								id="password"
-								type="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								required
-								disabled={isLoading}
-								minLength={6}
-							/>
-						</div>
+						<CustomInput
+							labelText={t("passwordRequired")}
+							inputType="password"
+							error={errors.password?.message}
+							inputProps={{ ...register("password"), disabled: isSubmitting }}
+						/>
 
-						<div className="space-y-2">
-							<Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
-							<Input
-								id="confirmPassword"
-								type="password"
-								value={confirmPassword}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								required
-								disabled={isLoading}
-								minLength={6}
-							/>
-						</div>
+						<CustomInput
+							labelText={t("confirmPassword")}
+							inputType="password"
+							error={errors.confirmPassword?.message}
+							inputProps={{
+								...register("confirmPassword"),
+								disabled: isSubmitting,
+							}}
+						/>
 
-						{error && (
+						{serverError && (
 							<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-								{error}
+								{serverError}
 							</div>
 						)}
 
-						<Button type="submit" className="w-full" disabled={isLoading}>
-							{isLoading ? t("registering") : t("createAccount")}
+						<Button type="submit" className="w-full" disabled={isSubmitting}>
+							{isSubmitting ? t("registering") : t("createAccount")}
 						</Button>
 
 						<div className="text-center text-sm">
 							<span className="text-muted-foreground">
 								{t("alreadyHaveAccount")}{" "}
 							</span>
-							<Link
-								href="/auth/signin"
-								className="text-blue-600 hover:underline"
-							>
+							<Link href="/auth/signin" className="text-blue-600 hover:underline">
 								{t("signIn")}
 							</Link>
 						</div>

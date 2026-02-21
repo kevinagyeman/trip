@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Calendar } from "@/components/ui/calendar";
 import {
 	Popover,
@@ -17,6 +17,8 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
+import CustomInput from "@/app/_components/ui/custom-input";
+import { confirmTripSchema, type ConfirmTripFormValues } from "@/lib/schemas/trip-request";
 
 interface ConfirmTripFormProps {
 	requestId: string;
@@ -28,33 +30,28 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 		id: requestId,
 	});
 
-	// Arrival flight details
-	const [arrivalFlightDate, setArrivalFlightDate] = useState<Date | undefined>(
-		request?.arrivalFlightDate
-			? new Date(request.arrivalFlightDate)
+	const {
+		register,
+		handleSubmit,
+		control,
+		formState: { errors },
+	} = useForm<ConfirmTripFormValues>({
+		resolver: zodResolver(confirmTripSchema),
+		values: request
+			? {
+					arrivalFlightDate: request.arrivalFlightDate
+						? new Date(request.arrivalFlightDate)
+						: undefined,
+					arrivalFlightTime: request.arrivalFlightTime ?? "",
+					arrivalFlightNumber: request.arrivalFlightNumber ?? "",
+					departureFlightDate: request.departureFlightDate
+						? new Date(request.departureFlightDate)
+						: undefined,
+					departureFlightTime: request.departureFlightTime ?? "",
+					departureFlightNumber: request.departureFlightNumber ?? "",
+				}
 			: undefined,
-	);
-	const [arrivalFlightTime, setArrivalFlightTime] = useState(
-		request?.arrivalFlightTime ?? "",
-	);
-	const [arrivalFlightNumber, setArrivalFlightNumber] = useState(
-		request?.arrivalFlightNumber ?? "",
-	);
-
-	// Departure flight details
-	const [departureFlightDate, setDepartureFlightDate] = useState<
-		Date | undefined
-	>(
-		request?.departureFlightDate
-			? new Date(request.departureFlightDate)
-			: undefined,
-	);
-	const [departureFlightTime, setDepartureFlightTime] = useState(
-		request?.departureFlightTime ?? "",
-	);
-	const [departureFlightNumber, setDepartureFlightNumber] = useState(
-		request?.departureFlightNumber ?? "",
-	);
+	});
 
 	const confirmTrip = api.tripRequest.confirm.useMutation({
 		onSuccess: () => {
@@ -62,17 +59,15 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 		},
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-
+	const onSubmit = (values: ConfirmTripFormValues) => {
 		confirmTrip.mutate({
 			id: requestId,
-			arrivalFlightDate: arrivalFlightDate,
-			arrivalFlightTime: arrivalFlightTime || undefined,
-			arrivalFlightNumber: arrivalFlightNumber || undefined,
-			departureFlightDate: departureFlightDate,
-			departureFlightTime: departureFlightTime || undefined,
-			departureFlightNumber: departureFlightNumber || undefined,
+			arrivalFlightDate: values.arrivalFlightDate,
+			arrivalFlightTime: values.arrivalFlightTime || undefined,
+			arrivalFlightNumber: values.arrivalFlightNumber || undefined,
+			departureFlightDate: values.departureFlightDate,
+			departureFlightTime: values.departureFlightTime || undefined,
+			departureFlightNumber: values.departureFlightNumber || undefined,
 		});
 	};
 
@@ -99,16 +94,13 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 			</Button>
 
 			<div className="rounded-lg bg-blue-50 p-4">
-				<h2 className="mb-2 text-lg font-semibold">
-					Trip Confirmation - Step 2
-				</h2>
+				<h2 className="mb-2 text-lg font-semibold">Trip Confirmation - Step 2</h2>
 				<p className="text-sm text-muted-foreground">
-					Please provide your complete flight details to confirm your trip
-					booking.
+					Please provide your complete flight details to confirm your trip booking.
 				</p>
 			</div>
 
-			{/* Read-only trip information */}
+			{/* Read-only trip summary */}
 			<Card>
 				<CardHeader>
 					<CardTitle>Trip Information (Read-Only)</CardTitle>
@@ -190,61 +182,64 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 			</Card>
 
 			{/* Flight details form */}
-			<form onSubmit={handleSubmit} className="space-y-6">
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				{showArrivalFields && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Arrival Flight Details *</CardTitle>
+							<CardTitle>Arrival Flight Details</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div>
-								<Label>Flight Date *</Label>
-								<Popover>
-									<PopoverTrigger asChild>
-										<Button
-											variant="outline"
-											className={cn(
-												"w-full justify-start text-left font-normal",
-												!arrivalFlightDate && "text-muted-foreground",
-											)}
-										>
-											<CalendarIcon className="mr-2 h-4 w-4" />
-											{arrivalFlightDate
-												? format(arrivalFlightDate, "PPP")
-												: "Pick arrival date"}
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent className="w-auto p-0">
-										<Calendar
-											mode="single"
-											selected={arrivalFlightDate}
-											onSelect={setArrivalFlightDate}
-										/>
-									</PopoverContent>
-								</Popover>
+								<Label>Flight Date</Label>
+								<Controller
+									name="arrivalFlightDate"
+									control={control}
+									render={({ field }) => (
+										<Popover>
+											<PopoverTrigger asChild>
+												<Button
+													variant="outline"
+													className={cn(
+														"w-full justify-start text-left font-normal",
+														!field.value && "text-muted-foreground",
+													)}
+												>
+													<CalendarIcon className="mr-2 h-4 w-4" />
+													{field.value
+														? format(field.value, "PPP")
+														: "Pick arrival date"}
+												</Button>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0">
+												<Calendar
+													mode="single"
+													selected={field.value}
+													onSelect={field.onChange}
+												/>
+											</PopoverContent>
+										</Popover>
+									)}
+								/>
+								{errors.arrivalFlightDate && (
+									<small className="text-xs text-destructive">
+										{errors.arrivalFlightDate.message}
+									</small>
+								)}
 							</div>
 
-							<div>
-								<Label htmlFor="arrivalFlightTime">Flight Time *</Label>
-								<Input
-									id="arrivalFlightTime"
-									value={arrivalFlightTime}
-									onChange={(e) => setArrivalFlightTime(e.target.value)}
-									placeholder="e.g., 14:30"
-									required
-								/>
-							</div>
+							<CustomInput
+								labelText="Flight Time"
+								placeholder="e.g., 14:30"
+								error={errors.arrivalFlightTime?.message}
+								inputProps={{ ...register("arrivalFlightTime") }}
+							/>
 
-							<div>
-								<Label htmlFor="arrivalFlightNumber">Flight Number *</Label>
-								<Input
-									id="arrivalFlightNumber"
-									value={arrivalFlightNumber}
-									onChange={(e) => setArrivalFlightNumber(e.target.value)}
-									placeholder="e.g., FR1234"
-									required
-								/>
-							</div>
+							<CustomInput
+								labelText="Flight Number"
+								placeholder="e.g., FR1234"
+								error={errors.arrivalFlightNumber?.message}
+								inputProps={{ ...register("arrivalFlightNumber") }}
+							/>
 						</CardContent>
 					</Card>
 				)}
@@ -252,57 +247,60 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				{showDepartureFields && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Departure Flight Details *</CardTitle>
+							<CardTitle>Departure Flight Details</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div>
-								<Label>Flight Date *</Label>
-								<Popover>
-									<PopoverTrigger asChild>
-										<Button
-											variant="outline"
-											className={cn(
-												"w-full justify-start text-left font-normal",
-												!departureFlightDate && "text-muted-foreground",
-											)}
-										>
-											<CalendarIcon className="mr-2 h-4 w-4" />
-											{departureFlightDate
-												? format(departureFlightDate, "PPP")
-												: "Pick departure date"}
-										</Button>
-									</PopoverTrigger>
-									<PopoverContent className="w-auto p-0">
-										<Calendar
-											mode="single"
-											selected={departureFlightDate}
-											onSelect={setDepartureFlightDate}
-										/>
-									</PopoverContent>
-								</Popover>
+								<Label>Flight Date</Label>
+								<Controller
+									name="departureFlightDate"
+									control={control}
+									render={({ field }) => (
+										<Popover>
+											<PopoverTrigger asChild>
+												<Button
+													variant="outline"
+													className={cn(
+														"w-full justify-start text-left font-normal",
+														!field.value && "text-muted-foreground",
+													)}
+												>
+													<CalendarIcon className="mr-2 h-4 w-4" />
+													{field.value
+														? format(field.value, "PPP")
+														: "Pick departure date"}
+												</Button>
+											</PopoverTrigger>
+											<PopoverContent className="w-auto p-0">
+												<Calendar
+													mode="single"
+													selected={field.value}
+													onSelect={field.onChange}
+												/>
+											</PopoverContent>
+										</Popover>
+									)}
+								/>
+								{errors.departureFlightDate && (
+									<small className="text-xs text-destructive">
+										{errors.departureFlightDate.message}
+									</small>
+								)}
 							</div>
 
-							<div>
-								<Label htmlFor="departureFlightTime">Flight Time *</Label>
-								<Input
-									id="departureFlightTime"
-									value={departureFlightTime}
-									onChange={(e) => setDepartureFlightTime(e.target.value)}
-									placeholder="e.g., 18:45"
-									required
-								/>
-							</div>
+							<CustomInput
+								labelText="Flight Time"
+								placeholder="e.g., 18:45"
+								error={errors.departureFlightTime?.message}
+								inputProps={{ ...register("departureFlightTime") }}
+							/>
 
-							<div>
-								<Label htmlFor="departureFlightNumber">Flight Number *</Label>
-								<Input
-									id="departureFlightNumber"
-									value={departureFlightNumber}
-									onChange={(e) => setDepartureFlightNumber(e.target.value)}
-									placeholder="e.g., FR5678"
-									required
-								/>
-							</div>
+							<CustomInput
+								labelText="Flight Number"
+								placeholder="e.g., FR5678"
+								error={errors.departureFlightNumber?.message}
+								inputProps={{ ...register("departureFlightNumber") }}
+							/>
 						</CardContent>
 					</Card>
 				)}
@@ -317,9 +315,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				</Button>
 
 				{confirmTrip.error && (
-					<p className="text-sm text-destructive">
-						{confirmTrip.error.message}
-					</p>
+					<p className="text-sm text-destructive">{confirmTrip.error.message}</p>
 				)}
 			</form>
 		</div>

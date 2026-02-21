@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
 	Select,
 	SelectContent,
@@ -14,41 +14,38 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AIRPORTS, SERVICE_TYPES, LANGUAGES } from "@/lib/airports";
+import CustomInput from "@/app/_components/ui/custom-input";
+import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
+import { createTripRequestSchema, type CreateTripRequestFormValues } from "@/lib/schemas/trip-request";
 
 export function CreateTripRequestForm() {
 	const router = useRouter();
 
-	// Service Type
-	const [serviceType, setServiceType] = useState<
-		"both" | "arrival" | "departure"
-	>("both");
+	const {
+		register,
+		handleSubmit,
+		control,
+		watch,
+		formState: { errors },
+	} = useForm<CreateTripRequestFormValues>({
+		resolver: zodResolver(createTripRequestSchema),
+		defaultValues: {
+			serviceType: "both",
+			language: "English",
+			numberOfAdults: 1,
+			areThereChildren: false,
+			numberOfChildren: 0,
+			numberOfChildSeats: 0,
+		},
+	});
 
-	// Arrival Information
-	const [arrivalAirport, setArrivalAirport] = useState("");
-	const [destinationAddress, setDestinationAddress] = useState("");
+	const serviceType = watch("serviceType");
+	const areThereChildren = watch("areThereChildren");
 
-	// Departure Information
-	const [pickupAddress, setPickupAddress] = useState("");
-	const [departureAirport, setDepartureAirport] = useState("");
-
-	// Travel Information
-	const [language, setLanguage] = useState<"English" | "Italian">("English");
-	const [firstName, setFirstName] = useState("");
-	const [lastName, setLastName] = useState("");
-	const [phone, setPhone] = useState("");
-	const [numberOfAdults, setNumberOfAdults] = useState(1);
-
-	// Children Information
-	const [areThereChildren, setAreThereChildren] = useState(false);
-	const [numberOfChildren, setNumberOfChildren] = useState(0);
-	const [ageOfChildren, setAgeOfChildren] = useState("");
-	const [numberOfChildSeats, setNumberOfChildSeats] = useState(0);
-
-	// Additional Information
-	const [additionalInfo, setAdditionalInfo] = useState("");
-	const [submitted, setSubmitted] = useState(false);
+	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
+	const showDepartureFields =
+		serviceType === "both" || serviceType === "departure";
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
@@ -56,309 +53,251 @@ export function CreateTripRequestForm() {
 		},
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		setSubmitted(true);
-
-		if (showArrivalFields && (!arrivalAirport || !destinationAddress)) {
-			return;
-		}
-		if (showDepartureFields && (!pickupAddress || !departureAirport)) {
-			return;
-		}
-
+	const onSubmit = (values: CreateTripRequestFormValues) => {
 		createRequest.mutate({
-			serviceType,
-			arrivalAirport: arrivalAirport || undefined,
-			destinationAddress: destinationAddress || undefined,
-			pickupAddress: pickupAddress || undefined,
-			departureAirport: departureAirport || undefined,
-			language,
-			firstName,
-			lastName,
-			phone,
-			numberOfAdults,
-			areThereChildren,
-			numberOfChildren: areThereChildren ? numberOfChildren : undefined,
+			serviceType: values.serviceType,
+			arrivalAirport: values.arrivalAirport || undefined,
+			destinationAddress: values.destinationAddress || undefined,
+			pickupAddress: values.pickupAddress || undefined,
+			departureAirport: values.departureAirport || undefined,
+			language: values.language,
+			firstName: values.firstName,
+			lastName: values.lastName,
+			phone: values.phone,
+			numberOfAdults: values.numberOfAdults,
+			areThereChildren: values.areThereChildren,
+			numberOfChildren: values.areThereChildren
+				? values.numberOfChildren
+				: undefined,
 			ageOfChildren:
-				areThereChildren && ageOfChildren ? ageOfChildren : undefined,
-			numberOfChildSeats: areThereChildren ? numberOfChildSeats : undefined,
-			additionalInfo: additionalInfo || undefined,
+				values.areThereChildren && values.ageOfChildren
+					? values.ageOfChildren
+					: undefined,
+			numberOfChildSeats: values.areThereChildren
+				? values.numberOfChildSeats
+				: undefined,
+			additionalInfo: values.additionalInfo || undefined,
 		});
 	};
 
-	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
-	const showDepartureFields =
-		serviceType === "both" || serviceType === "departure";
-
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
-			{/* Service Type Section */}
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+			{/* Service Type */}
 			<div className="space-y-4">
 				<h3 className="text-lg font-semibold">Service Type</h3>
 				<div>
-					<Label htmlFor="serviceType">What service do you need?</Label>
-					<Select
-						value={serviceType}
-						onValueChange={(value) =>
-							setServiceType(value as "both" | "arrival" | "departure")
-						}
-					>
-						<SelectTrigger id="serviceType">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							{SERVICE_TYPES.map((type) => (
-								<SelectItem key={type.value} value={type.value}>
-									{type.label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+					<Label>What service do you need?</Label>
+					<Controller
+						name="serviceType"
+						control={control}
+						render={({ field }) => (
+							<Select value={field.value} onValueChange={field.onChange}>
+								<SelectTrigger>
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									{SERVICE_TYPES.map((type) => (
+										<SelectItem key={type.value} value={type.value}>
+											{type.label}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						)}
+					/>
 				</div>
 			</div>
 
-			{/* Arrival Information Section */}
+			{/* Arrival Information */}
 			{showArrivalFields && (
 				<div className="space-y-4 rounded-lg border p-4">
 					<h3 className="text-lg font-semibold">Arrival Information</h3>
+
 					<div>
-						<Label htmlFor="arrivalAirport">Arrival Airport *</Label>
-						<Select value={arrivalAirport} onValueChange={setArrivalAirport}>
-							<SelectTrigger
-								id="arrivalAirport"
-								className={
-									submitted && !arrivalAirport ? "border-destructive" : ""
-								}
-							>
-								<SelectValue placeholder="Select arrival airport" />
-							</SelectTrigger>
-							<SelectContent>
-								{AIRPORTS.map((airport) => (
-									<SelectItem key={airport.value} value={airport.value}>
-										{airport.label}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-						{submitted && !arrivalAirport && (
-							<p className="mt-1 text-sm text-destructive">
-								Please select an airport
-							</p>
+						<Label>Arrival Airport *</Label>
+						<Controller
+							name="arrivalAirport"
+							control={control}
+							render={({ field }) => (
+								<Select value={field.value ?? ""} onValueChange={field.onChange}>
+									<SelectTrigger
+										className={errors.arrivalAirport ? "border-destructive" : ""}
+									>
+										<SelectValue placeholder="Select arrival airport" />
+									</SelectTrigger>
+									<SelectContent>
+										{AIRPORTS.map((airport) => (
+											<SelectItem key={airport.value} value={airport.value}>
+												{airport.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
+						{errors.arrivalAirport && (
+							<small className="text-xs text-destructive">
+								{errors.arrivalAirport.message}
+							</small>
 						)}
 					</div>
 
-					<div>
-						<Label htmlFor="destinationAddress">Destination Address *</Label>
-						<Input
-							id="destinationAddress"
-							value={destinationAddress}
-							onChange={(e) => setDestinationAddress(e.target.value)}
-							placeholder="Enter your destination address"
-							className={
-								submitted && !destinationAddress ? "border-destructive" : ""
-							}
-						/>
-						{submitted && !destinationAddress && (
-							<p className="mt-1 text-sm text-destructive">
-								Please enter a destination address
-							</p>
-						)}
-					</div>
+					<CustomInput
+						labelText="Destination Address *"
+						placeholder="Enter your destination address"
+						error={errors.destinationAddress?.message}
+						inputProps={{
+							...register("destinationAddress"),
+							className: errors.destinationAddress ? "border-destructive" : "",
+						}}
+					/>
 				</div>
 			)}
 
-			{/* Departure Information Section */}
+			{/* Departure Information */}
 			{showDepartureFields && (
 				<div className="space-y-4 rounded-lg border p-4">
 					<h3 className="text-lg font-semibold">Departure Information</h3>
-					<div>
-						<Label htmlFor="pickupAddress">Pickup Address *</Label>
-						<Input
-							id="pickupAddress"
-							value={pickupAddress}
-							onChange={(e) => setPickupAddress(e.target.value)}
-							placeholder="Enter pickup address"
-						/>
-					</div>
+
+					<CustomInput
+						labelText="Pickup Address *"
+						placeholder="Enter pickup address"
+						error={errors.pickupAddress?.message}
+						inputProps={{
+							...register("pickupAddress"),
+							className: errors.pickupAddress ? "border-destructive" : "",
+						}}
+					/>
 
 					<div>
-						<Label htmlFor="departureAirport">Departure Airport *</Label>
-						<Select
-							value={departureAirport}
-							onValueChange={setDepartureAirport}
-						>
-							<SelectTrigger id="departureAirport">
-								<SelectValue placeholder="Select departure airport" />
-							</SelectTrigger>
-							<SelectContent>
-								{AIRPORTS.map((airport) => (
-									<SelectItem key={airport.value} value={airport.value}>
-										{airport.label}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
+						<Label>Departure Airport *</Label>
+						<Controller
+							name="departureAirport"
+							control={control}
+							render={({ field }) => (
+								<Select value={field.value ?? ""} onValueChange={field.onChange}>
+									<SelectTrigger
+										className={errors.departureAirport ? "border-destructive" : ""}
+									>
+										<SelectValue placeholder="Select departure airport" />
+									</SelectTrigger>
+									<SelectContent>
+										{AIRPORTS.map((airport) => (
+											<SelectItem key={airport.value} value={airport.value}>
+												{airport.label}
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
+						{errors.departureAirport && (
+							<small className="text-xs text-destructive">
+								{errors.departureAirport.message}
+							</small>
+						)}
 					</div>
 				</div>
 			)}
 
-			{/* Travel Information Section */}
+			{/* Travel Information */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">Travel Information</h3>
 
 				<div>
-					<Label htmlFor="language">Preferred Language</Label>
-					<Select
-						value={language}
-						onValueChange={(value) =>
-							setLanguage(value as "English" | "Italian")
-						}
-					>
-						<SelectTrigger id="language">
-							<SelectValue />
-						</SelectTrigger>
-						<SelectContent>
-							{LANGUAGES.map((lang) => (
-								<SelectItem key={lang.value} value={lang.value}>
-									{lang.label}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
+					<Label>Preferred Language</Label>
+					<Controller
+						name="language"
+						control={control}
+						render={({ field }) => (
+							<Select value={field.value} onValueChange={field.onChange}>
+								<SelectTrigger>
+									<SelectValue />
+								</SelectTrigger>
+								<SelectContent>
+									{LANGUAGES.map((lang) => (
+										<SelectItem key={lang.value} value={lang.value}>
+											{lang.label}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						)}
+					/>
 				</div>
 
 				<div className="grid grid-cols-2 gap-4">
-					<div>
-						<Label htmlFor="firstName">First Name *</Label>
-						<Input
-							id="firstName"
-							value={firstName}
-							onChange={(e) => setFirstName(e.target.value)}
-							placeholder="First name"
-							required
-						/>
-					</div>
-					<div>
-						<Label htmlFor="lastName">Last Name *</Label>
-						<Input
-							id="lastName"
-							value={lastName}
-							onChange={(e) => setLastName(e.target.value)}
-							placeholder="Last name"
-							required
-						/>
-					</div>
-				</div>
-
-				<div>
-					<Label htmlFor="phone">Phone Number (with country code) *</Label>
-					<Input
-						id="phone"
-						value={phone}
-						onChange={(e) => setPhone(e.target.value)}
-						placeholder="+39 123 456 7890"
-						required
+					<CustomInput
+						labelText="First Name *"
+						placeholder="First name"
+						error={errors.firstName?.message}
+						inputProps={{ ...register("firstName") }}
+					/>
+					<CustomInput
+						labelText="Last Name *"
+						placeholder="Last name"
+						error={errors.lastName?.message}
+						inputProps={{ ...register("lastName") }}
 					/>
 				</div>
 
-				<div>
-					<Label htmlFor="numberOfAdults">Number of Adults *</Label>
-					<Input
-						id="numberOfAdults"
-						type="number"
-						min={1}
-						max={100}
-						value={numberOfAdults}
-						onChange={(e) => setNumberOfAdults(parseInt(e.target.value) || 1)}
-						required
-					/>
-				</div>
+				<CustomInput
+					labelText="Phone Number (with country code) *"
+					placeholder="+39 123 456 7890"
+					error={errors.phone?.message}
+					inputProps={{ ...register("phone") }}
+				/>
+
+				<CustomInput
+					labelText="Number of Adults *"
+					inputType="number"
+					error={errors.numberOfAdults?.message}
+					inputProps={{ ...register("numberOfAdults"), min: 1, max: 100 }}
+				/>
 			</div>
 
-			{/* Children Information Section */}
+			{/* Children Information */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">Children Information</h3>
 
-				<div>
-					<Label>Are there children traveling? *</Label>
-					<RadioGroup
-						value={areThereChildren ? "yes" : "no"}
-						onValueChange={(value) => setAreThereChildren(value === "yes")}
-					>
-						<div className="flex items-center space-x-2">
-							<RadioGroupItem value="yes" id="children-yes" />
-							<Label htmlFor="children-yes" className="font-normal">
-								Yes
-							</Label>
-						</div>
-						<div className="flex items-center space-x-2">
-							<RadioGroupItem value="no" id="children-no" />
-							<Label htmlFor="children-no" className="font-normal">
-								No
-							</Label>
-						</div>
-					</RadioGroup>
-				</div>
+				<CustomCheckbox
+					label="Are there children traveling?"
+					inputProps={{ ...register("areThereChildren") }}
+				/>
 
 				{areThereChildren && (
 					<>
-						<div>
-							<Label htmlFor="numberOfChildren">
-								Number of Children (0-10 years)
-							</Label>
-							<Input
-								id="numberOfChildren"
-								type="number"
-								min={0}
-								max={20}
-								value={numberOfChildren}
-								onChange={(e) =>
-									setNumberOfChildren(parseInt(e.target.value) || 0)
-								}
-							/>
-						</div>
-
-						<div>
-							<Label htmlFor="ageOfChildren">Age of Children</Label>
-							<Input
-								id="ageOfChildren"
-								value={ageOfChildren}
-								onChange={(e) => setAgeOfChildren(e.target.value)}
-								placeholder="e.g., 3 years, 7 years"
-							/>
-						</div>
-
-						<div>
-							<Label htmlFor="numberOfChildSeats">Number of Child Seats</Label>
-							<Input
-								id="numberOfChildSeats"
-								type="number"
-								min={0}
-								max={20}
-								value={numberOfChildSeats}
-								onChange={(e) =>
-									setNumberOfChildSeats(parseInt(e.target.value) || 0)
-								}
-							/>
-						</div>
+						<CustomInput
+							labelText="Number of Children"
+							inputType="number"
+							error={errors.numberOfChildren?.message}
+							inputProps={{ ...register("numberOfChildren"), min: 0, max: 20 }}
+						/>
+						<CustomInput
+							labelText="Age of Children"
+							placeholder="e.g., 3 years, 7 years"
+							error={errors.ageOfChildren?.message}
+							inputProps={{ ...register("ageOfChildren") }}
+						/>
+						<CustomInput
+							labelText="Number of Child Seats"
+							inputType="number"
+							error={errors.numberOfChildSeats?.message}
+							inputProps={{ ...register("numberOfChildSeats"), min: 0, max: 20 }}
+						/>
 					</>
 				)}
 			</div>
 
-			{/* Additional Information Section */}
-			<div className="space-y-4">
+			{/* Additional Information */}
+			<div className="space-y-2">
 				<h3 className="text-lg font-semibold">Additional Information</h3>
-				<div>
-					<Label htmlFor="additionalInfo">Special Requests (Optional)</Label>
-					<Textarea
-						id="additionalInfo"
-						value={additionalInfo}
-						onChange={(e) => setAdditionalInfo(e.target.value)}
-						placeholder="Any special requests or additional information..."
-						rows={4}
-					/>
-				</div>
+				<Label>Special Requests (Optional)</Label>
+				<Textarea
+					{...register("additionalInfo")}
+					placeholder="Any special requests or additional information..."
+					rows={4}
+				/>
 			</div>
 
 			<div className="rounded-lg bg-muted p-4 text-sm">
@@ -368,18 +307,12 @@ export function CreateTripRequestForm() {
 				</p>
 			</div>
 
-			<Button
-				type="submit"
-				disabled={createRequest.isPending}
-				className="w-full"
-			>
+			<Button type="submit" disabled={createRequest.isPending} className="w-full">
 				{createRequest.isPending ? "Submitting..." : "Submit Quotation Request"}
 			</Button>
 
 			{createRequest.error && (
-				<p className="text-sm text-destructive">
-					{createRequest.error.message}
-				</p>
+				<p className="text-sm text-destructive">{createRequest.error.message}</p>
 			)}
 		</form>
 	);
