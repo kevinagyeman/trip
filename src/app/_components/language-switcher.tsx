@@ -25,16 +25,14 @@ export function LanguageSwitcher() {
 	return (
 		<Select
 			value={locale}
-			onValueChange={(value) =>
-				router.replace(pathname, { locale: value })
-			}
+			onValueChange={(value) => router.replace(pathname, { locale: value })}
 		>
-			<SelectTrigger className="w-20">
+			<SelectTrigger className="w-17.5">
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>
 				{locales.map((l) => (
-					<SelectItem key={l.code} value={l.code}>
+					<SelectItem key={l.code} value={l.code} className="cursor-pointer">
 						{l.label}
 					</SelectItem>
 				))}

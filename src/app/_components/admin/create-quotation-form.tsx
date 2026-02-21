@@ -9,7 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import CustomInput from "@/app/_components/ui/custom-input";
-import { createQuotationSchema, type CreateQuotationFormValues } from "@/lib/schemas/quotation";
+import {
+	createQuotationSchema,
+	type CreateQuotationFormValues,
+} from "@/lib/schemas/quotation";
 
 const DEFAULT_ADDITIONAL_INFO = `If the transfer time is between 22:00 and 06:00 (italian time)
 the price will be increased by 20%.
@@ -23,7 +26,9 @@ interface CreateQuotationFormProps {
 	tripRequestId: string;
 }
 
-export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps) {
+export function CreateQuotationForm({
+	tripRequestId,
+}: CreateQuotationFormProps) {
 	const router = useRouter();
 	const utils = api.useUtils();
 

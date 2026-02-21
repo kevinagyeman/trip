@@ -38,7 +38,10 @@ export default function RegisterPage() {
 			const response = await fetch("/api/auth/register", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ email: values.email, password: values.password }),
+				body: JSON.stringify({
+					email: values.email,
+					password: values.password,
+				}),
 			});
 
 			const data = await response.json();
@@ -145,7 +148,10 @@ export default function RegisterPage() {
 							<span className="text-muted-foreground">
 								{t("alreadyHaveAccount")}{" "}
 							</span>
-							<Link href="/auth/signin" className="text-blue-600 hover:underline">
+							<Link
+								href="/auth/signin"
+								className="text-blue-600 hover:underline"
+							>
 								{t("signIn")}
 							</Link>
 						</div>

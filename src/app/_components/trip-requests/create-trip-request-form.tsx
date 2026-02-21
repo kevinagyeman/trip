@@ -1,23 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { AIRPORTS, SERVICE_TYPES, LANGUAGES } from "@/lib/airports";
-import CustomInput from "@/app/_components/ui/custom-input";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
-import { createTripRequestSchema, type CreateTripRequestFormValues } from "@/lib/schemas/trip-request";
+import CustomInput from "@/app/_components/ui/custom-input";
+import CustomSelect from "@/app/_components/ui/custom-select";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { AIRPORTS, LANGUAGES, SERVICE_TYPES } from "@/lib/airports";
+import {
+	createTripRequestSchema,
+	type CreateTripRequestFormValues,
+} from "@/lib/schemas/trip-request";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm() {
 	const router = useRouter();
@@ -27,6 +25,7 @@ export function CreateTripRequestForm() {
 		handleSubmit,
 		control,
 		watch,
+		getValues,
 		formState: { errors },
 	} = useForm<CreateTripRequestFormValues>({
 		resolver: zodResolver(createTripRequestSchema),
@@ -35,13 +34,30 @@ export function CreateTripRequestForm() {
 			language: "English",
 			numberOfAdults: 1,
 			areThereChildren: false,
-			numberOfChildren: 0,
+			numberOfChildren: 1,
+			childrenAges: [],
 			numberOfChildSeats: 0,
 		},
 	});
 
+	const { fields, replace } = useFieldArray({
+		control,
+		name: "childrenAges",
+	});
+
 	const serviceType = watch("serviceType");
 	const areThereChildren = watch("areThereChildren");
+	const numberOfChildren = watch("numberOfChildren");
+
+	useEffect(() => {
+		const count = Number(numberOfChildren) || 0;
+		const current = getValues("childrenAges") ?? [];
+		replace(
+			Array.from({ length: count }, (_, i) => ({
+				age: current[i]?.age ?? "",
+			})),
+		);
+	}, [numberOfChildren]);
 
 	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
 	const showDepartureFields =
@@ -70,8 +86,8 @@ export function CreateTripRequestForm() {
 				? values.numberOfChildren
 				: undefined,
 			ageOfChildren:
-				values.areThereChildren && values.ageOfChildren
-					? values.ageOfChildren
+				values.areThereChildren && values.childrenAges?.length
+					? values.childrenAges.map((c) => c.age).join(", ")
 					: undefined,
 			numberOfChildSeats: values.areThereChildren
 				? values.numberOfChildSeats
@@ -85,27 +101,18 @@ export function CreateTripRequestForm() {
 			{/* Service Type */}
 			<div className="space-y-4">
 				<h3 className="text-lg font-semibold">Service Type</h3>
-				<div>
-					<Label>What service do you need?</Label>
-					<Controller
-						name="serviceType"
-						control={control}
-						render={({ field }) => (
-							<Select value={field.value} onValueChange={field.onChange}>
-								<SelectTrigger>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{SERVICE_TYPES.map((type) => (
-										<SelectItem key={type.value} value={type.value}>
-											{type.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						)}
-					/>
-				</div>
+				<Controller
+					name="serviceType"
+					control={control}
+					render={({ field }) => (
+						<CustomSelect
+							labelText="What service do you need?"
+							options={SERVICE_TYPES}
+							value={field.value}
+							onValueChange={field.onChange}
+						/>
+					)}
+				/>
 			</div>
 
 			{/* Arrival Information */}
@@ -113,43 +120,26 @@ export function CreateTripRequestForm() {
 				<div className="space-y-4 rounded-lg border p-4">
 					<h3 className="text-lg font-semibold">Arrival Information</h3>
 
-					<div>
-						<Label>Arrival Airport *</Label>
-						<Controller
-							name="arrivalAirport"
-							control={control}
-							render={({ field }) => (
-								<Select value={field.value ?? ""} onValueChange={field.onChange}>
-									<SelectTrigger
-										className={errors.arrivalAirport ? "border-destructive" : ""}
-									>
-										<SelectValue placeholder="Select arrival airport" />
-									</SelectTrigger>
-									<SelectContent>
-										{AIRPORTS.map((airport) => (
-											<SelectItem key={airport.value} value={airport.value}>
-												{airport.label}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.arrivalAirport && (
-							<small className="text-xs text-destructive">
-								{errors.arrivalAirport.message}
-							</small>
+					<Controller
+						name="arrivalAirport"
+						control={control}
+						render={({ field }) => (
+							<CustomSelect
+								labelText="Arrival Airport *"
+								placeholder="Select arrival airport"
+								options={AIRPORTS}
+								value={field.value ?? ""}
+								onValueChange={field.onChange}
+								error={errors.arrivalAirport?.message}
+							/>
 						)}
-					</div>
+					/>
 
 					<CustomInput
 						labelText="Destination Address *"
 						placeholder="Enter your destination address"
 						error={errors.destinationAddress?.message}
-						inputProps={{
-							...register("destinationAddress"),
-							className: errors.destinationAddress ? "border-destructive" : "",
-						}}
+						inputProps={{ ...register("destinationAddress") }}
 					/>
 				</div>
 			)}
@@ -163,40 +153,23 @@ export function CreateTripRequestForm() {
 						labelText="Pickup Address *"
 						placeholder="Enter pickup address"
 						error={errors.pickupAddress?.message}
-						inputProps={{
-							...register("pickupAddress"),
-							className: errors.pickupAddress ? "border-destructive" : "",
-						}}
+						inputProps={{ ...register("pickupAddress") }}
 					/>
 
-					<div>
-						<Label>Departure Airport *</Label>
-						<Controller
-							name="departureAirport"
-							control={control}
-							render={({ field }) => (
-								<Select value={field.value ?? ""} onValueChange={field.onChange}>
-									<SelectTrigger
-										className={errors.departureAirport ? "border-destructive" : ""}
-									>
-										<SelectValue placeholder="Select departure airport" />
-									</SelectTrigger>
-									<SelectContent>
-										{AIRPORTS.map((airport) => (
-											<SelectItem key={airport.value} value={airport.value}>
-												{airport.label}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						{errors.departureAirport && (
-							<small className="text-xs text-destructive">
-								{errors.departureAirport.message}
-							</small>
+					<Controller
+						name="departureAirport"
+						control={control}
+						render={({ field }) => (
+							<CustomSelect
+								labelText="Departure Airport *"
+								placeholder="Select departure airport"
+								options={AIRPORTS}
+								value={field.value ?? ""}
+								onValueChange={field.onChange}
+								error={errors.departureAirport?.message}
+							/>
 						)}
-					</div>
+					/>
 				</div>
 			)}
 
@@ -204,27 +177,18 @@ export function CreateTripRequestForm() {
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">Travel Information</h3>
 
-				<div>
-					<Label>Preferred Language</Label>
-					<Controller
-						name="language"
-						control={control}
-						render={({ field }) => (
-							<Select value={field.value} onValueChange={field.onChange}>
-								<SelectTrigger>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									{LANGUAGES.map((lang) => (
-										<SelectItem key={lang.value} value={lang.value}>
-											{lang.label}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						)}
-					/>
-				</div>
+				<Controller
+					name="language"
+					control={control}
+					render={({ field }) => (
+						<CustomSelect
+							labelText="Preferred Language"
+							options={LANGUAGES}
+							value={field.value}
+							onValueChange={field.onChange}
+						/>
+					)}
+				/>
 
 				<div className="grid grid-cols-2 gap-4">
 					<CustomInput
@@ -273,17 +237,24 @@ export function CreateTripRequestForm() {
 							error={errors.numberOfChildren?.message}
 							inputProps={{ ...register("numberOfChildren"), min: 0, max: 20 }}
 						/>
-						<CustomInput
-							labelText="Age of Children"
-							placeholder="e.g., 3 years, 7 years"
-							error={errors.ageOfChildren?.message}
-							inputProps={{ ...register("ageOfChildren") }}
-						/>
+						{fields.map((field, index) => (
+							<CustomInput
+								key={field.id}
+								labelText={`Child ${index + 1} age *`}
+								placeholder="e.g., 3 years"
+								error={errors.childrenAges?.[index]?.age?.message}
+								inputProps={{ ...register(`childrenAges.${index}.age`) }}
+							/>
+						))}
 						<CustomInput
 							labelText="Number of Child Seats"
 							inputType="number"
 							error={errors.numberOfChildSeats?.message}
-							inputProps={{ ...register("numberOfChildSeats"), min: 0, max: 20 }}
+							inputProps={{
+								...register("numberOfChildSeats"),
+								min: 0,
+								max: 20,
+							}}
 						/>
 					</>
 				)}
@@ -307,12 +278,18 @@ export function CreateTripRequestForm() {
 				</p>
 			</div>
 
-			<Button type="submit" disabled={createRequest.isPending} className="w-full">
+			<Button
+				type="submit"
+				disabled={createRequest.isPending}
+				className="w-full"
+			>
 				{createRequest.isPending ? "Submitting..." : "Submit Quotation Request"}
 			</Button>
 
 			{createRequest.error && (
-				<p className="text-sm text-destructive">{createRequest.error.message}</p>
+				<p className="text-sm text-destructive">
+					{createRequest.error.message}
+				</p>
 			)}
 		</form>
 	);

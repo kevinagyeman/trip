@@ -18,7 +18,10 @@ import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 import CustomInput from "@/app/_components/ui/custom-input";
-import { confirmTripSchema, type ConfirmTripFormValues } from "@/lib/schemas/trip-request";
+import {
+	confirmTripSchema,
+	type ConfirmTripFormValues,
+} from "@/lib/schemas/trip-request";
 
 interface ConfirmTripFormProps {
 	requestId: string;
@@ -94,9 +97,12 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 			</Button>
 
 			<div className="rounded-lg bg-blue-50 p-4">
-				<h2 className="mb-2 text-lg font-semibold">Trip Confirmation - Step 2</h2>
+				<h2 className="mb-2 text-lg font-semibold">
+					Trip Confirmation - Step 2
+				</h2>
 				<p className="text-sm text-muted-foreground">
-					Please provide your complete flight details to confirm your trip booking.
+					Please provide your complete flight details to confirm your trip
+					booking.
 				</p>
 			</div>
 
@@ -315,7 +321,9 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				</Button>
 
 				{confirmTrip.error && (
-					<p className="text-sm text-destructive">{confirmTrip.error.message}</p>
+					<p className="text-sm text-destructive">
+						{confirmTrip.error.message}
+					</p>
 				)}
 			</form>
 		</div>

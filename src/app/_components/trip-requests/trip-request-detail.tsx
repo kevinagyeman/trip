@@ -83,7 +83,9 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							<p className="text-muted-foreground">{serviceTypeLabel}</p>
 						</div>
 						<div className="flex gap-2">
-							<Badge className={statusColors[request.status]}>{request.status}</Badge>
+							<Badge className={statusColors[request.status]}>
+								{request.status}
+							</Badge>
 							{request.isConfirmed && (
 								<Badge variant="outline">Confirmed</Badge>
 							)}
@@ -324,7 +326,9 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											</p>
 										)}
 									</div>
-									<Badge className={quotationStatusColors[quotation.status]}>{quotation.status}</Badge>
+									<Badge className={quotationStatusColors[quotation.status]}>
+										{quotation.status}
+									</Badge>
 								</div>
 							</CardHeader>
 							<CardContent className="space-y-4">

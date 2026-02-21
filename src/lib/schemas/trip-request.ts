@@ -17,7 +17,9 @@ export const createTripRequestSchema = z
 		numberOfAdults: z.coerce.number().int().min(1, "At least 1 adult required"),
 		areThereChildren: z.boolean(),
 		numberOfChildren: z.coerce.number().int().min(0).optional(),
-		ageOfChildren: z.string().optional(),
+		childrenAges: z
+			.array(z.object({ age: z.string().min(1, "Age is required") }))
+			.optional(),
 		numberOfChildSeats: z.coerce.number().int().min(0).optional(),
 		additionalInfo: z.string().optional(),
 	})
@@ -36,6 +38,18 @@ export const createTripRequestSchema = z
 					code: z.ZodIssueCode.custom,
 					message: "Destination address is required",
 				});
+			}
+		}
+		if (data.areThereChildren && data.numberOfChildren) {
+			const count = Number(data.numberOfChildren);
+			for (let i = 0; i < count; i++) {
+				if (!data.childrenAges?.[i]?.age?.trim()) {
+					ctx.addIssue({
+						path: ["childrenAges", i, "age"],
+						code: z.ZodIssueCode.custom,
+						message: "Age is required",
+					});
+				}
 			}
 		}
 		if (data.serviceType === "both" || data.serviceType === "departure") {
@@ -65,5 +79,7 @@ export const confirmTripSchema = z.object({
 	departureFlightNumber: z.string().optional(),
 });
 
-export type CreateTripRequestFormValues = z.infer<typeof createTripRequestSchema>;
+export type CreateTripRequestFormValues = z.infer<
+	typeof createTripRequestSchema
+>;
 export type ConfirmTripFormValues = z.infer<typeof confirmTripSchema>;

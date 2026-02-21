@@ -90,7 +90,9 @@ export function AllTripRequests() {
 												: format(new Date(request.createdAt), "MMM dd, yyyy")}
 									</p>
 								</div>
-								<Badge className={statusColors[request.status]}>{request.status}</Badge>
+								<Badge className={statusColors[request.status]}>
+									{request.status}
+								</Badge>
 							</div>
 						</CardHeader>
 						<CardContent>
