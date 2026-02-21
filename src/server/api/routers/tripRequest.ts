@@ -84,7 +84,7 @@ export const tripRequestRouter = createTRPCRouter({
 						lastName: input.lastName,
 						phone: input.phone,
 						numberOfAdults: input.numberOfAdults,
-						adminUrl: `${APP_URL}/en/admin/requests/${tripRequest.id}`,
+						adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
 					}),
 				});
 			}
@@ -278,7 +278,7 @@ export const tripRequestRouter = createTRPCRouter({
 							: undefined,
 						departureFlightTime: data.departureFlightTime,
 						departureFlightNumber: data.departureFlightNumber,
-						adminUrl: `${APP_URL}/en/admin/requests/${id}`,
+						adminUrl: `${APP_URL}/admin/requests/${id}`,
 					}),
 				});
 			}

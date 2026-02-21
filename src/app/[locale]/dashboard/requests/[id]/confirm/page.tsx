@@ -14,7 +14,7 @@ export default async function ConfirmTripPage({
 	const session = await auth();
 
 	if (!session?.user) {
-		redirect(`/${locale}/auth/signin`);
+		redirect("/auth/signin");
 	}
 
 	return (

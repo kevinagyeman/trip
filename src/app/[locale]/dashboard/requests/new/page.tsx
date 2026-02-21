@@ -15,7 +15,7 @@ export default async function NewTripRequestPage({
 
 	const session = await auth();
 	if (!session?.user) {
-		redirect(`/${locale}`);
+		redirect("/");
 	}
 
 	return (

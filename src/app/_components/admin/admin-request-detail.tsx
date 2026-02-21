@@ -13,14 +13,12 @@ import {
 } from "@/components/ui/select";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
-	const locale = useLocale();
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } =

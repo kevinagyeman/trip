@@ -15,11 +15,11 @@ export default async function AdminDashboardPage({
 	const session = await auth();
 
 	if (!session?.user) {
-		redirect(`/${locale}`);
+		redirect("/");
 	}
 
 	if (session.user.role !== "ADMIN") {
-		redirect(`/${locale}/dashboard`);
+		redirect("/dashboard");
 	}
 
 	const t = await getTranslations("dashboard");

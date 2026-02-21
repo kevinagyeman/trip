@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +23,6 @@ interface CreateQuotationFormProps {
 
 export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps) {
 	const router = useRouter();
-	const locale = useLocale();
 	const utils = api.useUtils();
 	const [price, setPrice] = useState("");
 	const [isPriceEachWay, setIsPriceEachWay] = useState(false);
@@ -37,7 +35,7 @@ export function CreateQuotationForm({ tripRequestId }: CreateQuotationFormProps)
 	const createQuotation = api.quotation.create.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: tripRequestId });
-			router.push(`/${locale}/admin/requests/${tripRequestId}`);
+			router.push(`/admin/requests/${tripRequestId}`);
 		},
 	});
 

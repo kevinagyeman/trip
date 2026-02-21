@@ -40,10 +40,16 @@ export function MyTripRequests() {
 					<CardHeader>
 						<div className="flex items-start justify-between">
 							<div>
-								<CardTitle>{request.destination}</CardTitle>
+								<CardTitle>
+									{request.firstName} {request.lastName}
+								</CardTitle>
 								<p className="text-sm text-muted-foreground">
-									{format(new Date(request.startDate), "MMM dd")} -{" "}
-									{format(new Date(request.endDate), "MMM dd, yyyy")}
+									{request.serviceType} ·{" "}
+									{request.arrivalFlightDate
+										? format(new Date(request.arrivalFlightDate), "MMM dd, yyyy")
+										: request.departureFlightDate
+											? format(new Date(request.departureFlightDate), "MMM dd, yyyy")
+											: format(new Date(request.createdAt), "MMM dd, yyyy")}
 								</p>
 							</div>
 							<Badge className={statusColors[request.status]}>
@@ -54,9 +60,14 @@ export function MyTripRequests() {
 					<CardContent>
 						<div className="flex items-center justify-between">
 							<div className="text-sm">
-								<p>{request.passengerCount} passenger(s)</p>
+								<p>
+									{request.numberOfAdults} adult(s)
+									{request.numberOfChildren
+										? `, ${request.numberOfChildren} child(ren)`
+										: ""}
+								</p>
 								{request.quotations.length > 0 && (
-									<p className="text-green-600 font-medium mt-1">
+									<p className="mt-1 font-medium text-green-600">
 										{request.quotations.length} quotation(s) received
 									</p>
 								)}

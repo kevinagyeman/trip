@@ -15,7 +15,7 @@ export default async function AdminRequestPage({
 	const session = await auth();
 
 	if (!session?.user || session.user.role !== "ADMIN") {
-		redirect(`/${locale}`);
+		redirect("/");
 	}
 
 	try {

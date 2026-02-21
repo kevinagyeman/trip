@@ -17,9 +17,9 @@ export default async function Home({
 
 	if (session?.user) {
 		if (session.user.role === "ADMIN") {
-			redirect(`/${locale}/admin`);
+			redirect("/admin");
 		} else {
-			redirect(`/${locale}/dashboard`);
+			redirect("/dashboard");
 		}
 	}
 

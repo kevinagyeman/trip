@@ -131,7 +131,7 @@ export const quotationRouter = createTRPCRouter({
 						isPriceEachWay: quotation.isPriceEachWay,
 						areCarSeatsIncluded: quotation.areCarSeatsIncluded,
 						additionalInfo: quotation.quotationAdditionalInfo ?? undefined,
-						dashboardUrl: `${APP_URL}/en/dashboard/requests/${quotation.tripRequestId}`,
+						dashboardUrl: `${APP_URL}/dashboard/requests/${quotation.tripRequestId}`,
 					}),
 				});
 			}
@@ -202,7 +202,7 @@ export const quotationRouter = createTRPCRouter({
 						customerEmail: user.email ?? "",
 						price: quotation.price.toString(),
 						currency: quotation.currency,
-						adminUrl: `${APP_URL}/en/admin/requests/${quotation.tripRequestId}`,
+						adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
 					}),
 				});
 			}
@@ -266,7 +266,7 @@ export const quotationRouter = createTRPCRouter({
 						customerEmail: user.email ?? "",
 						price: quotation.price.toString(),
 						currency: quotation.currency,
-						adminUrl: `${APP_URL}/en/admin/requests/${quotation.tripRequestId}`,
+						adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
 					}),
 				});
 			}

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useLocale } from "next-intl";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +19,6 @@ import { AIRPORTS, SERVICE_TYPES, LANGUAGES } from "@/lib/airports";
 
 export function CreateTripRequestForm() {
 	const router = useRouter();
-	const locale = useLocale();
 
 	// Service Type
 	const [serviceType, setServiceType] = useState<
@@ -53,7 +51,7 @@ export function CreateTripRequestForm() {
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
-			router.push(`/${locale}/dashboard/requests/${data.id}`);
+			router.push(`/dashboard/requests/${data.id}`);
 		},
 	});
 
