@@ -30,7 +30,7 @@ function HomeContent() {
 	const t = useTranslations("home");
 
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-8 dark:from-gray-900 dark:to-gray-800">
+		<div className="flex min-h-[calc(100vh-65px)] flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-8 dark:from-gray-900 dark:to-gray-800">
 			<div className="space-y-8 text-center">
 				<div className="space-y-4">
 					<h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">

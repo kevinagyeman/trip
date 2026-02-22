@@ -11,11 +11,25 @@ export async function Navigation() {
 	const t = await getTranslations("navigation");
 
 	if (!session?.user) {
-		return null;
+		return (
+			<nav className="sticky top-0 z-50 border-b bg-background">
+				<div className="container mx-auto px-4 py-4">
+					<div className="flex items-center justify-between">
+						<Link href="/" className="text-xl font-bold">
+							{t("brand")}
+						</Link>
+						<div className="flex items-center gap-3">
+							<LanguageSwitcher />
+							<ThemeToggle />
+						</div>
+					</div>
+				</div>
+			</nav>
+		);
 	}
 
 	return (
-		<nav className="border-b">
+		<nav className="sticky top-0 z-50 border-b bg-background">
 			<div className="container mx-auto px-4 py-4">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-6">
