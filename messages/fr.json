@@ -239,6 +239,11 @@
 		"sentDate": "Envoyé : {date}",
 		"respondedDate": "Répondu : {date}"
 	},
+	"notFound": {
+		"heading": "Page Introuvable",
+		"description": "Oups ! La page que vous recherchez est partie en voyage.",
+		"backHome": "Retour à l'Accueil"
+	},
 	"pages": {
 		"newTripRequest": "Nouvelle Demande de Voyage",
 		"backToDashboard": "← Retour au Tableau de Bord",

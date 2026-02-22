@@ -239,6 +239,11 @@
 		"sentDate": "Inviato: {date}",
 		"respondedDate": "Risposto: {date}"
 	},
+	"notFound": {
+		"heading": "Pagina Non Trovata",
+		"description": "Ops! La pagina che stai cercando è partita per un altro viaggio.",
+		"backHome": "Torna alla Home"
+	},
 	"pages": {
 		"newTripRequest": "Nuova Richiesta di Viaggio",
 		"backToDashboard": "← Torna alla Dashboard",

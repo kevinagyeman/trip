@@ -239,6 +239,11 @@
 		"sentDate": "Gesendet: {date}",
 		"respondedDate": "Beantwortet: {date}"
 	},
+	"notFound": {
+		"heading": "Seite Nicht Gefunden",
+		"description": "Hoppla! Die gesuchte Seite ist auf eine andere Reise gegangen.",
+		"backHome": "Zurück zur Startseite"
+	},
 	"pages": {
 		"newTripRequest": "Neue Reiseanfrage",
 		"backToDashboard": "← Zurück zum Dashboard",

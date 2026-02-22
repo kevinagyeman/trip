@@ -96,6 +96,7 @@ export default function SignInPage() {
 						<CustomInput
 							labelText={t("password")}
 							inputType="password"
+							placeholder="Password"
 							error={errors.password?.message}
 							inputProps={{ ...register("password"), disabled: isSubmitting }}
 						/>
