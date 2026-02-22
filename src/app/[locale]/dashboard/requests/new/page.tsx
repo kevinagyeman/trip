@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
 import { Link } from "@/i18n/navigation";
@@ -18,14 +18,16 @@ export default async function NewTripRequestPage({
 		redirect("/");
 	}
 
+	const t = await getTranslations("pages");
+
 	return (
 		<div className="container mx-auto max-w-2xl py-8">
 			<div className="mb-6">
 				<Link href="/dashboard">
-					<Button variant="outline">← Back to Dashboard</Button>
+					<Button variant="outline">{t("backToDashboard")}</Button>
 				</Link>
 			</div>
-			<h1 className="mb-6 text-3xl font-bold">New Trip Request</h1>
+			<h1 className="mb-6 text-3xl font-bold">{t("newTripRequest")}</h1>
 			<CreateTripRequestForm />
 		</div>
 	);

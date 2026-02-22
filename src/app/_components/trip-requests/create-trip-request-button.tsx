@@ -1,10 +1,12 @@
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
-export function CreateTripRequestButton() {
+export async function CreateTripRequestButton() {
+	const t = await getTranslations("dashboard");
 	return (
 		<Link href="/dashboard/requests/new">
-			<Button>New Trip Request</Button>
+			<Button>{t("newTripRequest")}</Button>
 		</Link>
 	);
 }

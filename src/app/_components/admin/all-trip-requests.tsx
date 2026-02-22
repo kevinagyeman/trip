@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { format } from "date-fns";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 const statusColors: Record<string, string> = {
@@ -26,6 +27,7 @@ const statusColors: Record<string, string> = {
 };
 
 export function AllTripRequests() {
+	const t = useTranslations("adminRequests");
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -34,7 +36,7 @@ export function AllTripRequests() {
 		status: statusFilter === "ALL" ? undefined : statusFilter,
 	});
 
-	if (isLoading) return <div>Loading...</div>;
+	if (isLoading) return <div>{t("loading")}</div>;
 
 	return (
 		<div className="space-y-4">
@@ -44,15 +46,15 @@ export function AllTripRequests() {
 					onValueChange={(v) => setStatusFilter(v as TripRequestStatus | "ALL")}
 				>
 					<SelectTrigger className="w-[200px]">
-						<SelectValue placeholder="Filter by status" />
+						<SelectValue placeholder={t("filterByStatus")} />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value="ALL">All Requests</SelectItem>
-						<SelectItem value="PENDING">Pending</SelectItem>
-						<SelectItem value="QUOTED">Quoted</SelectItem>
-						<SelectItem value="ACCEPTED">Accepted</SelectItem>
-						<SelectItem value="REJECTED">Rejected</SelectItem>
-						<SelectItem value="COMPLETED">Completed</SelectItem>
+						<SelectItem value="ALL">{t("allRequests")}</SelectItem>
+						<SelectItem value="PENDING">{t("statusPending")}</SelectItem>
+						<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
+						<SelectItem value="ACCEPTED">{t("statusAccepted")}</SelectItem>
+						<SelectItem value="REJECTED">{t("statusRejected")}</SelectItem>
+						<SelectItem value="COMPLETED">{t("statusCompleted")}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>
@@ -60,7 +62,7 @@ export function AllTripRequests() {
 			{!data?.items.length ? (
 				<Card>
 					<CardContent className="py-8 text-center text-muted-foreground">
-						No requests found.
+						{t("noRequests")}
 					</CardContent>
 				</Card>
 			) : (
@@ -99,17 +101,21 @@ export function AllTripRequests() {
 							<div className="flex items-center justify-between">
 								<div className="text-sm">
 									<p>
-										{request.numberOfAdults} adult(s)
+										{t("adultsCount", { count: request.numberOfAdults })}
 										{request.numberOfChildren
-											? `, ${request.numberOfChildren} child(ren)`
+											? `, ${t("childrenCount", { count: request.numberOfChildren })}`
 											: ""}
 									</p>
 									<p className="text-muted-foreground">
-										{request.quotations.length} quotation(s)
+										{t("quotationsCount", {
+											count: request.quotations.length,
+										})}
 									</p>
 								</div>
 								<Button asChild>
-									<Link href={`/admin/requests/${request.id}`}>Manage</Link>
+									<Link href={`/admin/requests/${request.id}`}>
+										{t("manage")}
+									</Link>
 								</Button>
 							</div>
 						</CardContent>

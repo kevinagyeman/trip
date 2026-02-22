@@ -13,12 +13,14 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm() {
 	const router = useRouter();
+	const t = useTranslations("tripRequest");
 
 	const {
 		register,
@@ -36,7 +38,7 @@ export function CreateTripRequestForm() {
 			areThereChildren: false,
 			numberOfChildren: 1,
 			childrenAges: [],
-			numberOfChildSeats: 0,
+			numberOfChildSeats: 1,
 		},
 	});
 
@@ -49,6 +51,10 @@ export function CreateTripRequestForm() {
 	const areThereChildren = watch("areThereChildren");
 	const numberOfChildren = watch("numberOfChildren");
 
+	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
+	const showDepartureFields =
+		serviceType === "both" || serviceType === "departure";
+
 	useEffect(() => {
 		const count = Number(numberOfChildren) || 0;
 		const current = getValues("childrenAges") ?? [];
@@ -58,10 +64,6 @@ export function CreateTripRequestForm() {
 			})),
 		);
 	}, [numberOfChildren]);
-
-	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
-	const showDepartureFields =
-		serviceType === "both" || serviceType === "departure";
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
@@ -100,13 +102,13 @@ export function CreateTripRequestForm() {
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 			{/* Service Type */}
 			<div className="space-y-4">
-				<h3 className="text-lg font-semibold">Service Type</h3>
+				<h3 className="text-lg font-semibold">{t("serviceType")}</h3>
 				<Controller
 					name="serviceType"
 					control={control}
 					render={({ field }) => (
 						<CustomSelect
-							labelText="What service do you need?"
+							labelText={t("serviceTypeQuestion")}
 							options={SERVICE_TYPES}
 							value={field.value}
 							onValueChange={field.onChange}
@@ -118,15 +120,15 @@ export function CreateTripRequestForm() {
 			{/* Arrival Information */}
 			{showArrivalFields && (
 				<div className="space-y-4 rounded-lg border p-4">
-					<h3 className="text-lg font-semibold">Arrival Information</h3>
+					<h3 className="text-lg font-semibold">{t("arrivalInformation")}</h3>
 
 					<Controller
 						name="arrivalAirport"
 						control={control}
 						render={({ field }) => (
 							<CustomSelect
-								labelText="Arrival Airport *"
-								placeholder="Select arrival airport"
+								labelText={t("arrivalAirport")}
+								placeholder={t("selectArrivalAirport")}
 								options={AIRPORTS}
 								value={field.value ?? ""}
 								onValueChange={field.onChange}
@@ -136,8 +138,8 @@ export function CreateTripRequestForm() {
 					/>
 
 					<CustomInput
-						labelText="Destination Address *"
-						placeholder="Enter your destination address"
+						labelText={t("destinationAddress")}
+						placeholder={t("destinationAddressPlaceholder")}
 						error={errors.destinationAddress?.message}
 						inputProps={{ ...register("destinationAddress") }}
 					/>
@@ -147,11 +149,11 @@ export function CreateTripRequestForm() {
 			{/* Departure Information */}
 			{showDepartureFields && (
 				<div className="space-y-4 rounded-lg border p-4">
-					<h3 className="text-lg font-semibold">Departure Information</h3>
+					<h3 className="text-lg font-semibold">{t("departureInformation")}</h3>
 
 					<CustomInput
-						labelText="Pickup Address *"
-						placeholder="Enter pickup address"
+						labelText={t("pickupAddress")}
+						placeholder={t("pickupAddressPlaceholder")}
 						error={errors.pickupAddress?.message}
 						inputProps={{ ...register("pickupAddress") }}
 					/>
@@ -161,8 +163,8 @@ export function CreateTripRequestForm() {
 						control={control}
 						render={({ field }) => (
 							<CustomSelect
-								labelText="Departure Airport *"
-								placeholder="Select departure airport"
+								labelText={t("departureAirport")}
+								placeholder={t("selectDepartureAirport")}
 								options={AIRPORTS}
 								value={field.value ?? ""}
 								onValueChange={field.onChange}
@@ -175,14 +177,14 @@ export function CreateTripRequestForm() {
 
 			{/* Travel Information */}
 			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">Travel Information</h3>
+				<h3 className="text-lg font-semibold">{t("travelInformation")}</h3>
 
 				<Controller
 					name="language"
 					control={control}
 					render={({ field }) => (
 						<CustomSelect
-							labelText="Preferred Language"
+							labelText={t("preferredLanguage")}
 							options={LANGUAGES}
 							value={field.value}
 							onValueChange={field.onChange}
@@ -192,28 +194,28 @@ export function CreateTripRequestForm() {
 
 				<div className="grid grid-cols-2 gap-4">
 					<CustomInput
-						labelText="First Name *"
-						placeholder="First name"
+						labelText={t("firstName")}
+						placeholder={t("firstNamePlaceholder")}
 						error={errors.firstName?.message}
 						inputProps={{ ...register("firstName") }}
 					/>
 					<CustomInput
-						labelText="Last Name *"
-						placeholder="Last name"
+						labelText={t("lastName")}
+						placeholder={t("lastNamePlaceholder")}
 						error={errors.lastName?.message}
 						inputProps={{ ...register("lastName") }}
 					/>
 				</div>
 
 				<CustomInput
-					labelText="Phone Number (with country code) *"
-					placeholder="+39 123 456 7890"
+					labelText={t("phoneNumber")}
+					placeholder={t("phonePlaceholder")}
 					error={errors.phone?.message}
 					inputProps={{ ...register("phone") }}
 				/>
 
 				<CustomInput
-					labelText="Number of Adults *"
+					labelText={t("numberOfAdults")}
 					inputType="number"
 					error={errors.numberOfAdults?.message}
 					inputProps={{ ...register("numberOfAdults"), min: 1, max: 100 }}
@@ -222,17 +224,17 @@ export function CreateTripRequestForm() {
 
 			{/* Children Information */}
 			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">Children Information</h3>
+				<h3 className="text-lg font-semibold">{t("childrenInformation")}</h3>
 
 				<CustomCheckbox
-					label="Are there children traveling?"
+					label={t("areThereChildren")}
 					inputProps={{ ...register("areThereChildren") }}
 				/>
 
 				{areThereChildren && (
 					<>
 						<CustomInput
-							labelText="Number of Children"
+							labelText={t("numberOfChildren")}
 							inputType="number"
 							error={errors.numberOfChildren?.message}
 							inputProps={{ ...register("numberOfChildren"), min: 0, max: 20 }}
@@ -240,21 +242,17 @@ export function CreateTripRequestForm() {
 						{fields.map((field, index) => (
 							<CustomInput
 								key={field.id}
-								labelText={`Child ${index + 1} age *`}
-								placeholder="e.g., 3 years"
+								labelText={t("childAge", { n: index + 1 })}
+								placeholder={t("childAgePlaceholder")}
 								error={errors.childrenAges?.[index]?.age?.message}
 								inputProps={{ ...register(`childrenAges.${index}.age`) }}
 							/>
 						))}
 						<CustomInput
-							labelText="Number of Child Seats"
+							labelText={t("numberOfChildSeats")}
 							inputType="number"
 							error={errors.numberOfChildSeats?.message}
-							inputProps={{
-								...register("numberOfChildSeats"),
-								min: 0,
-								max: 20,
-							}}
+							inputProps={{ ...register("numberOfChildSeats"), min: 0, max: 20 }}
 						/>
 					</>
 				)}
@@ -262,34 +260,25 @@ export function CreateTripRequestForm() {
 
 			{/* Additional Information */}
 			<div className="space-y-2">
-				<h3 className="text-lg font-semibold">Additional Information</h3>
-				<Label>Special Requests (Optional)</Label>
+				<h3 className="text-lg font-semibold">{t("additionalInformation")}</h3>
+				<Label>{t("specialRequests")}</Label>
 				<Textarea
 					{...register("additionalInfo")}
-					placeholder="Any special requests or additional information..."
+					placeholder={t("specialRequestsPlaceholder")}
 					rows={4}
 				/>
 			</div>
 
 			<div className="rounded-lg bg-muted p-4 text-sm">
-				<p>
-					* Flight details (dates, times, numbers) can be added later after you
-					receive and accept a quotation.
-				</p>
+				<p>{t("flightDetailsNote")}</p>
 			</div>
 
-			<Button
-				type="submit"
-				disabled={createRequest.isPending}
-				className="w-full"
-			>
-				{createRequest.isPending ? "Submitting..." : "Submit Quotation Request"}
+			<Button type="submit" disabled={createRequest.isPending} className="w-full">
+				{createRequest.isPending ? t("submitting") : t("submitRequest")}
 			</Button>
 
 			{createRequest.error && (
-				<p className="text-sm text-destructive">
-					{createRequest.error.message}
-				</p>
+				<p className="text-sm text-destructive">{createRequest.error.message}</p>
 			)}
 		</form>
 	);

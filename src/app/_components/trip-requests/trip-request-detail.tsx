@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
 
 const statusColors: Record<string, string> = {
@@ -26,6 +27,7 @@ const quotationStatusColors: Record<string, string> = {
 
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
+	const t = useTranslations("requestDetail");
 	const utils = api.useUtils();
 	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
 		id: requestId,
@@ -45,11 +47,11 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	if (isLoading) return <div>Loading...</div>;
-	if (!request) return <div>Not found</div>;
+	if (isLoading) return <div>{t("loading")}</div>;
+	if (!request) return <div>{t("notFound")}</div>;
 
 	const serviceTypeLabel =
-		SERVICE_TYPES.find((t) => t.value === request.serviceType)?.label ??
+		SERVICE_TYPES.find((s) => s.value === request.serviceType)?.label ??
 		request.serviceType;
 	const showArrivalFields =
 		request.serviceType === "both" || request.serviceType === "arrival";
@@ -69,7 +71,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	return (
 		<div className="space-y-6">
 			<Button variant="outline" onClick={() => router.back()}>
-				Back
+				{t("back")}
 			</Button>
 
 			{/* Main Request Information */}
@@ -87,7 +89,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{request.status}
 							</Badge>
 							{request.isConfirmed && (
-								<Badge variant="outline">Confirmed</Badge>
+								<Badge variant="outline">{t("confirmed")}</Badge>
 							)}
 						</div>
 					</div>
@@ -95,22 +97,24 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 				<CardContent className="space-y-6">
 					{/* Travel Information */}
 					<div>
-						<h3 className="mb-3 text-lg font-semibold">Travel Information</h3>
+						<h3 className="mb-3 text-lg font-semibold">
+							{t("travelInformation")}
+						</h3>
 						<div className="grid grid-cols-2 gap-4">
 							<div>
-								<p className="text-sm text-muted-foreground">Language</p>
+								<p className="text-sm text-muted-foreground">{t("language")}</p>
 								<p className="font-medium">{request.language}</p>
 							</div>
 							<div>
-								<p className="text-sm text-muted-foreground">Phone</p>
+								<p className="text-sm text-muted-foreground">{t("phone")}</p>
 								<p className="font-medium">{request.phone}</p>
 							</div>
 							<div>
-								<p className="text-sm text-muted-foreground">Adults</p>
+								<p className="text-sm text-muted-foreground">{t("adults")}</p>
 								<p className="font-medium">{request.numberOfAdults}</p>
 							</div>
 							<div>
-								<p className="text-sm text-muted-foreground">Created</p>
+								<p className="text-sm text-muted-foreground">{t("created")}</p>
 								<p className="font-medium">
 									{format(new Date(request.createdAt), "PPP")}
 								</p>
@@ -122,12 +126,14 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					{showArrivalFields && (
 						<div className="rounded-lg border p-4">
 							<h3 className="mb-3 text-lg font-semibold">
-								Arrival Information
+								{t("arrivalInformation")}
 							</h3>
 							<div className="grid gap-3">
 								{request.arrivalAirport && (
 									<div>
-										<p className="text-sm text-muted-foreground">Airport</p>
+										<p className="text-sm text-muted-foreground">
+											{t("airport")}
+										</p>
 										<p className="font-medium">
 											{getAirportLabel(request.arrivalAirport)}
 										</p>
@@ -136,7 +142,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{request.destinationAddress && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Destination Address
+											{t("destinationAddress")}
 										</p>
 										<p className="font-medium">{request.destinationAddress}</p>
 									</div>
@@ -145,7 +151,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 									<div className="grid grid-cols-3 gap-3">
 										<div>
 											<p className="text-sm text-muted-foreground">
-												Flight Date
+												{t("flightDate")}
 											</p>
 											<p className="font-medium">
 												{format(new Date(request.arrivalFlightDate), "PPP")}
@@ -154,7 +160,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										{request.arrivalFlightTime && (
 											<div>
 												<p className="text-sm text-muted-foreground">
-													Flight Time
+													{t("flightTime")}
 												</p>
 												<p className="font-medium">
 													{request.arrivalFlightTime}
@@ -164,7 +170,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										{request.arrivalFlightNumber && (
 											<div>
 												<p className="text-sm text-muted-foreground">
-													Flight Number
+													{t("flightNumber")}
 												</p>
 												<p className="font-medium">
 													{request.arrivalFlightNumber}
@@ -181,20 +187,22 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					{showDepartureFields && (
 						<div className="rounded-lg border p-4">
 							<h3 className="mb-3 text-lg font-semibold">
-								Departure Information
+								{t("departureInformation")}
 							</h3>
 							<div className="grid gap-3">
 								{request.pickupAddress && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Pickup Address
+											{t("pickupAddress")}
 										</p>
 										<p className="font-medium">{request.pickupAddress}</p>
 									</div>
 								)}
 								{request.departureAirport && (
 									<div>
-										<p className="text-sm text-muted-foreground">Airport</p>
+										<p className="text-sm text-muted-foreground">
+											{t("airport")}
+										</p>
 										<p className="font-medium">
 											{getAirportLabel(request.departureAirport)}
 										</p>
@@ -204,7 +212,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 									<div className="grid grid-cols-3 gap-3">
 										<div>
 											<p className="text-sm text-muted-foreground">
-												Flight Date
+												{t("flightDate")}
 											</p>
 											<p className="font-medium">
 												{format(new Date(request.departureFlightDate), "PPP")}
@@ -213,7 +221,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										{request.departureFlightTime && (
 											<div>
 												<p className="text-sm text-muted-foreground">
-													Flight Time
+													{t("flightTime")}
 												</p>
 												<p className="font-medium">
 													{request.departureFlightTime}
@@ -223,7 +231,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										{request.departureFlightNumber && (
 											<div>
 												<p className="text-sm text-muted-foreground">
-													Flight Number
+													{t("flightNumber")}
 												</p>
 												<p className="font-medium">
 													{request.departureFlightNumber}
@@ -240,13 +248,13 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					{request.areThereChildren && (
 						<div>
 							<h3 className="mb-3 text-lg font-semibold">
-								Children Information
+								{t("childrenInformation")}
 							</h3>
 							<div className="grid grid-cols-2 gap-4">
 								{request.numberOfChildren !== null && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Number of Children
+											{t("numberOfChildren")}
 										</p>
 										<p className="font-medium">{request.numberOfChildren}</p>
 									</div>
@@ -254,7 +262,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{request.ageOfChildren && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Ages of Children
+											{t("agesOfChildren")}
 										</p>
 										<p className="font-medium">{request.ageOfChildren}</p>
 									</div>
@@ -262,7 +270,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{request.numberOfChildSeats !== null && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Child Seats Needed
+											{t("childSeatsNeeded")}
 										</p>
 										<p className="font-medium">{request.numberOfChildSeats}</p>
 									</div>
@@ -275,7 +283,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					{request.additionalInfo && (
 						<div>
 							<h3 className="mb-3 text-lg font-semibold">
-								Additional Information
+								{t("additionalInformation")}
 							</h3>
 							<p className="whitespace-pre-wrap rounded-lg bg-muted p-3">
 								{request.additionalInfo}
@@ -291,9 +299,11 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					<CardContent className="pt-6">
 						<div className="flex items-center justify-between">
 							<div>
-								<h3 className="font-semibold">Trip Confirmation Required</h3>
+								<h3 className="font-semibold">
+									{t("tripConfirmationRequired")}
+								</h3>
 								<p className="text-sm text-muted-foreground">
-									Please confirm your trip by providing complete flight details
+									{t("tripConfirmationDesc")}
 								</p>
 							</div>
 							<Button
@@ -301,7 +311,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 									router.push(`/dashboard/requests/${requestId}/confirm`)
 								}
 							>
-								Confirm Trip
+								{t("confirmTrip")}
 							</Button>
 						</div>
 					</CardContent>
@@ -311,7 +321,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 			{/* Quotations */}
 			{request.quotations.length > 0 && (
 				<div className="space-y-4">
-					<h2 className="text-xl font-bold">Quotations</h2>
+					<h2 className="text-xl font-bold">{t("quotations")}</h2>
 					{request.quotations.map((quotation) => (
 						<Card key={quotation.id}>
 							<CardHeader>
@@ -322,7 +332,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										</CardTitle>
 										{quotation.isPriceEachWay && (
 											<p className="text-sm text-muted-foreground">
-												Price for each way
+												{t("priceEachWay")}
 											</p>
 										)}
 									</div>
@@ -335,14 +345,14 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{quotation.areCarSeatsIncluded && (
 									<div className="rounded-lg bg-muted p-3">
 										<p className="text-sm font-medium">
-											Car seats are included in the price
+											{t("carSeatsIncluded")}
 										</p>
 									</div>
 								)}
 								{quotation.quotationAdditionalInfo && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											Additional Information
+											{t("additionalInfoLabel")}
 										</p>
 										<p className="mt-1 whitespace-pre-wrap">
 											{quotation.quotationAdditionalInfo}
@@ -351,7 +361,9 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								)}
 								{quotation.sentAt && (
 									<p className="text-sm text-muted-foreground">
-										Sent: {format(new Date(quotation.sentAt), "PPP")}
+										{t("sentDate", {
+											date: format(new Date(quotation.sentAt), "PPP"),
+										})}
 									</p>
 								)}
 								{quotation.status === "SENT" && (
@@ -362,7 +374,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											}
 											disabled={acceptQuotation.isPending}
 										>
-											Accept Quotation
+											{t("acceptQuotation")}
 										</Button>
 										<Button
 											variant="destructive"
@@ -371,7 +383,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											}
 											disabled={rejectQuotation.isPending}
 										>
-											Reject
+											{t("reject")}
 										</Button>
 									</div>
 								)}

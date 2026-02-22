@@ -13,6 +13,7 @@ import {
 	createQuotationSchema,
 	type CreateQuotationFormValues,
 } from "@/lib/schemas/quotation";
+import { useTranslations } from "next-intl";
 
 const DEFAULT_ADDITIONAL_INFO = `If the transfer time is between 22:00 and 06:00 (italian time)
 the price will be increased by 20%.
@@ -31,6 +32,7 @@ export function CreateQuotationForm({
 }: CreateQuotationFormProps) {
 	const router = useRouter();
 	const utils = api.useUtils();
+	const t = useTranslations("quotation");
 
 	const {
 		register,
@@ -69,18 +71,18 @@ export function CreateQuotationForm({
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<CustomInput
-				labelText="Price (EUR) *"
+				labelText={t("price")}
 				inputType="number"
-				placeholder="150.00"
+				placeholder={t("pricePlaceholder")}
 				error={errors.price?.message}
 				inputProps={{ ...register("price"), step: "0.01", min: "0" }}
 			/>
 
 			<div className="flex items-center justify-between rounded-lg border p-4">
 				<div className="space-y-0.5">
-					<Label>Is price for each way?</Label>
+					<Label>{t("isPriceEachWay")}</Label>
 					<p className="text-sm text-muted-foreground">
-						If enabled, the price applies to each direction separately
+						{t("isPriceEachWayDesc")}
 					</p>
 				</div>
 				<Controller
@@ -94,9 +96,9 @@ export function CreateQuotationForm({
 
 			<div className="flex items-center justify-between rounded-lg border p-4">
 				<div className="space-y-0.5">
-					<Label>Are car seats included?</Label>
+					<Label>{t("areCarSeatsIncluded")}</Label>
 					<p className="text-sm text-muted-foreground">
-						If enabled, child car seats are included in the price
+						{t("areCarSeatsIncludedDesc")}
 					</p>
 				</div>
 				<Controller
@@ -109,19 +111,19 @@ export function CreateQuotationForm({
 			</div>
 
 			<div>
-				<Label>Additional Information (Visible to Customer)</Label>
+				<Label>{t("additionalInfo")}</Label>
 				<Textarea
 					{...register("quotationAdditionalInfo")}
-					placeholder="Additional terms and conditions..."
+					placeholder={t("additionalInfoPlaceholder")}
 					rows={8}
 				/>
 			</div>
 
 			<div>
-				<Label>Internal Notes (Admin Only)</Label>
+				<Label>{t("internalNotes")}</Label>
 				<Textarea
 					{...register("internalNotes")}
-					placeholder="Notes for other admins..."
+					placeholder={t("internalNotesPlaceholder")}
 					rows={3}
 				/>
 			</div>
@@ -131,7 +133,7 @@ export function CreateQuotationForm({
 				disabled={createQuotation.isPending}
 				className="w-full"
 			>
-				{createQuotation.isPending ? "Creating..." : "Create Quotation (Draft)"}
+				{createQuotation.isPending ? t("creating") : t("createButton")}
 			</Button>
 
 			{createQuotation.error && (

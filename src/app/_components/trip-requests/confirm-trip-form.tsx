@@ -22,6 +22,7 @@ import {
 	confirmTripSchema,
 	type ConfirmTripFormValues,
 } from "@/lib/schemas/trip-request";
+import { useTranslations } from "next-intl";
 
 interface ConfirmTripFormProps {
 	requestId: string;
@@ -29,6 +30,8 @@ interface ConfirmTripFormProps {
 
 export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 	const router = useRouter();
+	const t = useTranslations("confirmTrip");
+
 	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
 		id: requestId,
 	});
@@ -74,11 +77,11 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 		});
 	};
 
-	if (isLoading) return <div>Loading...</div>;
-	if (!request) return <div>Not found</div>;
+	if (isLoading) return <div>{t("loading")}</div>;
+	if (!request) return <div>{t("notFound")}</div>;
 
 	const serviceTypeLabel =
-		SERVICE_TYPES.find((t) => t.value === request.serviceType)?.label ??
+		SERVICE_TYPES.find((s) => s.value === request.serviceType)?.label ??
 		request.serviceType;
 	const showArrivalFields =
 		request.serviceType === "both" || request.serviceType === "arrival";
@@ -93,51 +96,46 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 	return (
 		<div className="space-y-6">
 			<Button variant="outline" onClick={() => router.back()}>
-				Back
+				{t("back")}
 			</Button>
 
 			<div className="rounded-lg bg-blue-50 p-4">
-				<h2 className="mb-2 text-lg font-semibold">
-					Trip Confirmation - Step 2
-				</h2>
-				<p className="text-sm text-muted-foreground">
-					Please provide your complete flight details to confirm your trip
-					booking.
-				</p>
+				<h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
+				<p className="text-sm text-muted-foreground">{t("description")}</p>
 			</div>
 
 			{/* Read-only trip summary */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Trip Information (Read-Only)</CardTitle>
+					<CardTitle>{t("tripInfoReadOnly")}</CardTitle>
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div className="grid grid-cols-2 gap-4">
 						<div>
-							<p className="text-sm text-muted-foreground">Service Type</p>
+							<p className="text-sm text-muted-foreground">{t("serviceType")}</p>
 							<p className="font-medium">{serviceTypeLabel}</p>
 						</div>
 						<div>
-							<p className="text-sm text-muted-foreground">Language</p>
+							<p className="text-sm text-muted-foreground">{t("language")}</p>
 							<p className="font-medium">{request.language}</p>
 						</div>
 						<div>
-							<p className="text-sm text-muted-foreground">Name</p>
+							<p className="text-sm text-muted-foreground">{t("name")}</p>
 							<p className="font-medium">
 								{request.firstName} {request.lastName}
 							</p>
 						</div>
 						<div>
-							<p className="text-sm text-muted-foreground">Phone</p>
+							<p className="text-sm text-muted-foreground">{t("phone")}</p>
 							<p className="font-medium">{request.phone}</p>
 						</div>
 						<div>
-							<p className="text-sm text-muted-foreground">Adults</p>
+							<p className="text-sm text-muted-foreground">{t("adults")}</p>
 							<p className="font-medium">{request.numberOfAdults}</p>
 						</div>
 						{request.areThereChildren && (
 							<div>
-								<p className="text-sm text-muted-foreground">Children</p>
+								<p className="text-sm text-muted-foreground">{t("children")}</p>
 								<p className="font-medium">
 									{request.numberOfChildren} ({request.ageOfChildren})
 								</p>
@@ -147,17 +145,17 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 
 					{showArrivalFields && (
 						<div className="rounded-lg border p-3">
-							<p className="mb-2 font-semibold">Arrival</p>
+							<p className="mb-2 font-semibold">{t("arrival")}</p>
 							<div className="grid gap-2">
 								{request.arrivalAirport && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">Airport: </span>
+										<span className="text-muted-foreground">{t("airport")}: </span>
 										{getAirportLabel(request.arrivalAirport)}
 									</p>
 								)}
 								{request.destinationAddress && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">Destination: </span>
+										<span className="text-muted-foreground">{t("destination")}: </span>
 										{request.destinationAddress}
 									</p>
 								)}
@@ -167,17 +165,17 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 
 					{showDepartureFields && (
 						<div className="rounded-lg border p-3">
-							<p className="mb-2 font-semibold">Departure</p>
+							<p className="mb-2 font-semibold">{t("departure")}</p>
 							<div className="grid gap-2">
 								{request.pickupAddress && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">Pickup: </span>
+										<span className="text-muted-foreground">{t("pickup")}: </span>
 										{request.pickupAddress}
 									</p>
 								)}
 								{request.departureAirport && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">Airport: </span>
+										<span className="text-muted-foreground">{t("airport")}: </span>
 										{getAirportLabel(request.departureAirport)}
 									</p>
 								)}
@@ -192,11 +190,11 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				{showArrivalFields && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Arrival Flight Details</CardTitle>
+							<CardTitle>{t("arrivalFlightDetails")}</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div>
-								<Label>Flight Date</Label>
+								<Label>{t("flightDate")}</Label>
 								<Controller
 									name="arrivalFlightDate"
 									control={control}
@@ -213,7 +211,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 													<CalendarIcon className="mr-2 h-4 w-4" />
 													{field.value
 														? format(field.value, "PPP")
-														: "Pick arrival date"}
+														: t("pickArrivalDate")}
 												</Button>
 											</PopoverTrigger>
 											<PopoverContent className="w-auto p-0">
@@ -234,15 +232,15 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 							</div>
 
 							<CustomInput
-								labelText="Flight Time"
-								placeholder="e.g., 14:30"
+								labelText={t("flightTime")}
+								placeholder={t("flightTimePlaceholderArrival")}
 								error={errors.arrivalFlightTime?.message}
 								inputProps={{ ...register("arrivalFlightTime") }}
 							/>
 
 							<CustomInput
-								labelText="Flight Number"
-								placeholder="e.g., FR1234"
+								labelText={t("flightNumber")}
+								placeholder={t("flightNumberPlaceholderArrival")}
 								error={errors.arrivalFlightNumber?.message}
 								inputProps={{ ...register("arrivalFlightNumber") }}
 							/>
@@ -253,11 +251,11 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				{showDepartureFields && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Departure Flight Details</CardTitle>
+							<CardTitle>{t("departureFlightDetails")}</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div>
-								<Label>Flight Date</Label>
+								<Label>{t("flightDate")}</Label>
 								<Controller
 									name="departureFlightDate"
 									control={control}
@@ -274,7 +272,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 													<CalendarIcon className="mr-2 h-4 w-4" />
 													{field.value
 														? format(field.value, "PPP")
-														: "Pick departure date"}
+														: t("pickDepartureDate")}
 												</Button>
 											</PopoverTrigger>
 											<PopoverContent className="w-auto p-0">
@@ -295,15 +293,15 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 							</div>
 
 							<CustomInput
-								labelText="Flight Time"
-								placeholder="e.g., 18:45"
+								labelText={t("flightTime")}
+								placeholder={t("flightTimePlaceholderDeparture")}
 								error={errors.departureFlightTime?.message}
 								inputProps={{ ...register("departureFlightTime") }}
 							/>
 
 							<CustomInput
-								labelText="Flight Number"
-								placeholder="e.g., FR5678"
+								labelText={t("flightNumber")}
+								placeholder={t("flightNumberPlaceholderDeparture")}
 								error={errors.departureFlightNumber?.message}
 								inputProps={{ ...register("departureFlightNumber") }}
 							/>
@@ -317,7 +315,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 					className="w-full"
 					size="lg"
 				>
-					{confirmTrip.isPending ? "Confirming..." : "Confirm Trip Booking"}
+					{confirmTrip.isPending ? t("confirming") : t("confirmButton")}
 				</Button>
 
 				{confirmTrip.error && (

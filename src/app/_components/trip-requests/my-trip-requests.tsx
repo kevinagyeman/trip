@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -17,17 +18,18 @@ const statusColors: Record<string, string> = {
 };
 
 export function MyTripRequests() {
+	const t = useTranslations("myRequests");
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return <div>{t("loading")}</div>;
 	}
 
 	if (!data?.items.length) {
 		return (
 			<Card>
 				<CardContent className="py-8 text-center text-muted-foreground">
-					No trip requests yet. Create your first one!
+					{t("noRequests")}
 				</CardContent>
 			</Card>
 		);
@@ -67,20 +69,22 @@ export function MyTripRequests() {
 						<div className="flex items-center justify-between">
 							<div className="text-sm">
 								<p>
-									{request.numberOfAdults} adult(s)
+									{t("adultsCount", { count: request.numberOfAdults })}
 									{request.numberOfChildren
-										? `, ${request.numberOfChildren} child(ren)`
+										? `, ${t("childrenCount", { count: request.numberOfChildren })}`
 										: ""}
 								</p>
 								{request.quotations.length > 0 && (
 									<p className="mt-1 font-medium text-green-600">
-										{request.quotations.length} quotation(s) received
+										{t("quotationsReceived", {
+											count: request.quotations.length,
+										})}
 									</p>
 								)}
 							</div>
 							<Button asChild variant="outline">
 								<Link href={`/dashboard/requests/${request.id}`}>
-									View Details
+									{t("viewDetails")}
 								</Link>
 							</Button>
 						</div>
