@@ -252,7 +252,11 @@ export function CreateTripRequestForm() {
 							labelText={t("numberOfChildSeats")}
 							inputType="number"
 							error={errors.numberOfChildSeats?.message}
-							inputProps={{ ...register("numberOfChildSeats"), min: 0, max: 20 }}
+							inputProps={{
+								...register("numberOfChildSeats"),
+								min: 0,
+								max: 20,
+							}}
 						/>
 					</>
 				)}
@@ -273,12 +277,18 @@ export function CreateTripRequestForm() {
 				<p>{t("flightDetailsNote")}</p>
 			</div>
 
-			<Button type="submit" disabled={createRequest.isPending} className="w-full">
+			<Button
+				type="submit"
+				disabled={createRequest.isPending}
+				className="w-full"
+			>
 				{createRequest.isPending ? t("submitting") : t("submitRequest")}
 			</Button>
 
 			{createRequest.error && (
-				<p className="text-sm text-destructive">{createRequest.error.message}</p>
+				<p className="text-sm text-destructive">
+					{createRequest.error.message}
+				</p>
 			)}
 		</form>
 	);

@@ -115,10 +115,18 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<SelectContent>
 									<SelectItem value="PENDING">{t("statusPending")}</SelectItem>
 									<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
-									<SelectItem value="ACCEPTED">{t("statusAccepted")}</SelectItem>
-									<SelectItem value="REJECTED">{t("statusRejected")}</SelectItem>
-									<SelectItem value="COMPLETED">{t("statusCompleted")}</SelectItem>
-									<SelectItem value="CANCELLED">{t("statusCancelled")}</SelectItem>
+									<SelectItem value="ACCEPTED">
+										{t("statusAccepted")}
+									</SelectItem>
+									<SelectItem value="REJECTED">
+										{t("statusRejected")}
+									</SelectItem>
+									<SelectItem value="COMPLETED">
+										{t("statusCompleted")}
+									</SelectItem>
+									<SelectItem value="CANCELLED">
+										{t("statusCancelled")}
+									</SelectItem>
 								</SelectContent>
 							</Select>
 							{request.isConfirmed && (

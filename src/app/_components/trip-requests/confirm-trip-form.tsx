@@ -112,7 +112,9 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				<CardContent className="space-y-4">
 					<div className="grid grid-cols-2 gap-4">
 						<div>
-							<p className="text-sm text-muted-foreground">{t("serviceType")}</p>
+							<p className="text-sm text-muted-foreground">
+								{t("serviceType")}
+							</p>
 							<p className="font-medium">{serviceTypeLabel}</p>
 						</div>
 						<div>
@@ -149,13 +151,17 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 							<div className="grid gap-2">
 								{request.arrivalAirport && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">{t("airport")}: </span>
+										<span className="text-muted-foreground">
+											{t("airport")}:{" "}
+										</span>
 										{getAirportLabel(request.arrivalAirport)}
 									</p>
 								)}
 								{request.destinationAddress && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">{t("destination")}: </span>
+										<span className="text-muted-foreground">
+											{t("destination")}:{" "}
+										</span>
 										{request.destinationAddress}
 									</p>
 								)}
@@ -169,13 +175,17 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 							<div className="grid gap-2">
 								{request.pickupAddress && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">{t("pickup")}: </span>
+										<span className="text-muted-foreground">
+											{t("pickup")}:{" "}
+										</span>
 										{request.pickupAddress}
 									</p>
 								)}
 								{request.departureAirport && (
 									<p className="text-sm">
-										<span className="text-muted-foreground">{t("airport")}: </span>
+										<span className="text-muted-foreground">
+											{t("airport")}:{" "}
+										</span>
 										{getAirportLabel(request.departureAirport)}
 									</p>
 								)}
