@@ -23,7 +23,8 @@
 			"correctness": {
 				"noUnusedImports": "off",
 				"useExhaustiveDependencies": "off",
-				"noUnusedVariables": "off"
+				"noUnusedVariables": "off",
+				"noUnusedFunctionParameters": "off"
 			},
 			"suspicious": {
 				"noArrayIndexKey": "off"
@@ -31,6 +32,9 @@
 			"a11y": {
 				"recommended": true,
 				"noLabelWithoutControl": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
 			}
 		}
 	},

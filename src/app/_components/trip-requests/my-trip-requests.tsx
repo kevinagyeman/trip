@@ -50,7 +50,10 @@ export function MyTripRequests() {
 									</span>
 								</CardTitle>
 								<p className="text-sm text-muted-foreground">
-									{tSvc(request.serviceType as "both" | "arrival" | "departure")} ·{" "}
+									{tSvc(
+										request.serviceType as "both" | "arrival" | "departure",
+									)}{" "}
+									·{" "}
 									{request.arrivalFlightDate
 										? format(
 												new Date(request.arrivalFlightDate),

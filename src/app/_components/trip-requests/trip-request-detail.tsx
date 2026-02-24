@@ -51,7 +51,9 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const serviceTypeLabel = tSvc(request.serviceType as "both" | "arrival" | "departure");
+	const serviceTypeLabel = tSvc(
+		request.serviceType as "both" | "arrival" | "departure",
+	);
 	const showArrivalFields =
 		request.serviceType === "both" || request.serviceType === "arrival";
 	const showDepartureFields =

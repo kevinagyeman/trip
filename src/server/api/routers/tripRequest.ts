@@ -1,16 +1,16 @@
-import { z } from "zod";
-import { TRPCError } from "@trpc/server";
-import {
-	createTRPCRouter,
-	protectedProcedure,
-	adminProcedure,
-} from "@/server/api/trpc";
-import { TripRequestStatus } from "../../../../generated/prisma";
-import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
 import { NewRequestEmail } from "@/emails/new-request";
 import { TripConfirmedEmail } from "@/emails/trip-confirmed";
-import { createElement } from "react";
+import {
+	adminProcedure,
+	createTRPCRouter,
+	protectedProcedure,
+} from "@/server/api/trpc";
+import { ADMIN_EMAIL, APP_URL, sendEmail } from "@/server/email";
+import { TRPCError } from "@trpc/server";
 import { format } from "date-fns";
+import { createElement } from "react";
+import { z } from "zod";
+import { TripRequestStatus } from "../../../../generated/prisma";
 
 export const tripRequestRouter = createTRPCRouter({
 	// USER: Create new trip request
@@ -125,7 +125,7 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
-			let nextCursor: string | undefined = undefined;
+			let nextCursor: string | undefined;
 			if (items.length > limit) {
 				const nextItem = items.pop();
 				nextCursor = nextItem!.id;
@@ -187,7 +187,7 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
-			let nextCursor: string | undefined = undefined;
+			let nextCursor: string | undefined;
 			if (items.length > limit) {
 				const nextItem = items.pop();
 				nextCursor = nextItem!.id;

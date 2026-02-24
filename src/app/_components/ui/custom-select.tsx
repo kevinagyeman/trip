@@ -17,7 +17,7 @@ type CustomSelectProps = {
 	placeholder?: string;
 	hint?: string;
 	error?: string;
-	options: SelectOption[];
+	options: readonly SelectOption[];
 	value: string;
 	onValueChange: (value: string) => void;
 };

@@ -82,7 +82,10 @@ export function AllTripRequests() {
 										{request.user.name ?? request.user.email}
 									</p>
 									<p className="text-xs text-muted-foreground">
-										{tSvc(request.serviceType as "both" | "arrival" | "departure")} ·{" "}
+										{tSvc(
+											request.serviceType as "both" | "arrival" | "departure",
+										)}{" "}
+										·{" "}
 										{request.arrivalFlightDate
 											? format(
 													new Date(request.arrivalFlightDate),
