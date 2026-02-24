@@ -249,5 +249,10 @@
 		"backToDashboard": "← Retour au Tableau de Bord",
 		"createNewQuotation": "Créer un Nouveau Devis",
 		"backToRequest": "← Retour à la Demande"
+	},
+	"serviceTypes": {
+		"both": "Arrivée & Départ",
+		"arrival": "Arrivée Seulement",
+		"departure": "Départ Seulement"
 	}
 }

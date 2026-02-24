@@ -15,7 +15,7 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
+import { AIRPORTS } from "@/lib/airports";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 const statusColors: Record<string, string> = {
@@ -37,6 +37,7 @@ const quotationStatusColors: Record<string, string> = {
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
+	const tSvc = useTranslations("serviceTypes");
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
@@ -65,9 +66,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const serviceTypeLabel =
-		SERVICE_TYPES.find((s) => s.value === request.serviceType)?.label ??
-		request.serviceType;
+	const serviceTypeLabel = tSvc(request.serviceType as "both" | "arrival" | "departure");
 	const showArrivalFields =
 		request.serviceType === "both" || request.serviceType === "arrival";
 	const showDepartureFields =
@@ -91,6 +90,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<div>
 							<CardTitle className="text-2xl">
 								{request.firstName} {request.lastName}
+								<span className="ml-2 text-base font-normal text-muted-foreground">
+									#{String(request.orderNumber).padStart(7, "0")}
+								</span>
 							</CardTitle>
 							<p className="text-sm text-muted-foreground">
 								{request.user.email}

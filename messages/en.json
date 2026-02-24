@@ -249,5 +249,10 @@
 		"backToDashboard": "← Back to Dashboard",
 		"createNewQuotation": "Create New Quotation",
 		"backToRequest": "← Back to Request"
+	},
+	"serviceTypes": {
+		"both": "Arrival & Departure",
+		"arrival": "Only Arrival",
+		"departure": "Only Departure"
 	}
 }

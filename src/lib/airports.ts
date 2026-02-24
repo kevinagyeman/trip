@@ -9,9 +9,9 @@ export const AIRPORTS = [
 ] as const;
 
 export const SERVICE_TYPES = [
-	{ value: "both", label: "Arrivo e Partenza" },
-	{ value: "arrival", label: "Solo Arrivo" },
-	{ value: "departure", label: "Solo Partenza" },
+	{ value: "both", label: "Arrival & Departure" },
+	{ value: "arrival", label: "Only Arrival" },
+	{ value: "departure", label: "Only Departure" },
 ] as const;
 
 export const LANGUAGES = [

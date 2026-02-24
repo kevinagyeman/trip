@@ -249,5 +249,10 @@
 		"backToDashboard": "← Zurück zum Dashboard",
 		"createNewQuotation": "Neues Angebot Erstellen",
 		"backToRequest": "← Zurück zur Anfrage"
+	},
+	"serviceTypes": {
+		"both": "Ankunft & Abflug",
+		"arrival": "Nur Ankunft",
+		"departure": "Nur Abflug"
 	}
 }

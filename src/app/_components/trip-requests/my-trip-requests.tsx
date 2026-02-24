@@ -19,6 +19,7 @@ const statusColors: Record<string, string> = {
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
+	const tSvc = useTranslations("serviceTypes");
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {
@@ -42,11 +43,14 @@ export function MyTripRequests() {
 					<CardHeader>
 						<div className="flex items-start justify-between">
 							<div>
-								<CardTitle>
+								<CardTitle className="flex items-center gap-2">
 									{request.firstName} {request.lastName}
+									<span className="text-sm font-normal text-muted-foreground">
+										#{String(request.orderNumber).padStart(7, "0")}
+									</span>
 								</CardTitle>
 								<p className="text-sm text-muted-foreground">
-									{request.serviceType} ·{" "}
+									{tSvc(request.serviceType as "both" | "arrival" | "departure")} ·{" "}
 									{request.arrivalFlightDate
 										? format(
 												new Date(request.arrivalFlightDate),

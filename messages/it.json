@@ -249,5 +249,10 @@
 		"backToDashboard": "← Torna alla Dashboard",
 		"createNewQuotation": "Crea Nuovo Preventivo",
 		"backToRequest": "← Torna alla Richiesta"
+	},
+	"serviceTypes": {
+		"both": "Arrivo e Partenza",
+		"arrival": "Solo Arrivo",
+		"departure": "Solo Partenza"
 	}
 }

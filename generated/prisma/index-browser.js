@@ -170,6 +170,7 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 
 exports.Prisma.TripRequestScalarFieldEnum = {
   id: 'id',
+  orderNumber: 'orderNumber',
   status: 'status',
   serviceType: 'serviceType',
   arrivalAirport: 'arrivalAirport',

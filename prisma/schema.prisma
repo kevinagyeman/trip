@@ -102,8 +102,9 @@ model VerificationToken {
 
 // Trip management models
 model TripRequest {
-    id     String            @id @default(cuid())
-    status TripRequestStatus @default(PENDING)
+    id          String            @id @default(cuid())
+    orderNumber Int               @unique @default(autoincrement())
+    status      TripRequestStatus @default(PENDING)
 
     // Service type
     serviceType String // "Arrivo e Partenza", "Solo Arrivo", "Solo Partenza"

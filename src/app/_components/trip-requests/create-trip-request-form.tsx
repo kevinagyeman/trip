@@ -21,6 +21,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 export function CreateTripRequestForm() {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
+	const tSvc = useTranslations("serviceTypes");
 
 	const {
 		register,
@@ -36,9 +37,9 @@ export function CreateTripRequestForm() {
 			language: "English",
 			numberOfAdults: 1,
 			areThereChildren: false,
-			numberOfChildren: 1,
+			numberOfChildren: 0,
 			childrenAges: [],
-			numberOfChildSeats: 1,
+			numberOfChildSeats: 0,
 		},
 	});
 
@@ -98,6 +99,11 @@ export function CreateTripRequestForm() {
 		});
 	};
 
+	const serviceTypeOptions = SERVICE_TYPES.map((s) => ({
+		value: s.value,
+		label: tSvc(s.value),
+	}));
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 			{/* Service Type */}
@@ -109,7 +115,7 @@ export function CreateTripRequestForm() {
 					render={({ field }) => (
 						<CustomSelect
 							labelText={t("serviceTypeQuestion")}
-							options={SERVICE_TYPES}
+							options={serviceTypeOptions}
 							value={field.value}
 							onValueChange={field.onChange}
 						/>

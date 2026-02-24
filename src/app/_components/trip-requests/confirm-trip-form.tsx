@@ -16,7 +16,7 @@ import {
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { SERVICE_TYPES, AIRPORTS } from "@/lib/airports";
+import { AIRPORTS } from "@/lib/airports";
 import CustomInput from "@/app/_components/ui/custom-input";
 import {
 	confirmTripSchema,
@@ -31,6 +31,7 @@ interface ConfirmTripFormProps {
 export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 	const router = useRouter();
 	const t = useTranslations("confirmTrip");
+	const tSvc = useTranslations("serviceTypes");
 
 	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
 		id: requestId,
@@ -80,9 +81,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const serviceTypeLabel =
-		SERVICE_TYPES.find((s) => s.value === request.serviceType)?.label ??
-		request.serviceType;
+	const serviceTypeLabel = tSvc(request.serviceType as "both" | "arrival" | "departure");
 	const showArrivalFields =
 		request.serviceType === "both" || request.serviceType === "arrival";
 	const showDepartureFields =

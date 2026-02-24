@@ -28,6 +28,7 @@ const statusColors: Record<string, string> = {
 
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
+	const tSvc = useTranslations("serviceTypes");
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -71,14 +72,17 @@ export function AllTripRequests() {
 						<CardHeader>
 							<div className="flex items-start justify-between">
 								<div>
-									<CardTitle>
+									<CardTitle className="flex items-center gap-2">
 										{request.firstName} {request.lastName}
+										<span className="text-sm font-normal text-muted-foreground">
+											#{String(request.orderNumber).padStart(7, "0")}
+										</span>
 									</CardTitle>
 									<p className="text-sm text-muted-foreground">
 										{request.user.name ?? request.user.email}
 									</p>
 									<p className="text-xs text-muted-foreground">
-										{request.serviceType} ·{" "}
+										{tSvc(request.serviceType as "both" | "arrival" | "departure")} ·{" "}
 										{request.arrivalFlightDate
 											? format(
 													new Date(request.arrivalFlightDate),

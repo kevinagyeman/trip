@@ -7078,12 +7078,14 @@ export namespace Prisma {
   }
 
   export type TripRequestAvgAggregateOutputType = {
+    orderNumber: number | null
     numberOfAdults: number | null
     numberOfChildren: number | null
     numberOfChildSeats: number | null
   }
 
   export type TripRequestSumAggregateOutputType = {
+    orderNumber: number | null
     numberOfAdults: number | null
     numberOfChildren: number | null
     numberOfChildSeats: number | null
@@ -7091,6 +7093,7 @@ export namespace Prisma {
 
   export type TripRequestMinAggregateOutputType = {
     id: string | null
+    orderNumber: number | null
     status: $Enums.TripRequestStatus | null
     serviceType: string | null
     arrivalAirport: string | null
@@ -7121,6 +7124,7 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateOutputType = {
     id: string | null
+    orderNumber: number | null
     status: $Enums.TripRequestStatus | null
     serviceType: string | null
     arrivalAirport: string | null
@@ -7151,6 +7155,7 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateOutputType = {
     id: number
+    orderNumber: number
     status: number
     serviceType: number
     arrivalAirport: number
@@ -7182,12 +7187,14 @@ export namespace Prisma {
 
 
   export type TripRequestAvgAggregateInputType = {
+    orderNumber?: true
     numberOfAdults?: true
     numberOfChildren?: true
     numberOfChildSeats?: true
   }
 
   export type TripRequestSumAggregateInputType = {
+    orderNumber?: true
     numberOfAdults?: true
     numberOfChildren?: true
     numberOfChildSeats?: true
@@ -7195,6 +7202,7 @@ export namespace Prisma {
 
   export type TripRequestMinAggregateInputType = {
     id?: true
+    orderNumber?: true
     status?: true
     serviceType?: true
     arrivalAirport?: true
@@ -7225,6 +7233,7 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateInputType = {
     id?: true
+    orderNumber?: true
     status?: true
     serviceType?: true
     arrivalAirport?: true
@@ -7255,6 +7264,7 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateInputType = {
     id?: true
+    orderNumber?: true
     status?: true
     serviceType?: true
     arrivalAirport?: true
@@ -7372,6 +7382,7 @@ export namespace Prisma {
 
   export type TripRequestGroupByOutputType = {
     id: string
+    orderNumber: number
     status: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport: string | null
@@ -7421,6 +7432,7 @@ export namespace Prisma {
 
   export type TripRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    orderNumber?: boolean
     status?: boolean
     serviceType?: boolean
     arrivalAirport?: boolean
@@ -7454,6 +7466,7 @@ export namespace Prisma {
 
   export type TripRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    orderNumber?: boolean
     status?: boolean
     serviceType?: boolean
     arrivalAirport?: boolean
@@ -7485,6 +7498,7 @@ export namespace Prisma {
 
   export type TripRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    orderNumber?: boolean
     status?: boolean
     serviceType?: boolean
     arrivalAirport?: boolean
@@ -7516,6 +7530,7 @@ export namespace Prisma {
 
   export type TripRequestSelectScalar = {
     id?: boolean
+    orderNumber?: boolean
     status?: boolean
     serviceType?: boolean
     arrivalAirport?: boolean
@@ -7544,7 +7559,7 @@ export namespace Prisma {
     userId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "serviceType" | "arrivalAirport" | "destinationAddress" | "arrivalFlightDate" | "arrivalFlightTime" | "arrivalFlightNumber" | "pickupAddress" | "departureAirport" | "departureFlightDate" | "departureFlightTime" | "departureFlightNumber" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "isConfirmed" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "status" | "serviceType" | "arrivalAirport" | "destinationAddress" | "arrivalFlightDate" | "arrivalFlightTime" | "arrivalFlightNumber" | "pickupAddress" | "departureAirport" | "departureFlightDate" | "departureFlightTime" | "departureFlightNumber" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "isConfirmed" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
@@ -7565,6 +7580,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      orderNumber: number
       status: $Enums.TripRequestStatus
       serviceType: string
       arrivalAirport: string | null
@@ -8017,6 +8033,7 @@ export namespace Prisma {
    */
   interface TripRequestFieldRefs {
     readonly id: FieldRef<"TripRequest", 'String'>
+    readonly orderNumber: FieldRef<"TripRequest", 'Int'>
     readonly status: FieldRef<"TripRequest", 'TripRequestStatus'>
     readonly serviceType: FieldRef<"TripRequest", 'String'>
     readonly arrivalAirport: FieldRef<"TripRequest", 'String'>
@@ -9776,6 +9793,7 @@ export namespace Prisma {
 
   export const TripRequestScalarFieldEnum: {
     id: 'id',
+    orderNumber: 'orderNumber',
     status: 'status',
     serviceType: 'serviceType',
     arrivalAirport: 'arrivalAirport',
@@ -10308,6 +10326,7 @@ export namespace Prisma {
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
     id?: StringFilter<"TripRequest"> | string
+    orderNumber?: IntFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
     serviceType?: StringFilter<"TripRequest"> | string
     arrivalAirport?: StringNullableFilter<"TripRequest"> | string | null
@@ -10340,6 +10359,7 @@ export namespace Prisma {
 
   export type TripRequestOrderByWithRelationInput = {
     id?: SortOrder
+    orderNumber?: SortOrder
     status?: SortOrder
     serviceType?: SortOrder
     arrivalAirport?: SortOrderInput | SortOrder
@@ -10372,6 +10392,7 @@ export namespace Prisma {
 
   export type TripRequestWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    orderNumber?: number
     AND?: TripRequestWhereInput | TripRequestWhereInput[]
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
@@ -10403,10 +10424,11 @@ export namespace Prisma {
     userId?: StringFilter<"TripRequest"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     quotations?: QuotationListRelationFilter
-  }, "id">
+  }, "id" | "orderNumber">
 
   export type TripRequestOrderByWithAggregationInput = {
     id?: SortOrder
+    orderNumber?: SortOrder
     status?: SortOrder
     serviceType?: SortOrder
     arrivalAirport?: SortOrderInput | SortOrder
@@ -10445,6 +10467,7 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereWithAggregatesInput[]
     NOT?: TripRequestScalarWhereWithAggregatesInput | TripRequestScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TripRequest"> | string
+    orderNumber?: IntWithAggregatesFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusWithAggregatesFilter<"TripRequest"> | $Enums.TripRequestStatus
     serviceType?: StringWithAggregatesFilter<"TripRequest"> | string
     arrivalAirport?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
@@ -10923,6 +10946,7 @@ export namespace Prisma {
 
   export type TripRequestCreateInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -10954,6 +10978,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -11016,6 +11041,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     serviceType?: StringFieldUpdateOperationsInput | string
     arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11047,6 +11073,7 @@ export namespace Prisma {
 
   export type TripRequestCreateManyInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -11106,6 +11133,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     serviceType?: StringFieldUpdateOperationsInput | string
     arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -11681,6 +11709,7 @@ export namespace Prisma {
 
   export type TripRequestCountOrderByAggregateInput = {
     id?: SortOrder
+    orderNumber?: SortOrder
     status?: SortOrder
     serviceType?: SortOrder
     arrivalAirport?: SortOrder
@@ -11710,6 +11739,7 @@ export namespace Prisma {
   }
 
   export type TripRequestAvgOrderByAggregateInput = {
+    orderNumber?: SortOrder
     numberOfAdults?: SortOrder
     numberOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
@@ -11717,6 +11747,7 @@ export namespace Prisma {
 
   export type TripRequestMaxOrderByAggregateInput = {
     id?: SortOrder
+    orderNumber?: SortOrder
     status?: SortOrder
     serviceType?: SortOrder
     arrivalAirport?: SortOrder
@@ -11747,6 +11778,7 @@ export namespace Prisma {
 
   export type TripRequestMinOrderByAggregateInput = {
     id?: SortOrder
+    orderNumber?: SortOrder
     status?: SortOrder
     serviceType?: SortOrder
     arrivalAirport?: SortOrder
@@ -11776,6 +11808,7 @@ export namespace Prisma {
   }
 
   export type TripRequestSumOrderByAggregateInput = {
+    orderNumber?: SortOrder
     numberOfAdults?: SortOrder
     numberOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
@@ -12881,6 +12914,7 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutUserInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -12911,6 +12945,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateWithoutUserInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -13100,6 +13135,7 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereInput[]
     NOT?: TripRequestScalarWhereInput | TripRequestScalarWhereInput[]
     id?: StringFilter<"TripRequest"> | string
+    orderNumber?: IntFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
     serviceType?: StringFilter<"TripRequest"> | string
     arrivalAirport?: StringNullableFilter<"TripRequest"> | string | null
@@ -13296,6 +13332,7 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutQuotationsInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -13326,6 +13363,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateWithoutQuotationsInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -13435,6 +13473,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateWithoutQuotationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     serviceType?: StringFieldUpdateOperationsInput | string
     arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13532,6 +13571,7 @@ export namespace Prisma {
 
   export type TripRequestCreateManyUserInput = {
     id?: string
+    orderNumber?: number
     status?: $Enums.TripRequestStatus
     serviceType: string
     arrivalAirport?: string | null
@@ -13690,6 +13730,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     serviceType?: StringFieldUpdateOperationsInput | string
     arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13720,6 +13761,7 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     serviceType?: StringFieldUpdateOperationsInput | string
     arrivalAirport?: NullableStringFieldUpdateOperationsInput | string | null
