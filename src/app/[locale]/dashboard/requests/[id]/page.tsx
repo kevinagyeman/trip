@@ -26,7 +26,7 @@ export default async function TripRequestPage({
 
 	return (
 		<HydrateClient>
-			<div className="container mx-auto py-8">
+			<div className="container mx-auto px-4 py-8">
 				<TripRequestDetail requestId={id} />
 			</div>
 		</HydrateClient>

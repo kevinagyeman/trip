@@ -21,7 +21,7 @@ export default async function NewQuotationPage({
 	const t = await getTranslations("pages");
 
 	return (
-		<div className="container mx-auto max-w-2xl py-8">
+		<div className="container mx-auto max-w-2xl px-4 py-8">
 			<div className="mb-6">
 				<Link href={`/admin/requests/${id}`}>
 					<Button variant="outline">{t("backToRequest")}</Button>

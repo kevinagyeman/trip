@@ -25,7 +25,7 @@ export default async function DashboardPage({
 
 	return (
 		<HydrateClient>
-			<div className="container mx-auto py-8">
+			<div className="container mx-auto px-4 py-8">
 				<div className="mb-6 flex items-center justify-between">
 					<h1 className="text-3xl font-bold">{t("title")}</h1>
 					<CreateTripRequestButton />
