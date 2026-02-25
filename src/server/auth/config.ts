@@ -26,12 +26,6 @@ declare module "next-auth" {
 	}
 }
 
-declare module "next-auth/jwt" {
-	interface JWT {
-		id: string;
-		role: UserRole;
-	}
-}
 
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
@@ -103,15 +97,14 @@ export const authConfig = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				token.id = user.id;
-				token.role = user.role;
+				return { ...token, id: user.id, role: user.role };
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			if (token && session.user) {
-				session.user.id = token.id as string;
-				session.user.role = token.role as UserRole;
+				session.user.id = token["id"] as string;
+				session.user.role = token["role"] as UserRole;
 			}
 			return session;
 		},

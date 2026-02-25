@@ -172,13 +172,6 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			if (quotation.validUntil && quotation.validUntil < new Date()) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation has expired",
-				});
-			}
-
 			const updated = await ctx.db.$transaction(async (tx) => {
 				const result = await tx.quotation.update({
 					where: { id: input.id },

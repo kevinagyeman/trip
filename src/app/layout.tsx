@@ -19,14 +19,9 @@ const geist = Geist({
 
 export default function RootLayout({
 	children,
-	params,
-}: Readonly<{ children: React.ReactNode; params?: { locale?: string } }>) {
+}: Readonly<{ children: React.ReactNode }>) {
 	return (
-		<html
-			lang={params?.locale ?? "en"}
-			className={geist.variable}
-			suppressHydrationWarning
-		>
+		<html lang="en" className={geist.variable} suppressHydrationWarning>
 			<body>
 				<TRPCReactProvider>
 					<ThemeProvider

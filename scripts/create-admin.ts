@@ -14,7 +14,7 @@ async function main() {
 		return;
 	}
 
-	const user = users[0];
+	const user = users[0]!;
 	console.log(`Found user: ${user.email || user.name || user.id}`);
 
 	// Update the first user to be an admin
