@@ -299,7 +299,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Confirmation Prompt */}
 			{needsConfirmation && (
-				<Card className="border-yellow-500 bg-yellow-50">
+				<Card className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950/30">
 					<CardContent className="pt-6">
 						<div className="flex items-center justify-between">
 							<div>

@@ -100,7 +100,7 @@ export function ConfirmTripForm({ requestId }: ConfirmTripFormProps) {
 				{t("back")}
 			</Button>
 
-			<div className="rounded-lg bg-blue-50 p-4">
+			<div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-950/30">
 				<h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
 				<p className="text-sm text-muted-foreground">{t("description")}</p>
 			</div>

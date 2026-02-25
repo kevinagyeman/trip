@@ -169,7 +169,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 					{/* Arrival Information */}
 					{showArrivalFields && (
-						<div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+						<div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
 							<h3 className="mb-3 text-lg font-semibold">
 								{t("arrivalInformation")}
 							</h3>
@@ -230,7 +230,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 					{/* Departure Information */}
 					{showDepartureFields && (
-						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4">
+						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
 							<h3 className="mb-3 text-lg font-semibold">
 								{t("departureInformation")}
 							</h3>
@@ -392,7 +392,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									</div>
 								)}
 								{quotation.internalNotes && (
-									<div className="rounded-lg bg-yellow-50 p-3">
+									<div className="rounded-lg bg-yellow-50 p-3 dark:bg-yellow-950/30">
 										<p className="text-sm font-medium text-muted-foreground">
 											{t("internalNotes")}
 										</p>
