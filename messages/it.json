@@ -3,6 +3,7 @@
 		"brand": "Gestione Viaggi",
 		"myTrips": "I Miei Viaggi",
 		"adminDashboard": "Dashboard Admin",
+		"superAdminDashboard": "Super Admin",
 		"signOut": "Esci"
 	},
 	"home": {
@@ -52,7 +53,9 @@
 		"clickToSignIn": "Oppure clicca qui per accedere ora",
 		"registrationSuccessTitle": "Registrazione Riuscita!",
 		"verifyEmailSubtitle": "Verifica il tuo indirizzo email",
-		"productionNote": "(In produzione, questo link verrebbe inviato via email)"
+		"productionNote": "(In produzione, questo link verrebbe inviato via email)",
+		"registrationNotAllowed": "Registrazione Non Disponibile",
+		"registrationNotAllowedDesc": "Per creare un account, utilizza il link fornito dalla tua azienda di trasporti."
 	},
 	"dashboard": {
 		"title": "Le Mie Richieste di Viaggio",
@@ -237,7 +240,18 @@
 		"sendToCustomer": "Invia al Cliente",
 		"deleteDraft": "Elimina Bozza",
 		"sentDate": "Inviato: {date}",
-		"respondedDate": "Risposto: {date}"
+		"respondedDate": "Risposto: {date}",
+		"addToCalendar": "Aggiungi al Calendario",
+		"arrivalPickup": "Pickup Arrivo",
+		"departurePickup": "Pickup Partenza",
+		"downloadICS": "Scarica .ics",
+		"googleCalendar": "Google Calendar",
+		"noFlightDates": "Nessuna data di volo confermata.",
+		"calFlightNumber": "Volo",
+		"calAirport": "Aeroporto",
+		"calDestination": "Destinazione",
+		"calPickup": "Pickup",
+		"calPassengers": "Passeggeri"
 	},
 	"notFound": {
 		"heading": "Pagina Non Trovata",
@@ -250,9 +264,54 @@
 		"createNewQuotation": "Crea Nuovo Preventivo",
 		"backToRequest": "← Torna alla Richiesta"
 	},
+	"footer": {
+		"allRightsReserved": "Tutti i diritti riservati.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Termini di Servizio"
+	},
 	"serviceTypes": {
 		"both": "Arrivo e Partenza",
 		"arrival": "Solo Arrivo",
 		"departure": "Solo Partenza"
+	},
+	"booking": {
+		"subtitle": "Prenota il tuo trasferimento con noi",
+		"createAccount": "Crea Account",
+		"signIn": "Hai già un account? Accedi",
+		"poweredBy": "Powered by Trip Manager"
+	},
+	"superAdmin": {
+		"title": "Dashboard Super Admin",
+		"subtitle": "Gestisci tutte le aziende e le loro impostazioni",
+		"loading": "Caricamento...",
+		"notFound": "Non trovato",
+		"backToDashboard": "Torna alla Dashboard",
+		"newCompany": "Nuova Azienda",
+		"noCompanies": "Nessuna azienda ancora.",
+		"createFirstCompany": "Crea la Prima Azienda",
+		"createCompany": "Crea Azienda",
+		"creating": "Creazione...",
+		"active": "Attivo",
+		"inactive": "Inattivo",
+		"users": "Utenti",
+		"requests": "Richieste",
+		"manage": "Gestisci",
+		"companyName": "Nome Azienda",
+		"companyNamePlaceholder": "La Mia Azienda di Trasporti",
+		"companySlug": "Slug (identificatore URL)",
+		"slugHint": "Solo lettere minuscole, numeri e trattini",
+		"adminEmail": "Email Admin (opzionale)",
+		"logoUrl": "URL Logo (opzionale)",
+		"companyInfo": "Informazioni Azienda",
+		"companyUsers": "Utenti",
+		"noUsers": "Nessun utente assegnato ancora.",
+		"assignUserEmail": "Email utente da assegnare...",
+		"assignUser": "Assegna",
+		"removeUser": "Rimuovi",
+		"activate": "Attiva",
+		"deactivate": "Disattiva",
+		"bookingPortal": "Portale Prenotazioni",
+		"userNotFound": "Utente non trovato",
+		"assignError": "Errore nell'assegnazione"
 	}
 }

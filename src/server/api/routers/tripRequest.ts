@@ -68,6 +68,7 @@ export const tripRequestRouter = createTRPCRouter({
 				data: {
 					...input,
 					userId: ctx.session.user.id,
+					companyId: ctx.session.user.companyId ?? null,
 					status: TripRequestStatus.PENDING,
 				},
 			});
@@ -159,7 +160,7 @@ export const tripRequestRouter = createTRPCRouter({
 			return tripRequest;
 		}),
 
-	// ADMIN: Get all trip requests
+	// ADMIN: Get all trip requests (scoped to company)
 	getAllRequests: adminProcedure
 		.input(
 			z
@@ -173,10 +174,13 @@ export const tripRequestRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const limit = input?.limit ?? 50;
 			const cursor = input?.cursor;
+			const companyId = ctx.session.user.companyId;
 
 			const items = await ctx.db.tripRequest.findMany({
 				where: {
 					...(input?.status && { status: input.status }),
+					// SUPER_ADMIN sees all, ADMIN sees only their company
+					...(companyId ? { companyId } : {}),
 				},
 				take: limit + 1,
 				cursor: cursor ? { id: cursor } : undefined,
@@ -200,6 +204,8 @@ export const tripRequestRouter = createTRPCRouter({
 	getByIdAdmin: adminProcedure
 		.input(z.object({ id: z.string() }))
 		.query(async ({ ctx, input }) => {
+			const companyId = ctx.session.user.companyId;
+
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
 				include: {
@@ -210,6 +216,11 @@ export const tripRequestRouter = createTRPCRouter({
 
 			if (!tripRequest) {
 				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			// ADMIN can only access requests from their company
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
 			return tripRequest;

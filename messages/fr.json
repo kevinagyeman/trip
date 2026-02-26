@@ -3,6 +3,7 @@
 		"brand": "Gestionnaire de Voyages",
 		"myTrips": "Mes Voyages",
 		"adminDashboard": "Tableau de Bord Admin",
+		"superAdminDashboard": "Super Admin",
 		"signOut": "Se Déconnecter"
 	},
 	"home": {
@@ -52,7 +53,9 @@
 		"clickToSignIn": "Ou cliquez ici pour vous connecter maintenant",
 		"registrationSuccessTitle": "Inscription Réussie !",
 		"verifyEmailSubtitle": "Veuillez vérifier votre adresse email",
-		"productionNote": "(En production, ce lien serait envoyé par email)"
+		"productionNote": "(En production, ce lien serait envoyé par email)",
+		"registrationNotAllowed": "Inscription Non Disponible",
+		"registrationNotAllowedDesc": "Pour créer un compte, veuillez utiliser le lien fourni par votre société de transport."
 	},
 	"dashboard": {
 		"title": "Mes Demandes de Voyage",
@@ -237,7 +240,18 @@
 		"sendToCustomer": "Envoyer au Client",
 		"deleteDraft": "Supprimer le Brouillon",
 		"sentDate": "Envoyé : {date}",
-		"respondedDate": "Répondu : {date}"
+		"respondedDate": "Répondu : {date}",
+		"addToCalendar": "Ajouter au Calendrier",
+		"arrivalPickup": "Prise en Charge Arrivée",
+		"departurePickup": "Prise en Charge Départ",
+		"downloadICS": "Télécharger .ics",
+		"googleCalendar": "Google Agenda",
+		"noFlightDates": "Aucune date de vol confirmée.",
+		"calFlightNumber": "Vol",
+		"calAirport": "Aéroport",
+		"calDestination": "Destination",
+		"calPickup": "Prise en charge",
+		"calPassengers": "Passagers"
 	},
 	"notFound": {
 		"heading": "Page Introuvable",
@@ -250,9 +264,54 @@
 		"createNewQuotation": "Créer un Nouveau Devis",
 		"backToRequest": "← Retour à la Demande"
 	},
+	"footer": {
+		"allRightsReserved": "Tous droits réservés.",
+		"privacyPolicy": "Politique de Confidentialité",
+		"termsOfService": "Conditions d'Utilisation"
+	},
 	"serviceTypes": {
 		"both": "Arrivée & Départ",
 		"arrival": "Arrivée Seulement",
 		"departure": "Départ Seulement"
+	},
+	"booking": {
+		"subtitle": "Réservez votre transfert avec nous",
+		"createAccount": "Créer un Compte",
+		"signIn": "Déjà un compte ? Se Connecter",
+		"poweredBy": "Propulsé par Trip Manager"
+	},
+	"superAdmin": {
+		"title": "Tableau de Bord Super Admin",
+		"subtitle": "Gérer toutes les entreprises et leurs paramètres",
+		"loading": "Chargement...",
+		"notFound": "Non trouvé",
+		"backToDashboard": "Retour au Tableau de Bord",
+		"newCompany": "Nouvelle Entreprise",
+		"noCompanies": "Aucune entreprise pour l'instant.",
+		"createFirstCompany": "Créer la Première Entreprise",
+		"createCompany": "Créer l'Entreprise",
+		"creating": "Création...",
+		"active": "Actif",
+		"inactive": "Inactif",
+		"users": "Utilisateurs",
+		"requests": "Demandes",
+		"manage": "Gérer",
+		"companyName": "Nom de l'Entreprise",
+		"companyNamePlaceholder": "Ma Société de Transport",
+		"companySlug": "Slug (identifiant URL)",
+		"slugHint": "Lettres minuscules, chiffres et tirets uniquement",
+		"adminEmail": "Email Admin (optionnel)",
+		"logoUrl": "URL du Logo (optionnel)",
+		"companyInfo": "Informations de l'Entreprise",
+		"companyUsers": "Utilisateurs",
+		"noUsers": "Aucun utilisateur assigné pour l'instant.",
+		"assignUserEmail": "Email de l'utilisateur à assigner...",
+		"assignUser": "Assigner",
+		"removeUser": "Supprimer",
+		"activate": "Activer",
+		"deactivate": "Désactiver",
+		"bookingPortal": "Portail de Réservation",
+		"userNotFound": "Utilisateur non trouvé",
+		"assignError": "Échec de l'assignation"
 	}
 }

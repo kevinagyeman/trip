@@ -121,6 +121,17 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.CompanyScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  adminEmail: 'adminEmail',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PostScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -159,7 +170,8 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   password: 'password',
   image: 'image',
-  role: 'role'
+  role: 'role',
+  companyId: 'companyId'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -196,7 +208,8 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   isConfirmed: 'isConfirmed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  companyId: 'companyId'
 };
 
 exports.Prisma.QuotationScalarFieldEnum = {
@@ -232,7 +245,8 @@ exports.Prisma.NullsOrder = {
 };
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  SUPER_ADMIN: 'SUPER_ADMIN'
 };
 
 exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
@@ -252,6 +266,7 @@ exports.QuotationStatus = exports.$Enums.QuotationStatus = {
 };
 
 exports.Prisma.ModelName = {
+  Company: 'Company',
   Post: 'Post',
   Account: 'Account',
   Session: 'Session',

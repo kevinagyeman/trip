@@ -3,6 +3,7 @@
 		"brand": "Reisemanager",
 		"myTrips": "Meine Reisen",
 		"adminDashboard": "Admin-Dashboard",
+		"superAdminDashboard": "Super Admin",
 		"signOut": "Abmelden"
 	},
 	"home": {
@@ -52,7 +53,9 @@
 		"clickToSignIn": "Oder klicken Sie hier, um sich jetzt anzumelden",
 		"registrationSuccessTitle": "Registrierung Erfolgreich!",
 		"verifyEmailSubtitle": "Bitte verifizieren Sie Ihre E-Mail-Adresse",
-		"productionNote": "(In der Produktion würde dieser Link per E-Mail gesendet)"
+		"productionNote": "(In der Produktion würde dieser Link per E-Mail gesendet)",
+		"registrationNotAllowed": "Registrierung Nicht Verfügbar",
+		"registrationNotAllowedDesc": "Um ein Konto zu erstellen, verwenden Sie bitte den Link Ihres Transportunternehmens."
 	},
 	"dashboard": {
 		"title": "Meine Reiseanfragen",
@@ -237,7 +240,18 @@
 		"sendToCustomer": "An Kunden Senden",
 		"deleteDraft": "Entwurf Löschen",
 		"sentDate": "Gesendet: {date}",
-		"respondedDate": "Beantwortet: {date}"
+		"respondedDate": "Beantwortet: {date}",
+		"addToCalendar": "Zum Kalender Hinzufügen",
+		"arrivalPickup": "Abholung Ankunft",
+		"departurePickup": "Abholung Abflug",
+		"downloadICS": ".ics Herunterladen",
+		"googleCalendar": "Google Kalender",
+		"noFlightDates": "Noch keine Flugdaten bestätigt.",
+		"calFlightNumber": "Flug",
+		"calAirport": "Flughafen",
+		"calDestination": "Ziel",
+		"calPickup": "Abholort",
+		"calPassengers": "Passagiere"
 	},
 	"notFound": {
 		"heading": "Seite Nicht Gefunden",
@@ -250,9 +264,54 @@
 		"createNewQuotation": "Neues Angebot Erstellen",
 		"backToRequest": "← Zurück zur Anfrage"
 	},
+	"footer": {
+		"allRightsReserved": "Alle Rechte vorbehalten.",
+		"privacyPolicy": "Datenschutzrichtlinie",
+		"termsOfService": "Nutzungsbedingungen"
+	},
 	"serviceTypes": {
 		"both": "Ankunft & Abflug",
 		"arrival": "Nur Ankunft",
 		"departure": "Nur Abflug"
+	},
+	"booking": {
+		"subtitle": "Buchen Sie Ihren Transfer bei uns",
+		"createAccount": "Konto erstellen",
+		"signIn": "Bereits ein Konto? Anmelden",
+		"poweredBy": "Powered by Trip Manager"
+	},
+	"superAdmin": {
+		"title": "Super Admin Dashboard",
+		"subtitle": "Alle Unternehmen und Einstellungen verwalten",
+		"loading": "Laden...",
+		"notFound": "Nicht gefunden",
+		"backToDashboard": "Zurück zum Dashboard",
+		"newCompany": "Neues Unternehmen",
+		"noCompanies": "Noch keine Unternehmen.",
+		"createFirstCompany": "Erstes Unternehmen erstellen",
+		"createCompany": "Unternehmen erstellen",
+		"creating": "Wird erstellt...",
+		"active": "Aktiv",
+		"inactive": "Inaktiv",
+		"users": "Benutzer",
+		"requests": "Anfragen",
+		"manage": "Verwalten",
+		"companyName": "Unternehmensname",
+		"companyNamePlaceholder": "Mein Transportunternehmen",
+		"companySlug": "Slug (URL-Kennung)",
+		"slugHint": "Nur Kleinbuchstaben, Zahlen und Bindestriche",
+		"adminEmail": "Admin-E-Mail (optional)",
+		"logoUrl": "Logo-URL (optional)",
+		"companyInfo": "Unternehmensinformationen",
+		"companyUsers": "Benutzer",
+		"noUsers": "Noch keine Benutzer zugewiesen.",
+		"assignUserEmail": "E-Mail des zuzuweisenden Benutzers...",
+		"assignUser": "Zuweisen",
+		"removeUser": "Entfernen",
+		"activate": "Aktivieren",
+		"deactivate": "Deaktivieren",
+		"bookingPortal": "Buchungsportal",
+		"userNotFound": "Benutzer nicht gefunden",
+		"assignError": "Zuweisung fehlgeschlagen"
 	}
 }

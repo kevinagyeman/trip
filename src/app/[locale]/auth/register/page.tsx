@@ -2,9 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,8 +18,10 @@ import {
 import CustomInput from "@/app/_components/ui/custom-input";
 import { registerSchema, type RegisterFormValues } from "@/lib/schemas/auth";
 
-export default function RegisterPage() {
+function RegisterForm() {
 	const router = useRouter();
+	const searchParams = useSearchParams();
+	const companySlug = searchParams.get("company");
 	const t = useTranslations("auth");
 	const [serverError, setServerError] = useState("");
 	const [success, setSuccess] = useState(false);
@@ -41,6 +44,7 @@ export default function RegisterPage() {
 				body: JSON.stringify({
 					email: values.email,
 					password: values.password,
+					companySlug,
 				}),
 			});
 
@@ -52,13 +56,36 @@ export default function RegisterPage() {
 				setRegisteredEmail(values.email);
 				setSuccess(true);
 				setTimeout(() => {
-					router.push("/auth/signin?registered=true");
+					router.push(`/auth/signin?registered=true`);
 				}, 5000);
 			}
 		} catch {
 			setServerError(t("unexpectedError"));
 		}
 	};
+
+	// No company slug → block registration
+	if (!companySlug) {
+		return (
+			<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+				<Card className="w-full max-w-md">
+					<CardHeader className="space-y-1">
+						<CardTitle className="text-center text-2xl font-bold">
+							{t("registrationNotAllowed")}
+						</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-4 text-center">
+						<p className="text-muted-foreground">{t("registrationNotAllowedDesc")}</p>
+						<Link href="/auth/signin">
+							<Button variant="outline" className="mt-2 w-full">
+								{t("signIn")}
+							</Button>
+						</Link>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
 
 	if (success) {
 		return (
@@ -149,7 +176,7 @@ export default function RegisterPage() {
 								{t("alreadyHaveAccount")}{" "}
 							</span>
 							<Link
-								href="/auth/signin"
+								href={`/auth/signin`}
 								className="text-blue-600 hover:underline"
 							>
 								{t("signIn")}
@@ -159,5 +186,13 @@ export default function RegisterPage() {
 				</CardContent>
 			</Card>
 		</div>
+	);
+}
+
+export default function RegisterPage() {
+	return (
+		<Suspense>
+			<RegisterForm />
+		</Suspense>
 	);
 }

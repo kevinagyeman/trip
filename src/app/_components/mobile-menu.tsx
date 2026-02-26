@@ -10,15 +10,19 @@ import { Link } from "@/i18n/navigation";
 interface MobileMenuProps {
 	userName: string;
 	isAdmin: boolean;
+	isSuperAdmin: boolean;
 	myTripsLabel: string;
 	adminLabel: string;
+	superAdminLabel: string;
 }
 
 export function MobileMenu({
 	userName,
 	isAdmin,
+	isSuperAdmin,
 	myTripsLabel,
 	adminLabel,
+	superAdminLabel,
 }: MobileMenuProps) {
 	const [open, setOpen] = useState(false);
 
@@ -39,15 +43,24 @@ export function MobileMenu({
 						<p className="truncate text-sm text-muted-foreground">{userName}</p>
 					</div>
 					<div className="flex flex-col gap-1 p-2">
-						<Link href="/dashboard" onClick={() => setOpen(false)}>
-							<Button variant="ghost" className="w-full justify-start">
-								{myTripsLabel}
-							</Button>
-						</Link>
+						{!isSuperAdmin && (
+							<Link href="/dashboard" onClick={() => setOpen(false)}>
+								<Button variant="ghost" className="w-full justify-start">
+									{myTripsLabel}
+								</Button>
+							</Link>
+						)}
 						{isAdmin && (
 							<Link href="/admin" onClick={() => setOpen(false)}>
 								<Button variant="ghost" className="w-full justify-start">
 									{adminLabel}
+								</Button>
+							</Link>
+						)}
+						{isSuperAdmin && (
+							<Link href="/super-admin" onClick={() => setOpen(false)}>
+								<Button variant="ghost" className="w-full justify-start">
+									{superAdminLabel}
 								</Button>
 							</Link>
 						)}

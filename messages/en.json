@@ -3,6 +3,7 @@
 		"brand": "Trip Manager",
 		"myTrips": "My Trips",
 		"adminDashboard": "Admin Dashboard",
+		"superAdminDashboard": "Super Admin",
 		"signOut": "Sign Out"
 	},
 	"home": {
@@ -52,7 +53,9 @@
 		"clickToSignIn": "Or click here to sign in now",
 		"registrationSuccessTitle": "Registration Successful!",
 		"verifyEmailSubtitle": "Please verify your email address",
-		"productionNote": "(In production, this link would be sent via email)"
+		"productionNote": "(In production, this link would be sent via email)",
+		"registrationNotAllowed": "Registration Not Available",
+		"registrationNotAllowedDesc": "To create an account, please use the link provided by your transport company."
 	},
 	"dashboard": {
 		"title": "My Trip Requests",
@@ -237,7 +240,18 @@
 		"sendToCustomer": "Send to Customer",
 		"deleteDraft": "Delete Draft",
 		"sentDate": "Sent: {date}",
-		"respondedDate": "Responded: {date}"
+		"respondedDate": "Responded: {date}",
+		"addToCalendar": "Add to Calendar",
+		"arrivalPickup": "Arrival Pickup",
+		"departurePickup": "Departure Pickup",
+		"downloadICS": "Download .ics",
+		"googleCalendar": "Google Calendar",
+		"noFlightDates": "No flight dates confirmed yet.",
+		"calFlightNumber": "Flight",
+		"calAirport": "Airport",
+		"calDestination": "Destination",
+		"calPickup": "Pickup",
+		"calPassengers": "Passengers"
 	},
 	"notFound": {
 		"heading": "Page Not Found",
@@ -250,9 +264,54 @@
 		"createNewQuotation": "Create New Quotation",
 		"backToRequest": "← Back to Request"
 	},
+	"footer": {
+		"allRightsReserved": "All rights reserved.",
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service"
+	},
 	"serviceTypes": {
 		"both": "Arrival & Departure",
 		"arrival": "Only Arrival",
 		"departure": "Only Departure"
+	},
+	"booking": {
+		"subtitle": "Book your transfer with us",
+		"createAccount": "Create Account",
+		"signIn": "Already have an account? Sign In",
+		"poweredBy": "Powered by Trip Manager"
+	},
+	"superAdmin": {
+		"title": "Super Admin Dashboard",
+		"subtitle": "Manage all companies and their settings",
+		"loading": "Loading...",
+		"notFound": "Not found",
+		"backToDashboard": "Back to Dashboard",
+		"newCompany": "New Company",
+		"noCompanies": "No companies yet.",
+		"createFirstCompany": "Create First Company",
+		"createCompany": "Create Company",
+		"creating": "Creating...",
+		"active": "Active",
+		"inactive": "Inactive",
+		"users": "Users",
+		"requests": "Requests",
+		"manage": "Manage",
+		"companyName": "Company Name",
+		"companyNamePlaceholder": "My Transport Company",
+		"companySlug": "Slug (URL identifier)",
+		"slugHint": "Lowercase letters, numbers and hyphens only",
+		"adminEmail": "Admin Email (optional)",
+		"logoUrl": "Logo URL (optional)",
+		"companyInfo": "Company Information",
+		"companyUsers": "Users",
+		"noUsers": "No users assigned yet.",
+		"assignUserEmail": "User email to assign...",
+		"assignUser": "Assign",
+		"removeUser": "Remove",
+		"activate": "Activate",
+		"deactivate": "Deactivate",
+		"bookingPortal": "Booking Portal",
+		"userNotFound": "User not found",
+		"assignError": "Failed to assign user"
 	}
 }

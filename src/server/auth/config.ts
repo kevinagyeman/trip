@@ -18,11 +18,13 @@ declare module "next-auth" {
 		user: {
 			id: string;
 			role: UserRole;
+			companyId: string | null;
 		} & DefaultSession["user"];
 	}
 
 	interface User {
 		role: UserRole;
+		companyId: string | null;
 	}
 }
 
@@ -74,19 +76,11 @@ export const authConfig = {
 					email: user.email,
 					name: user.name,
 					role: user.role,
+					companyId: user.companyId,
 				};
 			},
 		}),
 		DiscordProvider,
-		/**
-		 * ...add more providers here.
-		 *
-		 * Most other providers require a bit more work than the Discord provider. For example, the
-		 * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-		 * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-		 *
-		 * @see https://next-auth.js.org/providers/github
-		 */
 	],
 	session: {
 		strategy: "jwt",
@@ -97,7 +91,7 @@ export const authConfig = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				return { ...token, id: user.id, role: user.role };
+				return { ...token, id: user.id, role: user.role, companyId: user.companyId };
 			}
 			return token;
 		},
@@ -105,6 +99,7 @@ export const authConfig = {
 			if (token && session.user) {
 				session.user.id = token["id"] as string;
 				session.user.role = token["role"] as UserRole;
+				session.user.companyId = token["companyId"] as string | null;
 			}
 			return session;
 		},

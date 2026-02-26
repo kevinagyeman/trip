@@ -16,7 +16,70 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { AIRPORTS } from "@/lib/airports";
+import { CalendarPlus } from "lucide-react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
+
+function toICSDateTime(date: Date, timeStr?: string | null): string {
+	const d = new Date(date);
+	if (timeStr) {
+		const [h, m] = timeStr.split(":").map(Number);
+		d.setHours(h ?? 0, m ?? 0, 0, 0);
+	}
+	const pad = (n: number) => String(n).padStart(2, "0");
+	return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+}
+
+function buildICS(params: {
+	uid: string;
+	summary: string;
+	description: string;
+	location: string;
+	start: string;
+	end: string;
+}): string {
+	return [
+		"BEGIN:VCALENDAR",
+		"VERSION:2.0",
+		"PRODID:-//Trip Manager//EN",
+		"BEGIN:VEVENT",
+		`UID:${params.uid}`,
+		`DTSTAMP:${toICSDateTime(new Date())}`,
+		`DTSTART:${params.start}`,
+		`DTEND:${params.end}`,
+		`SUMMARY:${params.summary}`,
+		`DESCRIPTION:${params.description}`,
+		`LOCATION:${params.location}`,
+		"END:VEVENT",
+		"END:VCALENDAR",
+	].join("\r\n");
+}
+
+function downloadICS(filename: string, content: string) {
+	const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = filename;
+	a.click();
+	URL.revokeObjectURL(url);
+}
+
+function googleCalendarUrl(params: {
+	summary: string;
+	description: string;
+	location: string;
+	start: string;
+	end: string;
+}): string {
+	const p = new URLSearchParams({
+		action: "TEMPLATE",
+		text: params.summary,
+		details: params.description,
+		location: params.location,
+		dates: `${params.start}/${params.end}`,
+	});
+	return `https://calendar.google.com/calendar/render?${p.toString()}`;
+}
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -337,6 +400,175 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					)}
 				</CardContent>
 			</Card>
+
+			{/* Calendar Section — only when trip is confirmed */}
+			{request.isConfirmed && (
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center gap-2 text-base">
+							<CalendarPlus className="h-5 w-5" />
+							{t("addToCalendar")}
+						</CardTitle>
+					</CardHeader>
+					<CardContent className="flex flex-wrap gap-3">
+						{showArrivalFields && request.arrivalFlightDate && (
+							<div className="flex flex-col gap-2">
+								<p className="text-sm font-medium">{t("arrivalPickup")}</p>
+								<div className="flex gap-2">
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={() => {
+											const start = toICSDateTime(
+												new Date(request.arrivalFlightDate!),
+												request.arrivalFlightTime,
+											);
+											const endDate = new Date(request.arrivalFlightDate!);
+											if (request.arrivalFlightTime) {
+												const [h, m] = request.arrivalFlightTime.split(":").map(Number);
+												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+											} else {
+												endDate.setHours(endDate.getHours() + 1);
+											}
+											const end = toICSDateTime(endDate);
+											const summary = `${t("arrivalPickup")} — ${request.firstName} ${request.lastName}`;
+											const description = [
+												`${t("calFlightNumber")}: ${request.arrivalFlightNumber ?? "—"}`,
+												`${t("calAirport")}: ${getAirportLabel(request.arrivalAirport)}`,
+												`${t("calDestination")}: ${request.destinationAddress ?? "—"}`,
+												`${t("calPassengers")}: ${request.numberOfAdults}`,
+											].join("\\n");
+											downloadICS(
+												`arrival-${request.id}.ics`,
+												buildICS({
+													uid: `arrival-${request.id}@tripmanager`,
+													summary,
+													description,
+													location: getAirportLabel(request.arrivalAirport),
+													start,
+													end,
+												}),
+											);
+										}}
+									>
+										{t("downloadICS")}
+									</Button>
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={() => {
+											const start = toICSDateTime(
+												new Date(request.arrivalFlightDate!),
+												request.arrivalFlightTime,
+											);
+											const endDate = new Date(request.arrivalFlightDate!);
+											if (request.arrivalFlightTime) {
+												const [h, m] = request.arrivalFlightTime.split(":").map(Number);
+												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+											} else {
+												endDate.setHours(endDate.getHours() + 1);
+											}
+											const end = toICSDateTime(endDate);
+											window.open(
+												googleCalendarUrl({
+													summary: `${t("arrivalPickup")} — ${request.firstName} ${request.lastName}`,
+													description: `${t("calFlightNumber")}: ${request.arrivalFlightNumber ?? "—"}\n${t("calDestination")}: ${request.destinationAddress ?? "—"}`,
+													location: getAirportLabel(request.arrivalAirport),
+													start,
+													end,
+												}),
+												"_blank",
+											);
+										}}
+									>
+										{t("googleCalendar")}
+									</Button>
+								</div>
+							</div>
+						)}
+
+						{showDepartureFields && request.departureFlightDate && (
+							<div className="flex flex-col gap-2">
+								<p className="text-sm font-medium">{t("departurePickup")}</p>
+								<div className="flex gap-2">
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={() => {
+											const start = toICSDateTime(
+												new Date(request.departureFlightDate!),
+												request.departureFlightTime,
+											);
+											const endDate = new Date(request.departureFlightDate!);
+											if (request.departureFlightTime) {
+												const [h, m] = request.departureFlightTime.split(":").map(Number);
+												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+											} else {
+												endDate.setHours(endDate.getHours() + 1);
+											}
+											const end = toICSDateTime(endDate);
+											const summary = `${t("departurePickup")} — ${request.firstName} ${request.lastName}`;
+											const description = [
+												`${t("calFlightNumber")}: ${request.departureFlightNumber ?? "—"}`,
+												`${t("calPickup")}: ${request.pickupAddress ?? "—"}`,
+												`${t("calAirport")}: ${getAirportLabel(request.departureAirport)}`,
+												`${t("calPassengers")}: ${request.numberOfAdults}`,
+											].join("\\n");
+											downloadICS(
+												`departure-${request.id}.ics`,
+												buildICS({
+													uid: `departure-${request.id}@tripmanager`,
+													summary,
+													description,
+													location: request.pickupAddress ?? "",
+													start,
+													end,
+												}),
+											);
+										}}
+									>
+										{t("downloadICS")}
+									</Button>
+									<Button
+										size="sm"
+										variant="outline"
+										onClick={() => {
+											const start = toICSDateTime(
+												new Date(request.departureFlightDate!),
+												request.departureFlightTime,
+											);
+											const endDate = new Date(request.departureFlightDate!);
+											if (request.departureFlightTime) {
+												const [h, m] = request.departureFlightTime.split(":").map(Number);
+												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+											} else {
+												endDate.setHours(endDate.getHours() + 1);
+											}
+											const end = toICSDateTime(endDate);
+											window.open(
+												googleCalendarUrl({
+													summary: `${t("departurePickup")} — ${request.firstName} ${request.lastName}`,
+													description: `${t("calFlightNumber")}: ${request.departureFlightNumber ?? "—"}\n${t("calPickup")}: ${request.pickupAddress ?? "—"}`,
+													location: request.pickupAddress ?? "",
+													start,
+													end,
+												}),
+												"_blank",
+											);
+										}}
+									>
+										{t("googleCalendar")}
+									</Button>
+								</div>
+							</div>
+						)}
+
+						{!request.arrivalFlightDate && !request.departureFlightDate && (
+							<p className="text-sm text-muted-foreground">{t("noFlightDates")}</p>
+						)}
+					</CardContent>
+				</Card>
+			)}
 
 			{/* Quotations Section */}
 			<div className="space-y-4">

@@ -19,6 +19,7 @@ datasource db {
 enum UserRole {
   USER
   ADMIN
+  SUPER_ADMIN
 }
 
 enum TripRequestStatus {
@@ -35,6 +36,22 @@ enum QuotationStatus {
   SENT
   ACCEPTED
   REJECTED
+}
+
+model Company {
+  id         String   @id @default(cuid())
+  name       String
+  slug       String   @unique
+  logoUrl    String?
+  adminEmail String?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  users        User[]
+  tripRequests TripRequest[]
+
+  @@index([slug])
 }
 
 model Post {
@@ -85,11 +102,15 @@ model User {
   password      String?
   image         String?
   role          UserRole      @default(USER)
+  companyId     String?
+  company       Company?      @relation(fields: [companyId], references: [id])
   accounts      Account[]
   sessions      Session[]
   posts         Post[]
   tripRequests  TripRequest[]
   quotations    Quotation[]
+
+  @@index([companyId])
 }
 
 model VerificationToken {
@@ -143,9 +164,12 @@ model TripRequest {
 
   userId     String
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId  String?
+  company    Company?    @relation(fields: [companyId], references: [id])
   quotations Quotation[]
 
   @@index([userId])
+  @@index([companyId])
   @@index([status])
   @@index([createdAt])
 }

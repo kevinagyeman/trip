@@ -30,7 +30,9 @@ export async function Navigation() {
 	}
 
 	const userName = session.user.name ?? session.user.email ?? "";
-	const isAdmin = session.user.role === "ADMIN";
+	const role = session.user.role;
+	const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
+	const isSuperAdmin = role === "SUPER_ADMIN";
 
 	return (
 		<nav className="sticky top-0 z-50 border-b bg-background">
@@ -42,12 +44,19 @@ export async function Navigation() {
 							{t("brand")}
 						</Link>
 						<div className="hidden items-center gap-2 md:flex">
-							<Link href="/dashboard">
-								<Button variant="ghost">{t("myTrips")}</Button>
-							</Link>
+							{!isSuperAdmin && (
+								<Link href="/dashboard">
+									<Button variant="ghost">{t("myTrips")}</Button>
+								</Link>
+							)}
 							{isAdmin && (
 								<Link href="/admin">
 									<Button variant="ghost">{t("adminDashboard")}</Button>
+								</Link>
+							)}
+							{isSuperAdmin && (
+								<Link href="/super-admin">
+									<Button variant="ghost">{t("superAdminDashboard")}</Button>
 								</Link>
 							)}
 						</div>
@@ -71,8 +80,10 @@ export async function Navigation() {
 						<MobileMenu
 							userName={userName}
 							isAdmin={isAdmin}
+							isSuperAdmin={isSuperAdmin}
 							myTripsLabel={t("myTrips")}
 							adminLabel={t("adminDashboard")}
+							superAdminLabel={t("superAdminDashboard")}
 						/>
 					</div>
 				</div>

@@ -8,7 +8,7 @@ import { VerifyEmailTemplate } from "@/emails/verify-email";
 export async function POST(request: Request) {
 	try {
 		const body = await request.json();
-		const { email, password, name } = body;
+		const { email, password, name, companySlug } = body;
 
 		// Validate input
 		if (!email || !password) {
@@ -47,6 +47,25 @@ export async function POST(request: Request) {
 			);
 		}
 
+		// Company slug is required — users must register via /book/[slug]
+		if (!companySlug) {
+			return NextResponse.json(
+				{ error: "Registration requires a company invitation link" },
+				{ status: 400 },
+			);
+		}
+
+		const company = await db.company.findUnique({
+			where: { slug: companySlug, isActive: true },
+		});
+		if (!company) {
+			return NextResponse.json(
+				{ error: "Company not found or inactive" },
+				{ status: 400 },
+			);
+		}
+		const companyId = company.id;
+
 		// Hash password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -57,6 +76,7 @@ export async function POST(request: Request) {
 				password: hashedPassword,
 				name: name || null,
 				role: "USER",
+				companyId,
 			},
 		});
 
