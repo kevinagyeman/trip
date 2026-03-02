@@ -13,15 +13,20 @@ export const authConfigEdge = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				return { ...token, id: user.id, role: user.role, companyId: (user as { companyId?: string | null }).companyId ?? null };
+				return {
+					...token,
+					id: user.id,
+					role: user.role,
+					companyId: (user as { companyId?: string | null }).companyId ?? null,
+				};
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			if (token && session.user) {
-				session.user.id = token["id"] as string;
-				session.user.role = token["role"] as UserRole;
-				session.user.companyId = token["companyId"] as string | null;
+				session.user.id = token.id as string;
+				session.user.role = token.role as UserRole;
+				session.user.companyId = token.companyId as string | null;
 			}
 			return session;
 		},

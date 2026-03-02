@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 
 export default async function BookingPortalPage({
 	params,
@@ -25,10 +26,11 @@ export default async function BookingPortalPage({
 		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
 			<div className="w-full max-w-md space-y-6 text-center">
 				{company.logoUrl && (
-					// eslint-disable-next-line @next/next/no-img-element
-					<img
+					<Image
 						src={company.logoUrl}
 						alt={company.name}
+						width={200}
+						height={80}
 						className="mx-auto h-20 w-auto object-contain"
 					/>
 				)}

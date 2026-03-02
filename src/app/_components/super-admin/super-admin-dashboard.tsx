@@ -51,7 +51,10 @@ export function SuperAdminDashboard() {
 			) : (
 				<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 					{companies.map((company) => (
-						<Card key={company.id} className="transition-shadow hover:shadow-md">
+						<Card
+							key={company.id}
+							className="transition-shadow hover:shadow-md"
+						>
 							<CardHeader className="flex flex-row items-center justify-between pb-2">
 								<CardTitle className="text-lg">{company.name}</CardTitle>
 								<Badge variant={company.isActive ? "default" : "secondary"}>

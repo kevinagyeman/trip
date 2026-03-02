@@ -75,7 +75,9 @@ function RegisterForm() {
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="space-y-4 text-center">
-						<p className="text-muted-foreground">{t("registrationNotAllowedDesc")}</p>
+						<p className="text-muted-foreground">
+							{t("registrationNotAllowedDesc")}
+						</p>
 						<Link href="/auth/signin">
 							<Button variant="outline" className="mt-2 w-full">
 								{t("signIn")}

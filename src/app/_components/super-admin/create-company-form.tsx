@@ -100,7 +100,11 @@ export function CreateCompanyForm() {
 						</p>
 					)}
 
-					<Button type="submit" disabled={createCompany.isPending} className="w-full">
+					<Button
+						type="submit"
+						disabled={createCompany.isPending}
+						className="w-full"
+					>
 						{createCompany.isPending ? t("creating") : t("createCompany")}
 					</Button>
 				</form>

@@ -28,7 +28,6 @@ declare module "next-auth" {
 	}
 }
 
-
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -91,15 +90,20 @@ export const authConfig = {
 	callbacks: {
 		async jwt({ token, user }) {
 			if (user) {
-				return { ...token, id: user.id, role: user.role, companyId: user.companyId };
+				return {
+					...token,
+					id: user.id,
+					role: user.role,
+					companyId: user.companyId,
+				};
 			}
 			return token;
 		},
 		async session({ session, token }) {
 			if (token && session.user) {
-				session.user.id = token["id"] as string;
-				session.user.role = token["role"] as UserRole;
-				session.user.companyId = token["companyId"] as string | null;
+				session.user.id = token.id as string;
+				session.user.role = token.role as UserRole;
+				session.user.companyId = token.companyId as string | null;
 			}
 			return session;
 		},

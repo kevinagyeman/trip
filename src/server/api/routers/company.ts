@@ -1,4 +1,8 @@
-import { createTRPCRouter, superAdminProcedure, publicProcedure } from "@/server/api/trpc";
+import {
+	createTRPCRouter,
+	superAdminProcedure,
+	publicProcedure,
+} from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -56,7 +60,10 @@ export const companyRouter = createTRPCRouter({
 				slug: z
 					.string()
 					.min(1)
-					.regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+					.regex(
+						/^[a-z0-9-]+$/,
+						"Slug must be lowercase alphanumeric with hyphens",
+					),
 				adminEmail: z.string().email().optional(),
 				logoUrl: z.string().url().optional(),
 			}),

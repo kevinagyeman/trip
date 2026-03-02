@@ -425,7 +425,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											);
 											const endDate = new Date(request.arrivalFlightDate!);
 											if (request.arrivalFlightTime) {
-												const [h, m] = request.arrivalFlightTime.split(":").map(Number);
+												const [h, m] = request.arrivalFlightTime
+													.split(":")
+													.map(Number);
 												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
 											} else {
 												endDate.setHours(endDate.getHours() + 1);
@@ -463,7 +465,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											);
 											const endDate = new Date(request.arrivalFlightDate!);
 											if (request.arrivalFlightTime) {
-												const [h, m] = request.arrivalFlightTime.split(":").map(Number);
+												const [h, m] = request.arrivalFlightTime
+													.split(":")
+													.map(Number);
 												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
 											} else {
 												endDate.setHours(endDate.getHours() + 1);
@@ -501,7 +505,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											);
 											const endDate = new Date(request.departureFlightDate!);
 											if (request.departureFlightTime) {
-												const [h, m] = request.departureFlightTime.split(":").map(Number);
+												const [h, m] = request.departureFlightTime
+													.split(":")
+													.map(Number);
 												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
 											} else {
 												endDate.setHours(endDate.getHours() + 1);
@@ -539,7 +545,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											);
 											const endDate = new Date(request.departureFlightDate!);
 											if (request.departureFlightTime) {
-												const [h, m] = request.departureFlightTime.split(":").map(Number);
+												const [h, m] = request.departureFlightTime
+													.split(":")
+													.map(Number);
 												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
 											} else {
 												endDate.setHours(endDate.getHours() + 1);
@@ -564,7 +572,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						)}
 
 						{!request.arrivalFlightDate && !request.departureFlightDate && (
-							<p className="text-sm text-muted-foreground">{t("noFlightDates")}</p>
+							<p className="text-sm text-muted-foreground">
+								{t("noFlightDates")}
+							</p>
 						)}
 					</CardContent>
 				</Card>
