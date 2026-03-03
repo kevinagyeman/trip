@@ -133,6 +133,23 @@ export const protectedProcedure = t.procedure
 	});
 
 /**
+ * Customer-only procedure
+ *
+ * Requires user to be logged in AND NOT have ADMIN or SUPER_ADMIN role.
+ * Use this for operations that should only be accessible to regular customers.
+ */
+export const customerProcedure = protectedProcedure.use(({ ctx, next }) => {
+	const role = ctx.session.user.role;
+	if (role === "ADMIN" || role === "SUPER_ADMIN") {
+		throw new TRPCError({
+			code: "FORBIDDEN",
+			message: "Not available for admin accounts",
+		});
+	}
+	return next({ ctx });
+});
+
+/**
  * Admin-only procedure
  *
  * Requires user to be logged in AND have ADMIN or SUPER_ADMIN role.

@@ -4,9 +4,18 @@ import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { AIRPORTS, LANGUAGES } from "@/lib/airports";
+import { COUNTRY_CODES } from "@/lib/phone";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
@@ -36,6 +45,7 @@ export function CreateTripRequestForm() {
 		defaultValues: {
 			routes: [{ pickup: "", destination: "" }],
 			language: "English",
+			phoneCountryCode: "+39",
 			numberOfAdults: 1,
 			areThereChildren: false,
 			numberOfChildren: 0,
@@ -78,7 +88,7 @@ export function CreateTripRequestForm() {
 			language: values.language,
 			firstName: values.firstName,
 			lastName: values.lastName,
-			phone: values.phone,
+			phone: `${values.phoneCountryCode} ${values.phoneNumber}`,
 			numberOfAdults: values.numberOfAdults,
 			areThereChildren: values.areThereChildren,
 			numberOfChildren: values.areThereChildren
@@ -243,12 +253,48 @@ export function CreateTripRequestForm() {
 					/>
 				</div>
 
-				<CustomInput
-					labelText={t("phoneNumber")}
-					placeholder={t("phonePlaceholder")}
-					error={errors.phone?.message}
-					inputProps={{ ...register("phone") }}
-				/>
+				<div>
+					<Label className="mb-2">{t("phoneNumber")}</Label>
+					<div className="flex gap-2">
+						<Controller
+							name="phoneCountryCode"
+							control={control}
+							render={({ field }) => (
+								<Select value={field.value} onValueChange={field.onChange}>
+									<SelectTrigger className="w-[100px] shrink-0">
+										<SelectValue>
+											{(() => {
+												const country = COUNTRY_CODES.find(
+													(c) => c.value === field.value,
+												);
+												const flag = country?.label.split(" ")[0] ?? "";
+												return `${flag} ${field.value}`;
+											})()}
+										</SelectValue>
+									</SelectTrigger>
+									<SelectContent className="max-h-72">
+										{COUNTRY_CODES.map((c) => (
+											<SelectItem key={c.value} value={c.value}>
+												{c.label} ({c.value})
+											</SelectItem>
+										))}
+									</SelectContent>
+								</Select>
+							)}
+						/>
+						<Input
+							type="tel"
+							placeholder={t("phonePlaceholder")}
+							className="flex-1"
+							{...register("phoneNumber")}
+						/>
+					</div>
+					{(errors.phoneCountryCode ?? errors.phoneNumber) && (
+						<small className="text-xs text-destructive">
+							{errors.phoneCountryCode?.message ?? errors.phoneNumber?.message}
+						</small>
+					)}
+				</div>
 
 				<CustomInput
 					labelText={t("numberOfAdults")}

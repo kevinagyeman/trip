@@ -3,6 +3,7 @@ import { TripConfirmedEmail } from "@/emails/trip-confirmed";
 import {
 	adminProcedure,
 	createTRPCRouter,
+	customerProcedure,
 	protectedProcedure,
 } from "@/server/api/trpc";
 import { ADMIN_EMAIL, APP_URL, sendEmail } from "@/server/email";
@@ -19,7 +20,7 @@ const routeSchema = z.object({
 
 export const tripRequestRouter = createTRPCRouter({
 	// USER: Create new trip request
-	create: protectedProcedure
+	create: customerProcedure
 		.input(
 			z.object({
 				routes: z.array(routeSchema).min(1),

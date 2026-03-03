@@ -44,12 +44,12 @@ export async function Navigation() {
 							{t("brand")}
 						</Link>
 						<div className="hidden items-center gap-2 md:flex">
-							{!isSuperAdmin && (
+							{!isSuperAdmin && !isAdmin && (
 								<Link href="/dashboard">
 									<Button variant="ghost">{t("myTrips")}</Button>
 								</Link>
 							)}
-							{isAdmin && (
+							{isAdmin && !isSuperAdmin && (
 								<Link href="/admin">
 									<Button variant="ghost">{t("adminDashboard")}</Button>
 								</Link>

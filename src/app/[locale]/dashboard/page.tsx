@@ -19,6 +19,9 @@ export default async function DashboardPage({
 		redirect("/");
 	}
 
+	const role = session.user.role;
+	const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
+
 	const t = await getTranslations("dashboard");
 
 	await api.tripRequest.getMyRequests.prefetch();
@@ -28,7 +31,7 @@ export default async function DashboardPage({
 			<div className="container mx-auto px-4 py-8">
 				<div className="mb-6 flex items-center justify-between">
 					<h1 className="text-3xl font-bold">{t("title")}</h1>
-					<CreateTripRequestButton />
+					{!isAdmin && <CreateTripRequestButton />}
 				</div>
 				<MyTripRequests />
 			</div>

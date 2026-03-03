@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { SignOutButton } from "@/app/_components/sign-out-button";
+import { ThemeToggle } from "@/app/_components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { Menu, X } from "lucide-react";
+import { useState } from "react";
 
 interface MobileMenuProps {
 	userName: string;
@@ -43,14 +43,14 @@ export function MobileMenu({
 						<p className="truncate text-sm text-muted-foreground">{userName}</p>
 					</div>
 					<div className="flex flex-col gap-1 p-2">
-						{!isSuperAdmin && (
+						{!isSuperAdmin && !isAdmin && (
 							<Link href="/dashboard" onClick={() => setOpen(false)}>
 								<Button variant="ghost" className="w-full justify-start">
 									{myTripsLabel}
 								</Button>
 							</Link>
 						)}
-						{isAdmin && (
+						{isAdmin && !isSuperAdmin && (
 							<Link href="/admin" onClick={() => setOpen(false)}>
 								<Button variant="ghost" className="w-full justify-start">
 									{adminLabel}
