@@ -6,13 +6,14 @@ import CustomSelect from "@/app/_components/ui/custom-select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { AIRPORTS, LANGUAGES, SERVICE_TYPES } from "@/lib/airports";
+import { AIRPORTS, LANGUAGES } from "@/lib/airports";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Copy, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -21,7 +22,6 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 export function CreateTripRequestForm() {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
-	const tSvc = useTranslations("serviceTypes");
 
 	const {
 		register,
@@ -29,11 +29,12 @@ export function CreateTripRequestForm() {
 		control,
 		watch,
 		getValues,
+		setValue,
 		formState: { errors },
 	} = useForm<CreateTripRequestFormValues>({
 		resolver: zodResolver(createTripRequestSchema),
 		defaultValues: {
-			serviceType: "both",
+			routes: [{ pickup: "", destination: "" }],
 			language: "English",
 			numberOfAdults: 1,
 			areThereChildren: false,
@@ -43,23 +44,22 @@ export function CreateTripRequestForm() {
 		},
 	});
 
-	const { fields, replace } = useFieldArray({
-		control,
-		name: "childrenAges",
-	});
+	const {
+		fields: routeFields,
+		append: appendRoute,
+		remove: removeRoute,
+	} = useFieldArray({ control, name: "routes" });
 
-	const serviceType = watch("serviceType");
+	const { fields: childrenAgeFields, replace: replaceChildrenAges } =
+		useFieldArray({ control, name: "childrenAges" });
+
 	const areThereChildren = watch("areThereChildren");
 	const numberOfChildren = watch("numberOfChildren");
-
-	const showArrivalFields = serviceType === "both" || serviceType === "arrival";
-	const showDepartureFields =
-		serviceType === "both" || serviceType === "departure";
 
 	useEffect(() => {
 		const count = Number(numberOfChildren) || 0;
 		const current = getValues("childrenAges") ?? [];
-		replace(
+		replaceChildrenAges(
 			Array.from({ length: count }, (_, i) => ({
 				age: current[i]?.age ?? "",
 			})),
@@ -74,11 +74,7 @@ export function CreateTripRequestForm() {
 
 	const onSubmit = (values: CreateTripRequestFormValues) => {
 		createRequest.mutate({
-			serviceType: values.serviceType,
-			arrivalAirport: values.arrivalAirport || undefined,
-			destinationAddress: values.destinationAddress || undefined,
-			pickupAddress: values.pickupAddress || undefined,
-			departureAirport: values.departureAirport || undefined,
+			routes: values.routes,
 			language: values.language,
 			firstName: values.firstName,
 			lastName: values.lastName,
@@ -99,87 +95,121 @@ export function CreateTripRequestForm() {
 		});
 	};
 
-	const serviceTypeOptions = SERVICE_TYPES.map((s) => ({
-		value: s.value,
-		label: tSvc(s.value),
-	}));
+	const duplicateRoute = (index: number) => {
+		const current = getValues(`routes.${index}`);
+		appendRoute({ pickup: current.pickup, destination: current.destination });
+	};
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-			{/* Service Type */}
-			<div className="space-y-4">
-				<h3 className="text-lg font-semibold">{t("serviceType")}</h3>
-				<Controller
-					name="serviceType"
-					control={control}
-					render={({ field }) => (
-						<CustomSelect
-							labelText={t("serviceTypeQuestion")}
-							options={serviceTypeOptions}
-							value={field.value}
-							onValueChange={field.onChange}
-						/>
-					)}
-				/>
+			{/* Route boxes */}
+			<div className="space-y-3">
+				<h3 className="text-lg font-semibold">{t("routes")}</h3>
+
+				{routeFields.map((field, index) => (
+					<div key={field.id} className="space-y-3 rounded-lg border p-4">
+						{/* Route header */}
+						<div className="flex items-center justify-between">
+							<h4 className="font-medium text-sm text-muted-foreground">
+								{t("routeN", { n: index + 1 })}
+							</h4>
+							<div className="flex gap-1">
+								<Button
+									type="button"
+									variant="outline"
+									size="sm"
+									onClick={() => duplicateRoute(index)}
+								>
+									<Copy className="mr-1 h-3 w-3" />
+									{t("duplicateRoute")}
+								</Button>
+								{routeFields.length > 1 && (
+									<Button
+										type="button"
+										variant="ghost"
+										size="icon"
+										onClick={() => removeRoute(index)}
+									>
+										<X className="h-4 w-4" />
+									</Button>
+								)}
+							</div>
+						</div>
+
+						{/* Pickup */}
+						<div className="space-y-2">
+							<CustomInput
+								labelText={t("pickup")}
+								placeholder={t("pickupPlaceholder")}
+								error={errors.routes?.[index]?.pickup?.message}
+								inputProps={{ ...register(`routes.${index}.pickup`) }}
+							/>
+							<div className="flex flex-wrap items-center gap-2">
+								<p className="text-xs text-muted-foreground">
+									{t("quickFill")}
+								</p>
+								{AIRPORTS.map((airport) => (
+									<Button
+										key={airport.value}
+										type="button"
+										variant="outline"
+										size="sm"
+										onClick={() =>
+											setValue(`routes.${index}.pickup`, airport.label)
+										}
+									>
+										{airport.value}
+									</Button>
+								))}
+							</div>
+						</div>
+
+						{/* Destination */}
+						<div className="space-y-2">
+							<CustomInput
+								labelText={t("destination")}
+								placeholder={t("destinationPlaceholder")}
+								error={errors.routes?.[index]?.destination?.message}
+								inputProps={{ ...register(`routes.${index}.destination`) }}
+							/>
+							<div className="flex flex-wrap items-center gap-2">
+								<p className="text-xs text-muted-foreground">
+									{t("quickFill")}
+								</p>
+								{AIRPORTS.map((airport) => (
+									<Button
+										key={airport.value}
+										type="button"
+										variant="outline"
+										size="sm"
+										onClick={() =>
+											setValue(`routes.${index}.destination`, airport.label)
+										}
+									>
+										{airport.value}
+									</Button>
+								))}
+							</div>
+						</div>
+					</div>
+				))}
+
+				<Button
+					type="button"
+					variant="outline"
+					className="w-full"
+					onClick={() => appendRoute({ pickup: "", destination: "" })}
+				>
+					<Plus className="mr-2 h-4 w-4" />
+					{t("addRoute")}
+				</Button>
+
+				{errors.routes?.root?.message && (
+					<p className="text-sm text-destructive">
+						{errors.routes.root.message}
+					</p>
+				)}
 			</div>
-
-			{/* Arrival Information */}
-			{showArrivalFields && (
-				<div className="space-y-4 rounded-lg border p-4">
-					<h3 className="text-lg font-semibold">{t("arrivalInformation")}</h3>
-
-					<Controller
-						name="arrivalAirport"
-						control={control}
-						render={({ field }) => (
-							<CustomSelect
-								labelText={t("arrivalAirport")}
-								placeholder={t("selectArrivalAirport")}
-								options={AIRPORTS}
-								value={field.value ?? ""}
-								onValueChange={field.onChange}
-								error={errors.arrivalAirport?.message}
-							/>
-						)}
-					/>
-
-					<CustomInput
-						labelText={t("destinationAddress")}
-						placeholder={t("destinationAddressPlaceholder")}
-						error={errors.destinationAddress?.message}
-						inputProps={{ ...register("destinationAddress") }}
-					/>
-				</div>
-			)}
-
-			{/* Departure Information */}
-			{showDepartureFields && (
-				<div className="space-y-4 rounded-lg border p-4">
-					<h3 className="text-lg font-semibold">{t("departureInformation")}</h3>
-
-					<CustomInput
-						labelText={t("pickupAddress")}
-						placeholder={t("pickupAddressPlaceholder")}
-						error={errors.pickupAddress?.message}
-						inputProps={{ ...register("pickupAddress") }}
-					/>
-
-					<Controller
-						name="departureAirport"
-						control={control}
-						render={({ field }) => (
-							<CustomSelect
-								labelText={t("departureAirport")}
-								placeholder={t("selectDepartureAirport")}
-								options={AIRPORTS}
-								value={field.value ?? ""}
-								onValueChange={field.onChange}
-								error={errors.departureAirport?.message}
-							/>
-						)}
-					/>
-				</div>
-			)}
 
 			{/* Travel Information */}
 			<div className="space-y-4 rounded-lg border p-4">
@@ -245,7 +275,7 @@ export function CreateTripRequestForm() {
 							error={errors.numberOfChildren?.message}
 							inputProps={{ ...register("numberOfChildren"), min: 0, max: 20 }}
 						/>
-						{fields.map((field, index) => (
+						{childrenAgeFields.map((field, index) => (
 							<CustomInput
 								key={field.id}
 								labelText={t("childAge", { n: index + 1 })}

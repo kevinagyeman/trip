@@ -20,9 +20,6 @@ interface TripConfirmedEmailProps {
 	arrivalFlightDate?: string;
 	arrivalFlightTime?: string;
 	arrivalFlightNumber?: string;
-	departureFlightDate?: string;
-	departureFlightTime?: string;
-	departureFlightNumber?: string;
 	adminUrl: string;
 }
 
@@ -33,79 +30,48 @@ export function TripConfirmedEmail({
 	arrivalFlightDate,
 	arrivalFlightTime,
 	arrivalFlightNumber,
-	departureFlightDate,
-	departureFlightTime,
-	departureFlightNumber,
 	adminUrl,
 }: TripConfirmedEmailProps) {
-	const showArrival = serviceType === "both" || serviceType === "arrival";
-	const showDeparture = serviceType === "both" || serviceType === "departure";
-
 	return (
 		<Html>
 			<Head />
-			<Preview>
-				✈️ {customerName} confirmed their trip with flight details
-			</Preview>
+			<Preview>🚗 {customerName} confirmed their trip</Preview>
 			<Body style={body}>
 				<Container style={container}>
 					<Heading style={heading}>Trip Manager</Heading>
 					<Hr style={hr} />
 					<Heading as="h2" style={subheading}>
-						✈️ Trip Confirmed
+						🚗 Trip Confirmed
 					</Heading>
 					<Text style={text}>
 						<strong>{customerName}</strong> ({customerEmail}) has confirmed
-						their booking and submitted flight details.
+						their booking and submitted pickup details.
 					</Text>
 
-					{showArrival && (arrivalFlightDate ?? arrivalFlightNumber) && (
-						<Section style={card}>
-							<Text style={cardTitle}>Arrival Flight</Text>
-							{arrivalFlightDate && (
-								<Row>
-									<Column style={label}>Date</Column>
-									<Column style={value}>{arrivalFlightDate}</Column>
-								</Row>
-							)}
-							{arrivalFlightTime && (
-								<Row>
-									<Column style={label}>Time</Column>
-									<Column style={value}>{arrivalFlightTime}</Column>
-								</Row>
-							)}
-							{arrivalFlightNumber && (
-								<Row>
-									<Column style={label}>Flight No.</Column>
-									<Column style={value}>{arrivalFlightNumber}</Column>
-								</Row>
-							)}
-						</Section>
-					)}
-
-					{showDeparture && (departureFlightDate ?? departureFlightNumber) && (
-						<Section style={card}>
-							<Text style={cardTitle}>Departure Flight</Text>
-							{departureFlightDate && (
-								<Row>
-									<Column style={label}>Date</Column>
-									<Column style={value}>{departureFlightDate}</Column>
-								</Row>
-							)}
-							{departureFlightTime && (
-								<Row>
-									<Column style={label}>Time</Column>
-									<Column style={value}>{departureFlightTime}</Column>
-								</Row>
-							)}
-							{departureFlightNumber && (
-								<Row>
-									<Column style={label}>Flight No.</Column>
-									<Column style={value}>{departureFlightNumber}</Column>
-								</Row>
-							)}
-						</Section>
-					)}
+					<Section style={card}>
+						<Row>
+							<Column style={label}>Route</Column>
+							<Column style={value}>{serviceType}</Column>
+						</Row>
+						{arrivalFlightDate && (
+							<Row>
+								<Column style={label}>Pickup Date</Column>
+								<Column style={value}>{arrivalFlightDate}</Column>
+							</Row>
+						)}
+						{arrivalFlightTime && (
+							<Row>
+								<Column style={label}>Pickup Time</Column>
+								<Column style={value}>{arrivalFlightTime}</Column>
+							</Row>
+						)}
+						{arrivalFlightNumber && (
+							<Row>
+								<Column style={label}>Flight No.</Column>
+								<Column style={value}>{arrivalFlightNumber}</Column>
+							</Row>
+						)}
+					</Section>
 
 					<Section style={buttonSection}>
 						<Button style={button} href={adminUrl}>
@@ -148,12 +114,6 @@ const card = {
 	borderRadius: "6px",
 	padding: "16px",
 	margin: "0 0 16px",
-};
-const cardTitle = {
-	color: "#1a1a1a",
-	fontSize: "14px",
-	fontWeight: "600",
-	margin: "0 0 12px",
 };
 const label = {
 	color: "#888888",

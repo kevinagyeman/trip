@@ -8,6 +8,8 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
+type Route = { pickup: string; destination: string };
+
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
 	QUOTED: "bg-blue-500",
@@ -19,7 +21,6 @@ const statusColors: Record<string, string> = {
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
-	const tSvc = useTranslations("serviceTypes");
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {
@@ -50,21 +51,16 @@ export function MyTripRequests() {
 									</span>
 								</CardTitle>
 								<p className="text-sm text-muted-foreground">
-									{tSvc(
-										request.serviceType as "both" | "arrival" | "departure",
-									)}{" "}
-									·{" "}
-									{request.arrivalFlightDate
-										? format(
-												new Date(request.arrivalFlightDate),
-												"MMM dd, yyyy",
-											)
-										: request.departureFlightDate
-											? format(
-													new Date(request.departureFlightDate),
-													"MMM dd, yyyy",
-												)
-											: format(new Date(request.createdAt), "MMM dd, yyyy")}
+									{(() => {
+										const routes = JSON.parse(request.routes) as Route[];
+										const first = routes[0]!;
+										return `${first.pickup} → ${first.destination}${routes.length > 1 ? ` +${routes.length - 1} more` : ""}`;
+									})()}
+								</p>
+								<p className="text-xs text-muted-foreground">
+									{request.pickupDate
+										? format(new Date(request.pickupDate), "MMM dd, yyyy")
+										: format(new Date(request.createdAt), "MMM dd, yyyy")}
 								</p>
 							</div>
 							<Badge className={statusColors[request.status]}>

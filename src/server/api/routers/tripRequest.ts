@@ -12,25 +12,17 @@ import { createElement } from "react";
 import { z } from "zod";
 import { TripRequestStatus } from "../../../../generated/prisma";
 
+const routeSchema = z.object({
+	pickup: z.string().min(1),
+	destination: z.string().min(1),
+});
+
 export const tripRequestRouter = createTRPCRouter({
 	// USER: Create new trip request
 	create: protectedProcedure
 		.input(
 			z.object({
-				serviceType: z.enum(["both", "arrival", "departure"]),
-				// Arrival info
-				arrivalAirport: z.string().optional(),
-				destinationAddress: z.string().optional(),
-				arrivalFlightDate: z.date().optional(),
-				arrivalFlightTime: z.string().optional(),
-				arrivalFlightNumber: z.string().optional(),
-				// Departure info
-				pickupAddress: z.string().optional(),
-				departureAirport: z.string().optional(),
-				departureFlightDate: z.date().optional(),
-				departureFlightTime: z.string().optional(),
-				departureFlightNumber: z.string().optional(),
-				// Travel info
+				routes: z.array(routeSchema).min(1),
 				language: z.enum(["English", "Italian"]),
 				firstName: z.string().min(1),
 				lastName: z.string().min(1),
@@ -44,34 +36,24 @@ export const tripRequestRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			if (input.serviceType === "both" || input.serviceType === "arrival") {
-				if (!input.arrivalAirport || !input.destinationAddress) {
-					throw new TRPCError({
-						code: "BAD_REQUEST",
-						message:
-							"Arrival airport and destination address are required for arrival service",
-					});
-				}
-			}
-
-			if (input.serviceType === "both" || input.serviceType === "departure") {
-				if (!input.pickupAddress || !input.departureAirport) {
-					throw new TRPCError({
-						code: "BAD_REQUEST",
-						message:
-							"Pickup address and departure airport are required for departure service",
-					});
-				}
-			}
+			const { routes, ...rest } = input;
 
 			const tripRequest = await ctx.db.tripRequest.create({
 				data: {
-					...input,
+					...rest,
+					routes: JSON.stringify(routes),
 					userId: ctx.session.user.id,
 					companyId: ctx.session.user.companyId ?? null,
 					status: TripRequestStatus.PENDING,
 				},
 			});
+
+			// Build route summary for email
+			const firstRoute = routes[0]!;
+			const routeSummary =
+				routes.length === 1
+					? `${firstRoute.pickup} → ${firstRoute.destination}`
+					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
 
 			// Notify admin of new request
 			if (ADMIN_EMAIL) {
@@ -82,7 +64,7 @@ export const tripRequestRouter = createTRPCRouter({
 						requestId: tripRequest.id,
 						userName: ctx.session.user.name ?? ctx.session.user.email ?? "",
 						userEmail: ctx.session.user.email ?? "",
-						serviceType: input.serviceType,
+						serviceType: routeSummary,
 						firstName: input.firstName,
 						lastName: input.lastName,
 						phone: input.phone,
@@ -179,7 +161,6 @@ export const tripRequestRouter = createTRPCRouter({
 			const items = await ctx.db.tripRequest.findMany({
 				where: {
 					...(input?.status && { status: input.status }),
-					// SUPER_ADMIN sees all, ADMIN sees only their company
 					...(companyId ? { companyId } : {}),
 				},
 				take: limit + 1,
@@ -218,7 +199,6 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			// ADMIN can only access requests from their company
 			if (companyId && tripRequest.companyId !== companyId) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
@@ -241,17 +221,14 @@ export const tripRequestRouter = createTRPCRouter({
 			});
 		}),
 
-	// USER: Confirm trip with flight details after accepting quotation
+	// USER: Confirm trip with pickup details after accepting quotation
 	confirm: protectedProcedure
 		.input(
 			z.object({
 				id: z.string(),
-				arrivalFlightDate: z.date().optional(),
-				arrivalFlightTime: z.string().optional(),
-				arrivalFlightNumber: z.string().optional(),
-				departureFlightDate: z.date().optional(),
-				departureFlightTime: z.string().optional(),
-				departureFlightNumber: z.string().optional(),
+				pickupDate: z.date(),
+				pickupTime: z.string(),
+				flightNumber: z.string().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -274,25 +251,27 @@ export const tripRequestRouter = createTRPCRouter({
 				data: { ...data, isConfirmed: true },
 			});
 
+			// Build route summary for email
+			type Route = { pickup: string; destination: string };
+			const routes = JSON.parse(tripRequest.routes) as Route[];
+			const firstRoute = routes[0]!;
+			const routeSummary =
+				routes.length === 1
+					? `${firstRoute.pickup} → ${firstRoute.destination}`
+					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+
 			// Notify admin of confirmed trip
 			if (ADMIN_EMAIL) {
 				await sendEmail({
 					to: ADMIN_EMAIL,
-					subject: `✈️ ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
+					subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
 					react: createElement(TripConfirmedEmail, {
 						customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
 						customerEmail: ctx.session.user.email ?? "",
-						serviceType: tripRequest.serviceType,
-						arrivalFlightDate: data.arrivalFlightDate
-							? format(data.arrivalFlightDate, "PPP")
-							: undefined,
-						arrivalFlightTime: data.arrivalFlightTime,
-						arrivalFlightNumber: data.arrivalFlightNumber,
-						departureFlightDate: data.departureFlightDate
-							? format(data.departureFlightDate, "PPP")
-							: undefined,
-						departureFlightTime: data.departureFlightTime,
-						departureFlightNumber: data.departureFlightNumber,
+						serviceType: routeSummary,
+						arrivalFlightDate: format(data.pickupDate, "PPP"),
+						arrivalFlightTime: data.pickupTime,
+						arrivalFlightNumber: data.flightNumber,
 						adminUrl: `${APP_URL}/admin/requests/${id}`,
 					}),
 				});

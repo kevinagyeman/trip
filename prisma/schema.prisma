@@ -127,37 +127,27 @@ model TripRequest {
     orderNumber Int               @unique @default(autoincrement())
     status      TripRequestStatus @default(PENDING)
 
-    // Service type
-    serviceType String // "Arrivo e Partenza", "Solo Arrivo", "Solo Partenza"
-
-    // Arrival information (if applicable)
-    arrivalAirport         String?
-    destinationAddress     String?
-    arrivalFlightDate      DateTime?
-    arrivalFlightTime      String?
-    arrivalFlightNumber    String?
-
-    // Departure information (if applicable)
-    pickupAddress          String?
-    departureAirport       String?
-    departureFlightDate    DateTime?
-    departureFlightTime    String?
-    departureFlightNumber  String?
+    // Route(s) — JSON array of {pickup: string, destination: string}
+    routes             String    @db.Text
 
     // Travel information
-    language               String // "English", "Italian"
-    firstName              String
-    lastName               String
-    phone                  String
-    numberOfAdults         Int
-    areThereChildren       Boolean @default(false)
-    numberOfChildren       Int?
-    ageOfChildren          String? @db.Text
-    numberOfChildSeats     Int?
-    additionalInfo         String? @db.Text
+    language           String
+    firstName          String
+    lastName           String
+    phone              String
+    numberOfAdults     Int
+    areThereChildren   Boolean @default(false)
+    numberOfChildren   Int?
+    ageOfChildren      String? @db.Text
+    numberOfChildSeats Int?
+    additionalInfo     String? @db.Text
 
-    // Confirmation status - true if user confirmed with flight details
-    isConfirmed            Boolean @default(false)
+    // Pickup details — set after quotation accepted
+    pickupDate   DateTime?
+    pickupTime   String?
+    flightNumber String?
+
+    isConfirmed  Boolean @default(false)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

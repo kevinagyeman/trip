@@ -15,9 +15,10 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { AIRPORTS } from "@/lib/airports";
 import { CalendarPlus } from "lucide-react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
+
+type Route = { pickup: string; destination: string };
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
@@ -100,7 +101,6 @@ const quotationStatusColors: Record<string, string> = {
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
-	const tSvc = useTranslations("serviceTypes");
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
@@ -129,18 +129,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const serviceTypeLabel = tSvc(
-		request.serviceType as "both" | "arrival" | "departure",
-	);
-	const showArrivalFields =
-		request.serviceType === "both" || request.serviceType === "arrival";
-	const showDepartureFields =
-		request.serviceType === "both" || request.serviceType === "departure";
-
-	const getAirportLabel = (code: string | null) => {
-		if (!code) return "";
-		return AIRPORTS.find((a) => a.value === code)?.label ?? code;
-	};
+	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const firstRoute = routes[0]!;
 
 	return (
 		<div className="space-y-6">
@@ -163,7 +153,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								{request.user.email}
 							</p>
 							<p className="text-sm text-muted-foreground">
-								{t("service", { type: serviceTypeLabel })}
+								{firstRoute.pickup} → {firstRoute.destination}
+								{routes.length > 1 && ` +${routes.length - 1} more`}
 							</p>
 						</div>
 						<div className="flex flex-col items-end gap-2">
@@ -203,6 +194,67 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-6">
+					{/* Routes */}
+					<div>
+						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
+						<div className="space-y-2">
+							{routes.map((route, i) => (
+								<div key={i} className="rounded-lg border p-3 text-sm">
+									<p className="mb-1 text-xs font-medium text-muted-foreground">
+										{t("routeN", { n: i + 1 })}
+									</p>
+									<p>
+										<span className="text-muted-foreground">
+											{t("pickup")}:{" "}
+										</span>
+										<span className="font-medium">{route.pickup}</span>
+									</p>
+									<p>
+										<span className="text-muted-foreground">
+											{t("destination")}:{" "}
+										</span>
+										<span className="font-medium">{route.destination}</span>
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+
+					{/* Pickup Details (confirmed) */}
+					{request.isConfirmed && request.pickupDate && (
+						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
+							<h3 className="mb-3 text-lg font-semibold">
+								{t("pickupDetails")}
+							</h3>
+							<div className="grid grid-cols-2 gap-4">
+								<div>
+									<p className="text-sm text-muted-foreground">
+										{t("pickupDate")}
+									</p>
+									<p className="font-medium">
+										{format(new Date(request.pickupDate), "PPP")}
+									</p>
+								</div>
+								{request.pickupTime && (
+									<div>
+										<p className="text-sm text-muted-foreground">
+											{t("pickupTime")}
+										</p>
+										<p className="font-medium">{request.pickupTime}</p>
+									</div>
+								)}
+								{request.flightNumber && (
+									<div>
+										<p className="text-sm text-muted-foreground">
+											{t("flightNumber")}
+										</p>
+										<p className="font-medium">{request.flightNumber}</p>
+									</div>
+								)}
+							</div>
+						</div>
+					)}
+
 					{/* Contact & Travel Info */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">
@@ -229,128 +281,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							</div>
 						</div>
 					</div>
-
-					{/* Arrival Information */}
-					{showArrivalFields && (
-						<div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("arrivalInformation")}
-							</h3>
-							<div className="grid gap-3">
-								{request.arrivalAirport && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("airport")}
-										</p>
-										<p className="font-medium">
-											{getAirportLabel(request.arrivalAirport)}
-										</p>
-									</div>
-								)}
-								{request.destinationAddress && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("destinationAddress")}
-										</p>
-										<p className="font-medium">{request.destinationAddress}</p>
-									</div>
-								)}
-								{request.arrivalFlightDate && (
-									<div className="grid grid-cols-3 gap-3">
-										<div>
-											<p className="text-sm text-muted-foreground">
-												{t("flightDate")}
-											</p>
-											<p className="font-medium">
-												{format(new Date(request.arrivalFlightDate), "PPP")}
-											</p>
-										</div>
-										{request.arrivalFlightTime && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightTime")}
-												</p>
-												<p className="font-medium">
-													{request.arrivalFlightTime}
-												</p>
-											</div>
-										)}
-										{request.arrivalFlightNumber && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightNumber")}
-												</p>
-												<p className="font-medium">
-													{request.arrivalFlightNumber}
-												</p>
-											</div>
-										)}
-									</div>
-								)}
-							</div>
-						</div>
-					)}
-
-					{/* Departure Information */}
-					{showDepartureFields && (
-						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("departureInformation")}
-							</h3>
-							<div className="grid gap-3">
-								{request.pickupAddress && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("pickupAddress")}
-										</p>
-										<p className="font-medium">{request.pickupAddress}</p>
-									</div>
-								)}
-								{request.departureAirport && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("airport")}
-										</p>
-										<p className="font-medium">
-											{getAirportLabel(request.departureAirport)}
-										</p>
-									</div>
-								)}
-								{request.departureFlightDate && (
-									<div className="grid grid-cols-3 gap-3">
-										<div>
-											<p className="text-sm text-muted-foreground">
-												{t("flightDate")}
-											</p>
-											<p className="font-medium">
-												{format(new Date(request.departureFlightDate), "PPP")}
-											</p>
-										</div>
-										{request.departureFlightTime && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightTime")}
-												</p>
-												<p className="font-medium">
-													{request.departureFlightTime}
-												</p>
-											</div>
-										)}
-										{request.departureFlightNumber && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightNumber")}
-												</p>
-												<p className="font-medium">
-													{request.departureFlightNumber}
-												</p>
-											</div>
-										)}
-									</div>
-								)}
-							</div>
-						</div>
-					)}
 
 					{/* Children Information */}
 					{request.areThereChildren && (
@@ -401,8 +331,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				</CardContent>
 			</Card>
 
-			{/* Calendar Section — only when trip is confirmed */}
-			{request.isConfirmed && (
+			{/* Calendar Section — only when trip is confirmed and pickup date set */}
+			{request.isConfirmed && request.pickupDate && (
 				<Card>
 					<CardHeader>
 						<CardTitle className="flex items-center gap-2 text-base">
@@ -411,171 +341,84 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="flex flex-wrap gap-3">
-						{showArrivalFields && request.arrivalFlightDate && (
-							<div className="flex flex-col gap-2">
-								<p className="text-sm font-medium">{t("arrivalPickup")}</p>
-								<div className="flex gap-2">
-									<Button
-										size="sm"
-										variant="outline"
-										onClick={() => {
-											const start = toICSDateTime(
-												new Date(request.arrivalFlightDate!),
-												request.arrivalFlightTime,
-											);
-											const endDate = new Date(request.arrivalFlightDate!);
-											if (request.arrivalFlightTime) {
-												const [h, m] = request.arrivalFlightTime
-													.split(":")
-													.map(Number);
-												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-											} else {
-												endDate.setHours(endDate.getHours() + 1);
-											}
-											const end = toICSDateTime(endDate);
-											const summary = `${t("arrivalPickup")} — ${request.firstName} ${request.lastName}`;
-											const description = [
-												`${t("calFlightNumber")}: ${request.arrivalFlightNumber ?? "—"}`,
-												`${t("calAirport")}: ${getAirportLabel(request.arrivalAirport)}`,
-												`${t("calDestination")}: ${request.destinationAddress ?? "—"}`,
-												`${t("calPassengers")}: ${request.numberOfAdults}`,
-											].join("\\n");
-											downloadICS(
-												`arrival-${request.id}.ics`,
-												buildICS({
-													uid: `arrival-${request.id}@tripmanager`,
-													summary,
-													description,
-													location: getAirportLabel(request.arrivalAirport),
-													start,
-													end,
-												}),
-											);
-										}}
-									>
-										{t("downloadICS")}
-									</Button>
-									<Button
-										size="sm"
-										variant="outline"
-										onClick={() => {
-											const start = toICSDateTime(
-												new Date(request.arrivalFlightDate!),
-												request.arrivalFlightTime,
-											);
-											const endDate = new Date(request.arrivalFlightDate!);
-											if (request.arrivalFlightTime) {
-												const [h, m] = request.arrivalFlightTime
-													.split(":")
-													.map(Number);
-												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-											} else {
-												endDate.setHours(endDate.getHours() + 1);
-											}
-											const end = toICSDateTime(endDate);
-											window.open(
-												googleCalendarUrl({
-													summary: `${t("arrivalPickup")} — ${request.firstName} ${request.lastName}`,
-													description: `${t("calFlightNumber")}: ${request.arrivalFlightNumber ?? "—"}\n${t("calDestination")}: ${request.destinationAddress ?? "—"}`,
-													location: getAirportLabel(request.arrivalAirport),
-													start,
-													end,
-												}),
-												"_blank",
-											);
-										}}
-									>
-										{t("googleCalendar")}
-									</Button>
-								</div>
+						<div className="flex flex-col gap-2">
+							<p className="text-sm font-medium">{t("pickupEvent")}</p>
+							<div className="flex gap-2">
+								<Button
+									size="sm"
+									variant="outline"
+									onClick={() => {
+										const start = toICSDateTime(
+											new Date(request.pickupDate!),
+											request.pickupTime,
+										);
+										const endDate = new Date(request.pickupDate!);
+										if (request.pickupTime) {
+											const [h, m] = request.pickupTime.split(":").map(Number);
+											endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+										} else {
+											endDate.setHours(endDate.getHours() + 1);
+										}
+										const end = toICSDateTime(endDate);
+										const summary = `${t("pickupEvent")} — ${request.firstName} ${request.lastName}`;
+										const routeStr = routes
+											.map((r) => `${r.pickup} → ${r.destination}`)
+											.join(" | ");
+										const description = [
+											`${t("calRoute")}: ${routeStr}`,
+											`${t("calFlightNumber")}: ${request.flightNumber ?? "—"}`,
+											`${t("calPassengers")}: ${request.numberOfAdults}`,
+										].join("\\n");
+										downloadICS(
+											`pickup-${request.id}.ics`,
+											buildICS({
+												uid: `pickup-${request.id}@tripmanager`,
+												summary,
+												description,
+												location: firstRoute.pickup,
+												start,
+												end,
+											}),
+										);
+									}}
+								>
+									{t("downloadICS")}
+								</Button>
+								<Button
+									size="sm"
+									variant="outline"
+									onClick={() => {
+										const start = toICSDateTime(
+											new Date(request.pickupDate!),
+											request.pickupTime,
+										);
+										const endDate = new Date(request.pickupDate!);
+										if (request.pickupTime) {
+											const [h, m] = request.pickupTime.split(":").map(Number);
+											endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+										} else {
+											endDate.setHours(endDate.getHours() + 1);
+										}
+										const end = toICSDateTime(endDate);
+										const routeStr = routes
+											.map((r) => `${r.pickup} → ${r.destination}`)
+											.join(" | ");
+										window.open(
+											googleCalendarUrl({
+												summary: `${t("pickupEvent")} — ${request.firstName} ${request.lastName}`,
+												description: `${t("calRoute")}: ${routeStr}\n${t("calFlightNumber")}: ${request.flightNumber ?? "—"}`,
+												location: firstRoute.pickup,
+												start,
+												end,
+											}),
+											"_blank",
+										);
+									}}
+								>
+									{t("googleCalendar")}
+								</Button>
 							</div>
-						)}
-
-						{showDepartureFields && request.departureFlightDate && (
-							<div className="flex flex-col gap-2">
-								<p className="text-sm font-medium">{t("departurePickup")}</p>
-								<div className="flex gap-2">
-									<Button
-										size="sm"
-										variant="outline"
-										onClick={() => {
-											const start = toICSDateTime(
-												new Date(request.departureFlightDate!),
-												request.departureFlightTime,
-											);
-											const endDate = new Date(request.departureFlightDate!);
-											if (request.departureFlightTime) {
-												const [h, m] = request.departureFlightTime
-													.split(":")
-													.map(Number);
-												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-											} else {
-												endDate.setHours(endDate.getHours() + 1);
-											}
-											const end = toICSDateTime(endDate);
-											const summary = `${t("departurePickup")} — ${request.firstName} ${request.lastName}`;
-											const description = [
-												`${t("calFlightNumber")}: ${request.departureFlightNumber ?? "—"}`,
-												`${t("calPickup")}: ${request.pickupAddress ?? "—"}`,
-												`${t("calAirport")}: ${getAirportLabel(request.departureAirport)}`,
-												`${t("calPassengers")}: ${request.numberOfAdults}`,
-											].join("\\n");
-											downloadICS(
-												`departure-${request.id}.ics`,
-												buildICS({
-													uid: `departure-${request.id}@tripmanager`,
-													summary,
-													description,
-													location: request.pickupAddress ?? "",
-													start,
-													end,
-												}),
-											);
-										}}
-									>
-										{t("downloadICS")}
-									</Button>
-									<Button
-										size="sm"
-										variant="outline"
-										onClick={() => {
-											const start = toICSDateTime(
-												new Date(request.departureFlightDate!),
-												request.departureFlightTime,
-											);
-											const endDate = new Date(request.departureFlightDate!);
-											if (request.departureFlightTime) {
-												const [h, m] = request.departureFlightTime
-													.split(":")
-													.map(Number);
-												endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-											} else {
-												endDate.setHours(endDate.getHours() + 1);
-											}
-											const end = toICSDateTime(endDate);
-											window.open(
-												googleCalendarUrl({
-													summary: `${t("departurePickup")} — ${request.firstName} ${request.lastName}`,
-													description: `${t("calFlightNumber")}: ${request.departureFlightNumber ?? "—"}\n${t("calPickup")}: ${request.pickupAddress ?? "—"}`,
-													location: request.pickupAddress ?? "",
-													start,
-													end,
-												}),
-												"_blank",
-											);
-										}}
-									>
-										{t("googleCalendar")}
-									</Button>
-								</div>
-							</div>
-						)}
-
-						{!request.arrivalFlightDate && !request.departureFlightDate && (
-							<p className="text-sm text-muted-foreground">
-								{t("noFlightDates")}
-							</p>
-						)}
+						</div>
 					</CardContent>
 				</Card>
 			)}

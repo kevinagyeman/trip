@@ -1,17 +1,11 @@
 export const AIRPORTS = [
-	{ value: "VRN", label: "VRN - Verona Villafranca Valerio Catullo" },
-	{ value: "BGY", label: "BGY - Milano Bergamo Orio al Serio" },
+	{ value: "VRN", label: "VRN - Verona Villafranca" },
+	{ value: "BGY", label: "BGY - Milano Bergamo" },
 	{ value: "MXP", label: "MXP - Milano Malpensa" },
-	{ value: "LIN", label: "MIL - Milano Linate" },
-	{ value: "VCE", label: "VCE - Venezia Marcopolo" },
+	{ value: "LIN", label: "LIN - Milano Linate" },
+	{ value: "VCE", label: "VCE - Venezia Marco Polo" },
 	{ value: "TSF", label: "TSF - Treviso Sant'Angelo" },
-	{ value: "BLQ", label: "BLQ - Bologna Guglielmo Marconi" },
-] as const;
-
-export const SERVICE_TYPES = [
-	{ value: "both", label: "Arrival & Departure" },
-	{ value: "arrival", label: "Only Arrival" },
-	{ value: "departure", label: "Only Departure" },
+	{ value: "BLQ", label: "BLQ - Bologna Marconi" },
 ] as const;
 
 export const LANGUAGES = [

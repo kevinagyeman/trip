@@ -36,13 +36,6 @@ export function NewRequestEmail({
 	numberOfAdults,
 	adminUrl,
 }: NewRequestEmailProps) {
-	const serviceLabel =
-		serviceType === "both"
-			? "Arrival & Departure"
-			: serviceType === "arrival"
-				? "Arrival only"
-				: "Departure only";
-
 	return (
 		<Html>
 			<Head />
@@ -77,8 +70,8 @@ export function NewRequestEmail({
 							<Column style={value}>{phone}</Column>
 						</Row>
 						<Row>
-							<Column style={label}>Service</Column>
-							<Column style={value}>{serviceLabel}</Column>
+							<Column style={label}>Route</Column>
+							<Column style={value}>{serviceType}</Column>
 						</Row>
 						<Row>
 							<Column style={label}>Adults</Column>

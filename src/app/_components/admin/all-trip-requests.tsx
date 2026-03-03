@@ -17,6 +17,8 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
+type Route = { pickup: string; destination: string };
+
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
 	QUOTED: "bg-blue-500",
@@ -28,7 +30,6 @@ const statusColors: Record<string, string> = {
 
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
-	const tSvc = useTranslations("serviceTypes");
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -41,7 +42,7 @@ export function AllTripRequests() {
 
 	return (
 		<div className="space-y-4">
-			<div className="flex justify-between items-center">
+			<div className="flex items-center justify-between">
 				<Select
 					value={statusFilter}
 					onValueChange={(v) => setStatusFilter(v as TripRequestStatus | "ALL")}
@@ -82,21 +83,14 @@ export function AllTripRequests() {
 										{request.user.name ?? request.user.email}
 									</p>
 									<p className="text-xs text-muted-foreground">
-										{tSvc(
-											request.serviceType as "both" | "arrival" | "departure",
-										)}{" "}
-										·{" "}
-										{request.arrivalFlightDate
-											? format(
-													new Date(request.arrivalFlightDate),
-													"MMM dd, yyyy",
-												)
-											: request.departureFlightDate
-												? format(
-														new Date(request.departureFlightDate),
-														"MMM dd, yyyy",
-													)
-												: format(new Date(request.createdAt), "MMM dd, yyyy")}
+										{(() => {
+											const routes = JSON.parse(request.routes) as Route[];
+											const first = routes[0]!;
+											return `${first.pickup} → ${first.destination}${routes.length > 1 ? ` +${routes.length - 1} more` : ""}`;
+										})()} ·{" "}
+										{request.pickupDate
+											? format(new Date(request.pickupDate), "MMM dd, yyyy")
+											: format(new Date(request.createdAt), "MMM dd, yyyy")}
 									</p>
 								</div>
 								<Badge className={statusColors[request.status]}>

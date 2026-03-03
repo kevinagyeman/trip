@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { AIRPORTS } from "@/lib/airports";
+
+type Route = { pickup: string; destination: string };
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -28,7 +29,6 @@ const quotationStatusColors: Record<string, string> = {
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("requestDetail");
-	const tSvc = useTranslations("serviceTypes");
 	const utils = api.useUtils();
 	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
 		id: requestId,
@@ -51,18 +51,8 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const serviceTypeLabel = tSvc(
-		request.serviceType as "both" | "arrival" | "departure",
-	);
-	const showArrivalFields =
-		request.serviceType === "both" || request.serviceType === "arrival";
-	const showDepartureFields =
-		request.serviceType === "both" || request.serviceType === "departure";
-
-	const getAirportLabel = (code: string | null) => {
-		if (!code) return "";
-		return AIRPORTS.find((a) => a.value === code)?.label ?? code;
-	};
+	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const firstRoute = routes[0]!;
 
 	const hasAcceptedQuotation = request.quotations.some(
 		(q) => q.status === "ACCEPTED",
@@ -86,7 +76,10 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 									#{String(request.orderNumber).padStart(7, "0")}
 								</span>
 							</CardTitle>
-							<p className="text-muted-foreground">{serviceTypeLabel}</p>
+							<p className="text-sm text-muted-foreground">
+								{firstRoute.pickup} → {firstRoute.destination}
+								{routes.length > 1 && ` +${routes.length - 1} more`}
+							</p>
 						</div>
 						<div className="flex gap-2">
 							<Badge className={statusColors[request.status]}>
@@ -99,6 +92,32 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					</div>
 				</CardHeader>
 				<CardContent className="space-y-6">
+					{/* Routes */}
+					<div>
+						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
+						<div className="space-y-2">
+							{routes.map((route, i) => (
+								<div key={i} className="rounded-lg border p-3 text-sm">
+									<p className="mb-1 text-xs font-medium text-muted-foreground">
+										{t("routeN", { n: i + 1 })}
+									</p>
+									<p>
+										<span className="text-muted-foreground">
+											{t("pickup")}:{" "}
+										</span>
+										<span className="font-medium">{route.pickup}</span>
+									</p>
+									<p>
+										<span className="text-muted-foreground">
+											{t("destination")}:{" "}
+										</span>
+										<span className="font-medium">{route.destination}</span>
+									</p>
+								</div>
+							))}
+						</div>
+					</div>
+
 					{/* Travel Information */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">
@@ -126,122 +145,35 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 
-					{/* Arrival Information */}
-					{showArrivalFields && (
-						<div className="rounded-lg border p-4">
+					{/* Pickup Details (only when confirmed) */}
+					{request.isConfirmed && request.pickupDate && (
+						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
 							<h3 className="mb-3 text-lg font-semibold">
-								{t("arrivalInformation")}
+								{t("pickupDetails")}
 							</h3>
-							<div className="grid gap-3">
-								{request.arrivalAirport && (
+							<div className="grid grid-cols-2 gap-4">
+								<div>
+									<p className="text-sm text-muted-foreground">
+										{t("pickupDate")}
+									</p>
+									<p className="font-medium">
+										{format(new Date(request.pickupDate), "PPP")}
+									</p>
+								</div>
+								{request.pickupTime && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											{t("airport")}
+											{t("pickupTime")}
 										</p>
-										<p className="font-medium">
-											{getAirportLabel(request.arrivalAirport)}
-										</p>
+										<p className="font-medium">{request.pickupTime}</p>
 									</div>
 								)}
-								{request.destinationAddress && (
+								{request.flightNumber && (
 									<div>
 										<p className="text-sm text-muted-foreground">
-											{t("destinationAddress")}
+											{t("flightNumber")}
 										</p>
-										<p className="font-medium">{request.destinationAddress}</p>
-									</div>
-								)}
-								{request.arrivalFlightDate && (
-									<div className="grid grid-cols-3 gap-3">
-										<div>
-											<p className="text-sm text-muted-foreground">
-												{t("flightDate")}
-											</p>
-											<p className="font-medium">
-												{format(new Date(request.arrivalFlightDate), "PPP")}
-											</p>
-										</div>
-										{request.arrivalFlightTime && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightTime")}
-												</p>
-												<p className="font-medium">
-													{request.arrivalFlightTime}
-												</p>
-											</div>
-										)}
-										{request.arrivalFlightNumber && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightNumber")}
-												</p>
-												<p className="font-medium">
-													{request.arrivalFlightNumber}
-												</p>
-											</div>
-										)}
-									</div>
-								)}
-							</div>
-						</div>
-					)}
-
-					{/* Departure Information */}
-					{showDepartureFields && (
-						<div className="rounded-lg border p-4">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("departureInformation")}
-							</h3>
-							<div className="grid gap-3">
-								{request.pickupAddress && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("pickupAddress")}
-										</p>
-										<p className="font-medium">{request.pickupAddress}</p>
-									</div>
-								)}
-								{request.departureAirport && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("airport")}
-										</p>
-										<p className="font-medium">
-											{getAirportLabel(request.departureAirport)}
-										</p>
-									</div>
-								)}
-								{request.departureFlightDate && (
-									<div className="grid grid-cols-3 gap-3">
-										<div>
-											<p className="text-sm text-muted-foreground">
-												{t("flightDate")}
-											</p>
-											<p className="font-medium">
-												{format(new Date(request.departureFlightDate), "PPP")}
-											</p>
-										</div>
-										{request.departureFlightTime && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightTime")}
-												</p>
-												<p className="font-medium">
-													{request.departureFlightTime}
-												</p>
-											</div>
-										)}
-										{request.departureFlightNumber && (
-											<div>
-												<p className="text-sm text-muted-foreground">
-													{t("flightNumber")}
-												</p>
-												<p className="font-medium">
-													{request.departureFlightNumber}
-												</p>
-											</div>
-										)}
+										<p className="font-medium">{request.flightNumber}</p>
 									</div>
 								)}
 							</div>

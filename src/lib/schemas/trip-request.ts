@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const createTripRequestSchema = z
 	.object({
-		serviceType: z.enum(["both", "arrival", "departure"]),
-		// Arrival
-		arrivalAirport: z.string().optional(),
-		destinationAddress: z.string().optional(),
-		// Departure
-		pickupAddress: z.string().optional(),
-		departureAirport: z.string().optional(),
-		// Travel info
+		routes: z
+			.array(
+				z.object({
+					pickup: z.string().min(1, "Pickup address is required"),
+					destination: z.string().min(1, "Destination is required"),
+				}),
+			)
+			.min(1, "At least one route is required"),
 		language: z.enum(["English", "Italian"]),
 		firstName: z.string().min(1, "First name is required"),
 		lastName: z.string().min(1, "Last name is required"),
@@ -24,22 +24,6 @@ export const createTripRequestSchema = z
 		additionalInfo: z.string().optional(),
 	})
 	.superRefine((data, ctx) => {
-		if (data.serviceType === "both" || data.serviceType === "arrival") {
-			if (!data.arrivalAirport) {
-				ctx.addIssue({
-					path: ["arrivalAirport"],
-					code: z.ZodIssueCode.custom,
-					message: "Arrival airport is required",
-				});
-			}
-			if (!data.destinationAddress) {
-				ctx.addIssue({
-					path: ["destinationAddress"],
-					code: z.ZodIssueCode.custom,
-					message: "Destination address is required",
-				});
-			}
-		}
 		if (data.areThereChildren && data.numberOfChildren) {
 			const count = Number(data.numberOfChildren);
 			for (let i = 0; i < count; i++) {
@@ -52,31 +36,12 @@ export const createTripRequestSchema = z
 				}
 			}
 		}
-		if (data.serviceType === "both" || data.serviceType === "departure") {
-			if (!data.pickupAddress) {
-				ctx.addIssue({
-					path: ["pickupAddress"],
-					code: z.ZodIssueCode.custom,
-					message: "Pickup address is required",
-				});
-			}
-			if (!data.departureAirport) {
-				ctx.addIssue({
-					path: ["departureAirport"],
-					code: z.ZodIssueCode.custom,
-					message: "Departure airport is required",
-				});
-			}
-		}
 	});
 
 export const confirmTripSchema = z.object({
-	arrivalFlightDate: z.date().optional(),
-	arrivalFlightTime: z.string().optional(),
-	arrivalFlightNumber: z.string().optional(),
-	departureFlightDate: z.date().optional(),
-	departureFlightTime: z.string().optional(),
-	departureFlightNumber: z.string().optional(),
+	pickupDate: z.date({ required_error: "Pickup date is required" }),
+	pickupTime: z.string().min(1, "Pickup time is required"),
+	flightNumber: z.string().optional(),
 });
 
 export type CreateTripRequestFormValues = z.infer<
