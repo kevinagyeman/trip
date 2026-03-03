@@ -175,6 +175,15 @@
 		"tripConfirmationDesc": "Veuillez confirmer votre voyage en fournissant la date et l'heure de prise en charge",
 		"confirmTrip": "Confirmer le Voyage"
 	},
+	"adminDashboard": {
+		"title": "Tableau de Bord Admin",
+		"statTotal": "Total",
+		"statPending": "En Attente",
+		"statQuoted": "Devisés",
+		"statAccepted": "Acceptés",
+		"statCompleted": "Terminés",
+		"statCancelled": "Refusés / Annulés"
+	},
 	"adminRequests": {
 		"loading": "Chargement...",
 		"filterByStatus": "Filtrer par statut",

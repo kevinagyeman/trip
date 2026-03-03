@@ -175,6 +175,15 @@
 		"tripConfirmationDesc": "Conferma il viaggio fornendo data e orario di ritiro",
 		"confirmTrip": "Conferma Viaggio"
 	},
+	"adminDashboard": {
+		"title": "Dashboard Admin",
+		"statTotal": "Totale",
+		"statPending": "In Attesa",
+		"statQuoted": "Preventivati",
+		"statAccepted": "Accettati",
+		"statCompleted": "Completati",
+		"statCancelled": "Rifiutati / Annullati"
+	},
 	"adminRequests": {
 		"loading": "Caricamento...",
 		"filterByStatus": "Filtra per stato",

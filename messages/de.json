@@ -175,6 +175,15 @@
 		"tripConfirmationDesc": "Bitte bestätigen Sie Ihre Reise mit Abholdatum und -uhrzeit",
 		"confirmTrip": "Reise Bestätigen"
 	},
+	"adminDashboard": {
+		"title": "Admin-Dashboard",
+		"statTotal": "Gesamt",
+		"statPending": "Ausstehend",
+		"statQuoted": "Angeboten",
+		"statAccepted": "Akzeptiert",
+		"statCompleted": "Abgeschlossen",
+		"statCancelled": "Abgelehnt / Storniert"
+	},
 	"adminRequests": {
 		"loading": "Laden...",
 		"filterByStatus": "Nach Status filtern",

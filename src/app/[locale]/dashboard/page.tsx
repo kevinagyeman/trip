@@ -20,6 +20,10 @@ export default async function DashboardPage({
 	}
 
 	const role = session.user.role;
+
+	if (role === "SUPER_ADMIN") redirect("/super-admin");
+	if (role === "ADMIN") redirect("/admin");
+
 	const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
 
 	const t = await getTranslations("dashboard");

@@ -6,7 +6,7 @@ import {
 	customerProcedure,
 	protectedProcedure,
 } from "@/server/api/trpc";
-import { ADMIN_EMAIL, APP_URL, sendEmail } from "@/server/email";
+import { resolveAdminEmails, APP_URL, sendEmail } from "@/server/email";
 import { TRPCError } from "@trpc/server";
 import { format } from "date-fns";
 import { createElement } from "react";
@@ -39,12 +39,20 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { routes, ...rest } = input;
 
+			// Read companyId fresh from DB — JWT may be stale if the user was
+			// assigned to a company after they last signed in.
+			const currentUser = await ctx.db.user.findUnique({
+				where: { id: ctx.session.user.id },
+				select: { companyId: true },
+			});
+			const companyId = currentUser?.companyId ?? null;
+
 			const tripRequest = await ctx.db.tripRequest.create({
 				data: {
 					...rest,
 					routes: JSON.stringify(routes),
 					userId: ctx.session.user.id,
-					companyId: ctx.session.user.companyId ?? null,
+					companyId,
 					status: TripRequestStatus.PENDING,
 				},
 			});
@@ -56,24 +64,27 @@ export const tripRequestRouter = createTRPCRouter({
 					? `${firstRoute.pickup} → ${firstRoute.destination}`
 					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
 
-			// Notify admin of new request
-			if (ADMIN_EMAIL) {
-				await sendEmail({
-					to: ADMIN_EMAIL,
-					subject: `New trip request from ${input.firstName} ${input.lastName}`,
-					react: createElement(NewRequestEmail, {
-						requestId: tripRequest.id,
-						userName: ctx.session.user.name ?? ctx.session.user.email ?? "",
-						userEmail: ctx.session.user.email ?? "",
-						serviceType: routeSummary,
-						firstName: input.firstName,
-						lastName: input.lastName,
-						phone: input.phone,
-						numberOfAdults: input.numberOfAdults,
-						adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
+			// Notify all admins of the new request
+			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
+			await Promise.all(
+				notifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `New trip request from ${input.firstName} ${input.lastName}`,
+						react: createElement(NewRequestEmail, {
+							requestId: tripRequest.id,
+							userName: ctx.session.user.name ?? ctx.session.user.email ?? "",
+							userEmail: ctx.session.user.email ?? "",
+							serviceType: routeSummary,
+							firstName: input.firstName,
+							lastName: input.lastName,
+							phone: input.phone,
+							numberOfAdults: input.numberOfAdults,
+							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
+						}),
 					}),
-				});
-			}
+				),
+			);
 
 			return tripRequest;
 		}),
@@ -142,6 +153,25 @@ export const tripRequestRouter = createTRPCRouter({
 
 			return tripRequest;
 		}),
+
+	// ADMIN: Get stats (scoped to company)
+	getStats: adminProcedure.query(async ({ ctx }) => {
+		const companyId = ctx.session.user.companyId;
+		const where = companyId ? { companyId } : {};
+
+		const [total, pending, quoted, accepted, completed, rejected, cancelled] =
+			await Promise.all([
+				ctx.db.tripRequest.count({ where }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "PENDING" } }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "QUOTED" } }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "ACCEPTED" } }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "COMPLETED" } }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "REJECTED" } }),
+				ctx.db.tripRequest.count({ where: { ...where, status: "CANCELLED" } }),
+			]);
+
+		return { total, pending, quoted, accepted, completed, rejected, cancelled };
+	}),
 
 	// ADMIN: Get all trip requests (scoped to company)
 	getAllRequests: adminProcedure
@@ -261,22 +291,27 @@ export const tripRequestRouter = createTRPCRouter({
 					? `${firstRoute.pickup} → ${firstRoute.destination}`
 					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
 
-			// Notify admin of confirmed trip
-			if (ADMIN_EMAIL) {
-				await sendEmail({
-					to: ADMIN_EMAIL,
-					subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
-					react: createElement(TripConfirmedEmail, {
-						customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
-						customerEmail: ctx.session.user.email ?? "",
-						serviceType: routeSummary,
-						arrivalFlightDate: format(data.pickupDate, "PPP"),
-						arrivalFlightTime: data.pickupTime,
-						arrivalFlightNumber: data.flightNumber,
-						adminUrl: `${APP_URL}/admin/requests/${id}`,
+			// Notify all admins of confirmed trip
+			const notifyEmailsConfirm = await resolveAdminEmails(
+				tripRequest.companyId,
+			);
+			await Promise.all(
+				notifyEmailsConfirm.map((to) =>
+					sendEmail({
+						to,
+						subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
+						react: createElement(TripConfirmedEmail, {
+							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
+							customerEmail: ctx.session.user.email ?? "",
+							serviceType: routeSummary,
+							arrivalFlightDate: format(data.pickupDate, "PPP"),
+							arrivalFlightTime: data.pickupTime,
+							arrivalFlightNumber: data.flightNumber,
+							adminUrl: `${APP_URL}/admin/requests/${id}`,
+						}),
 					}),
-				});
-			}
+				),
+			);
 
 			return updated;
 		}),

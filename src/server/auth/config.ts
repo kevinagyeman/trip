@@ -97,6 +97,19 @@ export const authConfig = {
 					companyId: user.companyId,
 				};
 			}
+			// Refresh role + companyId from DB so changes made by super admin
+			// (e.g. assigning a user to a company) take effect without requiring
+			// the user to sign out and back in.
+			if (token.id) {
+				const dbUser = await db.user.findUnique({
+					where: { id: token.id as string },
+					select: { role: true, companyId: true },
+				});
+				if (dbUser) {
+					token.role = dbUser.role;
+					token.companyId = dbUser.companyId;
+				}
+			}
 			return token;
 		},
 		async session({ session, token }) {

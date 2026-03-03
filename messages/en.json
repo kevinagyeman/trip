@@ -175,6 +175,15 @@
 		"tripConfirmationDesc": "Please confirm your trip by providing your pickup date and time",
 		"confirmTrip": "Confirm Trip"
 	},
+	"adminDashboard": {
+		"title": "Admin Dashboard",
+		"statTotal": "Total",
+		"statPending": "Pending",
+		"statQuoted": "Quoted",
+		"statAccepted": "Accepted",
+		"statCompleted": "Completed",
+		"statCancelled": "Rejected / Cancelled"
+	},
 	"adminRequests": {
 		"loading": "Loading...",
 		"filterByStatus": "Filter by status",

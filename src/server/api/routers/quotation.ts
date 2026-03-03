@@ -9,7 +9,7 @@ import {
 	QuotationStatus,
 	TripRequestStatus,
 } from "../../../../generated/prisma";
-import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
+import { sendEmail, resolveAdminEmails, APP_URL } from "@/server/email";
 import { QuotationSentEmail } from "@/emails/quotation-sent";
 import { QuotationResponseEmail } from "@/emails/quotation-response";
 import { createElement } from "react";
@@ -152,6 +152,7 @@ export const quotationRouter = createTRPCRouter({
 					tripRequest: {
 						include: {
 							user: { select: { email: true, name: true } },
+							company: { select: { adminEmail: true } },
 						},
 					},
 				},
@@ -186,22 +187,27 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			// Notify admin
-			if (ADMIN_EMAIL) {
-				const user = quotation.tripRequest.user;
-				await sendEmail({
-					to: ADMIN_EMAIL,
-					subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-					react: createElement(QuotationResponseEmail, {
-						accepted: true,
-						customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						customerEmail: user.email ?? "",
-						price: quotation.price.toString(),
-						currency: quotation.currency,
-						adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+			// Notify all admins
+			const acceptNotifyEmails = await resolveAdminEmails(
+				quotation.tripRequest.companyId,
+			);
+			const acceptUser = quotation.tripRequest.user;
+			await Promise.all(
+				acceptNotifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						react: createElement(QuotationResponseEmail, {
+							accepted: true,
+							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+							customerEmail: acceptUser.email ?? "",
+							price: quotation.price.toString(),
+							currency: quotation.currency,
+							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+						}),
 					}),
-				});
-			}
+				),
+			);
 
 			return updated;
 		}),
@@ -216,6 +222,7 @@ export const quotationRouter = createTRPCRouter({
 					tripRequest: {
 						include: {
 							user: { select: { email: true, name: true } },
+							company: { select: { adminEmail: true } },
 						},
 					},
 				},
@@ -250,22 +257,27 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			// Notify admin
-			if (ADMIN_EMAIL) {
-				const user = quotation.tripRequest.user;
-				await sendEmail({
-					to: ADMIN_EMAIL,
-					subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-					react: createElement(QuotationResponseEmail, {
-						accepted: false,
-						customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						customerEmail: user.email ?? "",
-						price: quotation.price.toString(),
-						currency: quotation.currency,
-						adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+			// Notify all admins
+			const rejectNotifyEmails = await resolveAdminEmails(
+				quotation.tripRequest.companyId,
+			);
+			const rejectUser = quotation.tripRequest.user;
+			await Promise.all(
+				rejectNotifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						react: createElement(QuotationResponseEmail, {
+							accepted: false,
+							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+							customerEmail: rejectUser.email ?? "",
+							price: quotation.price.toString(),
+							currency: quotation.currency,
+							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+						}),
 					}),
-				});
-			}
+				),
+			);
 
 			return updated;
 		}),
