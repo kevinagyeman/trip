@@ -203,7 +203,8 @@ export const quotationRouter = createTRPCRouter({
 						react: createElement(QuotationResponseEmail, {
 							accepted: true,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail: acceptUser?.email ?? quotation.tripRequest.customerEmail ?? "",
+							customerEmail:
+								acceptUser?.email ?? quotation.tripRequest.customerEmail ?? "",
 							price: quotation.price.toString(),
 							currency: quotation.currency,
 							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
@@ -273,7 +274,8 @@ export const quotationRouter = createTRPCRouter({
 						react: createElement(QuotationResponseEmail, {
 							accepted: false,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail: rejectUser?.email ?? quotation.tripRequest.customerEmail ?? "",
+							customerEmail:
+								rejectUser?.email ?? quotation.tripRequest.customerEmail ?? "",
 							price: quotation.price.toString(),
 							currency: quotation.currency,
 							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,

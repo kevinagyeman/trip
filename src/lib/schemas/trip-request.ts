@@ -7,6 +7,9 @@ export const createTripRequestSchema = z
 				z.object({
 					pickup: z.string().min(1, "Pickup address is required"),
 					destination: z.string().min(1, "Destination is required"),
+					departureDate: z.string().optional(),
+					departureTime: z.string().optional(),
+					flightNumber: z.string().optional(),
 				}),
 			)
 			.min(1, "At least one route is required"),

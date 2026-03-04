@@ -114,7 +114,13 @@ export function CreateTripRequestForm({
 
 	const duplicateRoute = (index: number) => {
 		const current = getValues(`routes.${index}`);
-		appendRoute({ pickup: current.pickup, destination: current.destination });
+		appendRoute({
+			pickup: current.pickup,
+			destination: current.destination,
+			departureDate: current.departureDate,
+			departureTime: current.departureTime,
+			flightNumber: current.flightNumber,
+		});
 	};
 
 	return (
@@ -207,6 +213,29 @@ export function CreateTripRequestForm({
 									</Button>
 								))}
 							</div>
+						</div>
+
+						{/* Optional departure details */}
+						<div className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-3">
+							<CustomInput
+								labelText={t("routeDepartureDate")}
+								inputProps={{
+									...register(`routes.${index}.departureDate`),
+									type: "date",
+								}}
+							/>
+							<CustomInput
+								labelText={t("routeDepartureTime")}
+								inputProps={{
+									...register(`routes.${index}.departureTime`),
+									type: "time",
+								}}
+							/>
+							<CustomInput
+								labelText={t("routeFlightNumber")}
+								placeholder={t("routeFlightNumberPlaceholder")}
+								inputProps={{ ...register(`routes.${index}.flightNumber`) }}
+							/>
 						</div>
 					</div>
 				))}

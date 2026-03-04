@@ -404,6 +404,38 @@ export const tripRequestRouter = createTRPCRouter({
 			return updated;
 		}),
 
+	// PUBLIC: Update route details (departure date/time/flight) by token
+	updateRoutes: publicProcedure
+		.input(
+			z.object({
+				token: z.string(),
+				routes: z.array(
+					z.object({
+						pickup: z.string(),
+						destination: z.string(),
+						departureDate: z.string().optional(),
+						departureTime: z.string().optional(),
+						flightNumber: z.string().optional(),
+					}),
+				),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { token: input.token },
+				select: { id: true },
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			await ctx.db.tripRequest.update({
+				where: { token: input.token },
+				data: { routes: JSON.stringify(input.routes) },
+			});
+		}),
+
 	// ADMIN: Confirm trip with pickup details (admin-initiated)
 	confirmByAdmin: adminProcedure
 		.input(

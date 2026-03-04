@@ -4,11 +4,20 @@ import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { TripMessageThread } from "./trip-message-thread";
 
-type Route = { pickup: string; destination: string };
+type Route = {
+	pickup: string;
+	destination: string;
+	departureDate?: string;
+	departureTime?: string;
+	flightNumber?: string;
+};
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -29,6 +38,7 @@ const quotationStatusColors: Record<string, string> = {
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
 	const utils = api.useUtils();
+	const [routeEdits, setRouteEdits] = useState<Route[] | null>(null);
 
 	const { data: request, isLoading } = api.tripRequest.getByToken.useQuery({
 		token,
@@ -46,11 +56,19 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		},
 	});
 
+	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByToken.invalidate({ token });
+			setRouteEdits(null);
+		},
+	});
+
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
 	const firstRoute = routes[0]!;
+	const editableRoutes = routeEdits ?? routes;
 
 	return (
 		<div className="space-y-6">
@@ -84,10 +102,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					{/* Routes */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
-						<div className="space-y-2">
-							{routes.map((route, i) => (
-								<div key={i} className="rounded-lg border p-3 text-sm">
-									<p className="mb-1 text-xs font-medium text-muted-foreground">
+						<div className="space-y-3">
+							{editableRoutes.map((route, i) => (
+								<div
+									key={i}
+									className="rounded-lg border p-3 text-sm space-y-3"
+								>
+									<p className="text-xs font-medium text-muted-foreground">
 										{t("routeN", { n: i + 1 })}
 									</p>
 									<p>
@@ -102,9 +123,75 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										</span>
 										<span className="font-medium">{route.destination}</span>
 									</p>
+									{/* Editable departure details */}
+									<div className="grid grid-cols-1 gap-2 pt-1 sm:grid-cols-3">
+										<div className="space-y-1">
+											<Label className="text-xs">
+												{t("routeDepartureDate")}
+											</Label>
+											<Input
+												type="date"
+												value={route.departureDate ?? ""}
+												onChange={(e) => {
+													const updated = [...editableRoutes];
+													updated[i] = {
+														...updated[i]!,
+														departureDate: e.target.value || undefined,
+													};
+													setRouteEdits(updated);
+												}}
+											/>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs">
+												{t("routeDepartureTime")}
+											</Label>
+											<Input
+												type="time"
+												value={route.departureTime ?? ""}
+												onChange={(e) => {
+													const updated = [...editableRoutes];
+													updated[i] = {
+														...updated[i]!,
+														departureTime: e.target.value || undefined,
+													};
+													setRouteEdits(updated);
+												}}
+											/>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs">
+												{t("routeFlightNumber")}
+											</Label>
+											<Input
+												placeholder={t("routeFlightNumberPlaceholder")}
+												value={route.flightNumber ?? ""}
+												onChange={(e) => {
+													const updated = [...editableRoutes];
+													updated[i] = {
+														...updated[i]!,
+														flightNumber: e.target.value || undefined,
+													};
+													setRouteEdits(updated);
+												}}
+											/>
+										</div>
+									</div>
 								</div>
 							))}
 						</div>
+						{routeEdits && (
+							<Button
+								className="mt-3"
+								size="sm"
+								disabled={updateRoutes.isPending}
+								onClick={() =>
+									updateRoutes.mutate({ token, routes: routeEdits })
+								}
+							>
+								{updateRoutes.isPending ? t("saving") : t("saveRouteDetails")}
+							</Button>
+						)}
 					</div>
 
 					{/* Travel Information */}

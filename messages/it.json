@@ -93,6 +93,10 @@
 		"specialRequests": "Richieste Speciali (Opzionale)",
 		"specialRequestsPlaceholder": "Eventuali richieste speciali o informazioni aggiuntive...",
 		"flightDetailsNote": "* I dettagli del ritiro (data, ora, numero di volo) potranno essere aggiunti in seguito dopo aver ricevuto e accettato un preventivo.",
+		"routeDepartureDate": "Data di Partenza",
+		"routeDepartureTime": "Orario di Partenza",
+		"routeFlightNumber": "Numero di Volo",
+		"routeFlightNumberPlaceholder": "es., FR1234",
 		"submitRequest": "Invia Richiesta di Preventivo",
 		"submitting": "Invio in corso..."
 	},
@@ -175,7 +179,13 @@
 		"reject": "Rifiuta",
 		"tripConfirmationRequired": "Conferma Viaggio Richiesta",
 		"tripConfirmationDesc": "Conferma il viaggio fornendo data e orario di ritiro",
-		"confirmTrip": "Conferma Viaggio"
+		"confirmTrip": "Conferma Viaggio",
+		"routeDepartureDate": "Data di Partenza",
+		"routeDepartureTime": "Orario di Partenza",
+		"routeFlightNumber": "Numero di Volo",
+		"routeFlightNumberPlaceholder": "es., FR1234",
+		"saveRouteDetails": "Salva dettagli",
+		"saving": "Salvataggio..."
 	},
 	"messages": {
 		"title": "Messaggi",
@@ -262,7 +272,10 @@
 		"googleCalendar": "Google Calendar",
 		"calRoute": "Percorso",
 		"calFlightNumber": "Volo",
-		"calPassengers": "Passeggeri"
+		"calPassengers": "Passeggeri",
+		"routeDepartureDate": "Data di Partenza",
+		"routeDepartureTime": "Orario di Partenza",
+		"routeFlightNumber": "Numero di Volo"
 	},
 	"notFound": {
 		"heading": "Pagina Non Trovata",

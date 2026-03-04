@@ -19,7 +19,13 @@ import { Link } from "@/i18n/navigation";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
-type Route = { pickup: string; destination: string };
+type Route = {
+	pickup: string;
+	destination: string;
+	departureDate?: string;
+	departureTime?: string;
+	flightNumber?: string;
+};
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
@@ -216,6 +222,75 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</span>
 										<span className="font-medium">{route.destination}</span>
 									</p>
+									{(route.departureDate ??
+										route.departureTime ??
+										route.flightNumber) && (
+										<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
+											{route.departureDate && (
+												<span>
+													{t("routeDepartureDate")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.departureDate}
+													</span>
+												</span>
+											)}
+											{route.departureTime && (
+												<span>
+													{t("routeDepartureTime")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.departureTime}
+													</span>
+												</span>
+											)}
+											{route.flightNumber && (
+												<span>
+													{t("routeFlightNumber")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.flightNumber}
+													</span>
+												</span>
+											)}
+										</div>
+									)}
+									{route.departureDate && (
+										<div className="mt-2">
+											<Button
+												size="sm"
+												variant="outline"
+												onClick={() => {
+													const [hRaw, mRaw] = (route.departureTime ?? "00:00")
+														.split(":")
+														.map(Number);
+													const endH = ((hRaw ?? 0) + 1) % 24;
+													const start = toICSDateTime(
+														new Date(route.departureDate!),
+														route.departureTime,
+													);
+													const end = toICSDateTime(
+														new Date(route.departureDate!),
+														`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
+													);
+													const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
+													const desc = route.flightNumber
+														? `${t("routeFlightNumber")}: ${route.flightNumber}`
+														: "";
+													window.open(
+														googleCalendarUrl({
+															summary,
+															description: desc,
+															location: route.pickup,
+															start,
+															end,
+														}),
+														"_blank",
+													);
+												}}
+											>
+												<CalendarPlus className="mr-1 h-3 w-3" />
+												{t("googleCalendar")}
+											</Button>
+										</div>
+									)}
 								</div>
 							))}
 						</div>

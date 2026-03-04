@@ -93,6 +93,10 @@
 		"specialRequests": "Special Requests (Optional)",
 		"specialRequestsPlaceholder": "Any special requests or additional information...",
 		"flightDetailsNote": "* Pickup details (date, time, flight number) can be added later after you receive and accept a quotation.",
+		"routeDepartureDate": "Departure Date",
+		"routeDepartureTime": "Departure Time",
+		"routeFlightNumber": "Flight Number",
+		"routeFlightNumberPlaceholder": "e.g. FR1234",
 		"submitRequest": "Submit Quotation Request",
 		"submitting": "Submitting..."
 	},
@@ -175,7 +179,13 @@
 		"reject": "Reject",
 		"tripConfirmationRequired": "Trip Confirmation Required",
 		"tripConfirmationDesc": "Please confirm your trip by providing your pickup date and time",
-		"confirmTrip": "Confirm Trip"
+		"confirmTrip": "Confirm Trip",
+		"routeDepartureDate": "Departure Date",
+		"routeDepartureTime": "Departure Time",
+		"routeFlightNumber": "Flight Number",
+		"routeFlightNumberPlaceholder": "e.g. FR1234",
+		"saveRouteDetails": "Save details",
+		"saving": "Saving..."
 	},
 	"messages": {
 		"title": "Messages",
@@ -262,7 +272,10 @@
 		"googleCalendar": "Google Calendar",
 		"calRoute": "Route",
 		"calFlightNumber": "Flight",
-		"calPassengers": "Passengers"
+		"calPassengers": "Passengers",
+		"routeDepartureDate": "Departure Date",
+		"routeDepartureTime": "Departure Time",
+		"routeFlightNumber": "Flight Number"
 	},
 	"notFound": {
 		"heading": "Page Not Found",
