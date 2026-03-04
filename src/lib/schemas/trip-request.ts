@@ -43,13 +43,6 @@ export const createTripRequestSchema = z
 		}
 	});
 
-export const confirmTripSchema = z.object({
-	pickupDate: z.date({ required_error: "Pickup date is required" }),
-	pickupTime: z.string().min(1, "Pickup time is required"),
-	flightNumber: z.string().optional(),
-});
-
 export type CreateTripRequestFormValues = z.infer<
 	typeof createTripRequestSchema
 >;
-export type ConfirmTripFormValues = z.infer<typeof confirmTripSchema>;

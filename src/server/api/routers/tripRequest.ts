@@ -353,66 +353,6 @@ export const tripRequestRouter = createTRPCRouter({
 			return tripRequest;
 		}),
 
-	// PUBLIC: Confirm trip by token (for anonymous customers)
-	confirmByToken: publicProcedure
-		.input(
-			z.object({
-				token: z.string(),
-				pickupDate: z.date(),
-				pickupTime: z.string(),
-				flightNumber: z.string().optional(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const { token, ...data } = input;
-
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { token },
-			});
-
-			if (!tripRequest) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
-
-			const updated = await ctx.db.tripRequest.update({
-				where: { token },
-				data: { ...data, isConfirmed: true },
-			});
-
-			// Build route summary for email
-			type Route = { pickup: string; destination: string };
-			const routes = JSON.parse(tripRequest.routes) as Route[];
-			const firstRoute = routes[0]!;
-			const routeSummary =
-				routes.length === 1
-					? `${firstRoute.pickup} → ${firstRoute.destination}`
-					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
-
-			// Notify all admins of confirmed trip
-			const notifyEmailsConfirm = await resolveAdminEmails(
-				tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmailsConfirm.map((to) =>
-					sendEmail({
-						to,
-						subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
-						react: createElement(TripConfirmedEmail, {
-							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
-							customerEmail: tripRequest.customerEmail,
-							serviceType: routeSummary,
-							arrivalFlightDate: format(data.pickupDate, "PPP"),
-							arrivalFlightTime: data.pickupTime,
-							arrivalFlightNumber: data.flightNumber,
-							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
-						}),
-					}),
-				),
-			);
-
-			return updated;
-		}),
-
 	// PUBLIC: Update route details (departure date/time/flight) by token
 	updateRoutes: publicProcedure
 		.input(

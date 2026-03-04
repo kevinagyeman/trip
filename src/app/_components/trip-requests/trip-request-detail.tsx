@@ -54,11 +54,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
 	const firstRoute = routes[0]!;
 
-	const hasAcceptedQuotation = request.quotations.some(
-		(q) => q.status === "ACCEPTED",
-	);
-	const needsConfirmation = hasAcceptedQuotation && !request.isConfirmed;
-
 	return (
 		<div className="space-y-6">
 			<Button variant="outline" onClick={() => router.back()}>
@@ -228,31 +223,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					)}
 				</CardContent>
 			</Card>
-
-			{/* Confirmation Prompt */}
-			{needsConfirmation && (
-				<Card className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950/30">
-					<CardContent className="pt-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<h3 className="font-semibold">
-									{t("tripConfirmationRequired")}
-								</h3>
-								<p className="text-sm text-muted-foreground">
-									{t("tripConfirmationDesc")}
-								</p>
-							</div>
-							<Button
-								onClick={() =>
-									router.push(`/dashboard/requests/${requestId}/confirm`)
-								}
-							>
-								{t("confirmTrip")}
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
-			)}
 
 			{/* Quotations */}
 			{request.quotations.length > 0 && (
