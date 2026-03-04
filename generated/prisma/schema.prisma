@@ -155,14 +155,30 @@ model TripRequest {
   updatedAt DateTime @updatedAt
 
   userId     String?
-  user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
   companyId  String?
-  company    Company?    @relation(fields: [companyId], references: [id])
+  company    Company?      @relation(fields: [companyId], references: [id])
   quotations Quotation[]
+  messages   TripMessage[]
 
   @@index([userId])
   @@index([companyId])
   @@index([status])
+  @@index([createdAt])
+}
+
+model TripMessage {
+  id         String @id @default(cuid())
+  body       String @db.Text
+  senderType String // "CUSTOMER" | "ADMIN"
+  senderName String
+
+  createdAt DateTime @default(now())
+
+  tripRequestId String
+  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)
+
+  @@index([tripRequestId])
   @@index([createdAt])
 }
 

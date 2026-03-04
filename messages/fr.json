@@ -177,6 +177,14 @@
 		"tripConfirmationDesc": "Veuillez confirmer votre voyage en fournissant la date et l'heure de prise en charge",
 		"confirmTrip": "Confirmer le Voyage"
 	},
+	"messages": {
+		"title": "Messages",
+		"noMessages": "Pas encore de messages. Commencez la conversation !",
+		"send": "Envoyer",
+		"sending": "Envoi...",
+		"placeholder": "Tapez un message... (Ctrl+Entrée pour envoyer)",
+		"you": "Vous"
+	},
 	"adminDashboard": {
 		"title": "Tableau de Bord Admin",
 		"statTotal": "Total",
@@ -237,6 +245,13 @@
 		"carSeatsIncluded": "Les sièges auto sont inclus dans le prix",
 		"additionalInfoCustomer": "Informations Supplémentaires (Visible par le Client)",
 		"internalNotes": "Notes Internes (Admin Uniquement)",
+		"confirmTripTitle": "Confirmer le Voyage",
+		"confirmTripDesc": "Définissez les détails de prise en charge pour confirmer la réservation et notifier le client.",
+		"confirmTripButton": "Confirmer & Notifier le Client",
+		"confirmingTrip": "Confirmation...",
+		"pickDate": "Choisir une date",
+		"pickupTimePlaceholder": "ex. 14:30",
+		"flightNumberPlaceholder": "ex. FR1234",
 		"sendToCustomer": "Envoyer au Client",
 		"deleteDraft": "Supprimer le Brouillon",
 		"sentDate": "Envoyé : {date}",

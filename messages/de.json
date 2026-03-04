@@ -177,6 +177,14 @@
 		"tripConfirmationDesc": "Bitte bestätigen Sie Ihre Reise mit Abholdatum und -uhrzeit",
 		"confirmTrip": "Reise Bestätigen"
 	},
+	"messages": {
+		"title": "Nachrichten",
+		"noMessages": "Noch keine Nachrichten. Beginnen Sie das Gespräch!",
+		"send": "Senden",
+		"sending": "Wird gesendet...",
+		"placeholder": "Nachricht eingeben... (Strg+Enter zum Senden)",
+		"you": "Sie"
+	},
 	"adminDashboard": {
 		"title": "Admin-Dashboard",
 		"statTotal": "Gesamt",
@@ -237,6 +245,13 @@
 		"carSeatsIncluded": "Kindersitze sind im Preis enthalten",
 		"additionalInfoCustomer": "Zusätzliche Informationen (Für Kunden Sichtbar)",
 		"internalNotes": "Interne Notizen (Nur Admin)",
+		"confirmTripTitle": "Reise Bestätigen",
+		"confirmTripDesc": "Legen Sie die Abholdetails fest, um die Buchung zu bestätigen und den Kunden zu benachrichtigen.",
+		"confirmTripButton": "Bestätigen & Kunde benachrichtigen",
+		"confirmingTrip": "Bestätigung läuft...",
+		"pickDate": "Datum auswählen",
+		"pickupTimePlaceholder": "z.B. 14:30",
+		"flightNumberPlaceholder": "z.B. FR1234",
 		"sendToCustomer": "An Kunden Senden",
 		"deleteDraft": "Entwurf Löschen",
 		"sentDate": "Gesendet: {date}",

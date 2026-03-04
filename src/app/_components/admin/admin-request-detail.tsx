@@ -12,10 +12,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { format } from "date-fns";
+import { CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { CalendarPlus } from "lucide-react";
+import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 type Route = { pickup: string; destination: string };
@@ -422,6 +423,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					</CardContent>
 				</Card>
 			)}
+
+			{/* Message Thread */}
+			<Card>
+				<CardContent className="pt-6">
+					<TripMessageThread mode="admin" requestId={requestId} />
+				</CardContent>
+			</Card>
 
 			{/* Quotations Section */}
 			<div className="space-y-4">

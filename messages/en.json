@@ -67,7 +67,7 @@
 		"routeN": "Route {n}",
 		"pickup": "Pickup Address *",
 		"pickupPlaceholder": "Enter pickup address",
-		"quickFill": "Quick fill:",
+		"quickFill": "Ariports:",
 		"destination": "Destination Address *",
 		"destinationPlaceholder": "Enter destination address",
 		"addRoute": "Add Route",
@@ -177,6 +177,14 @@
 		"tripConfirmationDesc": "Please confirm your trip by providing your pickup date and time",
 		"confirmTrip": "Confirm Trip"
 	},
+	"messages": {
+		"title": "Messages",
+		"noMessages": "No messages yet. Start the conversation!",
+		"send": "Send",
+		"sending": "Sending...",
+		"placeholder": "Type a message... (Ctrl+Enter to send)",
+		"you": "You"
+	},
 	"adminDashboard": {
 		"title": "Admin Dashboard",
 		"statTotal": "Total",
@@ -237,6 +245,13 @@
 		"carSeatsIncluded": "Car seats are included in the price",
 		"additionalInfoCustomer": "Additional Information (Customer Visible)",
 		"internalNotes": "Internal Notes (Admin Only)",
+		"confirmTripTitle": "Confirm Trip",
+		"confirmTripDesc": "Set the pickup details to confirm this booking and notify the customer.",
+		"confirmTripButton": "Confirm & Notify Customer",
+		"confirmingTrip": "Confirming...",
+		"pickDate": "Pick a date",
+		"pickupTimePlaceholder": "e.g., 14:30",
+		"flightNumberPlaceholder": "e.g., FR1234",
 		"sendToCustomer": "Send to Customer",
 		"deleteDraft": "Delete Draft",
 		"sentDate": "Sent: {date}",

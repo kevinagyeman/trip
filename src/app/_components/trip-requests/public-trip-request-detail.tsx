@@ -3,10 +3,9 @@
 import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { TripMessageThread } from "./trip-message-thread";
 
 type Route = { pickup: string; destination: string };
 
@@ -27,7 +26,6 @@ const quotationStatusColors: Record<string, string> = {
 };
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
-	const router = useRouter();
 	const t = useTranslations("requestDetail");
 	const utils = api.useUtils();
 
@@ -52,11 +50,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
 	const firstRoute = routes[0]!;
-
-	const hasAcceptedQuotation = request.quotations.some(
-		(q) => q.status === "ACCEPTED",
-	);
-	const needsConfirmation = hasAcceptedQuotation && !request.isConfirmed;
 
 	return (
 		<div className="space-y-6">
@@ -224,27 +217,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 				</CardContent>
 			</Card>
 
-			{/* Confirmation Prompt */}
-			{needsConfirmation && (
-				<Card className="border-yellow-500 bg-yellow-50 dark:bg-yellow-950/30">
-					<CardContent className="pt-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<h3 className="font-semibold">
-									{t("tripConfirmationRequired")}
-								</h3>
-								<p className="text-sm text-muted-foreground">
-									{t("tripConfirmationDesc")}
-								</p>
-							</div>
-							<Button onClick={() => router.push(`/request/${token}/confirm`)}>
-								{t("confirmTrip")}
-							</Button>
-						</div>
-					</CardContent>
-				</Card>
-			)}
-
 			{/* Quotations */}
 			{request.quotations.length > 0 && (
 				<div className="space-y-4">
@@ -319,6 +291,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					))}
 				</div>
 			)}
+
+			{/* Message Thread */}
+			<Card>
+				<CardContent className="pt-6">
+					<TripMessageThread mode="customer" token={token} />
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

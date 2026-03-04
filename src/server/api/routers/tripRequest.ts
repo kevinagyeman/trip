@@ -1,3 +1,4 @@
+import { BookingConfirmedEmail } from "@/emails/booking-confirmed";
 import { NewRequestEmail } from "@/emails/new-request";
 import { TripConfirmedEmail } from "@/emails/trip-confirmed";
 import {
@@ -399,6 +400,62 @@ export const tripRequestRouter = createTRPCRouter({
 					}),
 				),
 			);
+
+			return updated;
+		}),
+
+	// ADMIN: Confirm trip with pickup details (admin-initiated)
+	confirmByAdmin: adminProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				pickupDate: z.date(),
+				pickupTime: z.string(),
+				flightNumber: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { id, ...data } = input;
+
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id },
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			const updated = await ctx.db.tripRequest.update({
+				where: { id },
+				data: {
+					...data,
+					isConfirmed: true,
+					status: TripRequestStatus.ACCEPTED,
+				},
+			});
+
+			// Build route summary for email
+			type Route = { pickup: string; destination: string };
+			const routes = JSON.parse(tripRequest.routes) as Route[];
+			const firstRoute = routes[0]!;
+			const routeSummary =
+				routes.length === 1
+					? `${firstRoute.pickup} → ${firstRoute.destination}`
+					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+
+			// Notify the customer
+			await sendEmail({
+				to: tripRequest.customerEmail,
+				subject: `✅ Your trip is confirmed — ${format(data.pickupDate, "PPP")}`,
+				react: createElement(BookingConfirmedEmail, {
+					firstName: tripRequest.firstName,
+					pickupDate: format(data.pickupDate, "PPP"),
+					pickupTime: data.pickupTime,
+					flightNumber: data.flightNumber,
+					routeSummary,
+					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
+				}),
+			});
 
 			return updated;
 		}),

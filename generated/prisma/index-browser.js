@@ -207,6 +207,15 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   companyId: 'companyId'
 };
 
+exports.Prisma.TripMessageScalarFieldEnum = {
+  id: 'id',
+  body: 'body',
+  senderType: 'senderType',
+  senderName: 'senderName',
+  createdAt: 'createdAt',
+  tripRequestId: 'tripRequestId'
+};
+
 exports.Prisma.QuotationScalarFieldEnum = {
   id: 'id',
   price: 'price',
@@ -268,6 +277,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   VerificationToken: 'VerificationToken',
   TripRequest: 'TripRequest',
+  TripMessage: 'TripMessage',
   Quotation: 'Quotation'
 };
 

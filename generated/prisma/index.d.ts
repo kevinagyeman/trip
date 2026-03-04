@@ -49,6 +49,11 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
  */
 export type TripRequest = $Result.DefaultSelection<Prisma.$TripRequestPayload>
 /**
+ * Model TripMessage
+ * 
+ */
+export type TripMessage = $Result.DefaultSelection<Prisma.$TripMessagePayload>
+/**
  * Model Quotation
  * 
  */
@@ -289,6 +294,16 @@ export class PrismaClient<
     * ```
     */
   get tripRequest(): Prisma.TripRequestDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tripMessage`: Exposes CRUD operations for the **TripMessage** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more TripMessages
+    * const tripMessages = await prisma.tripMessage.findMany()
+    * ```
+    */
+  get tripMessage(): Prisma.TripMessageDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.quotation`: Exposes CRUD operations for the **Quotation** model.
@@ -747,6 +762,7 @@ export namespace Prisma {
     User: 'User',
     VerificationToken: 'VerificationToken',
     TripRequest: 'TripRequest',
+    TripMessage: 'TripMessage',
     Quotation: 'Quotation'
   };
 
@@ -766,7 +782,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "post" | "account" | "session" | "user" | "verificationToken" | "tripRequest" | "quotation"
+      modelProps: "company" | "post" | "account" | "session" | "user" | "verificationToken" | "tripRequest" | "tripMessage" | "quotation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1288,6 +1304,80 @@ export namespace Prisma {
           }
         }
       }
+      TripMessage: {
+        payload: Prisma.$TripMessagePayload<ExtArgs>
+        fields: Prisma.TripMessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TripMessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TripMessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          findFirst: {
+            args: Prisma.TripMessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TripMessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          findMany: {
+            args: Prisma.TripMessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>[]
+          }
+          create: {
+            args: Prisma.TripMessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          createMany: {
+            args: Prisma.TripMessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TripMessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>[]
+          }
+          delete: {
+            args: Prisma.TripMessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          update: {
+            args: Prisma.TripMessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.TripMessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TripMessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TripMessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.TripMessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TripMessagePayload>
+          }
+          aggregate: {
+            args: Prisma.TripMessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTripMessage>
+          }
+          groupBy: {
+            args: Prisma.TripMessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TripMessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TripMessageCountArgs<ExtArgs>
+            result: $Utils.Optional<TripMessageCountAggregateOutputType> | number
+          }
+        }
+      }
       Quotation: {
         payload: Prisma.$QuotationPayload<ExtArgs>
         fields: Prisma.QuotationFieldRefs
@@ -1465,6 +1555,7 @@ export namespace Prisma {
     user?: UserOmit
     verificationToken?: VerificationTokenOmit
     tripRequest?: TripRequestOmit
+    tripMessage?: TripMessageOmit
     quotation?: QuotationOmit
   }
 
@@ -1654,10 +1745,12 @@ export namespace Prisma {
 
   export type TripRequestCountOutputType = {
     quotations: number
+    messages: number
   }
 
   export type TripRequestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     quotations?: boolean | TripRequestCountOutputTypeCountQuotationsArgs
+    messages?: boolean | TripRequestCountOutputTypeCountMessagesArgs
   }
 
   // Custom InputTypes
@@ -1676,6 +1769,13 @@ export namespace Prisma {
    */
   export type TripRequestCountOutputTypeCountQuotationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QuotationWhereInput
+  }
+
+  /**
+   * TripRequestCountOutputType without action
+   */
+  export type TripRequestCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripMessageWhereInput
   }
 
 
@@ -8749,6 +8849,7 @@ export namespace Prisma {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
+    messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tripRequest"]>
 
@@ -8842,6 +8943,7 @@ export namespace Prisma {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
+    messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TripRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8859,6 +8961,7 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs> | null
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
+      messages: Prisma.$TripMessagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9282,6 +9385,7 @@ export namespace Prisma {
     user<T extends TripRequest$userArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends TripRequest$companyArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     quotations<T extends TripRequest$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messages<T extends TripRequest$messagesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9793,6 +9897,30 @@ export namespace Prisma {
   }
 
   /**
+   * TripRequest.messages
+   */
+  export type TripRequest$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    where?: TripMessageWhereInput
+    orderBy?: TripMessageOrderByWithRelationInput | TripMessageOrderByWithRelationInput[]
+    cursor?: TripMessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TripMessageScalarFieldEnum | TripMessageScalarFieldEnum[]
+  }
+
+  /**
    * TripRequest without action
    */
   export type TripRequestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9808,6 +9936,1077 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: TripRequestInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model TripMessage
+   */
+
+  export type AggregateTripMessage = {
+    _count: TripMessageCountAggregateOutputType | null
+    _min: TripMessageMinAggregateOutputType | null
+    _max: TripMessageMaxAggregateOutputType | null
+  }
+
+  export type TripMessageMinAggregateOutputType = {
+    id: string | null
+    body: string | null
+    senderType: string | null
+    senderName: string | null
+    createdAt: Date | null
+    tripRequestId: string | null
+  }
+
+  export type TripMessageMaxAggregateOutputType = {
+    id: string | null
+    body: string | null
+    senderType: string | null
+    senderName: string | null
+    createdAt: Date | null
+    tripRequestId: string | null
+  }
+
+  export type TripMessageCountAggregateOutputType = {
+    id: number
+    body: number
+    senderType: number
+    senderName: number
+    createdAt: number
+    tripRequestId: number
+    _all: number
+  }
+
+
+  export type TripMessageMinAggregateInputType = {
+    id?: true
+    body?: true
+    senderType?: true
+    senderName?: true
+    createdAt?: true
+    tripRequestId?: true
+  }
+
+  export type TripMessageMaxAggregateInputType = {
+    id?: true
+    body?: true
+    senderType?: true
+    senderName?: true
+    createdAt?: true
+    tripRequestId?: true
+  }
+
+  export type TripMessageCountAggregateInputType = {
+    id?: true
+    body?: true
+    senderType?: true
+    senderName?: true
+    createdAt?: true
+    tripRequestId?: true
+    _all?: true
+  }
+
+  export type TripMessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TripMessage to aggregate.
+     */
+    where?: TripMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TripMessages to fetch.
+     */
+    orderBy?: TripMessageOrderByWithRelationInput | TripMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TripMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TripMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TripMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned TripMessages
+    **/
+    _count?: true | TripMessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TripMessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TripMessageMaxAggregateInputType
+  }
+
+  export type GetTripMessageAggregateType<T extends TripMessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateTripMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTripMessage[P]>
+      : GetScalarType<T[P], AggregateTripMessage[P]>
+  }
+
+
+
+
+  export type TripMessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TripMessageWhereInput
+    orderBy?: TripMessageOrderByWithAggregationInput | TripMessageOrderByWithAggregationInput[]
+    by: TripMessageScalarFieldEnum[] | TripMessageScalarFieldEnum
+    having?: TripMessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TripMessageCountAggregateInputType | true
+    _min?: TripMessageMinAggregateInputType
+    _max?: TripMessageMaxAggregateInputType
+  }
+
+  export type TripMessageGroupByOutputType = {
+    id: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt: Date
+    tripRequestId: string
+    _count: TripMessageCountAggregateOutputType | null
+    _min: TripMessageMinAggregateOutputType | null
+    _max: TripMessageMaxAggregateOutputType | null
+  }
+
+  type GetTripMessageGroupByPayload<T extends TripMessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TripMessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TripMessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TripMessageGroupByOutputType[P]>
+            : GetScalarType<T[P], TripMessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TripMessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    body?: boolean
+    senderType?: boolean
+    senderName?: boolean
+    createdAt?: boolean
+    tripRequestId?: boolean
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tripMessage"]>
+
+  export type TripMessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    body?: boolean
+    senderType?: boolean
+    senderName?: boolean
+    createdAt?: boolean
+    tripRequestId?: boolean
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tripMessage"]>
+
+  export type TripMessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    body?: boolean
+    senderType?: boolean
+    senderName?: boolean
+    createdAt?: boolean
+    tripRequestId?: boolean
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tripMessage"]>
+
+  export type TripMessageSelectScalar = {
+    id?: boolean
+    body?: boolean
+    senderType?: boolean
+    senderName?: boolean
+    createdAt?: boolean
+    tripRequestId?: boolean
+  }
+
+  export type TripMessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "body" | "senderType" | "senderName" | "createdAt" | "tripRequestId", ExtArgs["result"]["tripMessage"]>
+  export type TripMessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }
+  export type TripMessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }
+  export type TripMessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
+  }
+
+  export type $TripMessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "TripMessage"
+    objects: {
+      tripRequest: Prisma.$TripRequestPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      body: string
+      senderType: string
+      senderName: string
+      createdAt: Date
+      tripRequestId: string
+    }, ExtArgs["result"]["tripMessage"]>
+    composites: {}
+  }
+
+  type TripMessageGetPayload<S extends boolean | null | undefined | TripMessageDefaultArgs> = $Result.GetResult<Prisma.$TripMessagePayload, S>
+
+  type TripMessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TripMessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TripMessageCountAggregateInputType | true
+    }
+
+  export interface TripMessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TripMessage'], meta: { name: 'TripMessage' } }
+    /**
+     * Find zero or one TripMessage that matches the filter.
+     * @param {TripMessageFindUniqueArgs} args - Arguments to find a TripMessage
+     * @example
+     * // Get one TripMessage
+     * const tripMessage = await prisma.tripMessage.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TripMessageFindUniqueArgs>(args: SelectSubset<T, TripMessageFindUniqueArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one TripMessage that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TripMessageFindUniqueOrThrowArgs} args - Arguments to find a TripMessage
+     * @example
+     * // Get one TripMessage
+     * const tripMessage = await prisma.tripMessage.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TripMessageFindUniqueOrThrowArgs>(args: SelectSubset<T, TripMessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TripMessage that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageFindFirstArgs} args - Arguments to find a TripMessage
+     * @example
+     * // Get one TripMessage
+     * const tripMessage = await prisma.tripMessage.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TripMessageFindFirstArgs>(args?: SelectSubset<T, TripMessageFindFirstArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first TripMessage that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageFindFirstOrThrowArgs} args - Arguments to find a TripMessage
+     * @example
+     * // Get one TripMessage
+     * const tripMessage = await prisma.tripMessage.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TripMessageFindFirstOrThrowArgs>(args?: SelectSubset<T, TripMessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more TripMessages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TripMessages
+     * const tripMessages = await prisma.tripMessage.findMany()
+     * 
+     * // Get first 10 TripMessages
+     * const tripMessages = await prisma.tripMessage.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tripMessageWithIdOnly = await prisma.tripMessage.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TripMessageFindManyArgs>(args?: SelectSubset<T, TripMessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a TripMessage.
+     * @param {TripMessageCreateArgs} args - Arguments to create a TripMessage.
+     * @example
+     * // Create one TripMessage
+     * const TripMessage = await prisma.tripMessage.create({
+     *   data: {
+     *     // ... data to create a TripMessage
+     *   }
+     * })
+     * 
+     */
+    create<T extends TripMessageCreateArgs>(args: SelectSubset<T, TripMessageCreateArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many TripMessages.
+     * @param {TripMessageCreateManyArgs} args - Arguments to create many TripMessages.
+     * @example
+     * // Create many TripMessages
+     * const tripMessage = await prisma.tripMessage.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TripMessageCreateManyArgs>(args?: SelectSubset<T, TripMessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many TripMessages and returns the data saved in the database.
+     * @param {TripMessageCreateManyAndReturnArgs} args - Arguments to create many TripMessages.
+     * @example
+     * // Create many TripMessages
+     * const tripMessage = await prisma.tripMessage.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many TripMessages and only return the `id`
+     * const tripMessageWithIdOnly = await prisma.tripMessage.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TripMessageCreateManyAndReturnArgs>(args?: SelectSubset<T, TripMessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a TripMessage.
+     * @param {TripMessageDeleteArgs} args - Arguments to delete one TripMessage.
+     * @example
+     * // Delete one TripMessage
+     * const TripMessage = await prisma.tripMessage.delete({
+     *   where: {
+     *     // ... filter to delete one TripMessage
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TripMessageDeleteArgs>(args: SelectSubset<T, TripMessageDeleteArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one TripMessage.
+     * @param {TripMessageUpdateArgs} args - Arguments to update one TripMessage.
+     * @example
+     * // Update one TripMessage
+     * const tripMessage = await prisma.tripMessage.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TripMessageUpdateArgs>(args: SelectSubset<T, TripMessageUpdateArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more TripMessages.
+     * @param {TripMessageDeleteManyArgs} args - Arguments to filter TripMessages to delete.
+     * @example
+     * // Delete a few TripMessages
+     * const { count } = await prisma.tripMessage.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TripMessageDeleteManyArgs>(args?: SelectSubset<T, TripMessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TripMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TripMessages
+     * const tripMessage = await prisma.tripMessage.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TripMessageUpdateManyArgs>(args: SelectSubset<T, TripMessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more TripMessages and returns the data updated in the database.
+     * @param {TripMessageUpdateManyAndReturnArgs} args - Arguments to update many TripMessages.
+     * @example
+     * // Update many TripMessages
+     * const tripMessage = await prisma.tripMessage.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more TripMessages and only return the `id`
+     * const tripMessageWithIdOnly = await prisma.tripMessage.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TripMessageUpdateManyAndReturnArgs>(args: SelectSubset<T, TripMessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one TripMessage.
+     * @param {TripMessageUpsertArgs} args - Arguments to update or create a TripMessage.
+     * @example
+     * // Update or create a TripMessage
+     * const tripMessage = await prisma.tripMessage.upsert({
+     *   create: {
+     *     // ... data to create a TripMessage
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TripMessage we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TripMessageUpsertArgs>(args: SelectSubset<T, TripMessageUpsertArgs<ExtArgs>>): Prisma__TripMessageClient<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of TripMessages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageCountArgs} args - Arguments to filter TripMessages to count.
+     * @example
+     * // Count the number of TripMessages
+     * const count = await prisma.tripMessage.count({
+     *   where: {
+     *     // ... the filter for the TripMessages we want to count
+     *   }
+     * })
+    **/
+    count<T extends TripMessageCountArgs>(
+      args?: Subset<T, TripMessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TripMessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a TripMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TripMessageAggregateArgs>(args: Subset<T, TripMessageAggregateArgs>): Prisma.PrismaPromise<GetTripMessageAggregateType<T>>
+
+    /**
+     * Group by TripMessage.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TripMessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TripMessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TripMessageGroupByArgs['orderBy'] }
+        : { orderBy?: TripMessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TripMessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTripMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the TripMessage model
+   */
+  readonly fields: TripMessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TripMessage.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TripMessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    tripRequest<T extends TripRequestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TripRequestDefaultArgs<ExtArgs>>): Prisma__TripRequestClient<$Result.GetResult<Prisma.$TripRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the TripMessage model
+   */
+  interface TripMessageFieldRefs {
+    readonly id: FieldRef<"TripMessage", 'String'>
+    readonly body: FieldRef<"TripMessage", 'String'>
+    readonly senderType: FieldRef<"TripMessage", 'String'>
+    readonly senderName: FieldRef<"TripMessage", 'String'>
+    readonly createdAt: FieldRef<"TripMessage", 'DateTime'>
+    readonly tripRequestId: FieldRef<"TripMessage", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * TripMessage findUnique
+   */
+  export type TripMessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which TripMessage to fetch.
+     */
+    where: TripMessageWhereUniqueInput
+  }
+
+  /**
+   * TripMessage findUniqueOrThrow
+   */
+  export type TripMessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which TripMessage to fetch.
+     */
+    where: TripMessageWhereUniqueInput
+  }
+
+  /**
+   * TripMessage findFirst
+   */
+  export type TripMessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which TripMessage to fetch.
+     */
+    where?: TripMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TripMessages to fetch.
+     */
+    orderBy?: TripMessageOrderByWithRelationInput | TripMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TripMessages.
+     */
+    cursor?: TripMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TripMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TripMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TripMessages.
+     */
+    distinct?: TripMessageScalarFieldEnum | TripMessageScalarFieldEnum[]
+  }
+
+  /**
+   * TripMessage findFirstOrThrow
+   */
+  export type TripMessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which TripMessage to fetch.
+     */
+    where?: TripMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TripMessages to fetch.
+     */
+    orderBy?: TripMessageOrderByWithRelationInput | TripMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for TripMessages.
+     */
+    cursor?: TripMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TripMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TripMessages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of TripMessages.
+     */
+    distinct?: TripMessageScalarFieldEnum | TripMessageScalarFieldEnum[]
+  }
+
+  /**
+   * TripMessage findMany
+   */
+  export type TripMessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter, which TripMessages to fetch.
+     */
+    where?: TripMessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of TripMessages to fetch.
+     */
+    orderBy?: TripMessageOrderByWithRelationInput | TripMessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing TripMessages.
+     */
+    cursor?: TripMessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` TripMessages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` TripMessages.
+     */
+    skip?: number
+    distinct?: TripMessageScalarFieldEnum | TripMessageScalarFieldEnum[]
+  }
+
+  /**
+   * TripMessage create
+   */
+  export type TripMessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a TripMessage.
+     */
+    data: XOR<TripMessageCreateInput, TripMessageUncheckedCreateInput>
+  }
+
+  /**
+   * TripMessage createMany
+   */
+  export type TripMessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TripMessages.
+     */
+    data: TripMessageCreateManyInput | TripMessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * TripMessage createManyAndReturn
+   */
+  export type TripMessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many TripMessages.
+     */
+    data: TripMessageCreateManyInput | TripMessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TripMessage update
+   */
+  export type TripMessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a TripMessage.
+     */
+    data: XOR<TripMessageUpdateInput, TripMessageUncheckedUpdateInput>
+    /**
+     * Choose, which TripMessage to update.
+     */
+    where: TripMessageWhereUniqueInput
+  }
+
+  /**
+   * TripMessage updateMany
+   */
+  export type TripMessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TripMessages.
+     */
+    data: XOR<TripMessageUpdateManyMutationInput, TripMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which TripMessages to update
+     */
+    where?: TripMessageWhereInput
+    /**
+     * Limit how many TripMessages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * TripMessage updateManyAndReturn
+   */
+  export type TripMessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * The data used to update TripMessages.
+     */
+    data: XOR<TripMessageUpdateManyMutationInput, TripMessageUncheckedUpdateManyInput>
+    /**
+     * Filter which TripMessages to update
+     */
+    where?: TripMessageWhereInput
+    /**
+     * Limit how many TripMessages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * TripMessage upsert
+   */
+  export type TripMessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the TripMessage to update in case it exists.
+     */
+    where: TripMessageWhereUniqueInput
+    /**
+     * In case the TripMessage found by the `where` argument doesn't exist, create a new TripMessage with this data.
+     */
+    create: XOR<TripMessageCreateInput, TripMessageUncheckedCreateInput>
+    /**
+     * In case the TripMessage was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TripMessageUpdateInput, TripMessageUncheckedUpdateInput>
+  }
+
+  /**
+   * TripMessage delete
+   */
+  export type TripMessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
+    /**
+     * Filter which TripMessage to delete.
+     */
+    where: TripMessageWhereUniqueInput
+  }
+
+  /**
+   * TripMessage deleteMany
+   */
+  export type TripMessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TripMessages to delete
+     */
+    where?: TripMessageWhereInput
+    /**
+     * Limit how many TripMessages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * TripMessage without action
+   */
+  export type TripMessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripMessage
+     */
+    select?: TripMessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripMessage
+     */
+    omit?: TripMessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripMessageInclude<ExtArgs> | null
   }
 
 
@@ -11149,6 +12348,18 @@ export namespace Prisma {
   export type TripRequestScalarFieldEnum = (typeof TripRequestScalarFieldEnum)[keyof typeof TripRequestScalarFieldEnum]
 
 
+  export const TripMessageScalarFieldEnum: {
+    id: 'id',
+    body: 'body',
+    senderType: 'senderType',
+    senderName: 'senderName',
+    createdAt: 'createdAt',
+    tripRequestId: 'tripRequestId'
+  };
+
+  export type TripMessageScalarFieldEnum = (typeof TripMessageScalarFieldEnum)[keyof typeof TripMessageScalarFieldEnum]
+
+
   export const QuotationScalarFieldEnum: {
     id: 'id',
     price: 'price',
@@ -11757,6 +12968,7 @@ export namespace Prisma {
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
+    messages?: TripMessageListRelationFilter
   }
 
   export type TripRequestOrderByWithRelationInput = {
@@ -11787,6 +12999,7 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     quotations?: QuotationOrderByRelationAggregateInput
+    messages?: TripMessageOrderByRelationAggregateInput
   }
 
   export type TripRequestWhereUniqueInput = Prisma.AtLeast<{
@@ -11820,6 +13033,7 @@ export namespace Prisma {
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
+    messages?: TripMessageListRelationFilter
   }, "id" | "token" | "orderNumber">
 
   export type TripRequestOrderByWithAggregationInput = {
@@ -11882,6 +13096,66 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     companyId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+  }
+
+  export type TripMessageWhereInput = {
+    AND?: TripMessageWhereInput | TripMessageWhereInput[]
+    OR?: TripMessageWhereInput[]
+    NOT?: TripMessageWhereInput | TripMessageWhereInput[]
+    id?: StringFilter<"TripMessage"> | string
+    body?: StringFilter<"TripMessage"> | string
+    senderType?: StringFilter<"TripMessage"> | string
+    senderName?: StringFilter<"TripMessage"> | string
+    createdAt?: DateTimeFilter<"TripMessage"> | Date | string
+    tripRequestId?: StringFilter<"TripMessage"> | string
+    tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
+  }
+
+  export type TripMessageOrderByWithRelationInput = {
+    id?: SortOrder
+    body?: SortOrder
+    senderType?: SortOrder
+    senderName?: SortOrder
+    createdAt?: SortOrder
+    tripRequestId?: SortOrder
+    tripRequest?: TripRequestOrderByWithRelationInput
+  }
+
+  export type TripMessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: TripMessageWhereInput | TripMessageWhereInput[]
+    OR?: TripMessageWhereInput[]
+    NOT?: TripMessageWhereInput | TripMessageWhereInput[]
+    body?: StringFilter<"TripMessage"> | string
+    senderType?: StringFilter<"TripMessage"> | string
+    senderName?: StringFilter<"TripMessage"> | string
+    createdAt?: DateTimeFilter<"TripMessage"> | Date | string
+    tripRequestId?: StringFilter<"TripMessage"> | string
+    tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
+  }, "id">
+
+  export type TripMessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    body?: SortOrder
+    senderType?: SortOrder
+    senderName?: SortOrder
+    createdAt?: SortOrder
+    tripRequestId?: SortOrder
+    _count?: TripMessageCountOrderByAggregateInput
+    _max?: TripMessageMaxOrderByAggregateInput
+    _min?: TripMessageMinOrderByAggregateInput
+  }
+
+  export type TripMessageScalarWhereWithAggregatesInput = {
+    AND?: TripMessageScalarWhereWithAggregatesInput | TripMessageScalarWhereWithAggregatesInput[]
+    OR?: TripMessageScalarWhereWithAggregatesInput[]
+    NOT?: TripMessageScalarWhereWithAggregatesInput | TripMessageScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"TripMessage"> | string
+    body?: StringWithAggregatesFilter<"TripMessage"> | string
+    senderType?: StringWithAggregatesFilter<"TripMessage"> | string
+    senderName?: StringWithAggregatesFilter<"TripMessage"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"TripMessage"> | Date | string
+    tripRequestId?: StringWithAggregatesFilter<"TripMessage"> | string
   }
 
   export type QuotationWhereInput = {
@@ -12449,6 +13723,7 @@ export namespace Prisma {
     user?: UserCreateNestedOneWithoutTripRequestsInput
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateInput = {
@@ -12477,6 +13752,7 @@ export namespace Prisma {
     userId?: string | null
     companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUpdateInput = {
@@ -12504,6 +13780,7 @@ export namespace Prisma {
     user?: UserUpdateOneWithoutTripRequestsNestedInput
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateInput = {
@@ -12532,6 +13809,7 @@ export namespace Prisma {
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestCreateManyInput = {
@@ -12610,6 +13888,68 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type TripMessageCreateInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+    tripRequest: TripRequestCreateNestedOneWithoutMessagesInput
+  }
+
+  export type TripMessageUncheckedCreateInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+    tripRequestId: string
+  }
+
+  export type TripMessageUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequest?: TripRequestUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type TripMessageUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequestId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TripMessageCreateManyInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+    tripRequestId: string
+  }
+
+  export type TripMessageUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripMessageUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequestId?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuotationCreateInput = {
@@ -13221,6 +14561,16 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type TripMessageListRelationFilter = {
+    every?: TripMessageWhereInput
+    some?: TripMessageWhereInput
+    none?: TripMessageWhereInput
+  }
+
+  export type TripMessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type TripRequestCountOrderByAggregateInput = {
     id?: SortOrder
     token?: SortOrder
@@ -13326,6 +14676,38 @@ export namespace Prisma {
     _max?: NestedEnumTripRequestStatusFilter<$PrismaModel>
   }
 
+  export type TripRequestScalarRelationFilter = {
+    is?: TripRequestWhereInput
+    isNot?: TripRequestWhereInput
+  }
+
+  export type TripMessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    body?: SortOrder
+    senderType?: SortOrder
+    senderName?: SortOrder
+    createdAt?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
+  export type TripMessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    body?: SortOrder
+    senderType?: SortOrder
+    senderName?: SortOrder
+    createdAt?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
+  export type TripMessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    body?: SortOrder
+    senderType?: SortOrder
+    senderName?: SortOrder
+    createdAt?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
   export type DecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
@@ -13342,11 +14724,6 @@ export namespace Prisma {
     in?: $Enums.QuotationStatus[] | ListEnumQuotationStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.QuotationStatus[] | ListEnumQuotationStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumQuotationStatusFilter<$PrismaModel> | $Enums.QuotationStatus
-  }
-
-  export type TripRequestScalarRelationFilter = {
-    is?: TripRequestWhereInput
-    isNot?: TripRequestWhereInput
   }
 
   export type QuotationCountOrderByAggregateInput = {
@@ -13845,11 +15222,25 @@ export namespace Prisma {
     connect?: QuotationWhereUniqueInput | QuotationWhereUniqueInput[]
   }
 
+  export type TripMessageCreateNestedManyWithoutTripRequestInput = {
+    create?: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput> | TripMessageCreateWithoutTripRequestInput[] | TripMessageUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: TripMessageCreateOrConnectWithoutTripRequestInput | TripMessageCreateOrConnectWithoutTripRequestInput[]
+    createMany?: TripMessageCreateManyTripRequestInputEnvelope
+    connect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+  }
+
   export type QuotationUncheckedCreateNestedManyWithoutTripRequestInput = {
     create?: XOR<QuotationCreateWithoutTripRequestInput, QuotationUncheckedCreateWithoutTripRequestInput> | QuotationCreateWithoutTripRequestInput[] | QuotationUncheckedCreateWithoutTripRequestInput[]
     connectOrCreate?: QuotationCreateOrConnectWithoutTripRequestInput | QuotationCreateOrConnectWithoutTripRequestInput[]
     createMany?: QuotationCreateManyTripRequestInputEnvelope
     connect?: QuotationWhereUniqueInput | QuotationWhereUniqueInput[]
+  }
+
+  export type TripMessageUncheckedCreateNestedManyWithoutTripRequestInput = {
+    create?: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput> | TripMessageCreateWithoutTripRequestInput[] | TripMessageUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: TripMessageCreateOrConnectWithoutTripRequestInput | TripMessageCreateOrConnectWithoutTripRequestInput[]
+    createMany?: TripMessageCreateManyTripRequestInputEnvelope
+    connect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
   }
 
   export type EnumTripRequestStatusFieldUpdateOperationsInput = {
@@ -13890,6 +15281,20 @@ export namespace Prisma {
     deleteMany?: QuotationScalarWhereInput | QuotationScalarWhereInput[]
   }
 
+  export type TripMessageUpdateManyWithoutTripRequestNestedInput = {
+    create?: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput> | TripMessageCreateWithoutTripRequestInput[] | TripMessageUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: TripMessageCreateOrConnectWithoutTripRequestInput | TripMessageCreateOrConnectWithoutTripRequestInput[]
+    upsert?: TripMessageUpsertWithWhereUniqueWithoutTripRequestInput | TripMessageUpsertWithWhereUniqueWithoutTripRequestInput[]
+    createMany?: TripMessageCreateManyTripRequestInputEnvelope
+    set?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    disconnect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    delete?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    connect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    update?: TripMessageUpdateWithWhereUniqueWithoutTripRequestInput | TripMessageUpdateWithWhereUniqueWithoutTripRequestInput[]
+    updateMany?: TripMessageUpdateManyWithWhereWithoutTripRequestInput | TripMessageUpdateManyWithWhereWithoutTripRequestInput[]
+    deleteMany?: TripMessageScalarWhereInput | TripMessageScalarWhereInput[]
+  }
+
   export type QuotationUncheckedUpdateManyWithoutTripRequestNestedInput = {
     create?: XOR<QuotationCreateWithoutTripRequestInput, QuotationUncheckedCreateWithoutTripRequestInput> | QuotationCreateWithoutTripRequestInput[] | QuotationUncheckedCreateWithoutTripRequestInput[]
     connectOrCreate?: QuotationCreateOrConnectWithoutTripRequestInput | QuotationCreateOrConnectWithoutTripRequestInput[]
@@ -13902,6 +15307,34 @@ export namespace Prisma {
     update?: QuotationUpdateWithWhereUniqueWithoutTripRequestInput | QuotationUpdateWithWhereUniqueWithoutTripRequestInput[]
     updateMany?: QuotationUpdateManyWithWhereWithoutTripRequestInput | QuotationUpdateManyWithWhereWithoutTripRequestInput[]
     deleteMany?: QuotationScalarWhereInput | QuotationScalarWhereInput[]
+  }
+
+  export type TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput = {
+    create?: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput> | TripMessageCreateWithoutTripRequestInput[] | TripMessageUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: TripMessageCreateOrConnectWithoutTripRequestInput | TripMessageCreateOrConnectWithoutTripRequestInput[]
+    upsert?: TripMessageUpsertWithWhereUniqueWithoutTripRequestInput | TripMessageUpsertWithWhereUniqueWithoutTripRequestInput[]
+    createMany?: TripMessageCreateManyTripRequestInputEnvelope
+    set?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    disconnect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    delete?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    connect?: TripMessageWhereUniqueInput | TripMessageWhereUniqueInput[]
+    update?: TripMessageUpdateWithWhereUniqueWithoutTripRequestInput | TripMessageUpdateWithWhereUniqueWithoutTripRequestInput[]
+    updateMany?: TripMessageUpdateManyWithWhereWithoutTripRequestInput | TripMessageUpdateManyWithWhereWithoutTripRequestInput[]
+    deleteMany?: TripMessageScalarWhereInput | TripMessageScalarWhereInput[]
+  }
+
+  export type TripRequestCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<TripRequestCreateWithoutMessagesInput, TripRequestUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: TripRequestCreateOrConnectWithoutMessagesInput
+    connect?: TripRequestWhereUniqueInput
+  }
+
+  export type TripRequestUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<TripRequestCreateWithoutMessagesInput, TripRequestUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: TripRequestCreateOrConnectWithoutMessagesInput
+    upsert?: TripRequestUpsertWithoutMessagesInput
+    connect?: TripRequestWhereUniqueInput
+    update?: XOR<XOR<TripRequestUpdateToOneWithWhereWithoutMessagesInput, TripRequestUpdateWithoutMessagesInput>, TripRequestUncheckedUpdateWithoutMessagesInput>
   }
 
   export type TripRequestCreateNestedOneWithoutQuotationsInput = {
@@ -14288,6 +15721,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutCompanyInput = {
@@ -14315,6 +15749,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutCompanyInput = {
@@ -14770,6 +16205,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutUserInput = {
@@ -14797,6 +16233,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutUserInput = {
@@ -15132,6 +16569,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TripMessageCreateWithoutTripRequestInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+  }
+
+  export type TripMessageUncheckedCreateWithoutTripRequestInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+  }
+
+  export type TripMessageCreateOrConnectWithoutTripRequestInput = {
+    where: TripMessageWhereUniqueInput
+    create: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput>
+  }
+
+  export type TripMessageCreateManyTripRequestInputEnvelope = {
+    data: TripMessageCreateManyTripRequestInput | TripMessageCreateManyTripRequestInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutTripRequestsInput = {
     update: XOR<UserUpdateWithoutTripRequestsInput, UserUncheckedUpdateWithoutTripRequestsInput>
     create: XOR<UserCreateWithoutTripRequestsInput, UserUncheckedCreateWithoutTripRequestsInput>
@@ -15224,6 +16687,161 @@ export namespace Prisma {
     data: XOR<QuotationUpdateManyMutationInput, QuotationUncheckedUpdateManyWithoutTripRequestInput>
   }
 
+  export type TripMessageUpsertWithWhereUniqueWithoutTripRequestInput = {
+    where: TripMessageWhereUniqueInput
+    update: XOR<TripMessageUpdateWithoutTripRequestInput, TripMessageUncheckedUpdateWithoutTripRequestInput>
+    create: XOR<TripMessageCreateWithoutTripRequestInput, TripMessageUncheckedCreateWithoutTripRequestInput>
+  }
+
+  export type TripMessageUpdateWithWhereUniqueWithoutTripRequestInput = {
+    where: TripMessageWhereUniqueInput
+    data: XOR<TripMessageUpdateWithoutTripRequestInput, TripMessageUncheckedUpdateWithoutTripRequestInput>
+  }
+
+  export type TripMessageUpdateManyWithWhereWithoutTripRequestInput = {
+    where: TripMessageScalarWhereInput
+    data: XOR<TripMessageUpdateManyMutationInput, TripMessageUncheckedUpdateManyWithoutTripRequestInput>
+  }
+
+  export type TripMessageScalarWhereInput = {
+    AND?: TripMessageScalarWhereInput | TripMessageScalarWhereInput[]
+    OR?: TripMessageScalarWhereInput[]
+    NOT?: TripMessageScalarWhereInput | TripMessageScalarWhereInput[]
+    id?: StringFilter<"TripMessage"> | string
+    body?: StringFilter<"TripMessage"> | string
+    senderType?: StringFilter<"TripMessage"> | string
+    senderName?: StringFilter<"TripMessage"> | string
+    createdAt?: DateTimeFilter<"TripMessage"> | Date | string
+    tripRequestId?: StringFilter<"TripMessage"> | string
+  }
+
+  export type TripRequestCreateWithoutMessagesInput = {
+    id?: string
+    token?: string
+    orderNumber?: number
+    status?: $Enums.TripRequestStatus
+    routes: string
+    customerEmail: string
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    pickupDate?: Date | string | null
+    pickupTime?: string | null
+    flightNumber?: string | null
+    isConfirmed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    quotations?: QuotationCreateNestedManyWithoutTripRequestInput
+  }
+
+  export type TripRequestUncheckedCreateWithoutMessagesInput = {
+    id?: string
+    token?: string
+    orderNumber?: number
+    status?: $Enums.TripRequestStatus
+    routes: string
+    customerEmail: string
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    pickupDate?: Date | string | null
+    pickupTime?: string | null
+    flightNumber?: string | null
+    isConfirmed?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId?: string | null
+    companyId?: string | null
+    quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
+  }
+
+  export type TripRequestCreateOrConnectWithoutMessagesInput = {
+    where: TripRequestWhereUniqueInput
+    create: XOR<TripRequestCreateWithoutMessagesInput, TripRequestUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type TripRequestUpsertWithoutMessagesInput = {
+    update: XOR<TripRequestUpdateWithoutMessagesInput, TripRequestUncheckedUpdateWithoutMessagesInput>
+    create: XOR<TripRequestCreateWithoutMessagesInput, TripRequestUncheckedCreateWithoutMessagesInput>
+    where?: TripRequestWhereInput
+  }
+
+  export type TripRequestUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: TripRequestWhereInput
+    data: XOR<TripRequestUpdateWithoutMessagesInput, TripRequestUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type TripRequestUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
+    flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
+  }
+
+  export type TripRequestUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
+    flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
+  }
+
   export type TripRequestCreateWithoutQuotationsInput = {
     id?: string
     token?: string
@@ -15249,6 +16867,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutQuotationsInput = {
@@ -15276,6 +16895,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     userId?: string | null
     companyId?: string | null
+    messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutQuotationsInput = {
@@ -15353,6 +16973,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutQuotationsInput = {
@@ -15380,6 +17001,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type UserUpsertWithoutQuotationsInput = {
@@ -15523,6 +17145,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutCompanyInput = {
@@ -15550,6 +17173,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateManyWithoutCompanyInput = {
@@ -15755,6 +17379,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutUserInput = {
@@ -15782,6 +17407,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateManyWithoutUserInput = {
@@ -15874,6 +17500,14 @@ export namespace Prisma {
     createdById: string
   }
 
+  export type TripMessageCreateManyTripRequestInput = {
+    id?: string
+    body: string
+    senderType: string
+    senderName: string
+    createdAt?: Date | string
+  }
+
   export type QuotationUpdateWithoutTripRequestInput = {
     id?: StringFieldUpdateOperationsInput | string
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -15920,6 +17554,30 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TripMessageUpdateWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripMessageUncheckedUpdateWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TripMessageUncheckedUpdateManyWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    senderType?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

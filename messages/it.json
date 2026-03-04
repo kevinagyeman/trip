@@ -67,7 +67,7 @@
 		"routeN": "Percorso {n}",
 		"pickup": "Indirizzo di Ritiro *",
 		"pickupPlaceholder": "Inserisci l'indirizzo di ritiro",
-		"quickFill": "Riempimento rapido:",
+		"quickFill": "Aeroporti:",
 		"destination": "Indirizzo di Destinazione *",
 		"destinationPlaceholder": "Inserisci il tuo indirizzo di destinazione",
 		"addRoute": "Aggiungi Percorso",
@@ -177,6 +177,14 @@
 		"tripConfirmationDesc": "Conferma il viaggio fornendo data e orario di ritiro",
 		"confirmTrip": "Conferma Viaggio"
 	},
+	"messages": {
+		"title": "Messaggi",
+		"noMessages": "Nessun messaggio ancora. Inizia la conversazione!",
+		"send": "Invia",
+		"sending": "Invio...",
+		"placeholder": "Scrivi un messaggio... (Ctrl+Invio per inviare)",
+		"you": "Tu"
+	},
 	"adminDashboard": {
 		"title": "Dashboard Admin",
 		"statTotal": "Totale",
@@ -237,6 +245,13 @@
 		"carSeatsIncluded": "I seggiolini sono inclusi nel prezzo",
 		"additionalInfoCustomer": "Informazioni Aggiuntive (Visibili al Cliente)",
 		"internalNotes": "Note Interne (Solo Admin)",
+		"confirmTripTitle": "Conferma Viaggio",
+		"confirmTripDesc": "Imposta i dettagli del ritiro per confermare la prenotazione e notificare il cliente.",
+		"confirmTripButton": "Conferma e Notifica Cliente",
+		"confirmingTrip": "Conferma in corso...",
+		"pickDate": "Seleziona una data",
+		"pickupTimePlaceholder": "es., 14:30",
+		"flightNumberPlaceholder": "es., FR1234",
 		"sendToCustomer": "Invia al Cliente",
 		"deleteDraft": "Elimina Bozza",
 		"sentDate": "Inviato: {date}",
