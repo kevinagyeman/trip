@@ -3,8 +3,8 @@ import { TripConfirmedEmail } from "@/emails/trip-confirmed";
 import {
 	adminProcedure,
 	createTRPCRouter,
-	customerProcedure,
 	protectedProcedure,
+	publicProcedure,
 } from "@/server/api/trpc";
 import { resolveAdminEmails, APP_URL, sendEmail } from "@/server/email";
 import { TRPCError } from "@trpc/server";
@@ -19,10 +19,12 @@ const routeSchema = z.object({
 });
 
 export const tripRequestRouter = createTRPCRouter({
-	// USER: Create new trip request
-	create: customerProcedure
+	// PUBLIC: Create new trip request (anonymous)
+	create: publicProcedure
 		.input(
 			z.object({
+				companySlug: z.string().min(1),
+				email: z.string().email(),
 				routes: z.array(routeSchema).min(1),
 				language: z.enum(["English", "Italian"]),
 				firstName: z.string().min(1),
@@ -37,22 +39,26 @@ export const tripRequestRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
-			const { routes, ...rest } = input;
+			const { routes, companySlug, email, ...rest } = input;
 
-			// Read companyId fresh from DB — JWT may be stale if the user was
-			// assigned to a company after they last signed in.
-			const currentUser = await ctx.db.user.findUnique({
-				where: { id: ctx.session.user.id },
-				select: { companyId: true },
+			// Look up company by slug
+			const company = await ctx.db.company.findUnique({
+				where: { slug: companySlug, isActive: true },
+				select: { id: true },
 			});
-			const companyId = currentUser?.companyId ?? null;
+			if (!company) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Company not found",
+				});
+			}
 
 			const tripRequest = await ctx.db.tripRequest.create({
 				data: {
 					...rest,
 					routes: JSON.stringify(routes),
-					userId: ctx.session.user.id,
-					companyId,
+					customerEmail: email,
+					companyId: company.id,
 					status: TripRequestStatus.PENDING,
 				},
 			});
@@ -73,8 +79,8 @@ export const tripRequestRouter = createTRPCRouter({
 						subject: `New trip request from ${input.firstName} ${input.lastName}`,
 						react: createElement(NewRequestEmail, {
 							requestId: tripRequest.id,
-							userName: ctx.session.user.name ?? ctx.session.user.email ?? "",
-							userEmail: ctx.session.user.email ?? "",
+							userName: `${input.firstName} ${input.lastName}`,
+							userEmail: email,
 							serviceType: routeSummary,
 							firstName: input.firstName,
 							lastName: input.lastName,
@@ -86,7 +92,7 @@ export const tripRequestRouter = createTRPCRouter({
 				),
 			);
 
-			return tripRequest;
+			return { id: tripRequest.id, token: tripRequest.token };
 		}),
 
 	// USER: Get own trip requests
@@ -308,6 +314,87 @@ export const tripRequestRouter = createTRPCRouter({
 							arrivalFlightTime: data.pickupTime,
 							arrivalFlightNumber: data.flightNumber,
 							adminUrl: `${APP_URL}/admin/requests/${id}`,
+						}),
+					}),
+				),
+			);
+
+			return updated;
+		}),
+
+	// PUBLIC: Get trip request by token (for anonymous customers)
+	getByToken: publicProcedure
+		.input(z.object({ token: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { token: input.token },
+				include: {
+					quotations: {
+						where: { status: { not: "DRAFT" } },
+						orderBy: { createdAt: "desc" },
+					},
+				},
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			return tripRequest;
+		}),
+
+	// PUBLIC: Confirm trip by token (for anonymous customers)
+	confirmByToken: publicProcedure
+		.input(
+			z.object({
+				token: z.string(),
+				pickupDate: z.date(),
+				pickupTime: z.string(),
+				flightNumber: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { token, ...data } = input;
+
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { token },
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			const updated = await ctx.db.tripRequest.update({
+				where: { token },
+				data: { ...data, isConfirmed: true },
+			});
+
+			// Build route summary for email
+			type Route = { pickup: string; destination: string };
+			const routes = JSON.parse(tripRequest.routes) as Route[];
+			const firstRoute = routes[0]!;
+			const routeSummary =
+				routes.length === 1
+					? `${firstRoute.pickup} → ${firstRoute.destination}`
+					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+
+			// Notify all admins of confirmed trip
+			const notifyEmailsConfirm = await resolveAdminEmails(
+				tripRequest.companyId,
+			);
+			await Promise.all(
+				notifyEmailsConfirm.map((to) =>
+					sendEmail({
+						to,
+						subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
+						react: createElement(TripConfirmedEmail, {
+							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
+							customerEmail: tripRequest.customerEmail,
+							serviceType: routeSummary,
+							arrivalFlightDate: format(data.pickupDate, "PPP"),
+							arrivalFlightTime: data.pickupTime,
+							arrivalFlightNumber: data.flightNumber,
+							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
 						}),
 					}),
 				),

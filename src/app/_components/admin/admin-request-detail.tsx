@@ -150,7 +150,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								</span>
 							</CardTitle>
 							<p className="text-sm text-muted-foreground">
-								{request.user.email}
+								{request.user?.email ?? request.customerEmail}
 							</p>
 							<p className="text-sm text-muted-foreground">
 								{firstRoute.pickup} → {firstRoute.destination}

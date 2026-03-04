@@ -28,7 +28,11 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
-export function CreateTripRequestForm() {
+export function CreateTripRequestForm({
+	companySlug,
+}: {
+	companySlug: string;
+}) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
 
@@ -45,6 +49,7 @@ export function CreateTripRequestForm() {
 		defaultValues: {
 			routes: [{ pickup: "", destination: "" }],
 			language: "English",
+			email: "",
 			phoneCountryCode: "+39",
 			numberOfAdults: 1,
 			areThereChildren: false,
@@ -78,12 +83,14 @@ export function CreateTripRequestForm() {
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
-			router.push(`/dashboard/requests/${data.id}`);
+			router.push(`/request/${data.token}`);
 		},
 	});
 
 	const onSubmit = (values: CreateTripRequestFormValues) => {
 		createRequest.mutate({
+			companySlug,
+			email: values.email,
 			routes: values.routes,
 			language: values.language,
 			firstName: values.firstName,
@@ -252,6 +259,14 @@ export function CreateTripRequestForm() {
 						inputProps={{ ...register("lastName") }}
 					/>
 				</div>
+
+				<CustomInput
+					labelText={t("email")}
+					placeholder={t("emailPlaceholder")}
+					inputType="email"
+					error={errors.email?.message}
+					inputProps={{ ...register("email") }}
+				/>
 
 				<div>
 					<Label className="mb-2">{t("phoneNumber")}</Label>

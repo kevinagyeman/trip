@@ -17,6 +17,23 @@ export default auth((req) => {
 	const pathWithoutLocale = pathname.replace(localePattern, "") || "/";
 	const localePrefix = pathname.match(localePattern)?.[0] ?? "/en";
 
+	// Redirect logged-in users away from auth pages
+	if (
+		pathWithoutLocale === "/auth/signin" ||
+		pathWithoutLocale === "/auth/register"
+	) {
+		if (req.auth?.user) {
+			const role = req.auth.user.role;
+			const dest =
+				role === "SUPER_ADMIN"
+					? "/super-admin"
+					: role === "ADMIN"
+						? "/admin"
+						: "/dashboard";
+			return NextResponse.redirect(new URL(`${localePrefix}${dest}`, req.url));
+		}
+	}
+
 	// Protect /admin routes: must be ADMIN or SUPER_ADMIN
 	if (pathWithoutLocale.startsWith("/admin")) {
 		const role = req.auth?.user?.role;

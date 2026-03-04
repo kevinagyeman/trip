@@ -11,6 +11,7 @@ export const createTripRequestSchema = z
 			)
 			.min(1, "At least one route is required"),
 		language: z.enum(["English", "Italian"]),
+		email: z.string().email("Valid email is required"),
 		firstName: z.string().min(1, "First name is required"),
 		lastName: z.string().min(1, "Last name is required"),
 		phoneCountryCode: z.string().min(1, "Country code is required"),

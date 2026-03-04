@@ -124,6 +124,7 @@ model VerificationToken {
 // Trip management models
 model TripRequest {
     id          String            @id @default(cuid())
+    token       String            @unique @default(cuid())
     orderNumber Int               @unique @default(autoincrement())
     status      TripRequestStatus @default(PENDING)
 
@@ -131,6 +132,7 @@ model TripRequest {
     routes             String    @db.Text
 
     // Travel information
+    customerEmail      String
     language           String
     firstName          String
     lastName           String
@@ -152,8 +154,8 @@ model TripRequest {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    userId     String
-    user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId     String?
+    user       User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
     companyId  String?
     company    Company?    @relation(fields: [companyId], references: [id])
     quotations Quotation[]

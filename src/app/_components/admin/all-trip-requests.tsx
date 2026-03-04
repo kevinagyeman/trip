@@ -80,7 +80,9 @@ export function AllTripRequests() {
 										</span>
 									</CardTitle>
 									<p className="text-sm text-muted-foreground">
-										{request.user.name ?? request.user.email}
+										{request.user?.name ??
+											request.user?.email ??
+											request.customerEmail}
 									</p>
 									<p className="text-xs text-muted-foreground">
 										{(() => {

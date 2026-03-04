@@ -74,6 +74,8 @@
 		"duplicateRoute": "Duplizieren",
 		"travelInformation": "Reiseinformationen",
 		"preferredLanguage": "Bevorzugte Sprache",
+		"email": "E-Mail-Adresse *",
+		"emailPlaceholder": "ihre@email.com",
 		"firstName": "Vorname *",
 		"firstNamePlaceholder": "Vorname",
 		"lastName": "Nachname *",

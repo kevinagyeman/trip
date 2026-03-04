@@ -182,9 +182,11 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
 
 exports.Prisma.TripRequestScalarFieldEnum = {
   id: 'id',
+  token: 'token',
   orderNumber: 'orderNumber',
   status: 'status',
   routes: 'routes',
+  customerEmail: 'customerEmail',
   language: 'language',
   firstName: 'firstName',
   lastName: 'lastName',

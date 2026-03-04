@@ -8412,9 +8412,11 @@ export namespace Prisma {
 
   export type TripRequestMinAggregateOutputType = {
     id: string | null
+    token: string | null
     orderNumber: number | null
     status: $Enums.TripRequestStatus | null
     routes: string | null
+    customerEmail: string | null
     language: string | null
     firstName: string | null
     lastName: string | null
@@ -8437,9 +8439,11 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateOutputType = {
     id: string | null
+    token: string | null
     orderNumber: number | null
     status: $Enums.TripRequestStatus | null
     routes: string | null
+    customerEmail: string | null
     language: string | null
     firstName: string | null
     lastName: string | null
@@ -8462,9 +8466,11 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateOutputType = {
     id: number
+    token: number
     orderNumber: number
     status: number
     routes: number
+    customerEmail: number
     language: number
     firstName: number
     lastName: number
@@ -8503,9 +8509,11 @@ export namespace Prisma {
 
   export type TripRequestMinAggregateInputType = {
     id?: true
+    token?: true
     orderNumber?: true
     status?: true
     routes?: true
+    customerEmail?: true
     language?: true
     firstName?: true
     lastName?: true
@@ -8528,9 +8536,11 @@ export namespace Prisma {
 
   export type TripRequestMaxAggregateInputType = {
     id?: true
+    token?: true
     orderNumber?: true
     status?: true
     routes?: true
+    customerEmail?: true
     language?: true
     firstName?: true
     lastName?: true
@@ -8553,9 +8563,11 @@ export namespace Prisma {
 
   export type TripRequestCountAggregateInputType = {
     id?: true
+    token?: true
     orderNumber?: true
     status?: true
     routes?: true
+    customerEmail?: true
     language?: true
     firstName?: true
     lastName?: true
@@ -8665,9 +8677,11 @@ export namespace Prisma {
 
   export type TripRequestGroupByOutputType = {
     id: string
+    token: string
     orderNumber: number
     status: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -8684,7 +8698,7 @@ export namespace Prisma {
     isConfirmed: boolean
     createdAt: Date
     updatedAt: Date
-    userId: string
+    userId: string | null
     companyId: string | null
     _count: TripRequestCountAggregateOutputType | null
     _avg: TripRequestAvgAggregateOutputType | null
@@ -8709,9 +8723,11 @@ export namespace Prisma {
 
   export type TripRequestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    token?: boolean
     orderNumber?: boolean
     status?: boolean
     routes?: boolean
+    customerEmail?: boolean
     language?: boolean
     firstName?: boolean
     lastName?: boolean
@@ -8730,7 +8746,7 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     companyId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
@@ -8738,9 +8754,11 @@ export namespace Prisma {
 
   export type TripRequestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    token?: boolean
     orderNumber?: boolean
     status?: boolean
     routes?: boolean
+    customerEmail?: boolean
     language?: boolean
     firstName?: boolean
     lastName?: boolean
@@ -8759,15 +8777,17 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     companyId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
   }, ExtArgs["result"]["tripRequest"]>
 
   export type TripRequestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    token?: boolean
     orderNumber?: boolean
     status?: boolean
     routes?: boolean
+    customerEmail?: boolean
     language?: boolean
     firstName?: boolean
     lastName?: boolean
@@ -8786,15 +8806,17 @@ export namespace Prisma {
     updatedAt?: boolean
     userId?: boolean
     companyId?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
   }, ExtArgs["result"]["tripRequest"]>
 
   export type TripRequestSelectScalar = {
     id?: boolean
+    token?: boolean
     orderNumber?: boolean
     status?: boolean
     routes?: boolean
+    customerEmail?: boolean
     language?: boolean
     firstName?: boolean
     lastName?: boolean
@@ -8815,34 +8837,36 @@ export namespace Prisma {
     companyId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "orderNumber" | "status" | "routes" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "pickupDate" | "pickupTime" | "flightNumber" | "isConfirmed" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "pickupDate" | "pickupTime" | "flightNumber" | "isConfirmed" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TripRequestIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
   }
   export type TripRequestIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
+    user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
   }
 
   export type $TripRequestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "TripRequest"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
+      user: Prisma.$UserPayload<ExtArgs> | null
       company: Prisma.$CompanyPayload<ExtArgs> | null
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      token: string
       orderNumber: number
       status: $Enums.TripRequestStatus
       routes: string
+      customerEmail: string
       language: string
       firstName: string
       lastName: string
@@ -8859,7 +8883,7 @@ export namespace Prisma {
       isConfirmed: boolean
       createdAt: Date
       updatedAt: Date
-      userId: string
+      userId: string | null
       companyId: string | null
     }, ExtArgs["result"]["tripRequest"]>
     composites: {}
@@ -9255,7 +9279,7 @@ export namespace Prisma {
    */
   export interface Prisma__TripRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends TripRequest$userArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     company<T extends TripRequest$companyArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     quotations<T extends TripRequest$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -9288,9 +9312,11 @@ export namespace Prisma {
    */
   interface TripRequestFieldRefs {
     readonly id: FieldRef<"TripRequest", 'String'>
+    readonly token: FieldRef<"TripRequest", 'String'>
     readonly orderNumber: FieldRef<"TripRequest", 'Int'>
     readonly status: FieldRef<"TripRequest", 'TripRequestStatus'>
     readonly routes: FieldRef<"TripRequest", 'String'>
+    readonly customerEmail: FieldRef<"TripRequest", 'String'>
     readonly language: FieldRef<"TripRequest", 'String'>
     readonly firstName: FieldRef<"TripRequest", 'String'>
     readonly lastName: FieldRef<"TripRequest", 'String'>
@@ -9702,6 +9728,25 @@ export namespace Prisma {
      * Limit how many TripRequests to delete.
      */
     limit?: number
+  }
+
+  /**
+   * TripRequest.user
+   */
+  export type TripRequest$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
   }
 
   /**
@@ -11076,9 +11121,11 @@ export namespace Prisma {
 
   export const TripRequestScalarFieldEnum: {
     id: 'id',
+    token: 'token',
     orderNumber: 'orderNumber',
     status: 'status',
     routes: 'routes',
+    customerEmail: 'customerEmail',
     language: 'language',
     firstName: 'firstName',
     lastName: 'lastName',
@@ -11684,9 +11731,11 @@ export namespace Prisma {
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
     id?: StringFilter<"TripRequest"> | string
+    token?: StringFilter<"TripRequest"> | string
     orderNumber?: IntFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
     routes?: StringFilter<"TripRequest"> | string
+    customerEmail?: StringFilter<"TripRequest"> | string
     language?: StringFilter<"TripRequest"> | string
     firstName?: StringFilter<"TripRequest"> | string
     lastName?: StringFilter<"TripRequest"> | string
@@ -11703,18 +11752,20 @@ export namespace Prisma {
     isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
-    userId?: StringFilter<"TripRequest"> | string
+    userId?: StringNullableFilter<"TripRequest"> | string | null
     companyId?: StringNullableFilter<"TripRequest"> | string | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
   }
 
   export type TripRequestOrderByWithRelationInput = {
     id?: SortOrder
+    token?: SortOrder
     orderNumber?: SortOrder
     status?: SortOrder
     routes?: SortOrder
+    customerEmail?: SortOrder
     language?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
@@ -11731,7 +11782,7 @@ export namespace Prisma {
     isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     companyId?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
@@ -11740,12 +11791,14 @@ export namespace Prisma {
 
   export type TripRequestWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    token?: string
     orderNumber?: number
     AND?: TripRequestWhereInput | TripRequestWhereInput[]
     OR?: TripRequestWhereInput[]
     NOT?: TripRequestWhereInput | TripRequestWhereInput[]
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
     routes?: StringFilter<"TripRequest"> | string
+    customerEmail?: StringFilter<"TripRequest"> | string
     language?: StringFilter<"TripRequest"> | string
     firstName?: StringFilter<"TripRequest"> | string
     lastName?: StringFilter<"TripRequest"> | string
@@ -11762,18 +11815,20 @@ export namespace Prisma {
     isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
-    userId?: StringFilter<"TripRequest"> | string
+    userId?: StringNullableFilter<"TripRequest"> | string | null
     companyId?: StringNullableFilter<"TripRequest"> | string | null
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
-  }, "id" | "orderNumber">
+  }, "id" | "token" | "orderNumber">
 
   export type TripRequestOrderByWithAggregationInput = {
     id?: SortOrder
+    token?: SortOrder
     orderNumber?: SortOrder
     status?: SortOrder
     routes?: SortOrder
+    customerEmail?: SortOrder
     language?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
@@ -11790,7 +11845,7 @@ export namespace Prisma {
     isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    userId?: SortOrder
+    userId?: SortOrderInput | SortOrder
     companyId?: SortOrderInput | SortOrder
     _count?: TripRequestCountOrderByAggregateInput
     _avg?: TripRequestAvgOrderByAggregateInput
@@ -11804,9 +11859,11 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereWithAggregatesInput[]
     NOT?: TripRequestScalarWhereWithAggregatesInput | TripRequestScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TripRequest"> | string
+    token?: StringWithAggregatesFilter<"TripRequest"> | string
     orderNumber?: IntWithAggregatesFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusWithAggregatesFilter<"TripRequest"> | $Enums.TripRequestStatus
     routes?: StringWithAggregatesFilter<"TripRequest"> | string
+    customerEmail?: StringWithAggregatesFilter<"TripRequest"> | string
     language?: StringWithAggregatesFilter<"TripRequest"> | string
     firstName?: StringWithAggregatesFilter<"TripRequest"> | string
     lastName?: StringWithAggregatesFilter<"TripRequest"> | string
@@ -11823,7 +11880,7 @@ export namespace Prisma {
     isConfirmed?: BoolWithAggregatesFilter<"TripRequest"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
-    userId?: StringWithAggregatesFilter<"TripRequest"> | string
+    userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     companyId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
   }
 
@@ -12368,9 +12425,11 @@ export namespace Prisma {
 
   export type TripRequestCreateInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -12387,16 +12446,18 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutTripRequestsInput
+    user?: UserCreateNestedOneWithoutTripRequestsInput
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -12413,15 +12474,17 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
     companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -12438,16 +12501,18 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutTripRequestsNestedInput
+    user?: UserUpdateOneWithoutTripRequestsNestedInput
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -12464,16 +12529,18 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestCreateManyInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -12490,14 +12557,16 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
     companyId?: string | null
   }
 
   export type TripRequestUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -12518,9 +12587,11 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -12537,7 +12608,7 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -13145,11 +13216,18 @@ export namespace Prisma {
     not?: NestedEnumTripRequestStatusFilter<$PrismaModel> | $Enums.TripRequestStatus
   }
 
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type TripRequestCountOrderByAggregateInput = {
     id?: SortOrder
+    token?: SortOrder
     orderNumber?: SortOrder
     status?: SortOrder
     routes?: SortOrder
+    customerEmail?: SortOrder
     language?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
@@ -13179,9 +13257,11 @@ export namespace Prisma {
 
   export type TripRequestMaxOrderByAggregateInput = {
     id?: SortOrder
+    token?: SortOrder
     orderNumber?: SortOrder
     status?: SortOrder
     routes?: SortOrder
+    customerEmail?: SortOrder
     language?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
@@ -13204,9 +13284,11 @@ export namespace Prisma {
 
   export type TripRequestMinOrderByAggregateInput = {
     id?: SortOrder
+    token?: SortOrder
     orderNumber?: SortOrder
     status?: SortOrder
     routes?: SortOrder
+    customerEmail?: SortOrder
     language?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
@@ -13774,10 +13856,12 @@ export namespace Prisma {
     set?: $Enums.TripRequestStatus
   }
 
-  export type UserUpdateOneRequiredWithoutTripRequestsNestedInput = {
+  export type UserUpdateOneWithoutTripRequestsNestedInput = {
     create?: XOR<UserCreateWithoutTripRequestsInput, UserUncheckedCreateWithoutTripRequestsInput>
     connectOrCreate?: UserCreateOrConnectWithoutTripRequestsInput
     upsert?: UserUpsertWithoutTripRequestsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTripRequestsInput, UserUpdateWithoutTripRequestsInput>, UserUncheckedUpdateWithoutTripRequestsInput>
   }
@@ -14181,9 +14265,11 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutCompanyInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -14200,15 +14286,17 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutTripRequestsInput
+    user?: UserCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutCompanyInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -14225,7 +14313,7 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
@@ -14290,9 +14378,11 @@ export namespace Prisma {
     OR?: TripRequestScalarWhereInput[]
     NOT?: TripRequestScalarWhereInput | TripRequestScalarWhereInput[]
     id?: StringFilter<"TripRequest"> | string
+    token?: StringFilter<"TripRequest"> | string
     orderNumber?: IntFilter<"TripRequest"> | number
     status?: EnumTripRequestStatusFilter<"TripRequest"> | $Enums.TripRequestStatus
     routes?: StringFilter<"TripRequest"> | string
+    customerEmail?: StringFilter<"TripRequest"> | string
     language?: StringFilter<"TripRequest"> | string
     firstName?: StringFilter<"TripRequest"> | string
     lastName?: StringFilter<"TripRequest"> | string
@@ -14309,7 +14399,7 @@ export namespace Prisma {
     isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
-    userId?: StringFilter<"TripRequest"> | string
+    userId?: StringNullableFilter<"TripRequest"> | string | null
     companyId?: StringNullableFilter<"TripRequest"> | string | null
   }
 
@@ -14657,9 +14747,11 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutUserInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -14682,9 +14774,11 @@ export namespace Prisma {
 
   export type TripRequestUncheckedCreateWithoutUserInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -15132,9 +15226,11 @@ export namespace Prisma {
 
   export type TripRequestCreateWithoutQuotationsInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -15151,15 +15247,17 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutTripRequestsInput
+    user?: UserCreateNestedOneWithoutTripRequestsInput
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
   }
 
   export type TripRequestUncheckedCreateWithoutQuotationsInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -15176,7 +15274,7 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
     companyId?: string | null
   }
 
@@ -15233,8 +15331,10 @@ export namespace Prisma {
 
   export type TripRequestUpdateWithoutQuotationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15251,15 +15351,17 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutTripRequestsNestedInput
+    user?: UserUpdateOneWithoutTripRequestsNestedInput
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutQuotationsInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15276,7 +15378,7 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -15333,9 +15435,11 @@ export namespace Prisma {
 
   export type TripRequestCreateManyCompanyInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -15352,7 +15456,7 @@ export namespace Prisma {
     isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    userId: string
+    userId?: string | null
   }
 
   export type UserUpdateWithoutCompanyInput = {
@@ -15397,8 +15501,10 @@ export namespace Prisma {
 
   export type TripRequestUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15415,15 +15521,17 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutTripRequestsNestedInput
+    user?: UserUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15440,15 +15548,17 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateManyWithoutCompanyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15465,7 +15575,7 @@ export namespace Prisma {
     isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userId?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountCreateManyUserInput = {
@@ -15498,9 +15608,11 @@ export namespace Prisma {
 
   export type TripRequestCreateManyUserInput = {
     id?: string
+    token?: string
     orderNumber?: number
     status?: $Enums.TripRequestStatus
     routes: string
+    customerEmail: string
     language: string
     firstName: string
     lastName: string
@@ -15621,8 +15733,10 @@ export namespace Prisma {
 
   export type TripRequestUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15645,9 +15759,11 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -15670,9 +15786,11 @@ export namespace Prisma {
 
   export type TripRequestUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
     orderNumber?: IntFieldUpdateOperationsInput | number
     status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
     routes?: StringFieldUpdateOperationsInput | string
+    customerEmail?: StringFieldUpdateOperationsInput | string
     language?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
