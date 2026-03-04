@@ -217,7 +217,9 @@
 		"adultsCount": "{count} adult(s)",
 		"childrenCount": "{count} child(ren)",
 		"quotationsCount": "{count} quotation(s)",
-		"manage": "Manage"
+		"manage": "Manage",
+		"searchPlaceholder": "Search by name or email...",
+		"loadMore": "Load more"
 	},
 	"adminDetail": {
 		"loading": "Loading...",

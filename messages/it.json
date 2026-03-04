@@ -217,7 +217,9 @@
 		"adultsCount": "{count} adulto/i",
 		"childrenCount": "{count} bambino/i",
 		"quotationsCount": "{count} preventivo/i",
-		"manage": "Gestisci"
+		"manage": "Gestisci",
+		"searchPlaceholder": "Cerca per nome o email...",
+		"loadMore": "Carica altri"
 	},
 	"adminDetail": {
 		"loading": "Caricamento...",

@@ -186,20 +186,29 @@ export const tripRequestRouter = createTRPCRouter({
 			z
 				.object({
 					status: z.nativeEnum(TripRequestStatus).optional(),
-					limit: z.number().min(1).max(100).default(50),
+					search: z.string().optional(),
+					limit: z.number().min(1).max(100).default(20),
 					cursor: z.string().optional(),
 				})
 				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
-			const limit = input?.limit ?? 50;
+			const limit = input?.limit ?? 20;
 			const cursor = input?.cursor;
 			const companyId = ctx.session.user.companyId;
+			const search = input?.search?.trim();
 
 			const items = await ctx.db.tripRequest.findMany({
 				where: {
 					...(input?.status && { status: input.status }),
 					...(companyId ? { companyId } : {}),
+					...(search && {
+						OR: [
+							{ customerEmail: { contains: search, mode: "insensitive" } },
+							{ firstName: { contains: search, mode: "insensitive" } },
+							{ lastName: { contains: search, mode: "insensitive" } },
+						],
+					}),
 				},
 				take: limit + 1,
 				cursor: cursor ? { id: cursor } : undefined,
