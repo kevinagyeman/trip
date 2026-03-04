@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/server/auth";
+import { db } from "@/server/db";
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,20 @@ export default async function NewTripRequestPage({
 		redirect("/");
 	}
 
+	const companyId = session.user.companyId;
+	if (!companyId) {
+		redirect("/dashboard");
+	}
+
+	const company = await db.company.findUnique({
+		where: { id: companyId },
+		select: { slug: true },
+	});
+
+	if (!company) {
+		redirect("/dashboard");
+	}
+
 	const t = await getTranslations("pages");
 
 	return (
@@ -28,7 +43,7 @@ export default async function NewTripRequestPage({
 				</Link>
 			</div>
 			<h1 className="mb-6 text-3xl font-bold">{t("newTripRequest")}</h1>
-			<CreateTripRequestForm />
+			<CreateTripRequestForm companySlug={company.slug} />
 		</div>
 	);
 }
