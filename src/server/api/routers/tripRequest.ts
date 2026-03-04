@@ -17,6 +17,9 @@ import { TripRequestStatus } from "../../../../generated/prisma";
 const routeSchema = z.object({
 	pickup: z.string().min(1),
 	destination: z.string().min(1),
+	departureDate: z.string().optional(),
+	departureTime: z.string().optional(),
+	flightNumber: z.string().optional(),
 });
 
 export const tripRequestRouter = createTRPCRouter({
