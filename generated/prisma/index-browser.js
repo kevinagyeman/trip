@@ -132,14 +132,6 @@ exports.Prisma.CompanyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.PostScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  createdById: 'createdById'
-};
-
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -271,7 +263,6 @@ exports.QuotationStatus = exports.$Enums.QuotationStatus = {
 
 exports.Prisma.ModelName = {
   Company: 'Company',
-  Post: 'Post',
   Account: 'Account',
   Session: 'Session',
   User: 'User',
