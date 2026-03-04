@@ -11,8 +11,8 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 
 const locales = [
-	{ code: "en", label: "EN" },
-	{ code: "it", label: "IT" },
+	{ code: "en", label: "🇬🇧 EN" },
+	{ code: "it", label: "🇮🇹 IT" },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -25,7 +25,7 @@ export function LanguageSwitcher() {
 			value={locale}
 			onValueChange={(value) => router.replace(pathname, { locale: value })}
 		>
-			<SelectTrigger className="w-17.5">
+			<SelectTrigger className="w-24">
 				<SelectValue />
 			</SelectTrigger>
 			<SelectContent>

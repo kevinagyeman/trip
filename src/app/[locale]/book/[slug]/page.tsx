@@ -1,7 +1,7 @@
-import { db } from "@/server/db";
-import { notFound } from "next/navigation";
-import Image from "next/image";
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
+import { db } from "@/server/db";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 
 export default async function BookingPortalPage({
 	params,
@@ -35,7 +35,7 @@ export default async function BookingPortalPage({
 					<h1 className="text-3xl font-bold">{company.name}</h1>
 				</div>
 
-				<div className="bg-white dark:bg-gray-900 rounded-xl shadow-sm p-6">
+				<div>
 					<CreateTripRequestForm companySlug={slug} />
 				</div>
 			</div>

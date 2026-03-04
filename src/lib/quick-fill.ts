@@ -1,4 +1,4 @@
-export const AIRPORTS = [
+export const QUICK_FILL = [
 	{ value: "VRN", label: "VRN - Verona Villafranca" },
 	{ value: "BGY", label: "BGY - Milano Bergamo" },
 	{ value: "MXP", label: "MXP - Milano Malpensa" },

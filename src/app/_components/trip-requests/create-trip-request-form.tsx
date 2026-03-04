@@ -14,8 +14,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { AIRPORTS, LANGUAGES } from "@/lib/airports";
 import { COUNTRY_CODES } from "@/lib/phone";
+import { LANGUAGES, QUICK_FILL } from "@/lib/quick-fill";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
@@ -171,24 +171,24 @@ export function CreateTripRequestForm({
 								<p className="text-xs text-muted-foreground">
 									{t("quickFill")}
 								</p>
-								{AIRPORTS.map((airport) => (
+								{QUICK_FILL.map((quickFill) => (
 									<Button
-										key={airport.value}
+										key={quickFill.value}
 										type="button"
 										variant="outline"
-										size="sm"
+										size="xs"
 										onClick={() =>
-											setValue(`routes.${index}.pickup`, airport.label)
+											setValue(`routes.${index}.pickup`, quickFill.label)
 										}
 									>
-										{airport.value}
+										{quickFill.value}
 									</Button>
 								))}
 							</div>
 						</div>
 
 						{/* Destination */}
-						<div className="space-y-2">
+						<div className="space-y-2 pt-6">
 							<CustomInput
 								labelText={t("destination")}
 								placeholder={t("destinationPlaceholder")}
@@ -199,24 +199,24 @@ export function CreateTripRequestForm({
 								<p className="text-xs text-muted-foreground">
 									{t("quickFill")}
 								</p>
-								{AIRPORTS.map((airport) => (
+								{QUICK_FILL.map((quickFill) => (
 									<Button
-										key={airport.value}
+										key={quickFill.value}
 										type="button"
 										variant="outline"
-										size="sm"
+										size="xs"
 										onClick={() =>
-											setValue(`routes.${index}.destination`, airport.label)
+											setValue(`routes.${index}.destination`, quickFill.label)
 										}
 									>
-										{airport.value}
+										{quickFill.value}
 									</Button>
 								))}
 							</div>
 						</div>
 
 						{/* Optional departure details */}
-						<div className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-3">
+						<div className="grid grid-cols-1 gap-3 sm:grid-cols-3 pt-6">
 							<CustomInput
 								labelText={t("routeDepartureDate")}
 								inputProps={{
@@ -224,6 +224,7 @@ export function CreateTripRequestForm({
 									type: "date",
 								}}
 							/>
+
 							<CustomInput
 								labelText={t("routeDepartureTime")}
 								inputProps={{
@@ -328,9 +329,14 @@ export function CreateTripRequestForm({
 						/>
 						<Input
 							type="tel"
+							inputMode="numeric"
 							placeholder={t("phonePlaceholder")}
 							className="flex-1"
-							{...register("phoneNumber")}
+							{...register("phoneNumber", {
+								onChange: (e) => {
+									e.target.value = e.target.value.replace(/\D/g, "");
+								},
+							})}
 						/>
 					</div>
 					{(errors.phoneCountryCode ?? errors.phoneNumber) && (
