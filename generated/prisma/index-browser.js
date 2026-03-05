@@ -172,6 +172,14 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token',
+  expires: 'expires',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.TripRequestScalarFieldEnum = {
   id: 'id',
   token: 'token',
@@ -267,6 +275,7 @@ exports.Prisma.ModelName = {
   Session: 'Session',
   User: 'User',
   VerificationToken: 'VerificationToken',
+  PasswordResetToken: 'PasswordResetToken',
   TripRequest: 'TripRequest',
   TripMessage: 'TripMessage',
   Quotation: 'Quotation'

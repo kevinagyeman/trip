@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import {
 	Card,
 	CardContent,
@@ -109,6 +110,14 @@ function SignInForm() {
 						<Button type="submit" className="w-full" disabled={isSubmitting}>
 							{isSubmitting ? t("signingIn") : t("signIn")}
 						</Button>
+						<div className="text-center text-sm">
+							<Link
+								href="/auth/forgot-password"
+								className="text-muted-foreground hover:underline"
+							>
+								Forgot password?
+							</Link>
+						</div>
 
 						{/* <div className="text-center text-sm">
 							<span className="text-muted-foreground">{t("noAccount")} </span>
