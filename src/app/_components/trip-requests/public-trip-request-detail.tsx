@@ -72,6 +72,15 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	return (
 		<div className="space-y-6">
+			{/* Persistent email notification notice */}
+			{request && (
+				<div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-950/30">
+					<p className="text-blue-800 dark:text-blue-300">
+						{t("emailNotice", { email: request.fromEmail })}
+					</p>
+				</div>
+			)}
+
 			{/* Main Request Information */}
 			<Card>
 				<CardHeader>
@@ -200,6 +209,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							{t("travelInformation")}
 						</h3>
 						<div className="grid grid-cols-2 gap-4">
+							<div className="col-span-2">
+								<p className="text-sm text-muted-foreground">{t("email")}</p>
+								<p className="font-medium">{request.customerEmail}</p>
+							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("language")}</p>
 								<p className="font-medium">{request.language}</p>

@@ -96,7 +96,11 @@ export const tripRequestRouter = createTRPCRouter({
 				),
 			);
 
-			return { id: tripRequest.id, token: tripRequest.token };
+			return {
+				id: tripRequest.id,
+				token: tripRequest.token,
+				fromEmail: process.env.RESEND_FROM_EMAIL ?? "",
+			};
 		}),
 
 	// USER: Get own trip requests
@@ -219,6 +223,7 @@ export const tripRequestRouter = createTRPCRouter({
 				include: {
 					user: { select: { id: true, name: true, email: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
+					messages: { orderBy: { createdAt: "desc" }, take: 1 },
 				},
 			});
 
@@ -353,7 +358,7 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			return tripRequest;
+			return { ...tripRequest, fromEmail: process.env.RESEND_FROM_EMAIL ?? "" };
 		}),
 
 	// PUBLIC: Update route details (departure date/time/flight) by token

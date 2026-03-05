@@ -155,6 +155,7 @@
 	"requestDetail": {
 		"loading": "Caricamento...",
 		"notFound": "Non trovato",
+		"emailNotice": "Tutte le comunicazioni riguardanti questo viaggio (preventivi, conferme, aggiornamenti) saranno inviate alla tua email. Controlla la posta in arrivo e la cartella spam per i messaggi provenienti da {email}.",
 		"back": "Indietro",
 		"confirmed": "Confermato",
 		"routes": "Percorsi",
@@ -162,6 +163,7 @@
 		"pickup": "Ritiro",
 		"destination": "Destinazione",
 		"travelInformation": "Informazioni di Viaggio",
+		"email": "Email",
 		"language": "Lingua",
 		"phone": "Telefono",
 		"adults": "Adulti",
