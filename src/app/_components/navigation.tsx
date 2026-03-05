@@ -5,6 +5,7 @@ import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/server/auth";
+import { Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 export async function Navigation() {
@@ -72,6 +73,13 @@ export async function Navigation() {
 							{userName}
 						</span>
 						<ThemeToggle className="hidden md:flex" />
+						{isAdmin && (
+							<Link href="/admin/settings" className="hidden md:block">
+								<Button variant="ghost" size="icon">
+									<Settings className="h-4 w-4" />
+								</Button>
+							</Link>
+						)}
 						<div className="hidden md:block">
 							<SignOutButton />
 						</div>
