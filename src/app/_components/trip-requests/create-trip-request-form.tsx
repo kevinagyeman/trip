@@ -1,6 +1,7 @@
 "use client";
 
 import { TripRequestAlert } from "@/app/_components/trip-requests/alert";
+import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -14,7 +15,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { COUNTRY_CODES } from "@/lib/phone";
 import { LANGUAGES, QUICK_FILL } from "@/lib/quick-fill";
 import {
@@ -504,11 +504,11 @@ export function CreateTripRequestForm({
 			{/* Additional Information */}
 			<div className="space-y-2">
 				<h3 className="text-lg font-semibold">{t("additionalInformation")}</h3>
-				<Label>{t("specialRequests")}</Label>
-				<Textarea
-					{...register("additionalInfo")}
+				<CustomTextArea
+					labelText={t("specialRequests")}
 					placeholder={t("specialRequestsPlaceholder")}
-					rows={4}
+					rows={6}
+					textAreaProps={{ ...register("additionalInfo") }}
 				/>
 			</div>
 

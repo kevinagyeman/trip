@@ -20,7 +20,7 @@ export default async function BookingPortalPage({
 	}
 
 	return (
-		<div className="min-h-[calc(100vh-65px)] bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+		<div className="min-h-[calc(100vh-65px)] p-4">
 			<div className="mx-auto max-w-2xl py-8 space-y-6">
 				<div className="text-center space-y-3">
 					{company.logoUrl && (
