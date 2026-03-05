@@ -9,7 +9,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Link } from "@/i18n/navigation";
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -111,7 +110,7 @@ function SignInForm() {
 							{isSubmitting ? t("signingIn") : t("signIn")}
 						</Button>
 
-						<div className="text-center text-sm">
+						{/* <div className="text-center text-sm">
 							<span className="text-muted-foreground">{t("noAccount")} </span>
 							<Link
 								href="/auth/register"
@@ -119,7 +118,7 @@ function SignInForm() {
 							>
 								{t("register")}
 							</Link>
-						</div>
+						</div> */}
 					</form>
 				</CardContent>
 			</Card>
