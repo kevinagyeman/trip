@@ -87,7 +87,10 @@
 		"areThereChildren": "Ci sono bambini che viaggiano?",
 		"numberOfChildren": "Numero di Bambini",
 		"childAge": "Età del bambino {n} *",
-		"childAgePlaceholder": "es., 3 anni",
+		"childAgePlaceholder": "0",
+		"ageYears": "Anni",
+		"ageMonths": "Mesi",
+		"ageDays": "Giorni",
 		"numberOfChildSeats": "Numero di Seggiolini",
 		"additionalInformation": "Informazioni Aggiuntive",
 		"specialRequests": "Richieste Speciali (Opzionale)",
@@ -98,7 +101,9 @@
 		"routeFlightNumber": "Numero di Volo",
 		"routeFlightNumberPlaceholder": "es., FR1234",
 		"submitRequest": "Invia Richiesta di Preventivo",
-		"submitting": "Invio in corso..."
+		"submitting": "Invio in corso...",
+		"helpAlertTitle": "Aiutaci.",
+		"helpAlertBody": "Per poter formulare un preventivo corretto e conveniente, è consigliabile comunicare la data di arrivo e/o partenza.\n\nIl trasferimento si intende confermato quando il cliente riceve la notifica della prenotazione (conferma di prenotazione).\n\nGrazie!"
 	},
 	"confirmTrip": {
 		"title": "Conferma il tuo Viaggio",

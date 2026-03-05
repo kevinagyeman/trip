@@ -87,7 +87,10 @@
 		"areThereChildren": "Are there children traveling?",
 		"numberOfChildren": "Number of Children",
 		"childAge": "Child {n} age *",
-		"childAgePlaceholder": "e.g., 3 years",
+		"childAgePlaceholder": "0",
+		"ageYears": "Years",
+		"ageMonths": "Months",
+		"ageDays": "Days",
 		"numberOfChildSeats": "Number of Child Seats",
 		"additionalInformation": "Additional Information",
 		"specialRequests": "Special Requests (Optional)",
@@ -98,7 +101,9 @@
 		"routeFlightNumber": "Flight Number",
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
 		"submitRequest": "Submit Quotation Request",
-		"submitting": "Submitting..."
+		"submitting": "Submitting...",
+		"helpAlertTitle": "Help us.",
+		"helpAlertBody": "In order to be able to formulate a correct and convenient quote, it is advisable to communicate the date of arrival and/or departure.\n\nThe transfer is considered confirmed when the customer receives notification of the reservation (booking confirmation).\n\nThank you!"
 	},
 	"confirmTrip": {
 		"title": "Confirm Your Trip",

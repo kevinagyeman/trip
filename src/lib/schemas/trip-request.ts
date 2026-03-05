@@ -23,7 +23,12 @@ export const createTripRequestSchema = z
 		areThereChildren: z.boolean(),
 		numberOfChildren: z.coerce.number().int().min(0).optional(),
 		childrenAges: z
-			.array(z.object({ age: z.string().min(1, "Age is required") }))
+			.array(
+				z.object({
+					age: z.string().min(1, "Age is required"),
+					unit: z.enum(["years", "months", "days"]),
+				}),
+			)
 			.optional(),
 		numberOfChildSeats: z.coerce.number().int().min(0).optional(),
 		additionalInfo: z.string().optional(),

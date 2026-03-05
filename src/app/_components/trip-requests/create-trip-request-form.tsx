@@ -1,5 +1,6 @@
 "use client";
 
+import { TripRequestAlert } from "@/app/_components/trip-requests/alert";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -22,7 +23,7 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Copy, Plus, X } from "lucide-react";
+import { Copy, Minus, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -77,6 +78,7 @@ export function CreateTripRequestForm({
 		replaceChildrenAges(
 			Array.from({ length: count }, (_, i) => ({
 				age: current[i]?.age ?? "",
+				unit: current[i]?.unit ?? "years",
 			})),
 		);
 	}, [numberOfChildren]);
@@ -103,7 +105,7 @@ export function CreateTripRequestForm({
 				: undefined,
 			ageOfChildren:
 				values.areThereChildren && values.childrenAges?.length
-					? values.childrenAges.map((c) => c.age).join(", ")
+					? values.childrenAges.map((c) => `${c.age} ${c.unit}`).join(", ")
 					: undefined,
 			numberOfChildSeats: values.areThereChildren
 				? values.numberOfChildSeats
@@ -128,6 +130,8 @@ export function CreateTripRequestForm({
 			{/* Route boxes */}
 			<div className="space-y-3">
 				<h3 className="text-lg font-semibold">{t("routes")}</h3>
+
+				<TripRequestAlert />
 
 				{routeFields.map((field, index) => (
 					<div key={field.id} className="space-y-3 rounded-lg border p-4">
@@ -365,31 +369,134 @@ export function CreateTripRequestForm({
 
 				{areThereChildren && (
 					<>
-						<CustomInput
-							labelText={t("numberOfChildren")}
-							inputType="number"
-							error={errors.numberOfChildren?.message}
-							inputProps={{ ...register("numberOfChildren"), min: 0, max: 20 }}
-						/>
+						<div className="space-y-1">
+							<Label className="text-sm font-medium">
+								{t("numberOfChildren")}
+							</Label>
+							<div className="flex items-center gap-2">
+								<Button
+									type="button"
+									variant="outline"
+									size="icon"
+									onClick={() =>
+										setValue(
+											"numberOfChildren",
+											Math.max(0, Number(numberOfChildren) - 1),
+										)
+									}
+								>
+									<Minus className="h-4 w-4" />
+								</Button>
+								<span className="w-8 text-center font-medium tabular-nums">
+									{Number(numberOfChildren) || 0}
+								</span>
+								<Button
+									type="button"
+									variant="outline"
+									size="icon"
+									onClick={() =>
+										setValue(
+											"numberOfChildren",
+											Math.min(20, Number(numberOfChildren) + 1),
+										)
+									}
+								>
+									<Plus className="h-4 w-4" />
+								</Button>
+							</div>
+							{errors.numberOfChildren?.message && (
+								<p className="text-xs text-destructive">
+									{errors.numberOfChildren.message}
+								</p>
+							)}
+						</div>
 						{childrenAgeFields.map((field, index) => (
-							<CustomInput
-								key={field.id}
-								labelText={t("childAge", { n: index + 1 })}
-								placeholder={t("childAgePlaceholder")}
-								error={errors.childrenAges?.[index]?.age?.message}
-								inputProps={{ ...register(`childrenAges.${index}.age`) }}
-							/>
+							<div key={field.id} className="space-y-1">
+								<Label className="text-sm font-medium">
+									{t("childAge", { n: index + 1 })}
+								</Label>
+								<div className="flex gap-2">
+									<Input
+										type="text"
+										inputMode="numeric"
+										placeholder="0"
+										className="w-20"
+										{...register(`childrenAges.${index}.age`, {
+											onChange: (e) => {
+												e.target.value = e.target.value.replace(/\D/g, "");
+											},
+										})}
+									/>
+									<Controller
+										name={`childrenAges.${index}.unit`}
+										control={control}
+										render={({ field: unitField }) => (
+											<Select
+												value={unitField.value}
+												onValueChange={unitField.onChange}
+											>
+												<SelectTrigger className="w-28">
+													<SelectValue />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="years">{t("ageYears")}</SelectItem>
+													<SelectItem value="months">
+														{t("ageMonths")}
+													</SelectItem>
+													<SelectItem value="days">{t("ageDays")}</SelectItem>
+												</SelectContent>
+											</Select>
+										)}
+									/>
+								</div>
+								{errors.childrenAges?.[index]?.age?.message && (
+									<p className="text-xs text-destructive">
+										{errors.childrenAges[index].age.message}
+									</p>
+								)}
+							</div>
 						))}
-						<CustomInput
-							labelText={t("numberOfChildSeats")}
-							inputType="number"
-							error={errors.numberOfChildSeats?.message}
-							inputProps={{
-								...register("numberOfChildSeats"),
-								min: 0,
-								max: 20,
-							}}
-						/>
+						<div className="space-y-1">
+							<Label className="text-sm font-medium">
+								{t("numberOfChildSeats")}
+							</Label>
+							<div className="flex items-center gap-2">
+								<Button
+									type="button"
+									variant="outline"
+									size="icon"
+									onClick={() =>
+										setValue(
+											"numberOfChildSeats",
+											Math.max(0, Number(watch("numberOfChildSeats")) - 1),
+										)
+									}
+								>
+									<Minus className="h-4 w-4" />
+								</Button>
+								<span className="w-8 text-center font-medium tabular-nums">
+									{Number(watch("numberOfChildSeats")) || 0}
+								</span>
+								<Button
+									type="button"
+									variant="outline"
+									size="icon"
+									onClick={() =>
+										setValue(
+											"numberOfChildSeats",
+											Math.min(20, Number(watch("numberOfChildSeats")) + 1),
+										)
+									}
+								>
+									<Plus className="h-4 w-4" />
+								</Button>
+							</div>
+							{errors.numberOfChildSeats?.message && (
+								<p className="text-xs text-destructive">
+									{errors.numberOfChildSeats.message}
+								</p>
+							)}
+						</div>
 					</>
 				)}
 			</div>
@@ -403,10 +510,6 @@ export function CreateTripRequestForm({
 					placeholder={t("specialRequestsPlaceholder")}
 					rows={4}
 				/>
-			</div>
-
-			<div className="rounded-lg bg-muted p-4 text-sm">
-				<p>{t("flightDetailsNote")}</p>
 			</div>
 
 			<Button
