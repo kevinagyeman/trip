@@ -25,14 +25,16 @@ export default async function AdminSettingsPage({
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="mb-6 text-3xl font-bold">Settings</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
-				<Card>
-					<CardHeader>
-						<CardTitle>Quick Fill Options</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<QuickFillSettings />
-					</CardContent>
-				</Card>
+				{session.user.role === "ADMIN" && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Quick Fill Options</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<QuickFillSettings />
+						</CardContent>
+					</Card>
+				)}
 				<Card>
 					<CardHeader>
 						<CardTitle>Change Email</CardTitle>
