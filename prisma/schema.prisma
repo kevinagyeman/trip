@@ -39,14 +39,15 @@ enum QuotationStatus {
 }
 
 model Company {
-    id         String   @id @default(cuid())
-    name       String
-    slug       String   @unique
-    logoUrl    String?
-    adminEmail String?
-    isActive   Boolean  @default(true)
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
+    id               String   @id @default(cuid())
+    name             String
+    slug             String   @unique
+    logoUrl          String?
+    adminEmail       String?
+    isActive         Boolean  @default(true)
+    quickFillOptions String?  @db.Text
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
 
     users        User[]
     tripRequests TripRequest[]

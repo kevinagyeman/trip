@@ -16,7 +16,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { COUNTRY_CODES } from "@/lib/phone";
-import { LANGUAGES, QUICK_FILL } from "@/lib/quick-fill";
+import { LANGUAGES } from "@/lib/quick-fill";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
@@ -35,6 +35,16 @@ export function CreateTripRequestForm({
 	companySlug: string;
 }) {
 	const router = useRouter();
+	const { data: companyData } = api.company.getBySlug.useQuery({
+		slug: companySlug,
+	});
+	const quickFillOptions: { value: string; label: string }[] =
+		companyData?.quickFillOptions
+			? (JSON.parse(companyData.quickFillOptions) as {
+					value: string;
+					label: string;
+				}[])
+			: [];
 	const t = useTranslations("tripRequest");
 
 	const {
@@ -171,24 +181,26 @@ export function CreateTripRequestForm({
 								error={errors.routes?.[index]?.pickup?.message}
 								inputProps={{ ...register(`routes.${index}.pickup`) }}
 							/>
-							<div className="flex flex-wrap items-center gap-2">
-								<p className="text-xs text-muted-foreground">
-									{t("quickFill")}
-								</p>
-								{QUICK_FILL.map((quickFill) => (
-									<Button
-										key={quickFill.value}
-										type="button"
-										variant="outline"
-										size="xs"
-										onClick={() =>
-											setValue(`routes.${index}.pickup`, quickFill.label)
-										}
-									>
-										{quickFill.value}
-									</Button>
-								))}
-							</div>
+							{quickFillOptions.length > 0 && (
+								<div className="flex flex-wrap items-center gap-2">
+									<p className="text-xs text-muted-foreground">
+										{t("quickFill")}
+									</p>
+									{quickFillOptions.map((quickFill) => (
+										<Button
+											key={quickFill.value}
+											type="button"
+											variant="outline"
+											size="xs"
+											onClick={() =>
+												setValue(`routes.${index}.pickup`, quickFill.label)
+											}
+										>
+											{quickFill.value}
+										</Button>
+									))}
+								</div>
+							)}
 						</div>
 
 						{/* Destination */}
@@ -199,24 +211,26 @@ export function CreateTripRequestForm({
 								error={errors.routes?.[index]?.destination?.message}
 								inputProps={{ ...register(`routes.${index}.destination`) }}
 							/>
-							<div className="flex flex-wrap items-center gap-2">
-								<p className="text-xs text-muted-foreground">
-									{t("quickFill")}
-								</p>
-								{QUICK_FILL.map((quickFill) => (
-									<Button
-										key={quickFill.value}
-										type="button"
-										variant="outline"
-										size="xs"
-										onClick={() =>
-											setValue(`routes.${index}.destination`, quickFill.label)
-										}
-									>
-										{quickFill.value}
-									</Button>
-								))}
-							</div>
+							{quickFillOptions.length > 0 && (
+								<div className="flex flex-wrap items-center gap-2">
+									<p className="text-xs text-muted-foreground">
+										{t("quickFill")}
+									</p>
+									{quickFillOptions.map((quickFill) => (
+										<Button
+											key={quickFill.value}
+											type="button"
+											variant="outline"
+											size="xs"
+											onClick={() =>
+												setValue(`routes.${index}.destination`, quickFill.label)
+											}
+										>
+											{quickFill.value}
+										</Button>
+									))}
+								</div>
+							)}
 						</div>
 
 						{/* Optional departure details */}

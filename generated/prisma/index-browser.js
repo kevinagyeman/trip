@@ -128,6 +128,7 @@ exports.Prisma.CompanyScalarFieldEnum = {
   logoUrl: 'logoUrl',
   adminEmail: 'adminEmail',
   isActive: 'isActive',
+  quickFillOptions: 'quickFillOptions',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

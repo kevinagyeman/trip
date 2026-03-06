@@ -1791,6 +1791,7 @@ export namespace Prisma {
     logoUrl: string | null
     adminEmail: string | null
     isActive: boolean | null
+    quickFillOptions: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1802,6 +1803,7 @@ export namespace Prisma {
     logoUrl: string | null
     adminEmail: string | null
     isActive: boolean | null
+    quickFillOptions: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1813,6 +1815,7 @@ export namespace Prisma {
     logoUrl: number
     adminEmail: number
     isActive: number
+    quickFillOptions: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1826,6 +1829,7 @@ export namespace Prisma {
     logoUrl?: true
     adminEmail?: true
     isActive?: true
+    quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1837,6 +1841,7 @@ export namespace Prisma {
     logoUrl?: true
     adminEmail?: true
     isActive?: true
+    quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1848,6 +1853,7 @@ export namespace Prisma {
     logoUrl?: true
     adminEmail?: true
     isActive?: true
+    quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1932,6 +1938,7 @@ export namespace Prisma {
     logoUrl: string | null
     adminEmail: string | null
     isActive: boolean
+    quickFillOptions: string | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -1960,6 +1967,7 @@ export namespace Prisma {
     logoUrl?: boolean
     adminEmail?: boolean
     isActive?: boolean
+    quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -1974,6 +1982,7 @@ export namespace Prisma {
     logoUrl?: boolean
     adminEmail?: boolean
     isActive?: boolean
+    quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -1985,6 +1994,7 @@ export namespace Prisma {
     logoUrl?: boolean
     adminEmail?: boolean
     isActive?: boolean
+    quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["company"]>
@@ -1996,11 +2006,12 @@ export namespace Prisma {
     logoUrl?: boolean
     adminEmail?: boolean
     isActive?: boolean
+    quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "adminEmail" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "adminEmail" | "isActive" | "quickFillOptions" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -2022,6 +2033,7 @@ export namespace Prisma {
       logoUrl: string | null
       adminEmail: string | null
       isActive: boolean
+      quickFillOptions: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2455,6 +2467,7 @@ export namespace Prisma {
     readonly logoUrl: FieldRef<"Company", 'String'>
     readonly adminEmail: FieldRef<"Company", 'String'>
     readonly isActive: FieldRef<"Company", 'Boolean'>
+    readonly quickFillOptions: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -12114,6 +12127,7 @@ export namespace Prisma {
     logoUrl: 'logoUrl',
     adminEmail: 'adminEmail',
     isActive: 'isActive',
+    quickFillOptions: 'quickFillOptions',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12407,6 +12421,7 @@ export namespace Prisma {
     logoUrl?: StringNullableFilter<"Company"> | string | null
     adminEmail?: StringNullableFilter<"Company"> | string | null
     isActive?: BoolFilter<"Company"> | boolean
+    quickFillOptions?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -12420,6 +12435,7 @@ export namespace Prisma {
     logoUrl?: SortOrderInput | SortOrder
     adminEmail?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    quickFillOptions?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -12436,6 +12452,7 @@ export namespace Prisma {
     logoUrl?: StringNullableFilter<"Company"> | string | null
     adminEmail?: StringNullableFilter<"Company"> | string | null
     isActive?: BoolFilter<"Company"> | boolean
+    quickFillOptions?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -12449,6 +12466,7 @@ export namespace Prisma {
     logoUrl?: SortOrderInput | SortOrder
     adminEmail?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    quickFillOptions?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -12466,6 +12484,7 @@ export namespace Prisma {
     logoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
     adminEmail?: StringNullableWithAggregatesFilter<"Company"> | string | null
     isActive?: BoolWithAggregatesFilter<"Company"> | boolean
+    quickFillOptions?: StringNullableWithAggregatesFilter<"Company"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -13128,6 +13147,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -13141,6 +13161,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -13154,6 +13175,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -13167,6 +13189,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -13180,6 +13203,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13191,6 +13215,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13202,6 +13227,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14005,6 +14031,7 @@ export namespace Prisma {
     logoUrl?: SortOrder
     adminEmail?: SortOrder
     isActive?: SortOrder
+    quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14016,6 +14043,7 @@ export namespace Prisma {
     logoUrl?: SortOrder
     adminEmail?: SortOrder
     isActive?: SortOrder
+    quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14027,6 +14055,7 @@ export namespace Prisma {
     logoUrl?: SortOrder
     adminEmail?: SortOrder
     isActive?: SortOrder
+    quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15771,6 +15800,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -15783,6 +15813,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -15981,6 +16012,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -15993,6 +16025,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16151,6 +16184,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -16163,6 +16197,7 @@ export namespace Prisma {
     logoUrl?: string | null
     adminEmail?: string | null
     isActive?: boolean
+    quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -16298,6 +16333,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -16310,6 +16346,7 @@ export namespace Prisma {
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput

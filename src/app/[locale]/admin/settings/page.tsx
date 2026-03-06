@@ -4,6 +4,7 @@ import { auth } from "@/server/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
+import { QuickFillSettings } from "@/app/_components/admin/quick-fill-settings";
 
 export default async function AdminSettingsPage({
 	params,
@@ -23,7 +24,15 @@ export default async function AdminSettingsPage({
 	return (
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="mb-6 text-3xl font-bold">Settings</h1>
-			<div className="flex flex-col gap-6 max-w-md">
+			<div className="flex flex-col gap-6 max-w-lg">
+				<Card>
+					<CardHeader>
+						<CardTitle>Quick Fill Options</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<QuickFillSettings />
+					</CardContent>
+				</Card>
 				<Card>
 					<CardHeader>
 						<CardTitle>Change Email</CardTitle>
