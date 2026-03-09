@@ -1,10 +1,10 @@
 "use client";
 
 import { TripRequestAlert } from "@/app/_components/trip-requests/alert";
-import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
+import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -81,6 +81,7 @@ export function CreateTripRequestForm({
 
 	const areThereChildren = watch("areThereChildren");
 	const numberOfChildren = watch("numberOfChildren");
+	const numberOfAdults = watch("numberOfAdults");
 
 	useEffect(() => {
 		const count = Number(numberOfChildren) || 0;
@@ -276,22 +277,9 @@ export function CreateTripRequestForm({
 				)}
 			</div>
 
-			{/* Travel Information */}
+			{/* Contact Details */}
 			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">{t("travelInformation")}</h3>
-
-				<Controller
-					name="language"
-					control={control}
-					render={({ field }) => (
-						<CustomSelect
-							labelText={t("preferredLanguage")}
-							options={LANGUAGES}
-							value={field.value}
-							onValueChange={field.onChange}
-						/>
-					)}
-				/>
+				<h3 className="text-lg font-semibold">{t("contactDetails")}</h3>
 
 				<div className="grid grid-cols-2 gap-4">
 					<CustomInput
@@ -363,18 +351,51 @@ export function CreateTripRequestForm({
 						</small>
 					)}
 				</div>
-
-				<CustomInput
-					labelText={t("numberOfAdults")}
-					inputType="number"
-					error={errors.numberOfAdults?.message}
-					inputProps={{ ...register("numberOfAdults"), min: 1, max: 100 }}
-				/>
 			</div>
 
-			{/* Children Information */}
+			{/* Passengers */}
 			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">{t("childrenInformation")}</h3>
+				<h3 className="text-lg font-semibold">{t("passengers")}</h3>
+
+				<div className="space-y-1">
+					<Label className="text-sm font-medium">{t("numberOfAdults")}</Label>
+					<div className="flex items-center gap-2">
+						<Button
+							type="button"
+							variant="outline"
+							size="icon"
+							onClick={() =>
+								setValue(
+									"numberOfAdults",
+									Math.max(1, Number(numberOfAdults) - 1),
+								)
+							}
+						>
+							<Minus className="h-4 w-4" />
+						</Button>
+						<span className="w-8 text-center font-medium tabular-nums">
+							{Number(numberOfAdults) || 1}
+						</span>
+						<Button
+							type="button"
+							variant="outline"
+							size="icon"
+							onClick={() =>
+								setValue(
+									"numberOfAdults",
+									Math.min(100, Number(numberOfAdults) + 1),
+								)
+							}
+						>
+							<Plus className="h-4 w-4" />
+						</Button>
+					</div>
+					{errors.numberOfAdults?.message && (
+						<p className="text-xs text-destructive">
+							{errors.numberOfAdults.message}
+						</p>
+					)}
+				</div>
 
 				<CustomCheckbox
 					label={t("areThereChildren")}
@@ -515,13 +536,27 @@ export function CreateTripRequestForm({
 				)}
 			</div>
 
-			{/* Additional Information */}
-			<div className="space-y-2">
-				<h3 className="text-lg font-semibold">{t("additionalInformation")}</h3>
+			{/* Preferences */}
+			<div className="space-y-4 rounded-lg border p-4">
+				<h3 className="text-lg font-semibold">{t("preferences")}</h3>
+
+				<Controller
+					name="language"
+					control={control}
+					render={({ field }) => (
+						<CustomSelect
+							labelText={t("preferredLanguage")}
+							options={LANGUAGES}
+							value={field.value}
+							onValueChange={field.onChange}
+						/>
+					)}
+				/>
+
 				<CustomTextArea
 					labelText={t("specialRequests")}
 					placeholder={t("specialRequestsPlaceholder")}
-					rows={6}
+					rows={4}
 					textAreaProps={{ ...register("additionalInfo") }}
 				/>
 			</div>
