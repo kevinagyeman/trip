@@ -17,11 +17,13 @@ export default auth((req) => {
 	const pathWithoutLocale = pathname.replace(localePattern, "") || "/";
 	const localePrefix = pathname.match(localePattern)?.[0] ?? "/en";
 
+	// /auth/register is disabled — registration only via /book/[slug]
+	if (pathWithoutLocale === "/auth/register") {
+		return NextResponse.redirect(new URL(`${localePrefix}/`, req.url));
+	}
+
 	// Redirect logged-in users away from auth pages
-	if (
-		pathWithoutLocale === "/auth/signin" ||
-		pathWithoutLocale === "/auth/register"
-	) {
+	if (pathWithoutLocale === "/auth/signin") {
 		if (req.auth?.user) {
 			const role = req.auth.user.role;
 			const dest =
