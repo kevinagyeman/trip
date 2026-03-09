@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/trpc/react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { api } from "@/trpc/react";
+import { FileText, Globe, Mail, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Users, FileText, Mail, Globe } from "lucide-react";
+import { useState } from "react";
 
 export function CompanyDetail({ id }: { id: string }) {
 	const t = useTranslations("superAdmin");
@@ -201,7 +201,8 @@ export function CompanyDetail({ id }: { id: string }) {
 							className="rounded-md border bg-background px-3 py-2 text-sm"
 						>
 							<option value="ADMIN">ADMIN</option>
-							<option value="USER">USER</option>
+
+							{/* <option value="USER">USER</option> */}
 						</select>
 						<Button type="submit" size="sm">
 							{t("assignUser")}
