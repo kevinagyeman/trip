@@ -43,7 +43,7 @@ export function CompanyDetail({ id }: { id: string }) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					email: assignEmail,
-					companyName: company.name,
+					companyName: company!.name,
 					companyId: id,
 				}),
 			});
