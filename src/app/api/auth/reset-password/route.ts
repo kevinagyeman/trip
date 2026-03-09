@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 
 		await db.user.update({
 			where: { email: resetToken.email },
-			data: { password: hashed },
+			data: { password: hashed, emailVerified: new Date() },
 		});
 
 		await db.passwordResetToken.delete({ where: { token } });

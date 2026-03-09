@@ -15,6 +15,7 @@ export function CompanyDetail({ id }: { id: string }) {
 	const [assignEmail, setAssignEmail] = useState("");
 	const [assignRole, setAssignRole] = useState<"USER" | "ADMIN">("ADMIN");
 	const [assignError, setAssignError] = useState<string | null>(null);
+	const [assignSuccess, setAssignSuccess] = useState<string | null>(null);
 
 	const updateCompany = api.company.update.useMutation({
 		onSuccess: () => void utils.company.getById.invalidate({ id }),
@@ -35,17 +36,23 @@ export function CompanyDetail({ id }: { id: string }) {
 	async function handleAssignUser(e: React.FormEvent) {
 		e.preventDefault();
 		setAssignError(null);
-		// Find user by email, then assign
+		setAssignSuccess(null);
 		try {
-			const res = await fetch(
-				`/api/super-admin/find-user?email=${encodeURIComponent(assignEmail)}`,
-			);
+			const res = await fetch("/api/super-admin/find-user", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					email: assignEmail,
+					companyName: company.name,
+					companyId: id,
+				}),
+			});
 			if (!res.ok) {
 				const data = (await res.json()) as { error?: string };
 				setAssignError(data.error ?? t("userNotFound"));
 				return;
 			}
-			const data = (await res.json()) as { id: string };
+			const data = (await res.json()) as { id: string; created: boolean };
 			await utils.client.company.assignUser.mutate({
 				userId: data.id,
 				companyId: id,
@@ -53,6 +60,11 @@ export function CompanyDetail({ id }: { id: string }) {
 			});
 			void utils.company.getById.invalidate({ id });
 			setAssignEmail("");
+			setAssignSuccess(
+				data.created
+					? "User created and invite email sent."
+					: "User assigned successfully.",
+			);
 		} catch {
 			setAssignError(t("assignError"));
 		}
@@ -197,6 +209,11 @@ export function CompanyDetail({ id }: { id: string }) {
 					</form>
 					{assignError && (
 						<p className="text-sm text-destructive">{assignError}</p>
+					)}
+					{assignSuccess && (
+						<p className="text-sm text-green-600 dark:text-green-400">
+							{assignSuccess}
+						</p>
 					)}
 				</CardContent>
 			</Card>

@@ -55,11 +55,6 @@ export const authConfig = {
 					return null;
 				}
 
-				// Check if email is verified
-				if (!user.emailVerified) {
-					throw new Error("Please verify your email before signing in");
-				}
-
 				// Verify password
 				const isPasswordValid = await bcrypt.compare(
 					credentials.password as string,
