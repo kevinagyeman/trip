@@ -38,13 +38,9 @@ export function CreateTripRequestForm({
 	const { data: companyData } = api.company.getBySlug.useQuery({
 		slug: companySlug,
 	});
-	const quickFillOptions: { value: string; label: string }[] =
-		companyData?.quickFillOptions
-			? (JSON.parse(companyData.quickFillOptions) as {
-					value: string;
-					label: string;
-				}[])
-			: [];
+	const quickFillOptions: string[] = companyData?.quickFillOptions
+		? (JSON.parse(companyData.quickFillOptions) as string[])
+		: [];
 	const t = useTranslations("tripRequest");
 
 	const {
@@ -189,15 +185,15 @@ export function CreateTripRequestForm({
 									</p>
 									{quickFillOptions.map((quickFill) => (
 										<Button
-											key={quickFill.value}
+											key={quickFill}
 											type="button"
 											variant="outline"
 											size="xs"
 											onClick={() =>
-												setValue(`routes.${index}.pickup`, quickFill.label)
+												setValue(`routes.${index}.pickup`, quickFill)
 											}
 										>
-											{quickFill.value}
+											{quickFill}
 										</Button>
 									))}
 								</div>
@@ -219,15 +215,15 @@ export function CreateTripRequestForm({
 									</p>
 									{quickFillOptions.map((quickFill) => (
 										<Button
-											key={quickFill.value}
+											key={quickFill}
 											type="button"
 											variant="outline"
 											size="xs"
 											onClick={() =>
-												setValue(`routes.${index}.destination`, quickFill.label)
+												setValue(`routes.${index}.destination`, quickFill)
 											}
 										>
-											{quickFill.value}
+											{quickFill}
 										</Button>
 									))}
 								</div>

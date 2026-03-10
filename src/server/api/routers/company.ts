@@ -144,19 +144,14 @@ export const companyRouter = createTRPCRouter({
 			select: { quickFillOptions: true },
 		});
 		if (!company?.quickFillOptions) return [];
-		return JSON.parse(company.quickFillOptions) as {
-			value: string;
-			label: string;
-		}[];
+		return JSON.parse(company.quickFillOptions) as string[];
 	}),
 
 	// ADMIN: Update own company quick fill options
 	updateQuickFill: adminProcedure
 		.input(
 			z.object({
-				options: z.array(
-					z.object({ value: z.string().min(1), label: z.string().min(1) }),
-				),
+				options: z.array(z.string().min(1)),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

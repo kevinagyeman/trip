@@ -6,8 +6,6 @@ import { api } from "@/trpc/react";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
-type Option = { value: string; label: string };
-
 export function QuickFillSettings() {
 	const { data, isLoading } = api.company.getQuickFill.useQuery();
 
@@ -17,11 +15,10 @@ export function QuickFillSettings() {
 	return <QuickFillForm initialOptions={data ?? []} />;
 }
 
-function QuickFillForm({ initialOptions }: { initialOptions: Option[] }) {
+function QuickFillForm({ initialOptions }: { initialOptions: string[] }) {
 	const utils = api.useUtils();
-	const [options, setOptions] = useState<Option[]>(initialOptions);
+	const [options, setOptions] = useState<string[]>(initialOptions);
 	const [newValue, setNewValue] = useState("");
-	const [newLabel, setNewLabel] = useState("");
 	const [saved, setSaved] = useState(false);
 	const [error, setError] = useState("");
 
@@ -39,11 +36,9 @@ function QuickFillForm({ initialOptions }: { initialOptions: Option[] }) {
 
 	const addOption = () => {
 		const v = newValue.trim();
-		const l = newLabel.trim();
-		if (!v || !l) return;
-		setOptions((prev) => [...prev, { value: v, label: l }]);
+		if (!v) return;
+		setOptions((prev) => [...prev, v]);
 		setNewValue("");
-		setNewLabel("");
 	};
 
 	const removeOption = (i: number) => {
@@ -69,12 +64,7 @@ function QuickFillForm({ initialOptions }: { initialOptions: Option[] }) {
 						key={i}
 						className="flex items-center gap-2 rounded-lg border px-3 py-2"
 					>
-						<span className="w-14 shrink-0 text-sm font-medium">
-							{opt.value}
-						</span>
-						<span className="flex-1 truncate text-sm text-muted-foreground">
-							{opt.label}
-						</span>
+						<span className="flex-1 truncate text-sm">{opt}</span>
 						<button
 							type="button"
 							onClick={() => removeOption(i)}
@@ -89,15 +79,9 @@ function QuickFillForm({ initialOptions }: { initialOptions: Option[] }) {
 			{/* Add new */}
 			<div className="flex gap-2">
 				<Input
-					placeholder="Code (e.g. VRN)"
+					placeholder="e.g. Verona Villafranca Airport"
 					value={newValue}
 					onChange={(e) => setNewValue(e.target.value)}
-					className="w-28"
-				/>
-				<Input
-					placeholder="Label (e.g. Verona Airport)"
-					value={newLabel}
-					onChange={(e) => setNewLabel(e.target.value)}
 					onKeyDown={(e) => e.key === "Enter" && addOption()}
 				/>
 				<Button type="button" size="icon" variant="outline" onClick={addOption}>
@@ -109,15 +93,11 @@ function QuickFillForm({ initialOptions }: { initialOptions: Option[] }) {
 			<div className="flex items-center gap-3">
 				<Button
 					onClick={() => {
-						// commit any pending input before saving
 						const v = newValue.trim();
-						const l = newLabel.trim();
-						const finalOptions =
-							v && l ? [...options, { value: v, label: l }] : options;
-						if (v && l) {
+						const finalOptions = v ? [...options, v] : options;
+						if (v) {
 							setOptions(finalOptions);
 							setNewValue("");
-							setNewLabel("");
 						}
 						update.mutate({ options: finalOptions });
 					}}
