@@ -113,23 +113,63 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 
-					{/* Travel Information */}
+					{/* Contact Details */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">
-							{t("travelInformation")}
+							{t("contactDetails")}
 						</h3>
 						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">{request.language}</p>
-							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("phone")}</p>
 								<p className="font-medium">{request.phone}</p>
 							</div>
+						</div>
+					</div>
+
+					{/* Passengers */}
+					<div>
+						<h3 className="mb-3 text-lg font-semibold">{t("passengers")}</h3>
+						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<p className="text-sm text-muted-foreground">{t("adults")}</p>
 								<p className="font-medium">{request.numberOfAdults}</p>
+							</div>
+							{request.areThereChildren &&
+								request.numberOfChildren !== null && (
+									<div>
+										<p className="text-sm text-muted-foreground">
+											{t("numberOfChildren")}
+										</p>
+										<p className="font-medium">{request.numberOfChildren}</p>
+									</div>
+								)}
+							{request.areThereChildren && request.ageOfChildren && (
+								<div>
+									<p className="text-sm text-muted-foreground">
+										{t("agesOfChildren")}
+									</p>
+									<p className="font-medium">{request.ageOfChildren}</p>
+								</div>
+							)}
+							{request.areThereChildren &&
+								request.numberOfChildSeats !== null && (
+									<div>
+										<p className="text-sm text-muted-foreground">
+											{t("childSeatsNeeded")}
+										</p>
+										<p className="font-medium">{request.numberOfChildSeats}</p>
+									</div>
+								)}
+						</div>
+					</div>
+
+					{/* Preferences */}
+					<div>
+						<h3 className="mb-3 text-lg font-semibold">{t("preferences")}</h3>
+						<div className="grid grid-cols-2 gap-4">
+							<div>
+								<p className="text-sm text-muted-foreground">{t("language")}</p>
+								<p className="font-medium">{request.language}</p>
 							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("created")}</p>
@@ -138,6 +178,11 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								</p>
 							</div>
 						</div>
+						{request.additionalInfo && (
+							<p className="mt-3 whitespace-pre-wrap rounded-lg bg-muted p-3 text-sm">
+								{request.additionalInfo}
+							</p>
+						)}
 					</div>
 
 					{/* Pickup Details (only when confirmed) */}
@@ -172,53 +217,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 									</div>
 								)}
 							</div>
-						</div>
-					)}
-
-					{/* Children Information */}
-					{request.areThereChildren && (
-						<div>
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("childrenInformation")}
-							</h3>
-							<div className="grid grid-cols-2 gap-4">
-								{request.numberOfChildren !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("numberOfChildren")}
-										</p>
-										<p className="font-medium">{request.numberOfChildren}</p>
-									</div>
-								)}
-								{request.ageOfChildren && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("agesOfChildren")}
-										</p>
-										<p className="font-medium">{request.ageOfChildren}</p>
-									</div>
-								)}
-								{request.numberOfChildSeats !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("childSeatsNeeded")}
-										</p>
-										<p className="font-medium">{request.numberOfChildSeats}</p>
-									</div>
-								)}
-							</div>
-						</div>
-					)}
-
-					{/* Additional Information */}
-					{request.additionalInfo && (
-						<div>
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("additionalInformation")}
-							</h3>
-							<p className="whitespace-pre-wrap rounded-lg bg-muted p-3">
-								{request.additionalInfo}
-							</p>
 						</div>
 					)}
 				</CardContent>
