@@ -137,6 +137,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const firstRoute = routes[0]!;
 
 	return (
 		<div className="space-y-6">

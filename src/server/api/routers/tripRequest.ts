@@ -214,6 +214,10 @@ export const tripRequestRouter = createTRPCRouter({
 							{ customerEmail: { contains: search, mode: "insensitive" } },
 							{ firstName: { contains: search, mode: "insensitive" } },
 							{ lastName: { contains: search, mode: "insensitive" } },
+							...(Number.isFinite(Number(search.replace(/^0+/, "") || "0")) &&
+							!isNaN(Number(search))
+								? [{ orderNumber: Number(search) }]
+								: []),
 						],
 					}),
 				},
