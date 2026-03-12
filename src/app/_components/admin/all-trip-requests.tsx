@@ -18,7 +18,12 @@ import Link from "next/link";
 import { useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
-type Route = { pickup: string; destination: string };
+type Route = {
+	pickup: string;
+	destination: string;
+	departureDate?: string;
+	departureTime?: string;
+};
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -105,28 +110,30 @@ export function AllTripRequests() {
 						<Card key={request.id}>
 							<CardHeader>
 								<div className="flex items-start justify-between">
-									<div>
-										<CardTitle className="flex items-center gap-2">
+									<div className="space-y-0.5">
+										<p className="text-xs font-medium text-muted-foreground">
+											#{String(request.orderNumber).padStart(7, "0")}
+										</p>
+										<CardTitle>
 											{request.firstName} {request.lastName}
-											<span className="text-sm font-normal text-muted-foreground">
-												#{String(request.orderNumber).padStart(7, "0")}
-											</span>
 										</CardTitle>
 										<p className="text-sm text-muted-foreground">
 											{request.user?.name ??
 												request.user?.email ??
 												request.customerEmail}
 										</p>
-										<p className="text-xs text-muted-foreground">
-											{(() => {
-												const routes = JSON.parse(request.routes) as Route[];
-												const first = routes[0]!;
-												return `${first.pickup} → ${first.destination}${routes.length > 1 ? ` +${routes.length - 1} more` : ""}`;
-											})()} ·{" "}
-											{request.pickupDate
-												? format(new Date(request.pickupDate), "MMM dd, yyyy")
-												: format(new Date(request.createdAt), "MMM dd, yyyy")}
-										</p>
+										{(JSON.parse(request.routes) as Route[]).map((route, i) => (
+											<p key={i} className="text-xs text-muted-foreground">
+												{route.pickup} → {route.destination}
+												{(route.departureTime ?? route.departureDate) && (
+													<span className="ml-2">
+														{route.departureTime}
+														{route.departureDate &&
+															` · ${format(new Date(route.departureDate), "dd/MM")}`}
+													</span>
+												)}
+											</p>
+										))}
 									</div>
 									<Badge className={statusColors[request.status]}>
 										{request.status}

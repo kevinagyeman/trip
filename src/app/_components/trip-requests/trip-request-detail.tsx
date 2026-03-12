@@ -8,7 +8,12 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-type Route = { pickup: string; destination: string };
+type Route = {
+	pickup: string;
+	destination: string;
+	departureDate?: string;
+	departureTime?: string;
+};
 
 const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
@@ -52,7 +57,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
-	const firstRoute = routes[0]!;
 
 	return (
 		<div className="space-y-6">
@@ -64,17 +68,27 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 			<Card>
 				<CardHeader>
 					<div className="flex items-start justify-between">
-						<div>
+						<div className="space-y-1">
+							<p className="text-xs font-medium text-muted-foreground">
+								#{String(request.orderNumber).padStart(7, "0")}
+							</p>
 							<CardTitle className="text-2xl">
 								{request.firstName} {request.lastName}
-								<span className="ml-2 text-base font-normal text-muted-foreground">
-									#{String(request.orderNumber).padStart(7, "0")}
-								</span>
 							</CardTitle>
-							<p className="text-sm text-muted-foreground">
-								{firstRoute.pickup} → {firstRoute.destination}
-								{routes.length > 1 && ` +${routes.length - 1} more`}
-							</p>
+							<div className="space-y-0.5">
+								{routes.map((route, i) => (
+									<p key={i} className="text-sm text-muted-foreground">
+										{route.pickup} → {route.destination}
+										{(route.departureTime ?? route.departureDate) && (
+											<span className="ml-2 text-xs">
+												{route.departureTime}
+												{route.departureDate &&
+													` · ${format(new Date(route.departureDate), "dd/MM")}`}
+											</span>
+										)}
+									</p>
+								))}
+							</div>
 						</div>
 						<div className="flex gap-2">
 							<Badge className={statusColors[request.status]}>
