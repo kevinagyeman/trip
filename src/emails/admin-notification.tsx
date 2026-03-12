@@ -9,40 +9,28 @@ import {
 	Text,
 } from "@react-email/components";
 
-interface NewRequestEmailProps {
-	requestId: string;
-	orderNumber: number;
-	userName: string;
-	userEmail: string;
-	serviceType: string;
-	firstName: string;
-	lastName: string;
-	phone: string;
-	numberOfAdults: number;
+interface AdminNotificationEmailProps {
+	preview: string;
+	title: string;
+	subtitle?: string;
 	adminUrl: string;
 }
 
-export function NewRequestEmail({
-	orderNumber,
-	userName,
-	serviceType,
+export function AdminNotificationEmail({
+	preview,
+	title,
+	subtitle,
 	adminUrl,
-}: NewRequestEmailProps) {
-	const order = `#${String(orderNumber).padStart(7, "0")}`;
-
+}: AdminNotificationEmailProps) {
 	return (
 		<Html>
 			<Head />
-			<Preview>
-				NEW TRIP REQUEST {order} | {userName}
-			</Preview>
+			<Preview>{preview}</Preview>
 			<Body style={body}>
 				<Container style={container}>
 					<Text style={label}>dantrip.com</Text>
-					<Text style={title}>
-						NEW TRIP REQUEST {order} | {userName}
-					</Text>
-					<Text style={subtitle}>{serviceType}</Text>
+					<Text style={titleStyle}>{title}</Text>
+					{subtitle && <Text style={subtitleStyle}>{subtitle}</Text>}
 					<Section style={buttonSection}>
 						<Button style={button} href={adminUrl}>
 							More details
@@ -63,14 +51,18 @@ const container = {
 	maxWidth: "480px",
 };
 const label = { color: "#888888", fontSize: "12px", margin: "0 0 16px" };
-const title = {
+const titleStyle = {
 	color: "#1a1a1a",
 	fontSize: "18px",
 	fontWeight: "600",
 	margin: "0 0 4px",
 	lineHeight: "1.4",
 };
-const subtitle = { color: "#555555", fontSize: "14px", margin: "0 0 24px" };
+const subtitleStyle = {
+	color: "#555555",
+	fontSize: "14px",
+	margin: "0 0 24px",
+};
 const buttonSection = { margin: "0" };
 const button = {
 	backgroundColor: "#000000",

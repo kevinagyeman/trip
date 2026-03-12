@@ -201,6 +201,7 @@ export const quotationRouter = createTRPCRouter({
 						to,
 						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
 							accepted: true,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 							customerEmail:
@@ -272,6 +273,7 @@ export const quotationRouter = createTRPCRouter({
 						to,
 						subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
 							accepted: false,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 							customerEmail:
@@ -363,6 +365,7 @@ export const quotationRouter = createTRPCRouter({
 						to,
 						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
 							accepted: true,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 							customerEmail: quotation.tripRequest.customerEmail,
@@ -431,6 +434,7 @@ export const quotationRouter = createTRPCRouter({
 						to,
 						subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
 							accepted: false,
 							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 							customerEmail: quotation.tripRequest.customerEmail,

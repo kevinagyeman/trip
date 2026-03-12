@@ -9,42 +9,46 @@ import {
 	Text,
 } from "@react-email/components";
 
-interface NewRequestEmailProps {
-	requestId: string;
+interface RequestConfirmationEmailProps {
 	orderNumber: number;
-	userName: string;
-	userEmail: string;
-	serviceType: string;
 	firstName: string;
 	lastName: string;
+	email: string;
 	phone: string;
+	routes: unknown;
 	numberOfAdults: number;
-	adminUrl: string;
+	areThereChildren: boolean;
+	numberOfChildren?: number | null;
+	ageOfChildren?: string | null;
+	numberOfChildSeats?: number | null;
+	language: string;
+	additionalInfo?: string | null;
+	requestUrl: string;
 }
 
-export function NewRequestEmail({
+export function RequestConfirmationEmail({
 	orderNumber,
-	userName,
-	serviceType,
-	adminUrl,
-}: NewRequestEmailProps) {
+	firstName,
+	lastName,
+	requestUrl,
+}: RequestConfirmationEmailProps) {
 	const order = `#${String(orderNumber).padStart(7, "0")}`;
 
 	return (
 		<Html>
 			<Head />
-			<Preview>
-				NEW TRIP REQUEST {order} | {userName}
-			</Preview>
+			<Preview>REQUEST RECEIVED {order}</Preview>
 			<Body style={body}>
 				<Container style={container}>
 					<Text style={label}>dantrip.com</Text>
 					<Text style={title}>
-						NEW TRIP REQUEST {order} | {userName}
+						Dear {firstName} {lastName}, your request {order} has been received
 					</Text>
-					<Text style={subtitle}>{serviceType}</Text>
+					<Text style={subtitle}>
+						We'll notify you as soon as a quotation is ready.
+					</Text>
 					<Section style={buttonSection}>
-						<Button style={button} href={adminUrl}>
+						<Button style={button} href={requestUrl}>
 							More details
 						</Button>
 					</Section>

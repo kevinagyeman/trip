@@ -3,8 +3,6 @@ import {
 	Button,
 	Container,
 	Head,
-	Heading,
-	Hr,
 	Html,
 	Preview,
 	Section,
@@ -12,6 +10,7 @@ import {
 } from "@react-email/components";
 
 interface QuotationResponseEmailProps {
+	orderNumber: number;
 	accepted: boolean;
 	customerName: string;
 	customerEmail: string;
@@ -21,60 +20,36 @@ interface QuotationResponseEmailProps {
 }
 
 export function QuotationResponseEmail({
+	orderNumber,
 	accepted,
 	customerName,
-	customerEmail,
 	price,
 	currency,
 	adminUrl,
 }: QuotationResponseEmailProps) {
+	const order = `#${String(orderNumber).padStart(7, "0")}`;
 	const action = accepted ? "accepted" : "rejected";
-	const emoji = accepted ? "✅" : "❌";
 
 	return (
 		<Html>
 			<Head />
 			<Preview>
-				{emoji} {customerName} {action} the quotation
+				QUOTATION {action.toUpperCase()} {order} | {customerName}
 			</Preview>
 			<Body style={body}>
 				<Container style={container}>
-					<Heading style={heading}>Trip Manager</Heading>
-					<Hr style={hr} />
-					<Heading as="h2" style={accepted ? subheadingGreen : subheadingRed}>
-						{emoji} Quotation {accepted ? "Accepted" : "Rejected"}
-					</Heading>
-					<Text style={text}>
-						<strong>{customerName}</strong> ({customerEmail}) has{" "}
-						<strong>{action}</strong> the quotation of{" "}
-						<strong>
-							{currency} {price}
-						</strong>
-						.
+					<Text style={label}>dantrip.com</Text>
+					<Text style={title}>
+						{customerName} {action} quotation {order}
 					</Text>
-
-					{accepted && (
-						<Text style={text}>
-							The customer will now be able to confirm their booking with flight
-							details. You may want to proceed with the reservation.
-						</Text>
-					)}
-
-					{!accepted && (
-						<Text style={text}>
-							You may want to follow up with the customer or create a revised
-							quotation.
-						</Text>
-					)}
-
+					<Text style={subtitle}>
+						{currency} {price}
+					</Text>
 					<Section style={buttonSection}>
 						<Button style={button} href={adminUrl}>
-							View Request
+							View request
 						</Button>
 					</Section>
-
-					<Hr style={hr} />
-					<Text style={footer}>Trip Manager · Admin notification</Text>
 				</Container>
 			</Body>
 		</Html>
@@ -87,39 +62,25 @@ const container = {
 	margin: "40px auto",
 	padding: "40px",
 	borderRadius: "8px",
-	maxWidth: "560px",
+	maxWidth: "480px",
 };
-const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
-const subheadingGreen = {
-	color: "#166534",
-	fontSize: "20px",
-	margin: "24px 0 8px",
+const label = { color: "#888888", fontSize: "12px", margin: "0 0 16px" };
+const title = {
+	color: "#1a1a1a",
+	fontSize: "18px",
+	fontWeight: "600",
+	margin: "0 0 4px",
+	lineHeight: "1.4",
 };
-const subheadingRed = {
-	color: "#991b1b",
-	fontSize: "20px",
-	margin: "24px 0 8px",
-};
-const text = {
-	color: "#4a4a4a",
-	fontSize: "15px",
-	lineHeight: "24px",
-	margin: "0 0 16px",
-};
-const footer = {
-	color: "#888888",
-	fontSize: "12px",
-	textAlign: "center" as const,
-};
-const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
-const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
+const subtitle = { color: "#555555", fontSize: "14px", margin: "0 0 24px" };
+const buttonSection = { margin: "0" };
 const button = {
 	backgroundColor: "#000000",
 	borderRadius: "6px",
 	color: "#ffffff",
-	fontSize: "15px",
+	fontSize: "14px",
 	fontWeight: "600",
-	padding: "12px 24px",
+	padding: "10px 20px",
 	textDecoration: "none",
 	display: "inline-block",
 };

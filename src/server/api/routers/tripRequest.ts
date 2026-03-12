@@ -1,5 +1,7 @@
 import { BookingConfirmedEmail } from "@/emails/booking-confirmed";
+import { AdminNotificationEmail } from "@/emails/admin-notification";
 import { NewRequestEmail } from "@/emails/new-request";
+import { RequestConfirmationEmail } from "@/emails/request-confirmation";
 import { TripConfirmedEmail } from "@/emails/trip-confirmed";
 import {
 	adminProcedure,
@@ -83,6 +85,7 @@ export const tripRequestRouter = createTRPCRouter({
 						subject: `New trip request from ${input.firstName} ${input.lastName}`,
 						react: createElement(NewRequestEmail, {
 							requestId: tripRequest.id,
+							orderNumber: tripRequest.orderNumber,
 							userName: `${input.firstName} ${input.lastName}`,
 							userEmail: email,
 							serviceType: routeSummary,
@@ -95,6 +98,28 @@ export const tripRequestRouter = createTRPCRouter({
 					}),
 				),
 			);
+
+			// Send confirmation overview to the customer
+			await sendEmail({
+				to: email,
+				subject: `Your trip request #${String(tripRequest.orderNumber).padStart(7, "0")} has been received`,
+				react: createElement(RequestConfirmationEmail, {
+					orderNumber: tripRequest.orderNumber,
+					firstName: input.firstName,
+					lastName: input.lastName,
+					email,
+					phone: input.phone,
+					routes,
+					numberOfAdults: input.numberOfAdults,
+					areThereChildren: input.areThereChildren,
+					numberOfChildren: input.numberOfChildren ?? null,
+					ageOfChildren: input.ageOfChildren ?? null,
+					numberOfChildSeats: input.numberOfChildSeats ?? null,
+					language: input.language,
+					additionalInfo: input.additionalInfo ?? null,
+					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
+				}),
+			});
 
 			return {
 				id: tripRequest.id,
@@ -329,6 +354,7 @@ export const tripRequestRouter = createTRPCRouter({
 						to,
 						subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
 						react: createElement(TripConfirmedEmail, {
+							orderNumber: tripRequest.orderNumber,
 							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
 							customerEmail: ctx.session.user.email ?? "",
 							serviceType: routeSummary,
@@ -384,7 +410,13 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
-				select: { id: true },
+				select: {
+					id: true,
+					companyId: true,
+					orderNumber: true,
+					firstName: true,
+					lastName: true,
+				},
 			});
 
 			if (!tripRequest) {
@@ -395,6 +427,24 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { token: input.token },
 				data: { routes: JSON.stringify(input.routes) },
 			});
+
+			// Notify admins of updated route details
+			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
+			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
+			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
+			await Promise.all(
+				notifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `${customerName} updated route details ${order}`,
+						react: createElement(AdminNotificationEmail, {
+							preview: `Route details updated ${order} | ${customerName}`,
+							title: `${customerName} updated route details ${order}`,
+							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
+						}),
+					}),
+				),
+			);
 		}),
 
 	// ADMIN: Confirm trip with pickup details (admin-initiated)

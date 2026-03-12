@@ -3,17 +3,14 @@ import {
 	Button,
 	Container,
 	Head,
-	Heading,
-	Hr,
 	Html,
 	Preview,
-	Row,
-	Column,
 	Section,
 	Text,
 } from "@react-email/components";
 
 interface TripConfirmedEmailProps {
+	orderNumber: number;
 	customerName: string;
 	customerEmail: string;
 	serviceType: string;
@@ -24,63 +21,39 @@ interface TripConfirmedEmailProps {
 }
 
 export function TripConfirmedEmail({
+	orderNumber,
 	customerName,
-	customerEmail,
 	serviceType,
 	arrivalFlightDate,
 	arrivalFlightTime,
-	arrivalFlightNumber,
 	adminUrl,
 }: TripConfirmedEmailProps) {
+	const order = `#${String(orderNumber).padStart(7, "0")}`;
+	const detail = [arrivalFlightDate, arrivalFlightTime]
+		.filter(Boolean)
+		.join(" · ");
+
 	return (
 		<Html>
 			<Head />
-			<Preview>🚗 {customerName} confirmed their trip</Preview>
+			<Preview>
+				TRIP CONFIRMED {order} | {customerName}
+			</Preview>
 			<Body style={body}>
 				<Container style={container}>
-					<Heading style={heading}>Trip Manager</Heading>
-					<Hr style={hr} />
-					<Heading as="h2" style={subheading}>
-						🚗 Trip Confirmed
-					</Heading>
-					<Text style={text}>
-						<strong>{customerName}</strong> ({customerEmail}) has confirmed
-						their booking and submitted pickup details.
+					<Text style={label}>dantrip.com</Text>
+					<Text style={title}>
+						{customerName} confirmed trip {order}
 					</Text>
-
-					<Section style={card}>
-						<Row>
-							<Column style={label}>Route</Column>
-							<Column style={value}>{serviceType}</Column>
-						</Row>
-						{arrivalFlightDate && (
-							<Row>
-								<Column style={label}>Pickup Date</Column>
-								<Column style={value}>{arrivalFlightDate}</Column>
-							</Row>
-						)}
-						{arrivalFlightTime && (
-							<Row>
-								<Column style={label}>Pickup Time</Column>
-								<Column style={value}>{arrivalFlightTime}</Column>
-							</Row>
-						)}
-						{arrivalFlightNumber && (
-							<Row>
-								<Column style={label}>Flight No.</Column>
-								<Column style={value}>{arrivalFlightNumber}</Column>
-							</Row>
-						)}
-					</Section>
-
+					<Text style={subtitle}>
+						{serviceType}
+						{detail ? ` · ${detail}` : ""}
+					</Text>
 					<Section style={buttonSection}>
 						<Button style={button} href={adminUrl}>
-							View Full Request
+							View request
 						</Button>
 					</Section>
-
-					<Hr style={hr} />
-					<Text style={footer}>Trip Manager · Admin notification</Text>
 				</Container>
 			</Body>
 		</Html>
@@ -93,48 +66,25 @@ const container = {
 	margin: "40px auto",
 	padding: "40px",
 	borderRadius: "8px",
-	maxWidth: "560px",
+	maxWidth: "480px",
 };
-const heading = { color: "#1a1a1a", fontSize: "24px", margin: "0 0 8px" };
-const subheading = { color: "#1a1a1a", fontSize: "20px", margin: "24px 0 8px" };
-const text = {
-	color: "#4a4a4a",
-	fontSize: "15px",
-	lineHeight: "24px",
-	margin: "0 0 16px",
-};
-const footer = {
-	color: "#888888",
-	fontSize: "12px",
-	textAlign: "center" as const,
-};
-const hr = { borderColor: "#e6ebf1", margin: "24px 0" };
-const card = {
-	backgroundColor: "#f6f9fc",
-	borderRadius: "6px",
-	padding: "16px",
-	margin: "0 0 16px",
-};
-const label = {
-	color: "#888888",
-	fontSize: "13px",
-	width: "100px",
-	padding: "3px 0",
-};
-const value = {
+const label = { color: "#888888", fontSize: "12px", margin: "0 0 16px" };
+const title = {
 	color: "#1a1a1a",
-	fontSize: "14px",
-	fontWeight: "500",
-	padding: "3px 0",
+	fontSize: "18px",
+	fontWeight: "600",
+	margin: "0 0 4px",
+	lineHeight: "1.4",
 };
-const buttonSection = { textAlign: "center" as const, margin: "32px 0" };
+const subtitle = { color: "#555555", fontSize: "14px", margin: "0 0 24px" };
+const buttonSection = { margin: "0" };
 const button = {
 	backgroundColor: "#000000",
 	borderRadius: "6px",
 	color: "#ffffff",
-	fontSize: "15px",
+	fontSize: "14px",
 	fontWeight: "600",
-	padding: "12px 24px",
+	padding: "10px 20px",
 	textDecoration: "none",
 	display: "inline-block",
 };
