@@ -125,7 +125,6 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			// Send email notification to the customer
 			const customerEmail = quotation.tripRequest.customerEmail;
 			if (customerEmail) {
 				await sendEmail({
@@ -182,6 +181,72 @@ export const quotationRouter = createTRPCRouter({
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
 					data: { status: TripRequestStatus.ACCEPTED },
+				});
+
+				return result;
+			});
+
+			const notifyEmails = await resolveAdminEmails(
+				quotation.tripRequest.companyId,
+			);
+			await Promise.all(
+				notifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
+							accepted: true,
+							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+						}),
+					}),
+				),
+			);
+
+			return updated;
+		}),
+
+	// USER: Reject quotation
+	reject: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const quotation = await ctx.db.quotation.findUnique({
+				where: { id: input.id },
+				include: {
+					tripRequest: {
+						include: {
+							user: { select: { email: true, name: true } },
+							company: { select: { adminEmail: true } },
+						},
+					},
+				},
+			});
+
+			if (!quotation) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			if (quotation.tripRequest.userId !== ctx.session.user.id) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
+
+			if (quotation.status !== QuotationStatus.SENT) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Quotation cannot be rejected",
+				});
+			}
+
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
+					where: { id: input.id },
+					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
+				});
+
+				await tx.tripRequest.update({
+					where: { id: quotation.tripRequestId },
+					data: { status: TripRequestStatus.REJECTED },
 				});
 
 				return result;
@@ -251,6 +316,71 @@ export const quotationRouter = createTRPCRouter({
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
 					data: { status: TripRequestStatus.ACCEPTED },
+				});
+
+				return result;
+			});
+
+			const notifyEmails = await resolveAdminEmails(
+				quotation.tripRequest.companyId,
+			);
+			await Promise.all(
+				notifyEmails.map((to) =>
+					sendEmail({
+						to,
+						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+						react: createElement(QuotationResponseEmail, {
+							orderNumber: quotation.tripRequest.orderNumber,
+							accepted: true,
+							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
+							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
+						}),
+					}),
+				),
+			);
+
+			return updated;
+		}),
+
+	// PUBLIC: Reject quotation by token (anonymous customers)
+	rejectByToken: publicProcedure
+		.input(z.object({ id: z.string(), token: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const quotation = await ctx.db.quotation.findUnique({
+				where: { id: input.id },
+				include: {
+					tripRequest: {
+						include: {
+							company: { select: { adminEmail: true } },
+						},
+					},
+				},
+			});
+
+			if (!quotation) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			if (quotation.tripRequest.token !== input.token) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
+
+			if (quotation.status !== QuotationStatus.SENT) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Quotation cannot be rejected",
+				});
+			}
+
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
+					where: { id: input.id },
+					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
+				});
+
+				await tx.tripRequest.update({
+					where: { id: quotation.tripRequestId },
+					data: { status: TripRequestStatus.REJECTED },
 				});
 
 				return result;
