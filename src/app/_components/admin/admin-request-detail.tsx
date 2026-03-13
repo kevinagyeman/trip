@@ -615,6 +615,26 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												})}
 											</p>
 										)}
+										{quotation!.quotationAdditionalInfo && (
+											<div>
+												<p className="text-sm font-medium text-muted-foreground">
+													{t("additionalInfoCustomer")}
+												</p>
+												<p className="mt-1 whitespace-pre-wrap text-sm">
+													{quotation!.quotationAdditionalInfo}
+												</p>
+											</div>
+										)}
+										{quotation!.internalNotes && (
+											<div>
+												<p className="text-sm font-medium text-muted-foreground">
+													{t("internalNotes")}
+												</p>
+												<p className="mt-1 whitespace-pre-wrap text-sm">
+													{quotation!.internalNotes}
+												</p>
+											</div>
+										)}
 									</>
 								) : (
 									<>
