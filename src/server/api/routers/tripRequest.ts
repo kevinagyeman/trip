@@ -1,8 +1,4 @@
-import { AdminNotificationEmail } from "@/emails/admin-notification";
-import { BookingConfirmedEmail } from "@/emails/booking-confirmed";
-import { NewRequestEmail } from "@/emails/new-request";
-import { RequestConfirmationEmail } from "@/emails/request-confirmation";
-import { TripConfirmedEmail } from "@/emails/trip-confirmed";
+import { GenericEmail } from "@/emails/generic-email";
 import {
 	adminProcedure,
 	createTRPCRouter,
@@ -69,12 +65,7 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
-			// Build route summary for email
-			const firstRoute = routes[0]!;
-			const routeSummary =
-				routes.length === 1
-					? `${firstRoute.pickup} → ${firstRoute.destination}`
-					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
 
 			// Notify all admins of the new request
 			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
@@ -82,12 +73,16 @@ export const tripRequestRouter = createTRPCRouter({
 				notifyEmails.map((to) =>
 					sendEmail({
 						to,
-						subject: `New trip request from ${input.firstName} ${input.lastName}`,
-						react: createElement(NewRequestEmail, {
-							firstName: input.firstName,
-							lastName: input.lastName,
-							orderNumber: tripRequest.orderNumber,
-							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
+						subject: `[${order}] NEW TRIP REQUEST | ${input.firstName} ${input.lastName}`,
+						react: createElement(GenericEmail, {
+							data: {
+								preview: "View request",
+								title: `New trip request from ${input.firstName} ${input.lastName} — ${order}`,
+								subtitle:
+									"A new request has been submitted and is awaiting your review.",
+								buttonLabel: "View Request",
+							},
+							href: `${APP_URL}/admin/requests/${tripRequest.id}`,
 						}),
 					}),
 				),
@@ -96,12 +91,15 @@ export const tripRequestRouter = createTRPCRouter({
 			// Send confirmation overview to the customer
 			await sendEmail({
 				to: email,
-				subject: `Your trip request #${String(tripRequest.orderNumber).padStart(7, "0")} has been received`,
-				react: createElement(RequestConfirmationEmail, {
-					firstName: input.firstName,
-					lastName: input.lastName,
-					orderNumber: tripRequest.orderNumber,
-					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
+				subject: `[${order}] REQUEST RECEIVED | ${input.firstName} ${input.lastName}`,
+				react: createElement(GenericEmail, {
+					data: {
+						preview: "View your request",
+						title: `Dear ${input.firstName} ${input.lastName}, your request ${order} has been received.`,
+						subtitle: "We'll notify you as soon as a quotation is ready.",
+						buttonLabel: "View Request",
+					},
+					href: `${APP_URL}/request/${tripRequest.token}`,
 				}),
 			});
 
@@ -319,14 +317,8 @@ export const tripRequestRouter = createTRPCRouter({
 				data: { ...data, isConfirmed: true },
 			});
 
-			// Build route summary for email
-			type Route = { pickup: string; destination: string };
-			const routes = JSON.parse(tripRequest.routes) as Route[];
-			const firstRoute = routes[0]!;
-			const routeSummary =
-				routes.length === 1
-					? `${firstRoute.pickup} → ${firstRoute.destination}`
-					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
+			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
 
 			// Notify all admins of confirmed trip
 			const notifyEmailsConfirm = await resolveAdminEmails(
@@ -336,11 +328,15 @@ export const tripRequestRouter = createTRPCRouter({
 				notifyEmailsConfirm.map((to) =>
 					sendEmail({
 						to,
-						subject: `🚗 ${tripRequest.firstName} ${tripRequest.lastName} confirmed their trip`,
-						react: createElement(TripConfirmedEmail, {
-							orderNumber: tripRequest.orderNumber,
-							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
-							adminUrl: `${APP_URL}/admin/requests/${id}`,
+						subject: `[${order}] TRIP CONFIRMED | ${customerName}`,
+						react: createElement(GenericEmail, {
+							data: {
+								preview: "View request",
+								title: `${customerName} confirmed their trip — ${order}`,
+								subtitle: "The trip is ready to be finalised.",
+								buttonLabel: "View Request",
+							},
+							href: `${APP_URL}/admin/requests/${id}`,
 						}),
 					}),
 				),
@@ -453,12 +449,15 @@ export const tripRequestRouter = createTRPCRouter({
 				notifyEmails.map((to) =>
 					sendEmail({
 						to,
-						subject: `${customerName} added pickup details ${order}`,
-						react: createElement(AdminNotificationEmail, {
-							preview: `Pickup details ready ${order}`,
-							title: `${customerName} added pickup details`,
-							subtitle: `Order ${order} — ready to confirm`,
-							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
+						subject: `[${order}] PICKUP DETAILS READY | ${customerName}`,
+						react: createElement(GenericEmail, {
+							data: {
+								preview: "View request",
+								title: `${customerName} added pickup details`,
+								subtitle: `Order ${order} — ready to confirm`,
+								buttonLabel: "View Request",
+							},
+							href: `${APP_URL}/admin/requests/${tripRequest.id}`,
 						}),
 					}),
 				),
@@ -489,15 +488,21 @@ export const tripRequestRouter = createTRPCRouter({
 				data: { isConfirmed: true, status: TripRequestStatus.ACCEPTED },
 			});
 
+			const pickupDateStr = format(new Date(tripRequest.pickupDate), "PPP");
+			const orderStr = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
+
 			// Notify the customer
 			await sendEmail({
 				to: tripRequest.customerEmail,
-				subject: `✅ Your trip is confirmed — ${format(new Date(tripRequest.pickupDate), "PPP")}`,
-				react: createElement(BookingConfirmedEmail, {
-					firstName: tripRequest.firstName,
-					pickupDate: format(new Date(tripRequest.pickupDate), "PPP"),
-					pickupTime: tripRequest.pickupTime,
-					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
+				subject: `[${orderStr}] TRIP CONFIRMED | ${tripRequest.firstName} ${tripRequest.lastName}`,
+				react: createElement(GenericEmail, {
+					data: {
+						preview: "View details",
+						title: `Dear ${tripRequest.firstName}, your trip is confirmed!`,
+						subtitle: `Your pickup is scheduled for ${pickupDateStr} at ${tripRequest.pickupTime}.`,
+						buttonLabel: "View Details",
+					},
+					href: `${APP_URL}/request/${tripRequest.token}`,
 				}),
 			});
 

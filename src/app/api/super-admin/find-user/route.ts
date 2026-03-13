@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { APP_URL, sendEmail } from "@/server/email";
-import { InviteAdminEmail } from "@/emails/invite-admin";
+import { GenericEmail } from "@/emails/generic-email";
 import { createElement } from "react";
 import { randomBytes } from "node:crypto";
 
@@ -58,8 +58,18 @@ export async function POST(request: Request) {
 
 	await sendEmail({
 		to: email,
-		subject: `You've been invited to manage ${companyName}`,
-		react: createElement(InviteAdminEmail, { companyName, setPasswordUrl }),
+		subject: `[${companyName}] ADMIN INVITATION`,
+		react: createElement(GenericEmail, {
+			data: {
+				preview: "Set your password",
+				title: "You've been invited",
+				subtitle: `You've been added as an admin for ${companyName} on dantrip.com. Click the button below to set your password and get started.`,
+				buttonLabel: "Set Password",
+				secondaryText:
+					"This link expires in 24 hours. If you weren't expecting this invitation, you can safely ignore this email.",
+			},
+			href: setPasswordUrl,
+		}),
 	});
 
 	return NextResponse.json({ ...newUser, created: true });

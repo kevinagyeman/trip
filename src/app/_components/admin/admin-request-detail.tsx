@@ -2,6 +2,9 @@
 
 import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +17,7 @@ import {
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
@@ -99,13 +102,6 @@ const statusColors: Record<string, string> = {
 	CANCELLED: "bg-gray-400",
 };
 
-const quotationStatusColors: Record<string, string> = {
-	DRAFT: "bg-gray-400",
-	SENT: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
-};
-
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
@@ -119,6 +115,24 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		null,
 	);
 
+	// Quotation form state
+	const [qPrice, setQPrice] = useState("");
+	const [qIsPriceEachWay, setQIsPriceEachWay] = useState(false);
+	const [qAreCarSeatsIncluded, setQAreCarSeatsIncluded] = useState(false);
+	const [qAdditionalInfo, setQAdditionalInfo] = useState("");
+	const [qInternalNotes, setQInternalNotes] = useState("");
+
+	useEffect(() => {
+		const q = request?.quotations[0];
+		if (q) {
+			setQPrice(q.price.toString());
+			setQIsPriceEachWay(q.isPriceEachWay);
+			setQAreCarSeatsIncluded(q.areCarSeatsIncluded);
+			setQAdditionalInfo(q.quotationAdditionalInfo ?? "");
+			setQInternalNotes(q.internalNotes ?? "");
+		}
+	}, [request?.quotations[0]?.id]);
+
 	const updateStatus = api.tripRequest.updateStatus.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
@@ -126,13 +140,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	const sendQuotation = api.quotation.send.useMutation({
+	const saveQuotation = api.quotation.save.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 		},
 	});
 
-	const deleteQuotation = api.quotation.delete.useMutation({
+	const notifyQuotation = api.quotation.notify.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 		},
@@ -568,109 +582,148 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				</CardContent>
 			</Card>
 
-			{/* Quotations Section */}
-			<div className="space-y-4">
-				<div className="flex items-center justify-between">
-					<h2 className="text-xl font-bold">{t("quotations")}</h2>
-					<Link href={`/admin/requests/${requestId}/quotations/new`}>
-						<Button>{t("createQuotation")}</Button>
-					</Link>
-				</div>
-
-				{request.quotations.length === 0 ? (
-					<Card>
-						<CardContent className="py-8 text-center text-muted-foreground">
-							{t("noQuotations")}
-						</CardContent>
-					</Card>
-				) : (
-					request.quotations.map((quotation) => (
-						<Card key={quotation.id}>
-							<CardHeader>
-								<div className="flex items-start justify-between">
-									<div>
-										<CardTitle className="text-2xl">
-											{quotation.currency} {quotation.price.toString()}
-										</CardTitle>
-										{quotation.isPriceEachWay && (
+			{/* Quotation */}
+			{(() => {
+				const quotation = request.quotations[0];
+				const isAccepted = quotation?.status === "ACCEPTED";
+				return (
+					<div className="space-y-4">
+						<h2 className="text-xl font-bold">{t("quotation")}</h2>
+						<Card>
+							<CardContent className="space-y-4 pt-6">
+								{isAccepted ? (
+									<>
+										<div className="flex items-start justify-between">
+											<div>
+												<p className="text-2xl font-bold">
+													{quotation!.currency} {quotation!.price.toString()}
+												</p>
+												{quotation!.isPriceEachWay && (
+													<p className="text-sm text-muted-foreground">
+														{t("priceEachWay")}
+													</p>
+												)}
+											</div>
+											<Badge className="bg-green-500">
+												{t("statusAccepted")}
+											</Badge>
+										</div>
+										{quotation!.respondedAt && (
 											<p className="text-sm text-muted-foreground">
-												{t("priceEachWay")}
+												{t("respondedDate", {
+													date: format(new Date(quotation!.respondedAt), "PPP"),
+												})}
 											</p>
 										)}
-									</div>
-									<Badge className={quotationStatusColors[quotation.status]}>
-										{quotation.status}
-									</Badge>
-								</div>
-							</CardHeader>
-							<CardContent className="space-y-4">
-								{quotation.areCarSeatsIncluded && (
-									<div className="rounded-lg bg-muted p-3">
-										<p className="text-sm font-medium">
-											{t("carSeatsIncluded")}
-										</p>
-									</div>
-								)}
-								{quotation.quotationAdditionalInfo && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("additionalInfoCustomer")}
-										</p>
-										<p className="mt-1 whitespace-pre-wrap text-sm">
-											{quotation.quotationAdditionalInfo}
-										</p>
-									</div>
-								)}
-								{quotation.internalNotes && (
-									<div className="rounded-lg bg-yellow-50 p-3 dark:bg-yellow-950/30">
-										<p className="text-sm font-medium text-muted-foreground">
-											{t("internalNotes")}
-										</p>
-										<p className="mt-1 text-sm">{quotation.internalNotes}</p>
-									</div>
-								)}
-								<div className="flex flex-wrap gap-2">
-									{quotation.status === "DRAFT" && (
-										<>
+									</>
+								) : (
+									<>
+										{/* Price */}
+										<div className="w-48">
+											<Label className="text-sm">{t("price")}</Label>
+											<Input
+												type="number"
+												step="0.01"
+												min="0"
+												placeholder={t("pricePlaceholder")}
+												value={qPrice}
+												onChange={(e) => setQPrice(e.target.value)}
+											/>
+										</div>
+										{/* Checkboxes */}
+										<div className="space-y-2">
+											<label className="flex cursor-pointer items-center gap-2 text-sm">
+												<input
+													type="checkbox"
+													checked={qIsPriceEachWay}
+													onChange={(e) => setQIsPriceEachWay(e.target.checked)}
+												/>
+												{t("isPriceEachWay")}
+											</label>
+											<label className="flex cursor-pointer items-center gap-2 text-sm">
+												<input
+													type="checkbox"
+													checked={qAreCarSeatsIncluded}
+													onChange={(e) =>
+														setQAreCarSeatsIncluded(e.target.checked)
+													}
+												/>
+												{t("areCarSeatsIncluded")}
+											</label>
+										</div>
+										{/* Additional info */}
+										<div>
+											<Label className="text-sm">
+												{t("additionalInfoCustomer")}
+											</Label>
+											<Textarea
+												value={qAdditionalInfo}
+												onChange={(e) => setQAdditionalInfo(e.target.value)}
+												rows={4}
+												placeholder={t("additionalInfoPlaceholder")}
+											/>
+										</div>
+										{/* Internal notes */}
+										<div>
+											<Label className="text-sm">{t("internalNotes")}</Label>
+											<Textarea
+												value={qInternalNotes}
+												onChange={(e) => setQInternalNotes(e.target.value)}
+												rows={2}
+												placeholder={t("internalNotesPlaceholder")}
+											/>
+										</div>
+										{/* Actions */}
+										<div className="flex flex-wrap items-center gap-3">
 											<Button
+												disabled={!qPrice || saveQuotation.isPending}
 												onClick={() =>
-													sendQuotation.mutate({ id: quotation.id })
+													saveQuotation.mutate({
+														tripRequestId: requestId,
+														price: parseFloat(qPrice),
+														currency: "EUR",
+														isPriceEachWay: qIsPriceEachWay,
+														areCarSeatsIncluded: qAreCarSeatsIncluded,
+														quotationAdditionalInfo:
+															qAdditionalInfo || undefined,
+														internalNotes: qInternalNotes || undefined,
+													})
 												}
-												disabled={sendQuotation.isPending}
 											>
-												{t("sendToCustomer")}
+												{saveQuotation.isPending
+													? t("saving")
+													: t("saveQuotation")}
 											</Button>
-											<Button
-												variant="destructive"
-												onClick={() =>
-													deleteQuotation.mutate({ id: quotation.id })
-												}
-												disabled={deleteQuotation.isPending}
-											>
-												{t("deleteDraft")}
-											</Button>
-										</>
-									)}
-									{quotation.sentAt && (
-										<p className="text-sm text-muted-foreground">
-											{t("sentDate", {
-												date: format(new Date(quotation.sentAt), "PPP"),
-											})}
-										</p>
-									)}
-									{quotation.respondedAt && (
-										<p className="text-sm text-muted-foreground">
-											{t("respondedDate", {
-												date: format(new Date(quotation.respondedAt), "PPP"),
-											})}
-										</p>
-									)}
-								</div>
+											{quotation && (
+												<Button
+													variant="outline"
+													disabled={notifyQuotation.isPending}
+													onClick={() =>
+														notifyQuotation.mutate({
+															tripRequestId: requestId,
+														})
+													}
+												>
+													{notifyQuotation.isPending
+														? t("notifying")
+														: t("notifyCustomer")}
+												</Button>
+											)}
+											{quotation?.notifiedAt && (
+												<p className="text-sm text-muted-foreground">
+													{t("notifiedDate", {
+														date: format(new Date(quotation.notifiedAt), "PPP"),
+													})}
+												</p>
+											)}
+										</div>
+									</>
+								)}
 							</CardContent>
 						</Card>
-					))
-				)}
-			</div>
+					</div>
+				);
+			})()}
 		</div>
 	);
 }

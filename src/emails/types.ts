@@ -1,5 +1,5 @@
 export interface EmailData {
-	subject: string;
+	preview: string;
 	title: string;
 	subtitle?: string;
 	buttonLabel: string;

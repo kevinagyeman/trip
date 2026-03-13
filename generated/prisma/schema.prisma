@@ -32,10 +32,8 @@ enum TripRequestStatus {
 }
 
 enum QuotationStatus {
-  DRAFT
-  SENT
+  PENDING
   ACCEPTED
-  REJECTED
 }
 
 model Company {
@@ -187,9 +185,9 @@ model Quotation {
   isPriceEachWay          Boolean         @default(false)
   areCarSeatsIncluded     Boolean         @default(false)
   quotationAdditionalInfo String?         @db.Text
-  status                  QuotationStatus @default(DRAFT)
+  status                  QuotationStatus @default(PENDING)
   internalNotes           String?         @db.Text
-  sentAt                  DateTime?
+  notifiedAt              DateTime?
   respondedAt             DateTime?
   createdAt               DateTime        @default(now())
   updatedAt               DateTime        @updatedAt
@@ -197,8 +195,8 @@ model Quotation {
   tripRequestId String
   tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)
 
-  createdById String
-  createdBy   User   @relation(fields: [createdById], references: [id])
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id])
 
   @@index([tripRequestId])
   @@index([status])

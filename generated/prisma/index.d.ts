@@ -85,10 +85,8 @@ export type TripRequestStatus = (typeof TripRequestStatus)[keyof typeof TripRequ
 
 
 export const QuotationStatus: {
-  DRAFT: 'DRAFT',
-  SENT: 'SENT',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED'
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED'
 };
 
 export type QuotationStatus = (typeof QuotationStatus)[keyof typeof QuotationStatus]
@@ -10918,7 +10916,7 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     internalNotes: string | null
-    sentAt: Date | null
+    notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -10935,7 +10933,7 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     internalNotes: string | null
-    sentAt: Date | null
+    notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -10952,7 +10950,7 @@ export namespace Prisma {
     quotationAdditionalInfo: number
     status: number
     internalNotes: number
-    sentAt: number
+    notifiedAt: number
     respondedAt: number
     createdAt: number
     updatedAt: number
@@ -10979,7 +10977,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
-    sentAt?: true
+    notifiedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -10996,7 +10994,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
-    sentAt?: true
+    notifiedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -11013,7 +11011,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     internalNotes?: true
-    sentAt?: true
+    notifiedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -11117,12 +11115,12 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus
     internalNotes: string | null
-    sentAt: Date | null
+    notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date
     updatedAt: Date
     tripRequestId: string
-    createdById: string
+    createdById: string | null
     _count: QuotationCountAggregateOutputType | null
     _avg: QuotationAvgAggregateOutputType | null
     _sum: QuotationSumAggregateOutputType | null
@@ -11153,14 +11151,14 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
-    sentAt?: boolean
+    notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tripRequestId?: boolean
     createdById?: boolean
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["quotation"]>
 
   export type QuotationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11172,14 +11170,14 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
-    sentAt?: boolean
+    notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tripRequestId?: boolean
     createdById?: boolean
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["quotation"]>
 
   export type QuotationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -11191,14 +11189,14 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
-    sentAt?: boolean
+    notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tripRequestId?: boolean
     createdById?: boolean
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["quotation"]>
 
   export type QuotationSelectScalar = {
@@ -11210,7 +11208,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     internalNotes?: boolean
-    sentAt?: boolean
+    notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11218,25 +11216,25 @@ export namespace Prisma {
     createdById?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "internalNotes" | "sentAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "internalNotes" | "notifiedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }
   export type QuotationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }
   export type QuotationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
   }
 
   export type $QuotationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Quotation"
     objects: {
       tripRequest: Prisma.$TripRequestPayload<ExtArgs>
-      createdBy: Prisma.$UserPayload<ExtArgs>
+      createdBy: Prisma.$UserPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11247,12 +11245,12 @@ export namespace Prisma {
       quotationAdditionalInfo: string | null
       status: $Enums.QuotationStatus
       internalNotes: string | null
-      sentAt: Date | null
+      notifiedAt: Date | null
       respondedAt: Date | null
       createdAt: Date
       updatedAt: Date
       tripRequestId: string
-      createdById: string
+      createdById: string | null
     }, ExtArgs["result"]["quotation"]>
     composites: {}
   }
@@ -11648,7 +11646,7 @@ export namespace Prisma {
   export interface Prisma__QuotationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tripRequest<T extends TripRequestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TripRequestDefaultArgs<ExtArgs>>): Prisma__TripRequestClient<$Result.GetResult<Prisma.$TripRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends Quotation$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Quotation$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11686,7 +11684,7 @@ export namespace Prisma {
     readonly quotationAdditionalInfo: FieldRef<"Quotation", 'String'>
     readonly status: FieldRef<"Quotation", 'QuotationStatus'>
     readonly internalNotes: FieldRef<"Quotation", 'String'>
-    readonly sentAt: FieldRef<"Quotation", 'DateTime'>
+    readonly notifiedAt: FieldRef<"Quotation", 'DateTime'>
     readonly respondedAt: FieldRef<"Quotation", 'DateTime'>
     readonly createdAt: FieldRef<"Quotation", 'DateTime'>
     readonly updatedAt: FieldRef<"Quotation", 'DateTime'>
@@ -12088,6 +12086,25 @@ export namespace Prisma {
   }
 
   /**
+   * Quotation.createdBy
+   */
+  export type Quotation$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * Quotation without action
    */
   export type QuotationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12249,7 +12266,7 @@ export namespace Prisma {
     quotationAdditionalInfo: 'quotationAdditionalInfo',
     status: 'status',
     internalNotes: 'internalNotes',
-    sentAt: 'sentAt',
+    notifiedAt: 'notifiedAt',
     respondedAt: 'respondedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -13047,14 +13064,14 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
-    sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringFilter<"Quotation"> | string
+    createdById?: StringNullableFilter<"Quotation"> | string | null
     tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
-    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type QuotationOrderByWithRelationInput = {
@@ -13066,12 +13083,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     internalNotes?: SortOrderInput | SortOrder
-    sentAt?: SortOrderInput | SortOrder
+    notifiedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
-    createdById?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     tripRequest?: TripRequestOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
   }
@@ -13088,14 +13105,14 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
-    sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringFilter<"Quotation"> | string
+    createdById?: StringNullableFilter<"Quotation"> | string | null
     tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
-    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type QuotationOrderByWithAggregationInput = {
@@ -13107,12 +13124,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     internalNotes?: SortOrderInput | SortOrder
-    sentAt?: SortOrderInput | SortOrder
+    notifiedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
-    createdById?: SortOrder
+    createdById?: SortOrderInput | SortOrder
     _count?: QuotationCountOrderByAggregateInput
     _avg?: QuotationAvgOrderByAggregateInput
     _max?: QuotationMaxOrderByAggregateInput
@@ -13132,12 +13149,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
-    sentAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
+    notifiedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     tripRequestId?: StringWithAggregatesFilter<"Quotation"> | string
-    createdById?: StringWithAggregatesFilter<"Quotation"> | string
+    createdById?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
   }
 
   export type CompanyCreateInput = {
@@ -13845,12 +13862,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequest: TripRequestCreateNestedOneWithoutQuotationsInput
-    createdBy: UserCreateNestedOneWithoutQuotationsInput
+    createdBy?: UserCreateNestedOneWithoutQuotationsInput
   }
 
   export type QuotationUncheckedCreateInput = {
@@ -13862,12 +13879,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
-    createdById: string
+    createdById?: string | null
   }
 
   export type QuotationUpdateInput = {
@@ -13879,12 +13896,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequest?: TripRequestUpdateOneRequiredWithoutQuotationsNestedInput
-    createdBy?: UserUpdateOneRequiredWithoutQuotationsNestedInput
+    createdBy?: UserUpdateOneWithoutQuotationsNestedInput
   }
 
   export type QuotationUncheckedUpdateInput = {
@@ -13896,12 +13913,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuotationCreateManyInput = {
@@ -13913,12 +13930,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
-    createdById: string
+    createdById?: string | null
   }
 
   export type QuotationUpdateManyMutationInput = {
@@ -13930,7 +13947,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13945,12 +13962,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
-    createdById?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -14604,7 +14621,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
-    sentAt?: SortOrder
+    notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14625,7 +14642,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
-    sentAt?: SortOrder
+    notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14642,7 +14659,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     internalNotes?: SortOrder
-    sentAt?: SortOrder
+    notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15182,10 +15199,12 @@ export namespace Prisma {
     update?: XOR<XOR<TripRequestUpdateToOneWithWhereWithoutQuotationsInput, TripRequestUpdateWithoutQuotationsInput>, TripRequestUncheckedUpdateWithoutQuotationsInput>
   }
 
-  export type UserUpdateOneRequiredWithoutQuotationsNestedInput = {
+  export type UserUpdateOneWithoutQuotationsNestedInput = {
     create?: XOR<UserCreateWithoutQuotationsInput, UserUncheckedCreateWithoutQuotationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutQuotationsInput
     upsert?: UserUpsertWithoutQuotationsInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuotationsInput, UserUpdateWithoutQuotationsInput>, UserUncheckedUpdateWithoutQuotationsInput>
   }
@@ -15961,7 +15980,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15977,7 +15996,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16136,12 +16155,12 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     internalNotes?: StringNullableFilter<"Quotation"> | string | null
-    sentAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringFilter<"Quotation"> | string
+    createdById?: StringNullableFilter<"Quotation"> | string | null
   }
 
   export type UserCreateWithoutTripRequestsInput = {
@@ -16217,11 +16236,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdBy: UserCreateNestedOneWithoutQuotationsInput
+    createdBy?: UserCreateNestedOneWithoutQuotationsInput
   }
 
   export type QuotationUncheckedCreateWithoutTripRequestInput = {
@@ -16233,11 +16252,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
+    createdById?: string | null
   }
 
   export type QuotationCreateOrConnectWithoutTripRequestInput = {
@@ -16933,7 +16952,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17093,7 +17112,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17109,7 +17128,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17125,7 +17144,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17141,11 +17160,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     internalNotes?: string | null
-    sentAt?: Date | string | null
+    notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById: string
+    createdById?: string | null
   }
 
   export type TripMessageCreateManyTripRequestInput = {
@@ -17165,11 +17184,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneRequiredWithoutQuotationsNestedInput
+    createdBy?: UserUpdateOneWithoutQuotationsNestedInput
   }
 
   export type QuotationUncheckedUpdateWithoutTripRequestInput = {
@@ -17181,11 +17200,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuotationUncheckedUpdateManyWithoutTripRequestInput = {
@@ -17197,11 +17216,11 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
-    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: StringFieldUpdateOperationsInput | string
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TripMessageUpdateWithoutTripRequestInput = {

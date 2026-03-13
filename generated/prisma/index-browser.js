@@ -226,7 +226,7 @@ exports.Prisma.QuotationScalarFieldEnum = {
   quotationAdditionalInfo: 'quotationAdditionalInfo',
   status: 'status',
   internalNotes: 'internalNotes',
-  sentAt: 'sentAt',
+  notifiedAt: 'notifiedAt',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -264,10 +264,8 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
 };
 
 exports.QuotationStatus = exports.$Enums.QuotationStatus = {
-  DRAFT: 'DRAFT',
-  SENT: 'SENT',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED'
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED'
 };
 
 exports.Prisma.ModelName = {

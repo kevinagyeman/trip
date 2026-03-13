@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { createElement } from "react";
 import { db } from "@/server/db";
 import { sendEmail, APP_URL } from "@/server/email";
-import { VerifyEmailTemplate } from "@/emails/verify-email";
+import { GenericEmail } from "@/emails/generic-email";
 
 export async function POST(request: Request) {
 	try {
@@ -95,10 +95,18 @@ export async function POST(request: Request) {
 		const verificationUrl = `${APP_URL}/api/auth/verify-email?token=${verificationToken.token}`;
 		await sendEmail({
 			to: email,
-			subject: "Verify your Trip Manager account",
-			react: createElement(VerifyEmailTemplate, {
-				verificationUrl,
-				userName: name || undefined,
+			subject: "VERIFY YOUR ACCOUNT",
+			react: createElement(GenericEmail, {
+				data: {
+					preview: "Verify your email address",
+					title: `Hi${name ? ` ${name}` : ""}, verify your email address`,
+					subtitle:
+						"Thanks for signing up! Please verify your email address by clicking the button below. The link is valid for 24 hours.",
+					buttonLabel: "Verify Email Address",
+					secondaryText:
+						"If you didn't create an account, you can safely ignore this email.",
+				},
+				href: verificationUrl,
 			}),
 		});
 

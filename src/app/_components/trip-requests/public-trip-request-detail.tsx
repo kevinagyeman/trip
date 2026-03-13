@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TripMessageThread } from "./trip-message-thread";
 
 type Route = {
@@ -29,10 +29,8 @@ const statusColors: Record<string, string> = {
 };
 
 const quotationStatusColors: Record<string, string> = {
-	DRAFT: "bg-gray-400",
-	SENT: "bg-blue-500",
+	PENDING: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
 };
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
@@ -54,6 +52,26 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const [pickupDate, setPickupDate] = useState("");
 	const [pickupTime, setPickupTime] = useState("");
 	const [flightNumber, setFlightNumber] = useState("");
+	const [routeDepartures, setRouteDepartures] = useState<
+		Array<{
+			departureDate: string;
+			departureTime: string;
+			flightNumber: string;
+		}>
+	>([]);
+
+	useEffect(() => {
+		if (request) {
+			const parsed = JSON.parse(request.routes) as Route[];
+			setRouteDepartures(
+				parsed.map((r) => ({
+					departureDate: r.departureDate ?? "",
+					departureTime: r.departureTime ?? "",
+					flightNumber: r.flightNumber ?? "",
+				})),
+			);
+		}
+	}, [request?.id]);
 
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({
 		onSuccess: async () => {
@@ -61,13 +79,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		},
 	});
 
-	const rejectQuotation = api.quotation.rejectByToken.useMutation({
+	const updatePickupDetails = api.tripRequest.updatePickupDetails.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
 		},
 	});
 
-	const updatePickupDetails = api.tripRequest.updatePickupDetails.useMutation({
+	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
 		},
@@ -139,8 +157,117 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										</span>
 										<span className="font-medium">{route.destination}</span>
 									</p>
+									{(route.departureDate ??
+										route.departureTime ??
+										route.flightNumber) && (
+										<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
+											{route.departureDate && (
+												<span>
+													{t("routeDepartureDate")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.departureDate}
+													</span>
+												</span>
+											)}
+											{route.departureTime && (
+												<span>
+													{t("routeDepartureTime")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.departureTime}
+													</span>
+												</span>
+											)}
+											{route.flightNumber && (
+												<span>
+													{t("routeFlightNumber")}:{" "}
+													<span className="font-medium text-foreground">
+														{route.flightNumber}
+													</span>
+												</span>
+											)}
+										</div>
+									)}
+									{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+										<div className="mt-3 grid grid-cols-1 gap-2 border-t pt-3 sm:grid-cols-3">
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeDepartureDate")}
+												</Label>
+												<Input
+													type="date"
+													value={routeDepartures[i]?.departureDate ?? ""}
+													onChange={(e) =>
+														setRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.departureDate = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeDepartureTime")}
+												</Label>
+												<Input
+													type="time"
+													value={routeDepartures[i]?.departureTime ?? ""}
+													onChange={(e) =>
+														setRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.departureTime = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeFlightNumber")}
+												</Label>
+												<Input
+													placeholder={t("routeFlightNumberPlaceholder")}
+													value={routeDepartures[i]?.flightNumber ?? ""}
+													onChange={(e) =>
+														setRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.flightNumber = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+										</div>
+									)}
 								</div>
 							))}
+							{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+								<Button
+									className="mt-2"
+									size="sm"
+									variant="outline"
+									disabled={updateRoutes.isPending}
+									onClick={() =>
+										updateRoutes.mutate({
+											token,
+											routes: routes.map((r, i) => ({
+												...r,
+												departureDate:
+													routeDepartures[i]?.departureDate || undefined,
+												departureTime:
+													routeDepartures[i]?.departureTime || undefined,
+												flightNumber:
+													routeDepartures[i]?.flightNumber || undefined,
+											})),
+										})
+									}
+								>
+									{updateRoutes.isPending ? t("saving") : t("saveRouteDetails")}
+								</Button>
+							)}
 						</div>
 					</div>
 
@@ -352,14 +479,14 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										</p>
 									</div>
 								)}
-								{quotation.sentAt && (
+								{quotation.notifiedAt && (
 									<p className="text-sm text-muted-foreground">
-										{t("sentDate", {
-											date: format(new Date(quotation.sentAt), "PPP"),
+										{t("notifiedDate", {
+											date: format(new Date(quotation.notifiedAt), "PPP"),
 										})}
 									</p>
 								)}
-								{quotation.status === "SENT" && (
+								{quotation.status === "PENDING" && (
 									<div className="flex gap-2">
 										<Button
 											onClick={() =>
@@ -368,15 +495,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 											disabled={acceptQuotation.isPending}
 										>
 											{t("acceptQuotation")}
-										</Button>
-										<Button
-											variant="destructive"
-											onClick={() =>
-												rejectQuotation.mutate({ id: quotation.id, token })
-											}
-											disabled={rejectQuotation.isPending}
-										>
-											{t("reject")}
 										</Button>
 									</div>
 								)}
