@@ -135,7 +135,6 @@ export const tripRequestRouter = createTRPCRouter({
 				orderBy: { createdAt: "desc" },
 				include: {
 					quotations: {
-						where: { status: { not: "DRAFT" } },
 						orderBy: { createdAt: "desc" },
 					},
 				},
@@ -158,7 +157,6 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { id: input.id },
 				include: {
 					quotations: {
-						where: { status: { not: "DRAFT" } },
 						orderBy: { createdAt: "desc" },
 					},
 				},
@@ -353,7 +351,6 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { token: input.token },
 				include: {
 					quotations: {
-						where: { status: { not: "DRAFT" } },
 						orderBy: { createdAt: "desc" },
 					},
 				},

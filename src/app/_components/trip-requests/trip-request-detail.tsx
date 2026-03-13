@@ -25,10 +25,8 @@ const statusColors: Record<string, string> = {
 };
 
 const quotationStatusColors: Record<string, string> = {
-	DRAFT: "bg-gray-400",
-	SENT: "bg-blue-500",
+	PENDING: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
 };
 
 export function TripRequestDetail({ requestId }: { requestId: string }) {
@@ -48,13 +46,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	});
 
 	const acceptQuotation = api.quotation.accept.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getById.invalidate({ id: requestId });
-			await utils.tripRequest.getMyRequests.invalidate();
-		},
-	});
-
-	const rejectQuotation = api.quotation.reject.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getById.invalidate({ id: requestId });
 			await utils.tripRequest.getMyRequests.invalidate();
@@ -285,14 +276,14 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 										</p>
 									</div>
 								)}
-								{quotation.sentAt && (
+								{quotation.notifiedAt && (
 									<p className="text-sm text-muted-foreground">
-										{t("sentDate", {
-											date: format(new Date(quotation.sentAt), "PPP"),
+										{t("notifiedDate", {
+											date: format(new Date(quotation.notifiedAt), "PPP"),
 										})}
 									</p>
 								)}
-								{quotation.status === "SENT" && (
+								{quotation.status === "PENDING" && (
 									<div className="flex gap-2">
 										<Button
 											onClick={() =>
@@ -301,15 +292,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											disabled={acceptQuotation.isPending}
 										>
 											{t("acceptQuotation")}
-										</Button>
-										<Button
-											variant="destructive"
-											onClick={() =>
-												rejectQuotation.mutate({ id: quotation.id })
-											}
-											disabled={rejectQuotation.isPending}
-										>
-											{t("reject")}
 										</Button>
 									</div>
 								)}
