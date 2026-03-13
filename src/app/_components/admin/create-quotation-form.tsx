@@ -1,27 +1,21 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
+import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
 	createQuotationSchema,
 	type CreateQuotationFormValues,
 } from "@/lib/schemas/quotation";
+import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
-const DEFAULT_ADDITIONAL_INFO = `If the transfer time is between 22:00 and 06:00 (italian time)
-the price will be increased by 20%.
-If you need more information don't hesitate to contact us.
-
-Se l'orario del transfer è fra le 22:00 e le 06:00 (Ora italiana)
-il prezzo subirà una maggiorazione del 20%.
-Se dovesse aver bisogno di ulteriori informazioni, la prego di contattarci.`;
+const DEFAULT_ADDITIONAL_INFO = ``;
 
 interface CreateQuotationFormProps {
 	tripRequestId: string;
@@ -37,7 +31,6 @@ export function CreateQuotationForm({
 	const {
 		register,
 		handleSubmit,
-		control,
 		formState: { errors },
 	} = useForm<CreateQuotationFormValues>({
 		resolver: zodResolver(createQuotationSchema),
@@ -70,45 +63,25 @@ export function CreateQuotationForm({
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-			<CustomInput
-				labelText={t("price")}
-				inputType="number"
-				placeholder={t("pricePlaceholder")}
-				error={errors.price?.message}
-				inputProps={{ ...register("price"), step: "0.01", min: "0" }}
+			<div className="w-48">
+				<CustomInput
+					labelText={t("price")}
+					inputType="number"
+					placeholder={t("pricePlaceholder")}
+					error={errors.price?.message}
+					inputProps={{ ...register("price"), step: "0.01", min: "0" }}
+				/>
+			</div>
+
+			<CustomCheckbox
+				label={t("isPriceEachWay")}
+				inputProps={{ ...register("isPriceEachWay") }}
 			/>
 
-			<div className="flex items-center justify-between rounded-lg border p-4">
-				<div className="space-y-0.5">
-					<Label>{t("isPriceEachWay")}</Label>
-					<p className="text-sm text-muted-foreground">
-						{t("isPriceEachWayDesc")}
-					</p>
-				</div>
-				<Controller
-					name="isPriceEachWay"
-					control={control}
-					render={({ field }) => (
-						<Switch checked={field.value} onCheckedChange={field.onChange} />
-					)}
-				/>
-			</div>
-
-			<div className="flex items-center justify-between rounded-lg border p-4">
-				<div className="space-y-0.5">
-					<Label>{t("areCarSeatsIncluded")}</Label>
-					<p className="text-sm text-muted-foreground">
-						{t("areCarSeatsIncludedDesc")}
-					</p>
-				</div>
-				<Controller
-					name="areCarSeatsIncluded"
-					control={control}
-					render={({ field }) => (
-						<Switch checked={field.value} onCheckedChange={field.onChange} />
-					)}
-				/>
-			</div>
+			<CustomCheckbox
+				label={t("areCarSeatsIncluded")}
+				inputProps={{ ...register("areCarSeatsIncluded") }}
+			/>
 
 			<div>
 				<Label>{t("additionalInfo")}</Label>

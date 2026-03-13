@@ -37,6 +37,14 @@ const quotationStatusColors: Record<string, string> = {
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
+	const statusLabels: Record<string, string> = {
+		PENDING: t("statusPending"),
+		QUOTED: t("statusQuoted"),
+		ACCEPTED: t("statusAccepted"),
+		REJECTED: t("statusRejected"),
+		COMPLETED: t("statusCompleted"),
+		CANCELLED: t("statusCancelled"),
+	};
 	const utils = api.useUtils();
 	const [routeEdits, setRouteEdits] = useState<Route[] | null>(null);
 
@@ -108,7 +116,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						</div>
 						<div className="flex gap-2">
 							<Badge className={statusColors[request.status]}>
-								{request.status}
+								{statusLabels[request.status] ?? request.status}
 							</Badge>
 							{request.isConfirmed && (
 								<Badge variant="outline">{t("confirmed")}</Badge>

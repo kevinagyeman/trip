@@ -186,7 +186,13 @@
 		"viewDetails": "View Details",
 		"adultsCount": "{count} adult(s)",
 		"childrenCount": "{count} child(ren)",
-		"quotationsReceived": "{count} quotation(s) received"
+		"quotationsReceived": "{count} quotation(s) received",
+		"statusPending": "Pending",
+		"statusQuoted": "Quoted",
+		"statusAccepted": "Accepted",
+		"statusRejected": "Rejected",
+		"statusCompleted": "Completed",
+		"statusCancelled": "Cancelled"
 	},
 	"requestDetail": {
 		"loading": "Loading...",
@@ -231,7 +237,13 @@
 		"routeFlightNumber": "Flight Number",
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
 		"saveRouteDetails": "Save details",
-		"saving": "Saving..."
+		"saving": "Saving...",
+		"statusPending": "Pending",
+		"statusQuoted": "Quoted",
+		"statusAccepted": "Accepted",
+		"statusRejected": "Rejected",
+		"statusCompleted": "Completed",
+		"statusCancelled": "Cancelled"
 	},
 	"messages": {
 		"title": "Messages",
@@ -265,7 +277,8 @@
 		"quotationsCount": "{count} quotation(s)",
 		"manage": "Manage",
 		"searchPlaceholder": "Search by name or email...",
-		"loadMore": "Load more"
+		"loadMore": "Load more",
+		"statusCancelled": "Cancelled"
 	},
 	"adminDetail": {
 		"loading": "Loading...",

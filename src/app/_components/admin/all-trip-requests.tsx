@@ -36,6 +36,14 @@ const statusColors: Record<string, string> = {
 
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
+	const statusLabels: Record<string, string> = {
+		PENDING: t("statusPending"),
+		QUOTED: t("statusQuoted"),
+		ACCEPTED: t("statusAccepted"),
+		REJECTED: t("statusRejected"),
+		COMPLETED: t("statusCompleted"),
+		CANCELLED: t("statusCancelled"),
+	};
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -136,7 +144,7 @@ export function AllTripRequests() {
 										))}
 									</div>
 									<Badge className={statusColors[request.status]}>
-										{request.status}
+										{statusLabels[request.status] ?? request.status}
 									</Badge>
 								</div>
 							</CardHeader>

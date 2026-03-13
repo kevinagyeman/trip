@@ -34,6 +34,14 @@ const quotationStatusColors: Record<string, string> = {
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("requestDetail");
+	const statusLabels: Record<string, string> = {
+		PENDING: t("statusPending"),
+		QUOTED: t("statusQuoted"),
+		ACCEPTED: t("statusAccepted"),
+		REJECTED: t("statusRejected"),
+		COMPLETED: t("statusCompleted"),
+		CANCELLED: t("statusCancelled"),
+	};
 	const utils = api.useUtils();
 	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
 		id: requestId,
@@ -92,7 +100,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 						<div className="flex gap-2">
 							<Badge className={statusColors[request.status]}>
-								{request.status}
+								{statusLabels[request.status] ?? request.status}
 							</Badge>
 							{request.isConfirmed && (
 								<Badge variant="outline">{t("confirmed")}</Badge>

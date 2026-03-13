@@ -26,6 +26,14 @@ const statusColors: Record<string, string> = {
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
+	const statusLabels: Record<string, string> = {
+		PENDING: t("statusPending"),
+		QUOTED: t("statusQuoted"),
+		ACCEPTED: t("statusAccepted"),
+		REJECTED: t("statusRejected"),
+		COMPLETED: t("statusCompleted"),
+		CANCELLED: t("statusCancelled"),
+	};
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {
@@ -69,7 +77,7 @@ export function MyTripRequests() {
 								))}
 							</div>
 							<Badge className={statusColors[request.status]}>
-								{request.status}
+								{statusLabels[request.status] ?? request.status}
 							</Badge>
 						</div>
 					</CardHeader>

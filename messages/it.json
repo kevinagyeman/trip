@@ -186,7 +186,13 @@
 		"viewDetails": "Visualizza Dettagli",
 		"adultsCount": "{count} adulto/i",
 		"childrenCount": "{count} bambino/i",
-		"quotationsReceived": "{count} preventivo/i ricevuto/i"
+		"quotationsReceived": "{count} preventivo/i ricevuto/i",
+		"statusPending": "In Attesa",
+		"statusQuoted": "Preventivato",
+		"statusAccepted": "Accettato",
+		"statusRejected": "Rifiutato",
+		"statusCompleted": "Completato",
+		"statusCancelled": "Annullato"
 	},
 	"requestDetail": {
 		"loading": "Caricamento...",
@@ -231,7 +237,13 @@
 		"routeFlightNumber": "Numero di Volo",
 		"routeFlightNumberPlaceholder": "es., FR1234",
 		"saveRouteDetails": "Salva dettagli",
-		"saving": "Salvataggio..."
+		"saving": "Salvataggio...",
+		"statusPending": "In Attesa",
+		"statusQuoted": "Preventivato",
+		"statusAccepted": "Accettato",
+		"statusRejected": "Rifiutato",
+		"statusCompleted": "Completato",
+		"statusCancelled": "Annullato"
 	},
 	"messages": {
 		"title": "Messaggi",
@@ -265,7 +277,8 @@
 		"quotationsCount": "{count} preventivo/i",
 		"manage": "Gestisci",
 		"searchPlaceholder": "Cerca per nome o email...",
-		"loadMore": "Carica altri"
+		"loadMore": "Carica altri",
+		"statusCancelled": "Annullato"
 	},
 	"adminDetail": {
 		"loading": "Caricamento...",
