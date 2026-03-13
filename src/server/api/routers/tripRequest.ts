@@ -1,5 +1,5 @@
-import { BookingConfirmedEmail } from "@/emails/booking-confirmed";
 import { AdminNotificationEmail } from "@/emails/admin-notification";
+import { BookingConfirmedEmail } from "@/emails/booking-confirmed";
 import { NewRequestEmail } from "@/emails/new-request";
 import { RequestConfirmationEmail } from "@/emails/request-confirmation";
 import { TripConfirmedEmail } from "@/emails/trip-confirmed";
@@ -9,7 +9,7 @@ import {
 	protectedProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
-import { resolveAdminEmails, APP_URL, sendEmail } from "@/server/email";
+import { APP_URL, resolveAdminEmails, sendEmail } from "@/server/email";
 import { TRPCError } from "@trpc/server";
 import { format } from "date-fns";
 import { createElement } from "react";
@@ -84,15 +84,9 @@ export const tripRequestRouter = createTRPCRouter({
 						to,
 						subject: `New trip request from ${input.firstName} ${input.lastName}`,
 						react: createElement(NewRequestEmail, {
-							requestId: tripRequest.id,
-							orderNumber: tripRequest.orderNumber,
-							userName: `${input.firstName} ${input.lastName}`,
-							userEmail: email,
-							serviceType: routeSummary,
 							firstName: input.firstName,
 							lastName: input.lastName,
-							phone: input.phone,
-							numberOfAdults: input.numberOfAdults,
+							orderNumber: tripRequest.orderNumber,
 							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
 						}),
 					}),
@@ -104,19 +98,9 @@ export const tripRequestRouter = createTRPCRouter({
 				to: email,
 				subject: `Your trip request #${String(tripRequest.orderNumber).padStart(7, "0")} has been received`,
 				react: createElement(RequestConfirmationEmail, {
-					orderNumber: tripRequest.orderNumber,
 					firstName: input.firstName,
 					lastName: input.lastName,
-					email,
-					phone: input.phone,
-					routes,
-					numberOfAdults: input.numberOfAdults,
-					areThereChildren: input.areThereChildren,
-					numberOfChildren: input.numberOfChildren ?? null,
-					ageOfChildren: input.ageOfChildren ?? null,
-					numberOfChildSeats: input.numberOfChildSeats ?? null,
-					language: input.language,
-					additionalInfo: input.additionalInfo ?? null,
+					orderNumber: tripRequest.orderNumber,
 					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
 				}),
 			});
@@ -240,7 +224,7 @@ export const tripRequestRouter = createTRPCRouter({
 							{ firstName: { contains: search, mode: "insensitive" } },
 							{ lastName: { contains: search, mode: "insensitive" } },
 							...(Number.isFinite(Number(search.replace(/^0+/, "") || "0")) &&
-							!isNaN(Number(search))
+							!Number.isNaN(Number(search))
 								? [{ orderNumber: Number(search) }]
 								: []),
 						],
@@ -356,11 +340,6 @@ export const tripRequestRouter = createTRPCRouter({
 						react: createElement(TripConfirmedEmail, {
 							orderNumber: tripRequest.orderNumber,
 							customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
-							customerEmail: ctx.session.user.email ?? "",
-							serviceType: routeSummary,
-							arrivalFlightDate: format(data.pickupDate, "PPP"),
-							arrivalFlightTime: data.pickupTime,
-							arrivalFlightNumber: data.flightNumber,
 							adminUrl: `${APP_URL}/admin/requests/${id}`,
 						}),
 					}),
@@ -410,13 +389,7 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
-				select: {
-					id: true,
-					companyId: true,
-					orderNumber: true,
-					firstName: true,
-					lastName: true,
-				},
+				select: { id: true },
 			});
 
 			if (!tripRequest) {
@@ -427,8 +400,52 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { token: input.token },
 				data: { routes: JSON.stringify(input.routes) },
 			});
+		}),
 
-			// Notify admins of updated route details
+	// PUBLIC: Customer saves pickup date/time/flight by token
+	updatePickupDetails: publicProcedure
+		.input(
+			z.object({
+				token: z.string(),
+				pickupDate: z.string().min(1),
+				pickupTime: z.string().min(1),
+				flightNumber: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { token: input.token },
+				select: {
+					id: true,
+					companyId: true,
+					orderNumber: true,
+					firstName: true,
+					lastName: true,
+					isConfirmed: true,
+				},
+			});
+
+			if (!tripRequest) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			if (tripRequest.isConfirmed) {
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "Trip is already confirmed",
+				});
+			}
+
+			await ctx.db.tripRequest.update({
+				where: { token: input.token },
+				data: {
+					pickupDate: new Date(input.pickupDate),
+					pickupTime: input.pickupTime,
+					flightNumber: input.flightNumber ?? null,
+				},
+			});
+
+			// Notify admins
 			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
 			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
 			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
@@ -436,10 +453,11 @@ export const tripRequestRouter = createTRPCRouter({
 				notifyEmails.map((to) =>
 					sendEmail({
 						to,
-						subject: `${customerName} updated route details ${order}`,
+						subject: `${customerName} added pickup details ${order}`,
 						react: createElement(AdminNotificationEmail, {
-							preview: `Route details updated ${order} | ${customerName}`,
-							title: `${customerName} updated route details ${order}`,
+							preview: `Pickup details ready ${order}`,
+							title: `${customerName} added pickup details`,
+							subtitle: `Order ${order} — ready to confirm`,
 							adminUrl: `${APP_URL}/admin/requests/${tripRequest.id}`,
 						}),
 					}),
@@ -447,55 +465,38 @@ export const tripRequestRouter = createTRPCRouter({
 			);
 		}),
 
-	// ADMIN: Confirm trip with pickup details (admin-initiated)
+	// ADMIN: Confirm trip (customer must have already provided pickup details)
 	confirmByAdmin: adminProcedure
-		.input(
-			z.object({
-				id: z.string(),
-				pickupDate: z.date(),
-				pickupTime: z.string(),
-				flightNumber: z.string().optional(),
-			}),
-		)
+		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			const { id, ...data } = input;
-
 			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { id },
+				where: { id: input.id },
 			});
 
 			if (!tripRequest) {
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			const updated = await ctx.db.tripRequest.update({
-				where: { id },
-				data: {
-					...data,
-					isConfirmed: true,
-					status: TripRequestStatus.ACCEPTED,
-				},
-			});
+			if (!tripRequest.pickupDate || !tripRequest.pickupTime) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Customer has not provided pickup details yet",
+				});
+			}
 
-			// Build route summary for email
-			type Route = { pickup: string; destination: string };
-			const routes = JSON.parse(tripRequest.routes) as Route[];
-			const firstRoute = routes[0]!;
-			const routeSummary =
-				routes.length === 1
-					? `${firstRoute.pickup} → ${firstRoute.destination}`
-					: `${firstRoute.pickup} → ${firstRoute.destination} (+${routes.length - 1} more)`;
+			const updated = await ctx.db.tripRequest.update({
+				where: { id: input.id },
+				data: { isConfirmed: true, status: TripRequestStatus.ACCEPTED },
+			});
 
 			// Notify the customer
 			await sendEmail({
 				to: tripRequest.customerEmail,
-				subject: `✅ Your trip is confirmed — ${format(data.pickupDate, "PPP")}`,
+				subject: `✅ Your trip is confirmed — ${format(new Date(tripRequest.pickupDate), "PPP")}`,
 				react: createElement(BookingConfirmedEmail, {
 					firstName: tripRequest.firstName,
-					pickupDate: format(data.pickupDate, "PPP"),
-					pickupTime: data.pickupTime,
-					flightNumber: data.flightNumber,
-					routeSummary,
+					pickupDate: format(new Date(tripRequest.pickupDate), "PPP"),
+					pickupTime: tripRequest.pickupTime,
 					requestUrl: `${APP_URL}/request/${tripRequest.token}`,
 				}),
 			});

@@ -94,6 +94,7 @@ export const quotationRouter = createTRPCRouter({
 							token: true,
 							firstName: true,
 							customerEmail: true,
+							orderNumber: true,
 						},
 					},
 				},
@@ -132,11 +133,7 @@ export const quotationRouter = createTRPCRouter({
 					subject: `Your quotation is ready — ${quotation.currency} ${quotation.price}`,
 					react: createElement(QuotationSentEmail, {
 						firstName: quotation.tripRequest.firstName,
-						price: quotation.price.toString(),
-						currency: quotation.currency,
-						isPriceEachWay: quotation.isPriceEachWay,
-						areCarSeatsIncluded: quotation.areCarSeatsIncluded,
-						additionalInfo: quotation.quotationAdditionalInfo ?? undefined,
+						orderNumber: quotation.tripRequest.orderNumber,
 						dashboardUrl: `${APP_URL}/request/${quotation.tripRequest.token}`,
 					}),
 				});
@@ -189,102 +186,6 @@ export const quotationRouter = createTRPCRouter({
 
 				return result;
 			});
-
-			// Notify all admins
-			const acceptNotifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			const acceptUser = quotation.tripRequest.user;
-			await Promise.all(
-				acceptNotifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						react: createElement(QuotationResponseEmail, {
-							orderNumber: quotation.tripRequest.orderNumber,
-							accepted: true,
-							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail:
-								acceptUser?.email ?? quotation.tripRequest.customerEmail ?? "",
-							price: quotation.price.toString(),
-							currency: quotation.currency,
-							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
-
-			return updated;
-		}),
-
-	// USER: Reject quotation
-	reject: protectedProcedure
-		.input(z.object({ id: z.string() }))
-		.mutation(async ({ ctx, input }) => {
-			const quotation = await ctx.db.quotation.findUnique({
-				where: { id: input.id },
-				include: {
-					tripRequest: {
-						include: {
-							user: { select: { email: true, name: true } },
-							company: { select: { adminEmail: true } },
-						},
-					},
-				},
-			});
-
-			if (!quotation) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
-
-			if (quotation.tripRequest.userId !== ctx.session.user.id) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
-
-			if (quotation.status !== QuotationStatus.SENT) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation cannot be rejected",
-				});
-			}
-
-			const updated = await ctx.db.$transaction(async (tx) => {
-				const result = await tx.quotation.update({
-					where: { id: input.id },
-					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
-				});
-
-				await tx.tripRequest.update({
-					where: { id: quotation.tripRequestId },
-					data: { status: TripRequestStatus.REJECTED },
-				});
-
-				return result;
-			});
-
-			// Notify all admins
-			const rejectNotifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			const rejectUser = quotation.tripRequest.user;
-			await Promise.all(
-				rejectNotifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						react: createElement(QuotationResponseEmail, {
-							orderNumber: quotation.tripRequest.orderNumber,
-							accepted: false,
-							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail:
-								rejectUser?.email ?? quotation.tripRequest.customerEmail ?? "",
-							price: quotation.price.toString(),
-							currency: quotation.currency,
-							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
 
 			return updated;
 		}),
@@ -354,97 +255,6 @@ export const quotationRouter = createTRPCRouter({
 
 				return result;
 			});
-
-			// Notify all admins
-			const notifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `✅ Quotation accepted by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						react: createElement(QuotationResponseEmail, {
-							orderNumber: quotation.tripRequest.orderNumber,
-							accepted: true,
-							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail: quotation.tripRequest.customerEmail,
-							price: quotation.price.toString(),
-							currency: quotation.currency,
-							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
-
-			return updated;
-		}),
-
-	// PUBLIC: Reject quotation by token (anonymous customers)
-	rejectByToken: publicProcedure
-		.input(z.object({ id: z.string(), token: z.string() }))
-		.mutation(async ({ ctx, input }) => {
-			const quotation = await ctx.db.quotation.findUnique({
-				where: { id: input.id },
-				include: {
-					tripRequest: {
-						include: {
-							company: { select: { adminEmail: true } },
-						},
-					},
-				},
-			});
-
-			if (!quotation) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
-
-			if (quotation.tripRequest.token !== input.token) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
-
-			if (quotation.status !== QuotationStatus.SENT) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation cannot be rejected",
-				});
-			}
-
-			const updated = await ctx.db.$transaction(async (tx) => {
-				const result = await tx.quotation.update({
-					where: { id: input.id },
-					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
-				});
-
-				await tx.tripRequest.update({
-					where: { id: quotation.tripRequestId },
-					data: { status: TripRequestStatus.REJECTED },
-				});
-
-				return result;
-			});
-
-			// Notify all admins
-			const notifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `❌ Quotation rejected by ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-						react: createElement(QuotationResponseEmail, {
-							orderNumber: quotation.tripRequest.orderNumber,
-							accepted: false,
-							customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-							customerEmail: quotation.tripRequest.customerEmail,
-							price: quotation.price.toString(),
-							currency: quotation.currency,
-							adminUrl: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
 
 			return updated;
 		}),

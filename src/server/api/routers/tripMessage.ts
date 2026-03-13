@@ -62,7 +62,6 @@ export const tripMessageRouter = createTRPCRouter({
 						subject: `💬 Message from ${request.firstName} ${request.lastName}`,
 						react: createElement(TripMessageEmail, {
 							senderName: `${request.firstName} ${request.lastName}`,
-							body: input.body,
 							requestUrl: `${APP_URL}/admin/requests/${request.id}`,
 						}),
 					}),
@@ -100,7 +99,6 @@ export const tripMessageRouter = createTRPCRouter({
 				subject: `💬 New message about your trip request`,
 				react: createElement(TripMessageEmail, {
 					senderName: adminName,
-					body: input.body,
 					requestUrl: `${APP_URL}/request/${request.token}`,
 				}),
 			});

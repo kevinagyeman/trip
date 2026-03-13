@@ -5,9 +5,6 @@ interface QuotationResponseEmailProps {
 	orderNumber: number;
 	accepted: boolean;
 	customerName: string;
-	customerEmail: string;
-	price: string;
-	currency: string;
 	adminUrl: string;
 }
 
@@ -15,26 +12,20 @@ export function QuotationResponseEmail({
 	orderNumber,
 	accepted,
 	customerName,
-	price,
-	currency,
 	adminUrl,
 }: QuotationResponseEmailProps) {
 	const order = `#${String(orderNumber).padStart(7, "0")}`;
 	const action = accepted ? "accepted" : "rejected";
-
 	return (
 		<EmailLayout
 			preview={`QUOTATION ${action.toUpperCase()} ${order} | ${customerName}`}
 		>
 			<Text style={emailStyles.title}>
-				{customerName} {action} quotation {order}
-			</Text>
-			<Text style={emailStyles.subtitle}>
-				{currency} {price}
+				{customerName} {action} the quotation for request {order}.
 			</Text>
 			<Section style={emailStyles.buttonSection}>
 				<Button style={emailStyles.button} href={adminUrl}>
-					View request
+					View Request
 				</Button>
 			</Section>
 		</EmailLayout>

@@ -4,39 +4,26 @@ import { EmailLayout, emailStyles } from "./email-layout";
 interface TripConfirmedEmailProps {
 	orderNumber: number;
 	customerName: string;
-	customerEmail: string;
-	serviceType: string;
-	arrivalFlightDate?: string;
-	arrivalFlightTime?: string;
-	arrivalFlightNumber?: string;
 	adminUrl: string;
 }
 
 export function TripConfirmedEmail({
 	orderNumber,
 	customerName,
-	serviceType,
-	arrivalFlightDate,
-	arrivalFlightTime,
 	adminUrl,
 }: TripConfirmedEmailProps) {
 	const order = `#${String(orderNumber).padStart(7, "0")}`;
-	const detail = [arrivalFlightDate, arrivalFlightTime]
-		.filter(Boolean)
-		.join(" · ");
-
 	return (
 		<EmailLayout preview={`TRIP CONFIRMED ${order} | ${customerName}`}>
 			<Text style={emailStyles.title}>
-				{customerName} confirmed trip {order}
+				{customerName} confirmed their trip — {order}
 			</Text>
 			<Text style={emailStyles.subtitle}>
-				{serviceType}
-				{detail ? ` · ${detail}` : ""}
+				The trip is ready to be finalised.
 			</Text>
 			<Section style={emailStyles.buttonSection}>
 				<Button style={emailStyles.button} href={adminUrl}>
-					View request
+					View Request
 				</Button>
 			</Section>
 		</EmailLayout>

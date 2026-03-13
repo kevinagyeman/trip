@@ -46,11 +46,14 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		CANCELLED: t("statusCancelled"),
 	};
 	const utils = api.useUtils();
-	const [routeEdits, setRouteEdits] = useState<Route[] | null>(null);
 
 	const { data: request, isLoading } = api.tripRequest.getByToken.useQuery({
 		token,
 	});
+
+	const [pickupDate, setPickupDate] = useState("");
+	const [pickupTime, setPickupTime] = useState("");
+	const [flightNumber, setFlightNumber] = useState("");
 
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({
 		onSuccess: async () => {
@@ -64,10 +67,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		},
 	});
 
-	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
+	const updatePickupDetails = api.tripRequest.updatePickupDetails.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
-			setRouteEdits(null);
 		},
 	});
 
@@ -75,18 +77,16 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
-	const editableRoutes = routeEdits ?? routes;
+	const showPickupForm = request.status === "ACCEPTED" && !request.isConfirmed;
 
 	return (
 		<div className="space-y-6">
 			{/* Persistent email notification notice */}
-			{request && (
-				<div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-950/30">
-					<p className="text-blue-800 dark:text-blue-300">
-						{t("emailNotice", { email: request.fromEmail })}
-					</p>
-				</div>
-			)}
+			<div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-950/30">
+				<p className="text-blue-800 dark:text-blue-300">
+					{t("emailNotice", { email: request.fromEmail })}
+				</p>
+			</div>
 
 			{/* Main Request Information */}
 			<Card>
@@ -103,13 +103,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								{routes.map((route, i) => (
 									<p key={i} className="text-sm text-muted-foreground">
 										{route.pickup} → {route.destination}
-										{(route.departureTime ?? route.departureDate) && (
-											<span className="ml-2 text-xs">
-												{route.departureTime}
-												{route.departureDate &&
-													` · ${format(new Date(route.departureDate), "dd/MM")}`}
-											</span>
-										)}
 									</p>
 								))}
 							</div>
@@ -128,13 +121,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					{/* Routes */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
-						<div className="space-y-3">
-							{editableRoutes.map((route, i) => (
-								<div
-									key={i}
-									className="rounded-lg border p-3 text-sm space-y-3"
-								>
-									<p className="text-xs font-medium text-muted-foreground">
+						<div className="space-y-2">
+							{routes.map((route, i) => (
+								<div key={i} className="rounded-lg border p-3 text-sm">
+									<p className="mb-1 text-xs font-medium text-muted-foreground">
 										{t("routeN", { n: i + 1 })}
 									</p>
 									<p>
@@ -149,75 +139,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										</span>
 										<span className="font-medium">{route.destination}</span>
 									</p>
-									{/* Editable departure details */}
-									<div className="grid grid-cols-1 gap-2 pt-1 sm:grid-cols-3">
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("routeDepartureDate")}
-											</Label>
-											<Input
-												type="date"
-												value={route.departureDate ?? ""}
-												onChange={(e) => {
-													const updated = [...editableRoutes];
-													updated[i] = {
-														...updated[i]!,
-														departureDate: e.target.value || undefined,
-													};
-													setRouteEdits(updated);
-												}}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("routeDepartureTime")}
-											</Label>
-											<Input
-												type="time"
-												value={route.departureTime ?? ""}
-												onChange={(e) => {
-													const updated = [...editableRoutes];
-													updated[i] = {
-														...updated[i]!,
-														departureTime: e.target.value || undefined,
-													};
-													setRouteEdits(updated);
-												}}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("routeFlightNumber")}
-											</Label>
-											<Input
-												placeholder={t("routeFlightNumberPlaceholder")}
-												value={route.flightNumber ?? ""}
-												onChange={(e) => {
-													const updated = [...editableRoutes];
-													updated[i] = {
-														...updated[i]!,
-														flightNumber: e.target.value || undefined,
-													};
-													setRouteEdits(updated);
-												}}
-											/>
-										</div>
-									</div>
 								</div>
 							))}
 						</div>
-						{routeEdits && (
-							<Button
-								className="mt-3"
-								size="sm"
-								disabled={updateRoutes.isPending}
-								onClick={() =>
-									updateRoutes.mutate({ token, routes: routeEdits })
-								}
-							>
-								{updateRoutes.isPending ? t("saving") : t("saveRouteDetails")}
-							</Button>
-						)}
 					</div>
 
 					{/* Contact Details */}
@@ -296,8 +220,62 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						)}
 					</div>
 
-					{/* Pickup Details (only when confirmed) */}
-					{request.isConfirmed && request.pickupDate && (
+					{/* Pickup Details — form (editable) or read-only */}
+					{showPickupForm ? (
+						<div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
+							<h3 className="mb-1 text-lg font-semibold">
+								{t("pickupDetails")}
+							</h3>
+							<p className="mb-4 text-sm text-muted-foreground">
+								{t("pickupDetailsDesc")}
+							</p>
+							<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+								<div className="space-y-1">
+									<Label className="text-xs">{t("pickupDate")} *</Label>
+									<Input
+										type="date"
+										value={pickupDate}
+										onChange={(e) => setPickupDate(e.target.value)}
+									/>
+								</div>
+								<div className="space-y-1">
+									<Label className="text-xs">{t("pickupTime")} *</Label>
+									<Input
+										type="time"
+										value={pickupTime}
+										onChange={(e) => setPickupTime(e.target.value)}
+									/>
+								</div>
+								<div className="space-y-1">
+									<Label className="text-xs">{t("flightNumber")}</Label>
+									<Input
+										placeholder={t("routeFlightNumberPlaceholder")}
+										value={flightNumber}
+										onChange={(e) => setFlightNumber(e.target.value)}
+									/>
+								</div>
+							</div>
+							<Button
+								className="mt-4"
+								size="sm"
+								disabled={
+									!pickupDate || !pickupTime || updatePickupDetails.isPending
+								}
+								onClick={() =>
+									updatePickupDetails.mutate({
+										token,
+										pickupDate,
+										pickupTime,
+										flightNumber: flightNumber || undefined,
+									})
+								}
+							>
+								{updatePickupDetails.isPending
+									? t("saving")
+									: t("savePickupDetails")}
+							</Button>
+						</div>
+					) : request.isConfirmed && request.pickupDate ? (
 						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
 							<h3 className="mb-3 text-lg font-semibold">
 								{t("pickupDetails")}
@@ -329,7 +307,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								)}
 							</div>
 						</div>
-					)}
+					) : null}
 				</CardContent>
 			</Card>
 

@@ -7,7 +7,7 @@ interface ResetPasswordEmailProps {
 
 export function ResetPasswordEmail({ resetUrl }: ResetPasswordEmailProps) {
 	return (
-		<EmailLayout preview="Reset your dantrip.com password">
+		<EmailLayout preview="RESET YOUR dantrip.com PASSWORD">
 			<Heading as="h2" style={emailStyles.subheading}>
 				Reset your password
 			</Heading>

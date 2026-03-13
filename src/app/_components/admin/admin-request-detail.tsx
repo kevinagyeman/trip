@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
@@ -114,6 +115,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		id: requestId,
 	});
 
+	const [pendingStatus, setPendingStatus] = useState<TripRequestStatus | null>(
+		null,
+	);
+
 	const updateStatus = api.tripRequest.updateStatus.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
@@ -130,6 +135,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const deleteQuotation = api.quotation.delete.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
+		},
+	});
+
+	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
+			await utils.tripRequest.getAllRequests.invalidate();
 		},
 	});
 
@@ -175,35 +187,50 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							</div>
 						</div>
 						<div className="flex flex-col items-end gap-2">
-							<Select
-								value={request.status}
-								onValueChange={(value) =>
-									updateStatus.mutate({
-										id: requestId,
-										status: value as TripRequestStatus,
-									})
-								}
-							>
-								<SelectTrigger className="w-[150px]">
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="PENDING">{t("statusPending")}</SelectItem>
-									<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
-									<SelectItem value="ACCEPTED">
-										{t("statusAccepted")}
-									</SelectItem>
-									<SelectItem value="REJECTED">
-										{t("statusRejected")}
-									</SelectItem>
-									<SelectItem value="COMPLETED">
-										{t("statusCompleted")}
-									</SelectItem>
-									<SelectItem value="CANCELLED">
-										{t("statusCancelled")}
-									</SelectItem>
-								</SelectContent>
-							</Select>
+							<div className="flex items-center gap-2">
+								<Select
+									value={pendingStatus ?? request.status}
+									onValueChange={(value) =>
+										setPendingStatus(value as TripRequestStatus)
+									}
+								>
+									<SelectTrigger className="w-[150px]">
+										<SelectValue />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="PENDING">
+											{t("statusPending")}
+										</SelectItem>
+										<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
+										<SelectItem value="ACCEPTED">
+											{t("statusAccepted")}
+										</SelectItem>
+										<SelectItem value="REJECTED">
+											{t("statusRejected")}
+										</SelectItem>
+										<SelectItem value="COMPLETED">
+											{t("statusCompleted")}
+										</SelectItem>
+										<SelectItem value="CANCELLED">
+											{t("statusCancelled")}
+										</SelectItem>
+									</SelectContent>
+								</Select>
+								{pendingStatus && pendingStatus !== request.status && (
+									<Button
+										size="sm"
+										disabled={updateStatus.isPending}
+										onClick={() => {
+											updateStatus.mutate(
+												{ id: requestId, status: pendingStatus },
+												{ onSuccess: () => setPendingStatus(null) },
+											);
+										}}
+									>
+										{updateStatus.isPending ? t("saving") : t("saveStatus")}
+									</Button>
+								)}
+							</div>
 							{request.isConfirmed && (
 								<Badge variant="outline">{t("confirmed")}</Badge>
 							)}
@@ -384,12 +411,29 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						)}
 					</div>
 
-					{/* Pickup Details (confirmed) */}
-					{request.isConfirmed && request.pickupDate && (
-						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("pickupDetails")}
-							</h3>
+					{/* Pickup Details */}
+					{request.pickupDate ? (
+						<div
+							className={`rounded-lg border-2 p-4 ${
+								request.isConfirmed
+									? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
+									: "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30"
+							}`}
+						>
+							<div className="mb-3 flex items-center justify-between">
+								<h3 className="text-lg font-semibold">{t("pickupDetails")}</h3>
+								{!request.isConfirmed && (
+									<Button
+										size="sm"
+										disabled={confirmTrip.isPending}
+										onClick={() => confirmTrip.mutate({ id: requestId })}
+									>
+										{confirmTrip.isPending
+											? t("confirmingTrip")
+											: t("confirmTripButton")}
+									</Button>
+								)}
+							</div>
 							<div className="grid grid-cols-2 gap-4">
 								<div>
 									<p className="text-sm text-muted-foreground">
@@ -417,7 +461,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								)}
 							</div>
 						</div>
-					)}
+					) : request.status === "ACCEPTED" && !request.isConfirmed ? (
+						<div className="rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
+							{t("awaitingPickupDetails")}
+						</div>
+					) : null}
 				</CardContent>
 			</Card>
 
