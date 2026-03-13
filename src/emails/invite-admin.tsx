@@ -1,5 +1,6 @@
-import { Button, Heading, Section, Text } from "@react-email/components";
+import { Button, Section, Text } from "@react-email/components";
 import { EmailLayout, emailStyles } from "./email-layout";
+import type { EmailData } from "./types";
 
 interface InviteAdminEmailProps {
 	companyName: string;
@@ -10,25 +11,27 @@ export function InviteAdminEmail({
 	companyName,
 	setPasswordUrl,
 }: InviteAdminEmailProps) {
+	const emailData: EmailData = {
+		subject: `YOU'VE BEEN INVITED TO MANAGE ${companyName}`,
+		title: `You've been invited`,
+		subtitle: `You've been added as an admin for ${companyName} on dantrip.com. Click the button below to set your password and get started.`,
+		buttonLabel: "Set Password",
+		secondaryText:
+			"This link expires in 24 hours. If you weren't expecting this invitation, you can safely ignore this email.",
+	};
+
 	return (
-		<EmailLayout preview={`You've been invited to manage ${companyName}`}>
-			<Heading as="h2" style={emailStyles.subheading}>
-				You've been invited
-			</Heading>
-			<Text style={emailStyles.text}>
-				You've been added as an admin for <strong>{companyName}</strong> on
-				dantrip.com. Click the button below to set your password and get
-				started.
-			</Text>
+		<EmailLayout preview={emailData.subject}>
+			<Text style={emailStyles.title}>{emailData.title}</Text>
+			<Text style={emailStyles.subtitle}>{emailData.subtitle}</Text>
 			<Section style={emailStyles.buttonSection}>
 				<Button style={emailStyles.button} href={setPasswordUrl}>
-					Set Password
+					{emailData.buttonLabel}
 				</Button>
 			</Section>
-			<Text style={hint}>
-				This link expires in 24 hours. If you weren't expecting this invitation,
-				you can safely ignore this email.
-			</Text>
+			{emailData.secondaryText && (
+				<Text style={hint}>{emailData.secondaryText}</Text>
+			)}
 		</EmailLayout>
 	);
 }

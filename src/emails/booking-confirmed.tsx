@@ -1,5 +1,6 @@
 import { Button, Section, Text } from "@react-email/components";
 import { EmailLayout, emailStyles } from "./email-layout";
+import type { EmailData } from "./types";
 
 interface BookingConfirmedEmailProps {
 	firstName: string;
@@ -14,19 +15,20 @@ export function BookingConfirmedEmail({
 	pickupTime,
 	requestUrl,
 }: BookingConfirmedEmailProps) {
+	const emailData: EmailData = {
+		subject: `YOUR TRIP IS CONFIRMED — ${pickupDate} at ${pickupTime}`,
+		title: `Dear ${firstName}, your trip is confirmed!`,
+		subtitle: `Your pickup is scheduled for ${pickupDate} at ${pickupTime}.`,
+		buttonLabel: "View Details",
+	};
+
 	return (
-		<EmailLayout
-			preview={`YOUR TRIP IS CONFIRMED — ${pickupDate} at ${pickupTime}`}
-		>
-			<Text style={emailStyles.title}>
-				Dear {firstName}, your trip is confirmed!
-			</Text>
-			<Text style={emailStyles.subtitle}>
-				Your pickup is scheduled for {pickupDate} at {pickupTime}.
-			</Text>
+		<EmailLayout preview={emailData.subject}>
+			<Text style={emailStyles.title}>{emailData.title}</Text>
+			<Text style={emailStyles.subtitle}>{emailData.subtitle}</Text>
 			<Section style={emailStyles.buttonSection}>
 				<Button style={emailStyles.button} href={requestUrl}>
-					View Details
+					{emailData.buttonLabel}
 				</Button>
 			</Section>
 		</EmailLayout>

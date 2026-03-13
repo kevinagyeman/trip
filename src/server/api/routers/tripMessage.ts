@@ -1,12 +1,9 @@
-import { TripMessageEmail } from "@/emails/trip-message";
 import {
 	adminProcedure,
 	createTRPCRouter,
 	publicProcedure,
 } from "@/server/api/trpc";
-import { resolveAdminEmails, APP_URL, sendEmail } from "@/server/email";
 import { TRPCError } from "@trpc/server";
-import { createElement } from "react";
 import { z } from "zod";
 
 export const tripMessageRouter = createTRPCRouter({
@@ -45,7 +42,7 @@ export const tripMessageRouter = createTRPCRouter({
 			});
 			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
 
-			const message = await ctx.db.tripMessage.create({
+			return ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
 					senderType: "CUSTOMER",
@@ -53,22 +50,6 @@ export const tripMessageRouter = createTRPCRouter({
 					tripRequestId: request.id,
 				},
 			});
-
-			const adminEmails = await resolveAdminEmails(request.companyId);
-			await Promise.all(
-				adminEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `💬 Message from ${request.firstName} ${request.lastName}`,
-						react: createElement(TripMessageEmail, {
-							senderName: `${request.firstName} ${request.lastName}`,
-							requestUrl: `${APP_URL}/admin/requests/${request.id}`,
-						}),
-					}),
-				),
-			);
-
-			return message;
 		}),
 
 	// ADMIN: Admin sends a message
@@ -85,7 +66,7 @@ export const tripMessageRouter = createTRPCRouter({
 			const adminName =
 				ctx.session.user.name ?? ctx.session.user.email ?? "Admin";
 
-			const message = await ctx.db.tripMessage.create({
+			return ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
 					senderType: "ADMIN",
@@ -93,16 +74,5 @@ export const tripMessageRouter = createTRPCRouter({
 					tripRequestId: input.requestId,
 				},
 			});
-
-			await sendEmail({
-				to: request.customerEmail,
-				subject: `💬 New message about your trip request`,
-				react: createElement(TripMessageEmail, {
-					senderName: adminName,
-					requestUrl: `${APP_URL}/request/${request.token}`,
-				}),
-			});
-
-			return message;
 		}),
 });
