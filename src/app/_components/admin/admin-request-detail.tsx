@@ -146,9 +146,26 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
+	const saveAndSend = api.quotation.saveAndSend.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
+			await utils.tripRequest.getAllRequests.invalidate();
+		},
+	});
+
 	const notifyQuotation = api.quotation.notify.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
+			await utils.tripRequest.getAllRequests.invalidate();
+		},
+	});
+
+	const requestDetails = api.tripRequest.requestDetails.useMutation();
+
+	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
+			await utils.tripRequest.getAllRequests.invalidate();
 		},
 	});
 
@@ -195,34 +212,31 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 						<div className="flex flex-col items-end gap-2">
 							<div className="flex items-center gap-2">
-								<Select
-									value={pendingStatus ?? request.status}
-									onValueChange={(value) =>
-										setPendingStatus(value as TripRequestStatus)
-									}
-								>
-									<SelectTrigger className="w-[150px]">
-										<SelectValue />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="PENDING">
-											{t("statusPending")}
-										</SelectItem>
-										<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
-										<SelectItem value="ACCEPTED">
-											{t("statusAccepted")}
-										</SelectItem>
-										<SelectItem value="REJECTED">
-											{t("statusRejected")}
-										</SelectItem>
-										<SelectItem value="COMPLETED">
-											{t("statusCompleted")}
-										</SelectItem>
-										<SelectItem value="CANCELLED">
-											{t("statusCancelled")}
-										</SelectItem>
-									</SelectContent>
-								</Select>
+								<Badge className={statusColors[request.status]}>
+									{t(
+										`status${request.status.charAt(0) + request.status.slice(1).toLowerCase()}` as never,
+									)}
+								</Badge>
+								{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+									<Select
+										value={pendingStatus ?? ""}
+										onValueChange={(value) =>
+											setPendingStatus(value as TripRequestStatus)
+										}
+									>
+										<SelectTrigger className="w-[160px]">
+											<SelectValue placeholder={t("markAs")} />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="COMPLETED">
+												{t("statusCompleted")}
+											</SelectItem>
+											<SelectItem value="CANCELLED">
+												{t("statusCancelled")}
+											</SelectItem>
+										</SelectContent>
+									</Select>
+								)}
 								{pendingStatus && pendingStatus !== request.status && (
 									<Button
 										size="sm"
@@ -417,17 +431,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				</CardContent>
 			</Card>
 
-			{/* Message Thread */}
-			<Card>
-				<CardContent className="pt-6">
-					<TripMessageThread mode="admin" requestId={requestId} />
-				</CardContent>
-			</Card>
-
 			{/* Quotation */}
 			{(() => {
 				const quotation = request.quotations[0];
 				const isAccepted = quotation?.status === "ACCEPTED";
+				const isRejected = quotation?.status === "REJECTED";
+				const isEditable = !isAccepted;
 				return (
 					<div className="space-y-4">
 						<h2 className="text-xl font-bold">{t("quotation")}</h2>
@@ -477,9 +486,60 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												</p>
 											</div>
 										)}
+										{/* Confirmed banner or action buttons */}
+										{request.isConfirmed ? (
+											<div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950/30">
+												<p className="font-semibold text-green-800 dark:text-green-300">
+													{t("tripConfirmedTitle")}
+												</p>
+												<p className="mt-1 text-sm text-green-700 dark:text-green-400">
+													{t("tripConfirmedDesc")}
+												</p>
+											</div>
+										) : (
+											<div className="flex flex-wrap gap-2 border-t pt-4">
+												<Button
+													disabled={confirmTrip.isPending}
+													onClick={() => confirmTrip.mutate({ id: requestId })}
+												>
+													{confirmTrip.isPending
+														? t("confirming")
+														: t("confirmTrip")}
+												</Button>
+												<Button
+													variant="outline"
+													disabled={requestDetails.isPending}
+													onClick={() =>
+														requestDetails.mutate({ id: requestId })
+													}
+												>
+													{requestDetails.isPending
+														? t("sending")
+														: t("requestDetails")}
+												</Button>
+											</div>
+										)}
 									</>
 								) : (
 									<>
+										{/* Rejected banner */}
+										{isRejected && (
+											<div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950/30">
+												<div>
+													<p className="text-sm font-medium text-red-800 dark:text-red-300">
+														{t("quotationStatusRejected")}
+													</p>
+													{quotation!.respondedAt && (
+														<p className="text-xs text-red-600 dark:text-red-400">
+															{format(new Date(quotation!.respondedAt), "PPP")}
+														</p>
+													)}
+												</div>
+												<Badge className="bg-red-500">
+													{t("statusRejected")}
+												</Badge>
+											</div>
+										)}
 										{/* Price */}
 										<div className="w-48">
 											<Label className="text-sm">{t("price")}</Label>
@@ -537,13 +597,35 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</div>
 										{/* Actions */}
 										<div className="flex flex-wrap items-center gap-3">
+											{/* Primary: Save & Send */}
 											<Button
+												disabled={!qPrice || saveAndSend.isPending}
+												onClick={() =>
+													saveAndSend.mutate({
+														tripRequestId: requestId,
+														price: parseFloat(qPrice),
+														isPriceEachWay: qIsPriceEachWay,
+														areCarSeatsIncluded: qAreCarSeatsIncluded,
+														quotationAdditionalInfo:
+															qAdditionalInfo || undefined,
+														internalNotes: qInternalNotes || undefined,
+													})
+												}
+											>
+												{saveAndSend.isPending
+													? t("sending")
+													: isRejected
+														? t("reviseAndResend")
+														: t("saveAndSend")}
+											</Button>
+											{/* Secondary: Save draft */}
+											<Button
+												variant="outline"
 												disabled={!qPrice || saveQuotation.isPending}
 												onClick={() =>
 													saveQuotation.mutate({
 														tripRequestId: requestId,
 														price: parseFloat(qPrice),
-														currency: "EUR",
 														isPriceEachWay: qIsPriceEachWay,
 														areCarSeatsIncluded: qAreCarSeatsIncluded,
 														quotationAdditionalInfo:
@@ -556,19 +638,19 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													? t("saving")
 													: t("saveQuotation")}
 											</Button>
-											{quotation && (
+											{/* Resend after first notification */}
+											{quotation?.notifiedAt && !isRejected && (
 												<Button
-													variant="outline"
+													variant="ghost"
+													size="sm"
 													disabled={notifyQuotation.isPending}
 													onClick={() =>
-														notifyQuotation.mutate({
-															tripRequestId: requestId,
-														})
+														notifyQuotation.mutate({ tripRequestId: requestId })
 													}
 												>
 													{notifyQuotation.isPending
 														? t("notifying")
-														: t("notifyCustomer")}
+														: t("resendNotification")}
 												</Button>
 											)}
 											{quotation?.notifiedAt && (
@@ -586,6 +668,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					</div>
 				);
 			})()}
+
+			{/* Message Thread */}
+			<Card>
+				<CardContent className="pt-6">
+					<TripMessageThread mode="admin" requestId={requestId} />
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

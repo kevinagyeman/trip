@@ -265,7 +265,8 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
 
 exports.QuotationStatus = exports.$Enums.QuotationStatus = {
   PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED'
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {

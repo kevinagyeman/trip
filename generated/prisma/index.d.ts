@@ -86,7 +86,8 @@ export type TripRequestStatus = (typeof TripRequestStatus)[keyof typeof TripRequ
 
 export const QuotationStatus: {
   PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED'
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
 };
 
 export type QuotationStatus = (typeof QuotationStatus)[keyof typeof QuotationStatus]

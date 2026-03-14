@@ -31,6 +31,7 @@ const statusColors: Record<string, string> = {
 const quotationStatusColors: Record<string, string> = {
 	PENDING: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
+	REJECTED: "bg-red-500",
 };
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
@@ -76,6 +77,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		},
 	});
 
+	const rejectQuotation = api.quotation.rejectByToken.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByToken.invalidate({ token });
+		},
+	});
+
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
@@ -86,10 +93,24 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
-	const canEdit = !["COMPLETED", "CANCELLED"].includes(request.status);
+	const canEdit =
+		!["COMPLETED", "CANCELLED"].includes(request.status) &&
+		!request.isConfirmed;
 
 	return (
 		<div className="space-y-6">
+			{/* Trip confirmed banner */}
+			{request.isConfirmed && (
+				<div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
+					<p className="font-semibold text-green-800 dark:text-green-300">
+						{t("tripConfirmedTitle")}
+					</p>
+					<p className="mt-1 text-sm text-green-700 dark:text-green-400">
+						{t("tripConfirmedDesc")}
+					</p>
+				</div>
+			)}
+
 			{/* Persistent email notification notice */}
 			<div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-950/30">
 				<p className="text-blue-800 dark:text-blue-300">
@@ -396,16 +417,39 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										})}
 									</p>
 								)}
-								{quotation.status === "PENDING" && (
+								{quotation.status === "PENDING" && quotation.notifiedAt && (
 									<div className="flex gap-2">
 										<Button
 											onClick={() =>
 												acceptQuotation.mutate({ id: quotation.id, token })
 											}
-											disabled={acceptQuotation.isPending}
+											disabled={
+												acceptQuotation.isPending || rejectQuotation.isPending
+											}
 										>
 											{t("acceptQuotation")}
 										</Button>
+										<Button
+											variant="outline"
+											onClick={() =>
+												rejectQuotation.mutate({ id: quotation.id, token })
+											}
+											disabled={
+												acceptQuotation.isPending || rejectQuotation.isPending
+											}
+										>
+											{t("rejectQuotation")}
+										</Button>
+									</div>
+								)}
+								{quotation.status === "REJECTED" && (
+									<div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm dark:border-red-800 dark:bg-red-950/30">
+										<p className="font-medium text-red-800 dark:text-red-300">
+											{t("quotationRejected")}
+										</p>
+										<p className="mt-1 text-red-700 dark:text-red-400">
+											{t("quotationRejectedDesc")}
+										</p>
 									</div>
 								)}
 							</CardContent>
