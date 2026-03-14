@@ -152,13 +152,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-			await utils.tripRequest.getAllRequests.invalidate();
-		},
-	});
-
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
@@ -245,9 +238,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									</Button>
 								)}
 							</div>
-							{request.isConfirmed && (
-								<Badge variant="outline">{t("confirmed")}</Badge>
-							)}
 						</div>
 					</div>
 				</CardHeader>
@@ -424,156 +414,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							</p>
 						)}
 					</div>
-
-					{/* Pickup Details */}
-					{request.pickupDate ? (
-						<div
-							className={`rounded-lg border-2 p-4 ${
-								request.isConfirmed
-									? "border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/30"
-									: "border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950/30"
-							}`}
-						>
-							<div className="mb-3 flex items-center justify-between">
-								<h3 className="text-lg font-semibold">{t("pickupDetails")}</h3>
-								{!request.isConfirmed && (
-									<Button
-										size="sm"
-										disabled={confirmTrip.isPending}
-										onClick={() => confirmTrip.mutate({ id: requestId })}
-									>
-										{confirmTrip.isPending
-											? t("confirmingTrip")
-											: t("confirmTripButton")}
-									</Button>
-								)}
-							</div>
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<p className="text-sm text-muted-foreground">
-										{t("pickupDate")}
-									</p>
-									<p className="font-medium">
-										{format(new Date(request.pickupDate), "PPP")}
-									</p>
-								</div>
-								{request.pickupTime && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("pickupTime")}
-										</p>
-										<p className="font-medium">{request.pickupTime}</p>
-									</div>
-								)}
-								{request.flightNumber && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("flightNumber")}
-										</p>
-										<p className="font-medium">{request.flightNumber}</p>
-									</div>
-								)}
-							</div>
-						</div>
-					) : request.status === "ACCEPTED" && !request.isConfirmed ? (
-						<div className="rounded-lg border border-dashed p-4 text-center text-sm text-muted-foreground">
-							{t("awaitingPickupDetails")}
-						</div>
-					) : null}
 				</CardContent>
 			</Card>
-
-			{/* Calendar Section — only when trip is confirmed and pickup date set */}
-			{request.isConfirmed && request.pickupDate && (
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center gap-2 text-base">
-							<CalendarPlus className="h-5 w-5" />
-							{t("addToCalendar")}
-						</CardTitle>
-					</CardHeader>
-					<CardContent className="flex flex-wrap gap-3">
-						<div className="flex flex-col gap-2">
-							<p className="text-sm font-medium">{t("pickupEvent")}</p>
-							<div className="flex gap-2">
-								<Button
-									size="sm"
-									variant="outline"
-									onClick={() => {
-										const start = toICSDateTime(
-											new Date(request.pickupDate!),
-											request.pickupTime,
-										);
-										const endDate = new Date(request.pickupDate!);
-										if (request.pickupTime) {
-											const [h, m] = request.pickupTime.split(":").map(Number);
-											endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-										} else {
-											endDate.setHours(endDate.getHours() + 1);
-										}
-										const end = toICSDateTime(endDate);
-										const summary = `${t("pickupEvent")} — ${request.firstName} ${request.lastName}`;
-										const routeStr = routes
-											.map((r) => `${r.pickup} → ${r.destination}`)
-											.join(" | ");
-										const description = [
-											`${t("calRoute")}: ${routeStr}`,
-											`${t("calFlightNumber")}: ${request.flightNumber ?? "—"}`,
-											`${t("calPassengers")}: ${request.numberOfAdults}`,
-										].join("\\n");
-										downloadICS(
-											`pickup-${request.id}.ics`,
-											buildICS({
-												uid: `pickup-${request.id}@tripmanager`,
-												summary,
-												description,
-												location: firstRoute.pickup,
-												start,
-												end,
-											}),
-										);
-									}}
-								>
-									{t("downloadICS")}
-								</Button>
-								<Button
-									size="sm"
-									variant="outline"
-									onClick={() => {
-										const start = toICSDateTime(
-											new Date(request.pickupDate!),
-											request.pickupTime,
-										);
-										const endDate = new Date(request.pickupDate!);
-										if (request.pickupTime) {
-											const [h, m] = request.pickupTime.split(":").map(Number);
-											endDate.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-										} else {
-											endDate.setHours(endDate.getHours() + 1);
-										}
-										const end = toICSDateTime(endDate);
-										const routeStr = routes
-											.map((r) => `${r.pickup} → ${r.destination}`)
-											.join(" | ");
-										window.open(
-											googleCalendarUrl({
-												summary: `${t("pickupEvent")} — ${request.firstName} ${request.lastName}`,
-												description: `${t("calRoute")}: ${routeStr}\n${t("calFlightNumber")}: ${request.flightNumber ?? "—"}`,
-												location: firstRoute.pickup,
-												start,
-												end,
-											}),
-											"_blank",
-										);
-									}}
-								>
-									{t("googleCalendar")}
-								</Button>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-			)}
 
 			{/* Message Thread */}
 			<Card>

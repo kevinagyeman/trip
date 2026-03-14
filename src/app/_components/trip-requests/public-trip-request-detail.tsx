@@ -49,9 +49,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		token,
 	});
 
-	const [pickupDate, setPickupDate] = useState("");
-	const [pickupTime, setPickupTime] = useState("");
-	const [flightNumber, setFlightNumber] = useState("");
 	const [routeDepartures, setRouteDepartures] = useState<
 		Array<{
 			departureDate: string;
@@ -79,12 +76,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		},
 	});
 
-	const updatePickupDetails = api.tripRequest.updatePickupDetails.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getByToken.invalidate({ token });
-		},
-	});
-
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
@@ -95,7 +86,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
-	const showPickupForm = request.status === "ACCEPTED" && !request.isConfirmed;
+	const canEdit = !["COMPLETED", "CANCELLED"].includes(request.status);
 
 	return (
 		<div className="space-y-6">
@@ -129,9 +120,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							<Badge className={statusColors[request.status]}>
 								{statusLabels[request.status] ?? request.status}
 							</Badge>
-							{request.isConfirmed && (
-								<Badge variant="outline">{t("confirmed")}</Badge>
-							)}
 						</div>
 					</div>
 				</CardHeader>
@@ -139,135 +127,146 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					{/* Routes */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
-						<div className="space-y-2">
+						<div className="space-y-4">
 							{routes.map((route, i) => (
-								<div key={i} className="rounded-lg border p-3 text-sm">
-									<p className="mb-1 text-xs font-medium text-muted-foreground">
-										{t("routeN", { n: i + 1 })}
-									</p>
-									<p>
-										<span className="text-muted-foreground">
-											{t("pickup")}:{" "}
-										</span>
-										<span className="font-medium">{route.pickup}</span>
-									</p>
-									<p>
-										<span className="text-muted-foreground">
-											{t("destination")}:{" "}
-										</span>
-										<span className="font-medium">{route.destination}</span>
-									</p>
-									{(route.departureDate ??
-										route.departureTime ??
-										route.flightNumber) && (
-										<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-											{route.departureDate && (
-												<span>
-													{t("routeDepartureDate")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.departureDate}
+								<div key={i}>
+									{/* Route info card */}
+									<div className="rounded-lg border p-3 text-sm">
+										<p className="mb-1 text-xs font-medium text-muted-foreground">
+											{t("routeN", { n: i + 1 })}
+										</p>
+										<p>
+											<span className="text-muted-foreground">
+												{t("pickup")}:{" "}
+											</span>
+											<span className="font-medium">{route.pickup}</span>
+										</p>
+										<p>
+											<span className="text-muted-foreground">
+												{t("destination")}:{" "}
+											</span>
+											<span className="font-medium">{route.destination}</span>
+										</p>
+										{(route.departureDate ??
+											route.departureTime ??
+											route.flightNumber) && (
+											<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
+												{route.departureDate && (
+													<span>
+														{t("routeDepartureDate")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.departureDate}
+														</span>
 													</span>
-												</span>
-											)}
-											{route.departureTime && (
-												<span>
-													{t("routeDepartureTime")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.departureTime}
+												)}
+												{route.departureTime && (
+													<span>
+														{t("routeDepartureTime")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.departureTime}
+														</span>
 													</span>
-												</span>
-											)}
-											{route.flightNumber && (
-												<span>
-													{t("routeFlightNumber")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.flightNumber}
+												)}
+												{route.flightNumber && (
+													<span>
+														{t("routeFlightNumber")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.flightNumber}
+														</span>
 													</span>
-												</span>
-											)}
-										</div>
-									)}
-									{!["COMPLETED", "CANCELLED"].includes(request.status) && (
-										<div className="mt-3 grid grid-cols-1 gap-2 border-t pt-3 sm:grid-cols-3">
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("routeDepartureDate")}
-												</Label>
-												<Input
-													type="date"
-													value={routeDepartures[i]?.departureDate ?? ""}
-													onChange={(e) =>
-														setRouteDepartures((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.departureDate = e.target.value;
-															return next;
-														})
-													}
-												/>
+												)}
 											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("routeDepartureTime")}
-												</Label>
-												<Input
-													type="time"
-													value={routeDepartures[i]?.departureTime ?? ""}
-													onChange={(e) =>
-														setRouteDepartures((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.departureTime = e.target.value;
-															return next;
-														})
-													}
-												/>
+										)}
+									</div>
+
+									{/* Per-route departure edit form */}
+									{canEdit && (
+										<div className="mt-2 rounded-lg border border-dashed p-3">
+											<p className="mb-2 text-xs font-medium text-muted-foreground">
+												{t("routeN", { n: i + 1 })} —{" "}
+												{t("routeDepartureDetails")}
+											</p>
+											<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+												<div className="space-y-1">
+													<Label className="text-xs">
+														{t("routeDepartureDate")}
+													</Label>
+													<Input
+														type="date"
+														value={routeDepartures[i]?.departureDate ?? ""}
+														onChange={(e) =>
+															setRouteDepartures((prev) => {
+																const next = [...prev];
+																if (next[i])
+																	next[i]!.departureDate = e.target.value;
+																return next;
+															})
+														}
+													/>
+												</div>
+												<div className="space-y-1">
+													<Label className="text-xs">
+														{t("routeDepartureTime")}
+													</Label>
+													<Input
+														type="time"
+														value={routeDepartures[i]?.departureTime ?? ""}
+														onChange={(e) =>
+															setRouteDepartures((prev) => {
+																const next = [...prev];
+																if (next[i])
+																	next[i]!.departureTime = e.target.value;
+																return next;
+															})
+														}
+													/>
+												</div>
+												<div className="space-y-1">
+													<Label className="text-xs">
+														{t("routeFlightNumber")}
+													</Label>
+													<Input
+														placeholder={t("routeFlightNumberPlaceholder")}
+														value={routeDepartures[i]?.flightNumber ?? ""}
+														onChange={(e) =>
+															setRouteDepartures((prev) => {
+																const next = [...prev];
+																if (next[i])
+																	next[i]!.flightNumber = e.target.value;
+																return next;
+															})
+														}
+													/>
+												</div>
 											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("routeFlightNumber")}
-												</Label>
-												<Input
-													placeholder={t("routeFlightNumberPlaceholder")}
-													value={routeDepartures[i]?.flightNumber ?? ""}
-													onChange={(e) =>
-														setRouteDepartures((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.flightNumber = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
+											<Button
+												className="mt-2"
+												size="sm"
+												variant="outline"
+												disabled={updateRoutes.isPending}
+												onClick={() =>
+													updateRoutes.mutate({
+														token,
+														routes: routes.map((r, j) => ({
+															...r,
+															departureDate:
+																routeDepartures[j]?.departureDate || undefined,
+															departureTime:
+																routeDepartures[j]?.departureTime || undefined,
+															flightNumber:
+																routeDepartures[j]?.flightNumber || undefined,
+														})),
+													})
+												}
+											>
+												{updateRoutes.isPending
+													? t("saving")
+													: t("saveRouteDetails")}
+											</Button>
 										</div>
 									)}
 								</div>
 							))}
-							{!["COMPLETED", "CANCELLED"].includes(request.status) && (
-								<Button
-									className="mt-2"
-									size="sm"
-									variant="outline"
-									disabled={updateRoutes.isPending}
-									onClick={() =>
-										updateRoutes.mutate({
-											token,
-											routes: routes.map((r, i) => ({
-												...r,
-												departureDate:
-													routeDepartures[i]?.departureDate || undefined,
-												departureTime:
-													routeDepartures[i]?.departureTime || undefined,
-												flightNumber:
-													routeDepartures[i]?.flightNumber || undefined,
-											})),
-										})
-									}
-								>
-									{updateRoutes.isPending ? t("saving") : t("saveRouteDetails")}
-								</Button>
-							)}
 						</div>
 					</div>
 
@@ -346,95 +345,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</p>
 						)}
 					</div>
-
-					{/* Pickup Details — form (editable) or read-only */}
-					{showPickupForm ? (
-						<div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950/30">
-							<h3 className="mb-1 text-lg font-semibold">
-								{t("pickupDetails")}
-							</h3>
-							<p className="mb-4 text-sm text-muted-foreground">
-								{t("pickupDetailsDesc")}
-							</p>
-							<div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-								<div className="space-y-1">
-									<Label className="text-xs">{t("pickupDate")} *</Label>
-									<Input
-										type="date"
-										value={pickupDate}
-										onChange={(e) => setPickupDate(e.target.value)}
-									/>
-								</div>
-								<div className="space-y-1">
-									<Label className="text-xs">{t("pickupTime")} *</Label>
-									<Input
-										type="time"
-										value={pickupTime}
-										onChange={(e) => setPickupTime(e.target.value)}
-									/>
-								</div>
-								<div className="space-y-1">
-									<Label className="text-xs">{t("flightNumber")}</Label>
-									<Input
-										placeholder={t("routeFlightNumberPlaceholder")}
-										value={flightNumber}
-										onChange={(e) => setFlightNumber(e.target.value)}
-									/>
-								</div>
-							</div>
-							<Button
-								className="mt-4"
-								size="sm"
-								disabled={
-									!pickupDate || !pickupTime || updatePickupDetails.isPending
-								}
-								onClick={() =>
-									updatePickupDetails.mutate({
-										token,
-										pickupDate,
-										pickupTime,
-										flightNumber: flightNumber || undefined,
-									})
-								}
-							>
-								{updatePickupDetails.isPending
-									? t("saving")
-									: t("savePickupDetails")}
-							</Button>
-						</div>
-					) : request.isConfirmed && request.pickupDate ? (
-						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("pickupDetails")}
-							</h3>
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<p className="text-sm text-muted-foreground">
-										{t("pickupDate")}
-									</p>
-									<p className="font-medium">
-										{format(new Date(request.pickupDate), "PPP")}
-									</p>
-								</div>
-								{request.pickupTime && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("pickupTime")}
-										</p>
-										<p className="font-medium">{request.pickupTime}</p>
-									</div>
-								)}
-								{request.flightNumber && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("flightNumber")}
-										</p>
-										<p className="font-medium">{request.flightNumber}</p>
-									</div>
-								)}
-							</div>
-						</div>
-					) : null}
 				</CardContent>
 			</Card>
 

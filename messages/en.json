@@ -235,6 +235,7 @@
 		"routeDepartureTime": "Departure Time",
 		"routeFlightNumber": "Flight Number",
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
+		"routeDepartureDetails": "Departure details",
 		"saveRouteDetails": "Save details",
 		"saving": "Saving...",
 		"savePickupDetails": "Save Pickup Details",
