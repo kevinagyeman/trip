@@ -367,7 +367,10 @@
 		"calPassengers": "Passeggeri",
 		"routeDepartureDate": "Data di Partenza",
 		"routeDepartureTime": "Orario di Partenza",
-		"routeFlightNumber": "Numero di Volo"
+		"routeFlightNumber": "Numero di Volo",
+		"routeFlightNumberPlaceholder": "es. FR1234",
+		"routeDepartureDetails": "Dettagli di partenza",
+		"saveRouteDetails": "Salva dettagli"
 	},
 	"notFound": {
 		"heading": "Pagina Non Trovata",

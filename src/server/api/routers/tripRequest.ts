@@ -460,6 +460,35 @@ export const tripRequestRouter = createTRPCRouter({
 			);
 		}),
 
+	// ADMIN: Update route departure details by request id
+	updateRoutesByAdmin: adminProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				routes: z.array(
+					z.object({
+						pickup: z.string(),
+						destination: z.string(),
+						departureDate: z.string().optional(),
+						departureTime: z.string().optional(),
+						flightNumber: z.string().optional(),
+					}),
+				),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id: input.id },
+				select: { id: true },
+			});
+			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+
+			await ctx.db.tripRequest.update({
+				where: { id: input.id },
+				data: { routes: JSON.stringify(input.routes) },
+			});
+		}),
+
 	// ADMIN: Request customer to fill in missing departure details
 	requestDetails: adminProcedure
 		.input(z.object({ id: z.string() }))

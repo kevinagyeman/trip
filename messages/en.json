@@ -367,7 +367,10 @@
 		"calPassengers": "Passengers",
 		"routeDepartureDate": "Departure Date",
 		"routeDepartureTime": "Departure Time",
-		"routeFlightNumber": "Flight Number"
+		"routeFlightNumber": "Flight Number",
+		"routeFlightNumberPlaceholder": "e.g. FR1234",
+		"routeDepartureDetails": "Departure details",
+		"saveRouteDetails": "Save details"
 	},
 	"notFound": {
 		"heading": "Page Not Found",

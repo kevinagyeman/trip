@@ -115,6 +115,24 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		null,
 	);
 
+	// Route departures state (admin editable)
+	const [adminRouteDepartures, setAdminRouteDepartures] = useState<
+		Array<{ departureDate: string; departureTime: string; flightNumber: string }>
+	>([]);
+
+	useEffect(() => {
+		if (request) {
+			const parsed = JSON.parse(request.routes) as Route[];
+			setAdminRouteDepartures(
+				parsed.map((r) => ({
+					departureDate: r.departureDate ?? "",
+					departureTime: r.departureTime ?? "",
+					flightNumber: r.flightNumber ?? "",
+				})),
+			);
+		}
+	}, [request?.id]);
+
 	// Quotation form state
 	const [qPrice, setQPrice] = useState("");
 	const [qIsPriceEachWay, setQIsPriceEachWay] = useState(false);
@@ -157,6 +175,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 			await utils.tripRequest.getAllRequests.invalidate();
+		},
+	});
+
+	const updateRoutesByAdmin = api.tripRequest.updateRoutesByAdmin.useMutation({
+		onSuccess: async () => {
+			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 		},
 	});
 
@@ -261,7 +285,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
 						<div className="space-y-2">
 							{routes.map((route, i) => (
-								<div key={i} className="rounded-lg border p-3 text-sm">
+								<div key={i}>
+								<div className="rounded-lg border p-3 text-sm">
 									<p className="mb-1 text-xs font-medium text-muted-foreground">
 										{t("routeN", { n: i + 1 })}
 									</p>
@@ -346,6 +371,75 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											</Button>
 										</div>
 									)}
+								</div>
+								<div className="mt-2 rounded-lg border border-dashed p-3">
+									<p className="mb-2 text-xs font-medium text-muted-foreground">
+										{t("routeDepartureDetails")}
+									</p>
+									<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+										<div className="space-y-1">
+											<Label className="text-xs">{t("routeDepartureDate")}</Label>
+											<Input
+												type="date"
+												value={adminRouteDepartures[i]?.departureDate ?? ""}
+												onChange={(e) =>
+													setAdminRouteDepartures((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.departureDate = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs">{t("routeDepartureTime")}</Label>
+											<Input
+												type="time"
+												value={adminRouteDepartures[i]?.departureTime ?? ""}
+												onChange={(e) =>
+													setAdminRouteDepartures((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.departureTime = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs">{t("routeFlightNumber")}</Label>
+											<Input
+												placeholder={t("routeFlightNumberPlaceholder")}
+												value={adminRouteDepartures[i]?.flightNumber ?? ""}
+												onChange={(e) =>
+													setAdminRouteDepartures((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.flightNumber = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
+									</div>
+									<Button
+										className="mt-2"
+										size="sm"
+										variant="outline"
+										disabled={updateRoutesByAdmin.isPending}
+										onClick={() =>
+											updateRoutesByAdmin.mutate({
+												id: requestId,
+												routes: routes.map((r, j) => ({
+													...r,
+													departureDate: adminRouteDepartures[j]?.departureDate || undefined,
+													departureTime: adminRouteDepartures[j]?.departureTime || undefined,
+													flightNumber: adminRouteDepartures[j]?.flightNumber || undefined,
+												})),
+											})
+										}
+									>
+										{updateRoutesByAdmin.isPending ? t("saving") : t("saveRouteDetails")}
+									</Button>
+								</div>
 								</div>
 							))}
 						</div>
