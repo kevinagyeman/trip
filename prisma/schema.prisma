@@ -26,6 +26,7 @@ enum TripRequestStatus {
     PENDING
     QUOTED
     ACCEPTED
+    CONFIRMED
     REJECTED
     COMPLETED
     CANCELLED
@@ -145,8 +146,6 @@ model TripRequest {
     pickupDate   DateTime?
     pickupTime   String?
     flightNumber String?
-
-    isConfirmed  Boolean @default(false)
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

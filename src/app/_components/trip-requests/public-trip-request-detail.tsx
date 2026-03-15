@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { TripMessageThread } from "./trip-message-thread";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 
 type Route = {
 	pickup: string;
@@ -23,6 +24,7 @@ const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
 	QUOTED: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
+	CONFIRMED: "bg-emerald-600",
 	REJECTED: "bg-red-500",
 	COMPLETED: "bg-gray-500",
 	CANCELLED: "bg-gray-400",
@@ -40,6 +42,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		PENDING: t("statusPending"),
 		QUOTED: t("statusQuoted"),
 		ACCEPTED: t("statusAccepted"),
+		CONFIRMED: t("statusConfirmed"),
 		REJECTED: t("statusRejected"),
 		COMPLETED: t("statusCompleted"),
 		CANCELLED: t("statusCancelled"),
@@ -93,30 +96,26 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = JSON.parse(request.routes) as Route[];
-	const canEdit =
-		!["COMPLETED", "CANCELLED"].includes(request.status) &&
-		!request.isConfirmed;
+	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
+		request.status,
+	);
 
 	return (
 		<div className="space-y-6">
 			{/* Trip confirmed banner */}
-			{request.isConfirmed && (
-				<div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-					<p className="font-semibold text-green-800 dark:text-green-300">
-						{t("tripConfirmedTitle")}
-					</p>
-					<p className="mt-1 text-sm text-green-700 dark:text-green-400">
-						{t("tripConfirmedDesc")}
-					</p>
-				</div>
+			{request.status === "CONFIRMED" && (
+				<AlertBanner
+					variant="success"
+					title={t("tripConfirmedTitle")}
+					description={t("tripConfirmedDesc")}
+				/>
 			)}
 
 			{/* Persistent email notification notice */}
-			<div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm dark:border-blue-800 dark:bg-blue-950/30">
-				<p className="text-blue-800 dark:text-blue-300">
-					{t("emailNotice", { email: request.fromEmail })}
-				</p>
-			</div>
+			<AlertBanner
+				variant="info"
+				description={t("emailNotice", { email: request.fromEmail })}
+			/>
 
 			{/* Main Request Information */}
 			<Card>
@@ -443,14 +442,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									</div>
 								)}
 								{quotation.status === "REJECTED" && (
-									<div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm dark:border-red-800 dark:bg-red-950/30">
-										<p className="font-medium text-red-800 dark:text-red-300">
-											{t("quotationRejected")}
-										</p>
-										<p className="mt-1 text-red-700 dark:text-red-400">
-											{t("quotationRejectedDesc")}
-										</p>
-									</div>
+									<AlertBanner
+										variant="error"
+										title={t("quotationRejected")}
+										description={t("quotationRejectedDesc")}
+									/>
 								)}
 							</CardContent>
 						</Card>

@@ -76,6 +76,7 @@ export const TripRequestStatus: {
   PENDING: 'PENDING',
   QUOTED: 'QUOTED',
   ACCEPTED: 'ACCEPTED',
+  CONFIRMED: 'CONFIRMED',
   REJECTED: 'REJECTED',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
@@ -8408,7 +8409,6 @@ export namespace Prisma {
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
-    isConfirmed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -8435,7 +8435,6 @@ export namespace Prisma {
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
-    isConfirmed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -8462,7 +8461,6 @@ export namespace Prisma {
     pickupDate: number
     pickupTime: number
     flightNumber: number
-    isConfirmed: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -8505,7 +8503,6 @@ export namespace Prisma {
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
-    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -8532,7 +8529,6 @@ export namespace Prisma {
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
-    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -8559,7 +8555,6 @@ export namespace Prisma {
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
-    isConfirmed?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -8673,7 +8668,6 @@ export namespace Prisma {
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
-    isConfirmed: boolean
     createdAt: Date
     updatedAt: Date
     userId: string | null
@@ -8719,7 +8713,6 @@ export namespace Prisma {
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
-    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -8751,7 +8744,6 @@ export namespace Prisma {
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
-    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -8780,7 +8772,6 @@ export namespace Prisma {
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
-    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -8809,14 +8800,13 @@ export namespace Prisma {
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
-    isConfirmed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
     companyId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "pickupDate" | "pickupTime" | "flightNumber" | "isConfirmed" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "pickupDate" | "pickupTime" | "flightNumber" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
@@ -8861,7 +8851,6 @@ export namespace Prisma {
       pickupDate: Date | null
       pickupTime: string | null
       flightNumber: string | null
-      isConfirmed: boolean
       createdAt: Date
       updatedAt: Date
       userId: string | null
@@ -9312,7 +9301,6 @@ export namespace Prisma {
     readonly pickupDate: FieldRef<"TripRequest", 'DateTime'>
     readonly pickupTime: FieldRef<"TripRequest", 'String'>
     readonly flightNumber: FieldRef<"TripRequest", 'String'>
-    readonly isConfirmed: FieldRef<"TripRequest", 'Boolean'>
     readonly createdAt: FieldRef<"TripRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly userId: FieldRef<"TripRequest", 'String'>
@@ -12236,7 +12224,6 @@ export namespace Prisma {
     pickupDate: 'pickupDate',
     pickupTime: 'pickupTime',
     flightNumber: 'flightNumber',
-    isConfirmed: 'isConfirmed',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
@@ -12855,7 +12842,6 @@ export namespace Prisma {
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
-    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -12886,7 +12872,6 @@ export namespace Prisma {
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
     flightNumber?: SortOrderInput | SortOrder
-    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -12920,7 +12905,6 @@ export namespace Prisma {
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
-    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -12951,7 +12935,6 @@ export namespace Prisma {
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
     flightNumber?: SortOrderInput | SortOrder
-    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -12986,7 +12969,6 @@ export namespace Prisma {
     pickupDate?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
-    isConfirmed?: BoolWithAggregatesFilter<"TripRequest"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
@@ -13619,7 +13601,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -13648,7 +13629,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -13676,7 +13656,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -13705,7 +13684,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13734,7 +13712,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -13760,7 +13737,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13785,7 +13761,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14462,7 +14437,6 @@ export namespace Prisma {
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
-    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -14496,7 +14470,6 @@ export namespace Prisma {
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
-    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -14523,7 +14496,6 @@ export namespace Prisma {
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
-    isConfirmed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -15547,7 +15519,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -15575,7 +15546,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -15662,7 +15632,6 @@ export namespace Prisma {
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
-    isConfirmed?: BoolFilter<"TripRequest"> | boolean
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -15926,7 +15895,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
@@ -15954,7 +15922,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
@@ -16436,7 +16403,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -16464,7 +16430,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -16507,7 +16472,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -16535,7 +16499,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16563,7 +16526,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -16591,7 +16553,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -16667,7 +16628,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -16695,7 +16655,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16772,7 +16731,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -16835,7 +16793,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -16863,7 +16820,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16891,7 +16847,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16938,7 +16893,6 @@ export namespace Prisma {
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
-    isConfirmed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId?: string | null
@@ -17042,7 +16996,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
@@ -17070,7 +17023,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17098,7 +17050,6 @@ export namespace Prisma {
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    isConfirmed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null

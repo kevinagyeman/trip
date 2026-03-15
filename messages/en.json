@@ -190,6 +190,7 @@
 		"statusPending": "Pending",
 		"statusQuoted": "Quoted",
 		"statusAccepted": "Accepted",
+		"statusConfirmed": "Confirmed",
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled"
@@ -248,6 +249,7 @@
 		"statusPending": "Pending",
 		"statusQuoted": "Quoted",
 		"statusAccepted": "Accepted",
+		"statusConfirmed": "Confirmed",
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled"
@@ -276,6 +278,7 @@
 		"statusPending": "Pending",
 		"statusQuoted": "Quoted",
 		"statusAccepted": "Accepted",
+		"statusConfirmed": "Confirmed",
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"noRequests": "No requests found.",
@@ -338,6 +341,7 @@
 		"statusPending": "Pending",
 		"statusQuoted": "Quoted",
 		"statusAccepted": "Accepted",
+		"statusConfirmed": "Confirmed",
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled",

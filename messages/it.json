@@ -190,6 +190,7 @@
 		"statusPending": "In Attesa",
 		"statusQuoted": "Preventivato",
 		"statusAccepted": "Accettato",
+		"statusConfirmed": "Confermato",
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato"
@@ -248,6 +249,7 @@
 		"statusPending": "In Attesa",
 		"statusQuoted": "Preventivato",
 		"statusAccepted": "Accettato",
+		"statusConfirmed": "Confermato",
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato"
@@ -276,6 +278,7 @@
 		"statusPending": "In Attesa",
 		"statusQuoted": "Preventivato",
 		"statusAccepted": "Accettato",
+		"statusConfirmed": "Confermato",
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
 		"noRequests": "Nessuna richiesta trovata.",
@@ -338,6 +341,7 @@
 		"statusPending": "In Attesa",
 		"statusQuoted": "Preventivato",
 		"statusAccepted": "Accettato",
+		"statusConfirmed": "Confermato",
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato",

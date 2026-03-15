@@ -311,7 +311,7 @@ export const tripRequestRouter = createTRPCRouter({
 
 			const updated = await ctx.db.tripRequest.update({
 				where: { id },
-				data: { ...data, isConfirmed: true },
+				data: { ...data, status: "CONFIRMED" },
 			});
 
 			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
@@ -413,7 +413,7 @@ export const tripRequestRouter = createTRPCRouter({
 					orderNumber: true,
 					firstName: true,
 					lastName: true,
-					isConfirmed: true,
+					status: true,
 				},
 			});
 
@@ -421,7 +421,7 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			if (tripRequest.isConfirmed) {
+			if (tripRequest.status === "CONFIRMED") {
 				throw new TRPCError({
 					code: "FORBIDDEN",
 					message: "Trip is already confirmed",
@@ -533,7 +533,7 @@ export const tripRequestRouter = createTRPCRouter({
 
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
 
-			if (tripRequest.isConfirmed) {
+			if (tripRequest.status === "CONFIRMED") {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
 					message: "Trip is already confirmed",
@@ -542,7 +542,7 @@ export const tripRequestRouter = createTRPCRouter({
 
 			const updated = await ctx.db.tripRequest.update({
 				where: { id: input.id },
-				data: { isConfirmed: true },
+				data: { status: "CONFIRMED" },
 			});
 
 			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
@@ -553,8 +553,7 @@ export const tripRequestRouter = createTRPCRouter({
 					data: {
 						preview: "Your trip is confirmed",
 						title: `Dear ${tripRequest.firstName}, your trip is confirmed!`,
-						subtitle:
-							"The operator has confirmed your booking. You will be contacted with further details shortly.",
+						subtitle: "The operator has confirmed your booking.",
 						buttonLabel: "View Details",
 					},
 					href: `${APP_URL}/request/${tripRequest.token}`,

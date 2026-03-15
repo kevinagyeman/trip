@@ -4,6 +4,7 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { useState } from "react";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 
 export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 	const [newEmail, setNewEmail] = useState("");
@@ -33,10 +34,10 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4 max-w-sm">
-			<div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800 dark:border-blue-800 dark:bg-blue-950/30 dark:text-blue-300">
-				This is the address where all notifications are sent — new trip
-				requests, quotation responses, and booking confirmations.
-			</div>
+			<AlertBanner
+				variant="info"
+				description="This is the address where all notifications are sent — new trip requests, quotation responses, and booking confirmations."
+			/>
 			<p className="text-sm text-muted-foreground">
 				Current email:{" "}
 				<span className="font-medium text-foreground">{currentEmail}</span>

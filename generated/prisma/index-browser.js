@@ -201,7 +201,6 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   pickupDate: 'pickupDate',
   pickupTime: 'pickupTime',
   flightNumber: 'flightNumber',
-  isConfirmed: 'isConfirmed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
@@ -258,6 +257,7 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
   PENDING: 'PENDING',
   QUOTED: 'QUOTED',
   ACCEPTED: 'ACCEPTED',
+  CONFIRMED: 'CONFIRMED',
   REJECTED: 'REJECTED',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'

@@ -21,6 +21,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 type Route = {
@@ -97,6 +98,7 @@ const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
 	QUOTED: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
+	CONFIRMED: "bg-emerald-600",
 	REJECTED: "bg-red-500",
 	COMPLETED: "bg-gray-500",
 	CANCELLED: "bg-gray-400",
@@ -117,7 +119,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	// Route departures state (admin editable)
 	const [adminRouteDepartures, setAdminRouteDepartures] = useState<
-		Array<{ departureDate: string; departureTime: string; flightNumber: string }>
+		Array<{
+			departureDate: string;
+			departureTime: string;
+			flightNumber: string;
+		}>
 	>([]);
 
 	useEffect(() => {
@@ -286,160 +292,179 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<div className="space-y-2">
 							{routes.map((route, i) => (
 								<div key={i}>
-								<div className="rounded-lg border p-3 text-sm">
-									<p className="mb-1 text-xs font-medium text-muted-foreground">
-										{t("routeN", { n: i + 1 })}
-									</p>
-									<p>
-										<span className="text-muted-foreground">
-											{t("pickup")}:{" "}
-										</span>
-										<span className="font-medium">{route.pickup}</span>
-									</p>
-									<p>
-										<span className="text-muted-foreground">
-											{t("destination")}:{" "}
-										</span>
-										<span className="font-medium">{route.destination}</span>
-									</p>
-									{(route.departureDate ??
-										route.departureTime ??
-										route.flightNumber) && (
-										<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-											{route.departureDate && (
-												<span>
-													{t("routeDepartureDate")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.departureDate}
+									<div className="rounded-lg border p-3 text-sm">
+										<p className="mb-1 text-xs font-medium text-muted-foreground">
+											{t("routeN", { n: i + 1 })}
+										</p>
+										<p>
+											<span className="text-muted-foreground">
+												{t("pickup")}:{" "}
+											</span>
+											<span className="font-medium">{route.pickup}</span>
+										</p>
+										<p>
+											<span className="text-muted-foreground">
+												{t("destination")}:{" "}
+											</span>
+											<span className="font-medium">{route.destination}</span>
+										</p>
+										{(route.departureDate ??
+											route.departureTime ??
+											route.flightNumber) && (
+											<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
+												{route.departureDate && (
+													<span>
+														{t("routeDepartureDate")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.departureDate}
+														</span>
 													</span>
-												</span>
-											)}
-											{route.departureTime && (
-												<span>
-													{t("routeDepartureTime")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.departureTime}
+												)}
+												{route.departureTime && (
+													<span>
+														{t("routeDepartureTime")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.departureTime}
+														</span>
 													</span>
-												</span>
-											)}
-											{route.flightNumber && (
-												<span>
-													{t("routeFlightNumber")}:{" "}
-													<span className="font-medium text-foreground">
-														{route.flightNumber}
+												)}
+												{route.flightNumber && (
+													<span>
+														{t("routeFlightNumber")}:{" "}
+														<span className="font-medium text-foreground">
+															{route.flightNumber}
+														</span>
 													</span>
-												</span>
-											)}
-										</div>
-									)}
-									{route.departureDate && (
-										<div className="mt-2">
-											<Button
-												size="sm"
-												variant="outline"
-												onClick={() => {
-													const [hRaw, mRaw] = (route.departureTime ?? "00:00")
-														.split(":")
-														.map(Number);
-													const endH = ((hRaw ?? 0) + 1) % 24;
-													const start = toICSDateTime(
-														new Date(route.departureDate!),
-														route.departureTime,
-													);
-													const end = toICSDateTime(
-														new Date(route.departureDate!),
-														`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
-													);
-													const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
-													const desc = route.flightNumber
-														? `${t("routeFlightNumber")}: ${route.flightNumber}`
-														: "";
-													window.open(
-														googleCalendarUrl({
-															summary,
-															description: desc,
-															location: route.pickup,
-															start,
-															end,
-														}),
-														"_blank",
-													);
-												}}
-											>
-												<CalendarPlus className="mr-1 h-3 w-3" />
-												{t("googleCalendar")}
-											</Button>
-										</div>
-									)}
-								</div>
-								<div className="mt-2 rounded-lg border border-dashed p-3">
-									<p className="mb-2 text-xs font-medium text-muted-foreground">
-										{t("routeDepartureDetails")}
-									</p>
-									<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-										<div className="space-y-1">
-											<Label className="text-xs">{t("routeDepartureDate")}</Label>
-											<Input
-												type="date"
-												value={adminRouteDepartures[i]?.departureDate ?? ""}
-												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.departureDate = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">{t("routeDepartureTime")}</Label>
-											<Input
-												type="time"
-												value={adminRouteDepartures[i]?.departureTime ?? ""}
-												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.departureTime = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">{t("routeFlightNumber")}</Label>
-											<Input
-												placeholder={t("routeFlightNumberPlaceholder")}
-												value={adminRouteDepartures[i]?.flightNumber ?? ""}
-												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.flightNumber = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
+												)}
+											</div>
+										)}
+										{route.departureDate && (
+											<div className="mt-2">
+												<Button
+													size="sm"
+													variant="outline"
+													onClick={() => {
+														const [hRaw, mRaw] = (
+															route.departureTime ?? "00:00"
+														)
+															.split(":")
+															.map(Number);
+														const endH = ((hRaw ?? 0) + 1) % 24;
+														const start = toICSDateTime(
+															new Date(route.departureDate!),
+															route.departureTime,
+														);
+														const end = toICSDateTime(
+															new Date(route.departureDate!),
+															`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
+														);
+														const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
+														const desc = route.flightNumber
+															? `${t("routeFlightNumber")}: ${route.flightNumber}`
+															: "";
+														window.open(
+															googleCalendarUrl({
+																summary,
+																description: desc,
+																location: route.pickup,
+																start,
+																end,
+															}),
+															"_blank",
+														);
+													}}
+												>
+													<CalendarPlus className="mr-1 h-3 w-3" />
+													{t("googleCalendar")}
+												</Button>
+											</div>
+										)}
 									</div>
-									<Button
-										className="mt-2"
-										size="sm"
-										variant="outline"
-										disabled={updateRoutesByAdmin.isPending}
-										onClick={() =>
-											updateRoutesByAdmin.mutate({
-												id: requestId,
-												routes: routes.map((r, j) => ({
-													...r,
-													departureDate: adminRouteDepartures[j]?.departureDate || undefined,
-													departureTime: adminRouteDepartures[j]?.departureTime || undefined,
-													flightNumber: adminRouteDepartures[j]?.flightNumber || undefined,
-												})),
-											})
-										}
-									>
-										{updateRoutesByAdmin.isPending ? t("saving") : t("saveRouteDetails")}
-									</Button>
-								</div>
+									<div className="mt-2 rounded-lg border border-dashed p-3">
+										<p className="mb-2 text-xs font-medium text-muted-foreground">
+											{t("routeDepartureDetails")}
+										</p>
+										<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeDepartureDate")}
+												</Label>
+												<Input
+													type="date"
+													value={adminRouteDepartures[i]?.departureDate ?? ""}
+													onChange={(e) =>
+														setAdminRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.departureDate = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeDepartureTime")}
+												</Label>
+												<Input
+													type="time"
+													value={adminRouteDepartures[i]?.departureTime ?? ""}
+													onChange={(e) =>
+														setAdminRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.departureTime = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeFlightNumber")}
+												</Label>
+												<Input
+													placeholder={t("routeFlightNumberPlaceholder")}
+													value={adminRouteDepartures[i]?.flightNumber ?? ""}
+													onChange={(e) =>
+														setAdminRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.flightNumber = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+										</div>
+										<Button
+											className="mt-2"
+											size="sm"
+											variant="outline"
+											disabled={updateRoutesByAdmin.isPending}
+											onClick={() =>
+												updateRoutesByAdmin.mutate({
+													id: requestId,
+													routes: routes.map((r, j) => ({
+														...r,
+														departureDate:
+															adminRouteDepartures[j]?.departureDate ||
+															undefined,
+														departureTime:
+															adminRouteDepartures[j]?.departureTime ||
+															undefined,
+														flightNumber:
+															adminRouteDepartures[j]?.flightNumber ||
+															undefined,
+													})),
+												})
+											}
+										>
+											{updateRoutesByAdmin.isPending
+												? t("saving")
+												: t("saveRouteDetails")}
+										</Button>
+									</div>
 								</div>
 							))}
 						</div>
@@ -581,15 +606,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											</div>
 										)}
 										{/* Confirmed banner or action buttons */}
-										{request.isConfirmed ? (
-											<div className="rounded-lg border border-green-200 bg-green-50 p-3 dark:border-green-800 dark:bg-green-950/30">
-												<p className="font-semibold text-green-800 dark:text-green-300">
-													{t("tripConfirmedTitle")}
-												</p>
-												<p className="mt-1 text-sm text-green-700 dark:text-green-400">
-													{t("tripConfirmedDesc")}
-												</p>
-											</div>
+										{request.status === "CONFIRMED" ? (
+											<AlertBanner
+												variant="success"
+												title={t("tripConfirmedTitle")}
+												description={t("tripConfirmedDesc")}
+											/>
 										) : (
 											<div className="flex flex-wrap gap-2 border-t pt-4">
 												<Button
@@ -618,21 +640,15 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									<>
 										{/* Rejected banner */}
 										{isRejected && (
-											<div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-950/30">
-												<div>
-													<p className="text-sm font-medium text-red-800 dark:text-red-300">
-														{t("quotationStatusRejected")}
-													</p>
-													{quotation!.respondedAt && (
-														<p className="text-xs text-red-600 dark:text-red-400">
-															{format(new Date(quotation!.respondedAt), "PPP")}
-														</p>
-													)}
-												</div>
-												<Badge className="bg-red-500">
-													{t("statusRejected")}
-												</Badge>
-											</div>
+											<AlertBanner
+												variant="error"
+												title={t("quotationStatusRejected")}
+												description={
+													quotation!.respondedAt
+														? format(new Date(quotation!.respondedAt), "PPP")
+														: undefined
+												}
+											/>
 										)}
 										{/* Price */}
 										<div className="w-48">

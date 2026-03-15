@@ -19,6 +19,7 @@ const statusColors: Record<string, string> = {
 	PENDING: "bg-yellow-500",
 	QUOTED: "bg-blue-500",
 	ACCEPTED: "bg-green-500",
+	CONFIRMED: "bg-emerald-600",
 	REJECTED: "bg-red-500",
 	COMPLETED: "bg-gray-500",
 	CANCELLED: "bg-gray-400",
@@ -36,6 +37,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 		PENDING: t("statusPending"),
 		QUOTED: t("statusQuoted"),
 		ACCEPTED: t("statusAccepted"),
+		CONFIRMED: t("statusConfirmed"),
 		REJECTED: t("statusRejected"),
 		COMPLETED: t("statusCompleted"),
 		CANCELLED: t("statusCancelled"),
@@ -93,9 +95,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							<Badge className={statusColors[request.status]}>
 								{statusLabels[request.status] ?? request.status}
 							</Badge>
-							{request.isConfirmed && (
-								<Badge variant="outline">{t("confirmed")}</Badge>
-							)}
 						</div>
 					</div>
 				</CardHeader>
@@ -199,7 +198,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 					</div>
 
 					{/* Pickup Details (only when confirmed) */}
-					{request.isConfirmed && request.pickupDate && (
+					{request.status === "CONFIRMED" && request.pickupDate && (
 						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
 							<h3 className="mb-3 text-lg font-semibold">
 								{t("pickupDetails")}
