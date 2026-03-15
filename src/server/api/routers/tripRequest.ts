@@ -1,13 +1,18 @@
-import { GenericEmail } from "@/emails/generic-email";
 import {
 	adminProcedure,
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
-import { APP_URL, resolveAdminEmails, sendEmail } from "@/server/email";
+import {
+	sendNewTripRequestToAdmins,
+	sendPickupDetailsToAdmins,
+	sendRequestDetailsToCustomer,
+	sendRequestReceivedToCustomer,
+	sendTripConfirmedToAdmins,
+	sendTripConfirmedToCustomer,
+} from "@/server/emails/trip-emails";
 import { TRPCError } from "@trpc/server";
-import { createElement } from "react";
 import { z } from "zod";
 import { TripRequestStatus } from "../../../../generated/prisma";
 
@@ -27,7 +32,7 @@ export const tripRequestRouter = createTRPCRouter({
 				companySlug: z.string().min(1),
 				email: z.string().email(),
 				routes: z.array(routeSchema).min(1),
-				language: z.enum(["English", "Italian"]),
+				language: z.enum(["en", "it"]),
 				firstName: z.string().min(1),
 				lastName: z.string().min(1),
 				phone: z.string().min(1),
@@ -42,7 +47,6 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const { routes, companySlug, email, ...rest } = input;
 
-			// Look up company by slug
 			const company = await ctx.db.company.findUnique({
 				where: { slug: companySlug, isActive: true },
 				select: { id: true },
@@ -64,43 +68,22 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-
-			// Notify all admins of the new request
-			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `${order} - NEW TRIP REQUEST | ${input.firstName} ${input.lastName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `New trip request from ${input.firstName} ${input.lastName} — ${order}`,
-								subtitle:
-									"A new request has been submitted and is awaiting your review.",
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${tripRequest.id}`,
-						}),
-					}),
-				),
-			);
-
-			// Send confirmation overview to the customer
-			await sendEmail({
-				to: email,
-				subject: `${order} - REQUEST RECEIVED | ${input.firstName} ${input.lastName}`,
-				react: createElement(GenericEmail, {
-					data: {
-						preview: "View your request",
-						title: `Dear ${input.firstName} ${input.lastName}, your request ${order} has been received.`,
-						subtitle: "We'll notify you as soon as a quotation is ready.",
-						buttonLabel: "View Request",
-					},
-					href: `${APP_URL}/request/${tripRequest.token}`,
+			await Promise.all([
+				sendNewTripRequestToAdmins({
+					id: tripRequest.id,
+					companyId: tripRequest.companyId,
+					firstName: tripRequest.firstName,
+					lastName: tripRequest.lastName,
+					orderNumber: tripRequest.orderNumber,
 				}),
-			});
+				sendRequestReceivedToCustomer({
+					customerEmail: email,
+					firstName: tripRequest.firstName,
+					lastName: tripRequest.lastName,
+					orderNumber: tripRequest.orderNumber,
+					token: tripRequest.token,
+				}),
+			]);
 
 			return {
 				id: tripRequest.id,
@@ -314,30 +297,13 @@ export const tripRequestRouter = createTRPCRouter({
 				data: { ...data, status: "CONFIRMED" },
 			});
 
-			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-
-			// Notify all admins of confirmed trip
-			const notifyEmailsConfirm = await resolveAdminEmails(
-				tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmailsConfirm.map((to) =>
-					sendEmail({
-						to,
-						subject: `${order} - TRIP CONFIRMED | ${customerName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `${customerName} confirmed their trip — ${order}`,
-								subtitle: "The trip is ready to be finalised.",
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${id}`,
-						}),
-					}),
-				),
-			);
+			await sendTripConfirmedToAdmins({
+				id: tripRequest.id,
+				companyId: tripRequest.companyId,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+			});
 
 			return updated;
 		}),
@@ -437,27 +403,13 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
-			// Notify admins
-			const notifyEmails = await resolveAdminEmails(tripRequest.companyId);
-			const customerName = `${tripRequest.firstName} ${tripRequest.lastName}`;
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `${order} - PICKUP DETAILS READY | ${customerName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `${customerName} added pickup details`,
-								subtitle: `Order ${order} — ready to confirm`,
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${tripRequest.id}`,
-						}),
-					}),
-				),
-			);
+			await sendPickupDetailsToAdmins({
+				id: tripRequest.id,
+				companyId: tripRequest.companyId,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+			});
 		}),
 
 	// ADMIN: Update route departure details by request id
@@ -506,20 +458,12 @@ export const tripRequestRouter = createTRPCRouter({
 
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
 
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-			await sendEmail({
-				to: tripRequest.customerEmail,
-				subject: `${order} - ACTION REQUIRED | ${tripRequest.firstName} ${tripRequest.lastName}`,
-				react: createElement(GenericEmail, {
-					data: {
-						preview: "Complete your trip details",
-						title: `Dear ${tripRequest.firstName}, please complete your departure details.`,
-						subtitle:
-							"Your quotation has been accepted. To finalise your booking, please fill in the departure date, time.",
-						buttonLabel: "Complete Details",
-					},
-					href: `${APP_URL}/request/${tripRequest.token}`,
-				}),
+			await sendRequestDetailsToCustomer({
+				customerEmail: tripRequest.customerEmail,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+				token: tripRequest.token,
 			});
 		}),
 
@@ -545,19 +489,12 @@ export const tripRequestRouter = createTRPCRouter({
 				data: { status: "CONFIRMED" },
 			});
 
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-			await sendEmail({
-				to: tripRequest.customerEmail,
-				subject: `${order} - TRIP CONFIRMED | ${tripRequest.firstName} ${tripRequest.lastName}`,
-				react: createElement(GenericEmail, {
-					data: {
-						preview: "Your trip is confirmed",
-						title: `Dear ${tripRequest.firstName}, your trip is confirmed!`,
-						subtitle: "The operator has confirmed your booking.",
-						buttonLabel: "View Details",
-					},
-					href: `${APP_URL}/request/${tripRequest.token}`,
-				}),
+			await sendTripConfirmedToCustomer({
+				customerEmail: tripRequest.customerEmail,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+				token: tripRequest.token,
 			});
 
 			return updated;

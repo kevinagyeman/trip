@@ -1,13 +1,15 @@
-import { GenericEmail } from "@/emails/generic-email";
 import {
 	adminProcedure,
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
-import { APP_URL, resolveAdminEmails, sendEmail } from "@/server/email";
+import {
+	sendQuotationAcceptedToAdmins,
+	sendQuotationRejectedToAdmins,
+	sendQuotationToCustomer,
+} from "@/server/emails/trip-emails";
 import { TRPCError } from "@trpc/server";
-import { createElement } from "react";
 import { z } from "zod";
 import {
 	QuotationStatus,
@@ -46,7 +48,6 @@ export const quotationRouter = createTRPCRouter({
 						message: "Cannot edit an accepted quotation",
 					});
 				}
-				// Allow editing PENDING and REJECTED quotations
 				return ctx.db.quotation.update({
 					where: { id: existing.id },
 					data,
@@ -106,7 +107,6 @@ export const quotationRouter = createTRPCRouter({
 
 			const now = new Date();
 
-			// Upsert quotation: reset to PENDING, set notifiedAt
 			const quotation = await ctx.db.$transaction(async (tx) => {
 				const q = existing
 					? await tx.quotation.update({
@@ -137,20 +137,12 @@ export const quotationRouter = createTRPCRouter({
 				return q;
 			});
 
-			// Email customer
-			const order = `#${String(tripRequest.orderNumber).padStart(7, "0")}`;
-			await sendEmail({
-				to: tripRequest.customerEmail,
-				subject: `${order} - QUOTATION READY | ${tripRequest.firstName} ${tripRequest.lastName}`,
-				react: createElement(GenericEmail, {
-					data: {
-						preview: "View quotation",
-						title: `Dear ${tripRequest.firstName}, your quotation for request ${order} is ready.`,
-						subtitle: "Review your quotation and accept it when you're ready.",
-						buttonLabel: "View Quotation",
-					},
-					href: `${APP_URL}/request/${tripRequest.token}`,
-				}),
+			await sendQuotationToCustomer({
+				customerEmail: tripRequest.customerEmail,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+				token: tripRequest.token,
 			});
 
 			return quotation;
@@ -193,7 +185,6 @@ export const quotationRouter = createTRPCRouter({
 					where: { id: quotation.id },
 					data: {
 						notifiedAt: new Date(),
-						// If it was rejected, reset to PENDING so customer can accept again
 						status: QuotationStatus.PENDING,
 						respondedAt: null,
 					},
@@ -205,20 +196,12 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			const customerEmail = quotation.tripRequest.customerEmail;
-			const order = `#${String(quotation.tripRequest.orderNumber).padStart(7, "0")}`;
-			await sendEmail({
-				to: customerEmail,
-				subject: `${order} - QUOTATION READY | ${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
-				react: createElement(GenericEmail, {
-					data: {
-						preview: "View quotation",
-						title: `Dear ${quotation.tripRequest.firstName}, your quotation for request ${order} is ready.`,
-						subtitle: "Review your quotation and accept it when you're ready.",
-						buttonLabel: "View Quotation",
-					},
-					href: `${APP_URL}/request/${quotation.tripRequest.token}`,
-				}),
+			await sendQuotationToCustomer({
+				customerEmail: quotation.tripRequest.customerEmail,
+				firstName: quotation.tripRequest.firstName,
+				lastName: quotation.tripRequest.lastName,
+				orderNumber: quotation.tripRequest.orderNumber,
+				token: quotation.tripRequest.token,
 			});
 
 			return updated;
@@ -263,27 +246,13 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			const acceptOrder = `#${String(quotation.tripRequest.orderNumber).padStart(7, "0")}`;
-			const acceptCustomerName = `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`;
-			const notifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `${acceptOrder} - QUOTATION ACCEPTED | ${acceptCustomerName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `${acceptCustomerName} accepted the quotation for request ${acceptOrder}.`,
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
+			await sendQuotationAcceptedToAdmins({
+				id: quotation.tripRequestId,
+				companyId: quotation.tripRequest.companyId,
+				firstName: quotation.tripRequest.firstName,
+				lastName: quotation.tripRequest.lastName,
+				orderNumber: quotation.tripRequest.orderNumber,
+			});
 
 			return updated;
 		}),
@@ -326,27 +295,13 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			const acceptOrder = `#${String(quotation.tripRequest.orderNumber).padStart(7, "0")}`;
-			const acceptCustomerName = `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`;
-			const notifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `${acceptOrder} -  QUOTATION ACCEPTED | ${acceptCustomerName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `${acceptCustomerName} accepted the quotation for request ${acceptOrder}.`,
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
+			await sendQuotationAcceptedToAdmins({
+				id: quotation.tripRequestId,
+				companyId: quotation.tripRequest.companyId,
+				firstName: quotation.tripRequest.firstName,
+				lastName: quotation.tripRequest.lastName,
+				orderNumber: quotation.tripRequest.orderNumber,
+			});
 
 			return updated;
 		}),
@@ -388,29 +343,13 @@ export const quotationRouter = createTRPCRouter({
 				});
 			});
 
-			// Notify admins
-			const order = `#${String(quotation.tripRequest.orderNumber).padStart(7, "0")}`;
-			const customerName = `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`;
-			const notifyEmails = await resolveAdminEmails(
-				quotation.tripRequest.companyId,
-			);
-			await Promise.all(
-				notifyEmails.map((to) =>
-					sendEmail({
-						to,
-						subject: `${order} - QUOTATION REJECTED | ${customerName}`,
-						react: createElement(GenericEmail, {
-							data: {
-								preview: "View request",
-								title: `${customerName} rejected the quotation for request ${order}.`,
-								subtitle: "You can revise the quotation and resend it.",
-								buttonLabel: "View Request",
-							},
-							href: `${APP_URL}/admin/requests/${quotation.tripRequestId}`,
-						}),
-					}),
-				),
-			);
+			await sendQuotationRejectedToAdmins({
+				id: quotation.tripRequestId,
+				companyId: quotation.tripRequest.companyId,
+				firstName: quotation.tripRequest.firstName,
+				lastName: quotation.tripRequest.lastName,
+				orderNumber: quotation.tripRequest.orderNumber,
+			});
 		}),
 
 	// ADMIN: Delete quotation (only if PENDING or REJECTED)
