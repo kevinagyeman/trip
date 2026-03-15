@@ -9,6 +9,10 @@ export const QUICK_FILL = [
 ] as const;
 
 export const LANGUAGES = [
-	{ value: "English", label: "English" },
-	{ value: "Italian", label: "Italian" },
+	{ value: "en", label: "English" },
+	{ value: "it", label: "Italian" },
 ] as const;
+
+export const LANGUAGE_LABELS: Record<string, string> = Object.fromEntries(
+	LANGUAGES.map((l) => [l.value, l.label]),
+);

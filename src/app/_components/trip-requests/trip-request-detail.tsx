@@ -1,6 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
+import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -181,7 +182,9 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">{request.language}</p>
+								<p className="font-medium">
+									{LANGUAGE_LABELS[request.language] ?? request.language}
+								</p>
 							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("created")}</p>

@@ -22,6 +22,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 type Route = {
@@ -532,7 +533,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">{request.language}</p>
+								<p className="font-medium">
+									{LANGUAGE_LABELS[request.language] ?? request.language}
+								</p>
 							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("created")}</p>

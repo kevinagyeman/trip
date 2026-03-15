@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
 import { TripMessageThread } from "./trip-message-thread";
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 
 type Route = {
 	pickup: string;
@@ -350,7 +351,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						<div className="grid grid-cols-2 gap-4">
 							<div>
 								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">{request.language}</p>
+								<p className="font-medium">
+									{LANGUAGE_LABELS[request.language] ?? request.language}
+								</p>
 							</div>
 							<div>
 								<p className="text-sm text-muted-foreground">{t("created")}</p>

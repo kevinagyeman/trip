@@ -55,7 +55,7 @@ export function CreateTripRequestForm({
 		resolver: zodResolver(createTripRequestSchema),
 		defaultValues: {
 			routes: [{ pickup: "", destination: "" }],
-			language: "English",
+			language: "en",
 			email: "",
 			phoneCountryCode: "+39",
 			numberOfAdults: 1,
