@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { MessageSenderType } from "../../../../generated/prisma";
 
 type Props =
 	| { mode: "customer"; token: string }
@@ -82,8 +83,10 @@ export function TripMessageThread(props: Props) {
 				) : (
 					data.map((msg) => {
 						const isOwnMessage =
-							(props.mode === "customer" && msg.senderType === "CUSTOMER") ||
-							(props.mode === "admin" && msg.senderType === "ADMIN");
+							(props.mode === "customer" &&
+								msg.senderType === MessageSenderType.CUSTOMER) ||
+							(props.mode === "admin" &&
+								msg.senderType === MessageSenderType.ADMIN);
 
 						return (
 							<div

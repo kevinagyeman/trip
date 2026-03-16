@@ -5,6 +5,7 @@ import {
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { MessageSenderType } from "../../../../generated/prisma";
 
 export const tripMessageRouter = createTRPCRouter({
 	// PUBLIC: Get messages for a request by token (customer)
@@ -45,7 +46,7 @@ export const tripMessageRouter = createTRPCRouter({
 			return ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
-					senderType: "CUSTOMER",
+					senderType: MessageSenderType.CUSTOMER,
 					senderName: `${request.firstName} ${request.lastName}`,
 					tripRequestId: request.id,
 				},
@@ -69,7 +70,7 @@ export const tripMessageRouter = createTRPCRouter({
 			return ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
-					senderType: "ADMIN",
+					senderType: MessageSenderType.ADMIN,
 					senderName: adminName,
 					tripRequestId: input.requestId,
 				},

@@ -263,6 +263,11 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.MessageSenderType = exports.$Enums.MessageSenderType = {
+  CUSTOMER: 'CUSTOMER',
+  ADMIN: 'ADMIN'
+};
+
 exports.QuotationStatus = exports.$Enums.QuotationStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',

@@ -93,6 +93,14 @@ export const QuotationStatus: {
 
 export type QuotationStatus = (typeof QuotationStatus)[keyof typeof QuotationStatus]
 
+
+export const MessageSenderType: {
+  CUSTOMER: 'CUSTOMER',
+  ADMIN: 'ADMIN'
+};
+
+export type MessageSenderType = (typeof MessageSenderType)[keyof typeof MessageSenderType]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -106,6 +114,10 @@ export const TripRequestStatus: typeof $Enums.TripRequestStatus
 export type QuotationStatus = $Enums.QuotationStatus
 
 export const QuotationStatus: typeof $Enums.QuotationStatus
+
+export type MessageSenderType = $Enums.MessageSenderType
+
+export const MessageSenderType: typeof $Enums.MessageSenderType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -9818,7 +9830,7 @@ export namespace Prisma {
   export type TripMessageMinAggregateOutputType = {
     id: string | null
     body: string | null
-    senderType: string | null
+    senderType: $Enums.MessageSenderType | null
     senderName: string | null
     createdAt: Date | null
     tripRequestId: string | null
@@ -9827,7 +9839,7 @@ export namespace Prisma {
   export type TripMessageMaxAggregateOutputType = {
     id: string | null
     body: string | null
-    senderType: string | null
+    senderType: $Enums.MessageSenderType | null
     senderName: string | null
     createdAt: Date | null
     tripRequestId: string | null
@@ -9947,7 +9959,7 @@ export namespace Prisma {
   export type TripMessageGroupByOutputType = {
     id: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt: Date
     tripRequestId: string
@@ -10028,7 +10040,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       body: string
-      senderType: string
+      senderType: $Enums.MessageSenderType
       senderName: string
       createdAt: Date
       tripRequestId: string
@@ -10458,7 +10470,7 @@ export namespace Prisma {
   interface TripMessageFieldRefs {
     readonly id: FieldRef<"TripMessage", 'String'>
     readonly body: FieldRef<"TripMessage", 'String'>
-    readonly senderType: FieldRef<"TripMessage", 'String'>
+    readonly senderType: FieldRef<"TripMessage", 'MessageSenderType'>
     readonly senderName: FieldRef<"TripMessage", 'String'>
     readonly createdAt: FieldRef<"TripMessage", 'DateTime'>
     readonly tripRequestId: FieldRef<"TripMessage", 'String'>
@@ -12372,6 +12384,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MessageSenderType'
+   */
+  export type EnumMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageSenderType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessageSenderType[]'
+   */
+  export type ListEnumMessageSenderTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageSenderType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Decimal'
    */
   export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
@@ -12981,7 +13007,7 @@ export namespace Prisma {
     NOT?: TripMessageWhereInput | TripMessageWhereInput[]
     id?: StringFilter<"TripMessage"> | string
     body?: StringFilter<"TripMessage"> | string
-    senderType?: StringFilter<"TripMessage"> | string
+    senderType?: EnumMessageSenderTypeFilter<"TripMessage"> | $Enums.MessageSenderType
     senderName?: StringFilter<"TripMessage"> | string
     createdAt?: DateTimeFilter<"TripMessage"> | Date | string
     tripRequestId?: StringFilter<"TripMessage"> | string
@@ -13004,7 +13030,7 @@ export namespace Prisma {
     OR?: TripMessageWhereInput[]
     NOT?: TripMessageWhereInput | TripMessageWhereInput[]
     body?: StringFilter<"TripMessage"> | string
-    senderType?: StringFilter<"TripMessage"> | string
+    senderType?: EnumMessageSenderTypeFilter<"TripMessage"> | $Enums.MessageSenderType
     senderName?: StringFilter<"TripMessage"> | string
     createdAt?: DateTimeFilter<"TripMessage"> | Date | string
     tripRequestId?: StringFilter<"TripMessage"> | string
@@ -13029,7 +13055,7 @@ export namespace Prisma {
     NOT?: TripMessageScalarWhereWithAggregatesInput | TripMessageScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"TripMessage"> | string
     body?: StringWithAggregatesFilter<"TripMessage"> | string
-    senderType?: StringWithAggregatesFilter<"TripMessage"> | string
+    senderType?: EnumMessageSenderTypeWithAggregatesFilter<"TripMessage"> | $Enums.MessageSenderType
     senderName?: StringWithAggregatesFilter<"TripMessage"> | string
     createdAt?: DateTimeWithAggregatesFilter<"TripMessage"> | Date | string
     tripRequestId?: StringWithAggregatesFilter<"TripMessage"> | string
@@ -13770,7 +13796,7 @@ export namespace Prisma {
   export type TripMessageCreateInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
     tripRequest: TripRequestCreateNestedOneWithoutMessagesInput
@@ -13779,7 +13805,7 @@ export namespace Prisma {
   export type TripMessageUncheckedCreateInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
     tripRequestId: string
@@ -13788,7 +13814,7 @@ export namespace Prisma {
   export type TripMessageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequest?: TripRequestUpdateOneRequiredWithoutMessagesNestedInput
@@ -13797,7 +13823,7 @@ export namespace Prisma {
   export type TripMessageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -13806,7 +13832,7 @@ export namespace Prisma {
   export type TripMessageCreateManyInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
     tripRequestId: string
@@ -13815,7 +13841,7 @@ export namespace Prisma {
   export type TripMessageUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13823,7 +13849,7 @@ export namespace Prisma {
   export type TripMessageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -14535,6 +14561,13 @@ export namespace Prisma {
     _max?: NestedEnumTripRequestStatusFilter<$PrismaModel>
   }
 
+  export type EnumMessageSenderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageSenderType | EnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageSenderTypeFilter<$PrismaModel> | $Enums.MessageSenderType
+  }
+
   export type TripRequestScalarRelationFilter = {
     is?: TripRequestWhereInput
     isNot?: TripRequestWhereInput
@@ -14565,6 +14598,16 @@ export namespace Prisma {
     senderName?: SortOrder
     createdAt?: SortOrder
     tripRequestId?: SortOrder
+  }
+
+  export type EnumMessageSenderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageSenderType | EnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageSenderTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageSenderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageSenderTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageSenderTypeFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -15132,6 +15175,10 @@ export namespace Prisma {
     connect?: TripRequestWhereUniqueInput
   }
 
+  export type EnumMessageSenderTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MessageSenderType
+  }
+
   export type TripRequestUpdateOneRequiredWithoutMessagesNestedInput = {
     create?: XOR<TripRequestCreateWithoutMessagesInput, TripRequestUncheckedCreateWithoutMessagesInput>
     connectOrCreate?: TripRequestCreateOrConnectWithoutMessagesInput
@@ -15415,6 +15462,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumTripRequestStatusFilter<$PrismaModel>
     _max?: NestedEnumTripRequestStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMessageSenderTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageSenderType | EnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageSenderTypeFilter<$PrismaModel> | $Enums.MessageSenderType
+  }
+
+  export type NestedEnumMessageSenderTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageSenderType | EnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageSenderType[] | ListEnumMessageSenderTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageSenderTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageSenderType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessageSenderTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageSenderTypeFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -16240,7 +16304,7 @@ export namespace Prisma {
   export type TripMessageCreateWithoutTripRequestInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
   }
@@ -16248,7 +16312,7 @@ export namespace Prisma {
   export type TripMessageUncheckedCreateWithoutTripRequestInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
   }
@@ -16377,7 +16441,7 @@ export namespace Prisma {
     NOT?: TripMessageScalarWhereInput | TripMessageScalarWhereInput[]
     id?: StringFilter<"TripMessage"> | string
     body?: StringFilter<"TripMessage"> | string
-    senderType?: StringFilter<"TripMessage"> | string
+    senderType?: EnumMessageSenderTypeFilter<"TripMessage"> | $Enums.MessageSenderType
     senderName?: StringFilter<"TripMessage"> | string
     createdAt?: DateTimeFilter<"TripMessage"> | Date | string
     tripRequestId?: StringFilter<"TripMessage"> | string
@@ -17122,7 +17186,7 @@ export namespace Prisma {
   export type TripMessageCreateManyTripRequestInput = {
     id?: string
     body: string
-    senderType: string
+    senderType: $Enums.MessageSenderType
     senderName: string
     createdAt?: Date | string
   }
@@ -17178,7 +17242,7 @@ export namespace Prisma {
   export type TripMessageUpdateWithoutTripRequestInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17186,7 +17250,7 @@ export namespace Prisma {
   export type TripMessageUncheckedUpdateWithoutTripRequestInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17194,7 +17258,7 @@ export namespace Prisma {
   export type TripMessageUncheckedUpdateManyWithoutTripRequestInput = {
     id?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
-    senderType?: StringFieldUpdateOperationsInput | string
+    senderType?: EnumMessageSenderTypeFieldUpdateOperationsInput | $Enums.MessageSenderType
     senderName?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

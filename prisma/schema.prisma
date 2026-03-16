@@ -38,6 +38,11 @@ enum QuotationStatus {
     REJECTED
 }
 
+enum MessageSenderType {
+    CUSTOMER
+    ADMIN
+}
+
 model Company {
     id               String   @id @default(cuid())
     name             String
@@ -165,8 +170,8 @@ model TripRequest {
 
 model TripMessage {
     id         String   @id @default(cuid())
-    body       String   @db.Text
-    senderType String   // "CUSTOMER" | "ADMIN"
+    body       String            @db.Text
+    senderType MessageSenderType
     senderName String
 
     createdAt DateTime @default(now())

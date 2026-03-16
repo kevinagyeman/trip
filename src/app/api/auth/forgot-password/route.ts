@@ -13,6 +13,20 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: "Email is required" }, { status: 400 });
 		}
 
+		// Rate limit: max 3 reset attempts per email per hour
+		const recentAttempts = await db.passwordResetToken.count({
+			where: {
+				email,
+				createdAt: { gte: new Date(Date.now() - 60 * 60 * 1000) },
+			},
+		});
+		if (recentAttempts >= 3) {
+			return NextResponse.json(
+				{ error: "Too many requests. Please try again later." },
+				{ status: 429 },
+			);
+		}
+
 		const user = await db.user.findUnique({
 			where: { email },
 			select: { id: true, password: true },
