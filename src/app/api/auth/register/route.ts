@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "node:crypto";
 import { createElement } from "react";
 import { db } from "@/server/db";
 import { sendEmail, APP_URL } from "@/server/email";
@@ -84,9 +85,7 @@ export async function POST(request: Request) {
 		const verificationToken = await db.verificationToken.create({
 			data: {
 				identifier: email,
-				token:
-					Math.random().toString(36).substring(2, 15) +
-					Math.random().toString(36).substring(2, 15),
+				token: randomBytes(32).toString("hex"),
 				expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
 			},
 		});

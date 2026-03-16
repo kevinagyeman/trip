@@ -157,7 +157,13 @@ export const tripRequestRouter = createTRPCRouter({
 
 	// ADMIN: Get stats (scoped to company)
 	getStats: adminProcedure.query(async ({ ctx }) => {
-		const companyId = ctx.session.user.companyId;
+		const { companyId, role } = ctx.session.user;
+		if (role === "ADMIN" && !companyId) {
+			throw new TRPCError({
+				code: "FORBIDDEN",
+				message: "No company assigned",
+			});
+		}
 		const where = companyId ? { companyId } : {};
 
 		const [total, pending, quoted, accepted, completed, rejected, cancelled] =
@@ -189,7 +195,13 @@ export const tripRequestRouter = createTRPCRouter({
 		.query(async ({ ctx, input }) => {
 			const limit = input?.limit ?? 20;
 			const cursor = input?.cursor;
-			const companyId = ctx.session.user.companyId;
+			const { companyId, role } = ctx.session.user;
+			if (role === "ADMIN" && !companyId) {
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "No company assigned",
+				});
+			}
 			const search = input?.search?.trim();
 
 			const items = await ctx.db.tripRequest.findMany({
@@ -231,7 +243,13 @@ export const tripRequestRouter = createTRPCRouter({
 	getByIdAdmin: adminProcedure
 		.input(z.object({ id: z.string() }))
 		.query(async ({ ctx, input }) => {
-			const companyId = ctx.session.user.companyId;
+			const { companyId, role } = ctx.session.user;
+			if (role === "ADMIN" && !companyId) {
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "No company assigned",
+				});
+			}
 
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
