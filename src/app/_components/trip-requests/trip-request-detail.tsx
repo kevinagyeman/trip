@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import {
+	buildStatusLabels,
 	parseRoutes,
 	STATUS_COLORS,
 	QUOTATION_STATUS_COLORS,
@@ -19,17 +20,13 @@ import type { Route } from "@/lib/trip-utils";
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("requestDetail");
-	const statusLabels: Record<string, string> = {
-		PENDING: t("statusPending"),
-		QUOTED: t("statusQuoted"),
-		ACCEPTED: t("statusAccepted"),
-		CONFIRMED: t("statusConfirmed"),
-		REJECTED: t("statusRejected"),
-		COMPLETED: t("statusCompleted"),
-		CANCELLED: t("statusCancelled"),
-	};
+	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
-	const { data: request, isLoading } = api.tripRequest.getById.useQuery({
+	const {
+		data: request,
+		isLoading,
+		isError,
+	} = api.tripRequest.getById.useQuery({
 		id: requestId,
 	});
 
@@ -41,6 +38,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	});
 
 	if (isLoading) return <div>{t("loading")}</div>;
+	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = parseRoutes(request.routes);

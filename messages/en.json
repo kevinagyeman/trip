@@ -198,6 +198,7 @@
 	"requestDetail": {
 		"loading": "Loading...",
 		"notFound": "Not found",
+		"error": "Failed to load request",
 		"emailNotice": "All communications regarding this trip (quotations, confirmations, updates) will be sent to your email. Check your inbox and spam folder for messages from {email}.",
 		"back": "Back",
 		"confirmed": "Confirmed",
@@ -281,6 +282,7 @@
 		"statusConfirmed": "Confirmed",
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
+		"statusCancelled": "Cancelled",
 		"noRequests": "No requests found.",
 		"adultsCount": "{count} adult(s)",
 		"childrenCount": "{count} child(ren)",

@@ -12,7 +12,11 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
-import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
+import {
+	buildStatusLabels,
+	parseRoutes,
+	STATUS_COLORS,
+} from "@/lib/trip-utils";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -21,14 +25,7 @@ import type { TripRequestStatus } from "../../../../generated/prisma";
 
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
-	const statusLabels: Record<string, string> = {
-		PENDING: t("statusPending"),
-		QUOTED: t("statusQuoted"),
-		ACCEPTED: t("statusAccepted"),
-		REJECTED: t("statusRejected"),
-		COMPLETED: t("statusCompleted"),
-		CANCELLED: t("statusCancelled"),
-	};
+	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -82,8 +79,10 @@ export function AllTripRequests() {
 						<SelectItem value="PENDING">{t("statusPending")}</SelectItem>
 						<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
 						<SelectItem value="ACCEPTED">{t("statusAccepted")}</SelectItem>
+						<SelectItem value="CONFIRMED">{t("statusConfirmed")}</SelectItem>
 						<SelectItem value="REJECTED">{t("statusRejected")}</SelectItem>
 						<SelectItem value="COMPLETED">{t("statusCompleted")}</SelectItem>
+						<SelectItem value="CANCELLED">{t("statusCancelled")}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>

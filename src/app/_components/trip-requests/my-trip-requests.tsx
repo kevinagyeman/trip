@@ -4,21 +4,18 @@ import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
+import {
+	buildStatusLabels,
+	parseRoutes,
+	STATUS_COLORS,
+} from "@/lib/trip-utils";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
-	const statusLabels: Record<string, string> = {
-		PENDING: t("statusPending"),
-		QUOTED: t("statusQuoted"),
-		ACCEPTED: t("statusAccepted"),
-		REJECTED: t("statusRejected"),
-		COMPLETED: t("statusCompleted"),
-		CANCELLED: t("statusCancelled"),
-	};
+	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {

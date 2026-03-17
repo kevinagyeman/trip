@@ -14,6 +14,7 @@ import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 
 import {
+	buildStatusLabels,
 	parseRoutes,
 	STATUS_COLORS,
 	QUOTATION_STATUS_COLORS,
@@ -22,15 +23,7 @@ import type { Route } from "@/lib/trip-utils";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
-	const statusLabels: Record<string, string> = {
-		PENDING: t("statusPending"),
-		QUOTED: t("statusQuoted"),
-		ACCEPTED: t("statusAccepted"),
-		CONFIRMED: t("statusConfirmed"),
-		REJECTED: t("statusRejected"),
-		COMPLETED: t("statusCompleted"),
-		CANCELLED: t("statusCancelled"),
-	};
+	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByToken.useQuery({

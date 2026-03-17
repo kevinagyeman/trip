@@ -125,7 +125,7 @@ export const tripRequestRouter = createTRPCRouter({
 			let nextCursor: string | undefined;
 			if (items.length > limit) {
 				const nextItem = items.pop();
-				nextCursor = nextItem!.id;
+				nextCursor = nextItem?.id;
 			}
 
 			return { items, nextCursor };
@@ -233,7 +233,7 @@ export const tripRequestRouter = createTRPCRouter({
 			let nextCursor: string | undefined;
 			if (items.length > limit) {
 				const nextItem = items.pop();
-				nextCursor = nextItem!.id;
+				nextCursor = nextItem?.id;
 			}
 
 			return { items, nextCursor };
@@ -447,9 +447,13 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
-				select: { id: true },
+				select: { id: true, companyId: true },
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			await ctx.db.tripRequest.update({
 				where: { id: input.id },
@@ -470,10 +474,15 @@ export const tripRequestRouter = createTRPCRouter({
 					customerEmail: true,
 					orderNumber: true,
 					language: true,
+					companyId: true,
 				},
 			});
 
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			await sendRequestDetailsToCustomer({
 				customerEmail: tripRequest.customerEmail,
@@ -494,6 +503,10 @@ export const tripRequestRouter = createTRPCRouter({
 			});
 
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			if (tripRequest.status === "CONFIRMED") {
 				throw new TRPCError({

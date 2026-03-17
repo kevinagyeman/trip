@@ -328,8 +328,8 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			await ctx.db.$transaction(async (tx) => {
-				await tx.quotation.update({
+			const updated = await ctx.db.$transaction(async (tx) => {
+				const result = await tx.quotation.update({
 					where: { id: input.id },
 					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
 				});
@@ -337,6 +337,7 @@ export const quotationRouter = createTRPCRouter({
 					where: { id: quotation.tripRequestId },
 					data: { status: TripRequestStatus.PENDING },
 				});
+				return result;
 			});
 
 			await sendQuotationRejectedToAdmins({
@@ -346,6 +347,8 @@ export const quotationRouter = createTRPCRouter({
 				lastName: quotation.tripRequest.lastName,
 				orderNumber: quotation.tripRequest.orderNumber,
 			});
+
+			return updated;
 		}),
 
 	// ADMIN: Delete quotation (only if PENDING or REJECTED)

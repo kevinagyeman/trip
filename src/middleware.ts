@@ -13,7 +13,7 @@ export default auth((req) => {
 	const { pathname } = req.nextUrl;
 
 	// Strip locale prefix for path matching
-	const localePattern = /^\/(en|it|de|fr)/;
+	const localePattern = /^\/(en|it)/;
 	const pathWithoutLocale = pathname.replace(localePattern, "") || "/";
 	const localePrefix = pathname.match(localePattern)?.[0] ?? "/en";
 

@@ -198,6 +198,7 @@
 	"requestDetail": {
 		"loading": "Caricamento...",
 		"notFound": "Non trovato",
+		"error": "Impossibile caricare la richiesta",
 		"emailNotice": "Tutte le comunicazioni riguardanti questo viaggio (preventivi, conferme, aggiornamenti) saranno inviate alla tua email. Controlla la posta in arrivo e la cartella spam per i messaggi provenienti da {email}.",
 		"back": "Indietro",
 		"confirmed": "Confermato",
@@ -281,6 +282,7 @@
 		"statusConfirmed": "Confermato",
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
+		"statusCancelled": "Annullato",
 		"noRequests": "Nessuna richiesta trovata.",
 		"adultsCount": "{count} adulto/i",
 		"childrenCount": "{count} bambino/i",

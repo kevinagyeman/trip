@@ -39,3 +39,19 @@ export function parseQuickFillOptions(json: string): string[] {
 		return [];
 	}
 }
+
+// Accepts any t() function that covers the status keys — works with all namespaces
+// that define statusPending, statusQuoted, etc.
+export function buildStatusLabels(
+	t: (key: string) => string,
+): Record<string, string> {
+	return {
+		PENDING: t("statusPending"),
+		QUOTED: t("statusQuoted"),
+		ACCEPTED: t("statusAccepted"),
+		CONFIRMED: t("statusConfirmed"),
+		REJECTED: t("statusRejected"),
+		COMPLETED: t("statusCompleted"),
+		CANCELLED: t("statusCancelled"),
+	};
+}

@@ -87,12 +87,17 @@ function googleCalendarUrl(params: {
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
-import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
+import {
+	buildStatusLabels,
+	parseRoutes,
+	STATUS_COLORS,
+} from "@/lib/trip-utils";
 import type { Route } from "@/lib/trip-utils";
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
+	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
@@ -229,9 +234,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<div className="flex flex-col items-end gap-2">
 							<div className="flex items-center gap-2">
 								<Badge className={STATUS_COLORS[request.status]}>
-									{t(
-										`status${request.status.charAt(0) + request.status.slice(1).toLowerCase()}` as never,
-									)}
+									{statusLabels[request.status] ?? request.status}
 								</Badge>
 								{!["COMPLETED", "CANCELLED"].includes(request.status) && (
 									<Select
