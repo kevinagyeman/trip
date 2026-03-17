@@ -40,10 +40,12 @@ export async function sendEmail({
 	to: string;
 	subject: string;
 	react: ReactElement;
-}) {
+}): Promise<boolean> {
 	try {
 		await resend.emails.send({ from: FROM_EMAIL, to, subject, react });
+		return true;
 	} catch (error) {
 		console.error(`[EMAIL] Failed to send "${subject}" to ${to}:`, error);
+		return false;
 	}
 }

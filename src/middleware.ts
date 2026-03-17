@@ -65,7 +65,7 @@ export default auth((req) => {
 		}
 	}
 
-	return intlMiddleware(req as unknown as NextRequest);
+	return intlMiddleware(req as NextRequest);
 });
 
 export const config = {
