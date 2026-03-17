@@ -9,7 +9,6 @@ import {
 	sendPickupDetailsToAdmins,
 	sendRequestDetailsToCustomer,
 	sendRequestReceivedToCustomer,
-	sendTripConfirmedToAdmins,
 	sendTripConfirmedToCustomer,
 } from "@/server/emails/trip-emails";
 import { TRPCError } from "@trpc/server";
@@ -82,6 +81,7 @@ export const tripRequestRouter = createTRPCRouter({
 					lastName: tripRequest.lastName,
 					orderNumber: tripRequest.orderNumber,
 					token: tripRequest.token,
+					language: tripRequest.language,
 				}),
 			]);
 
@@ -270,7 +270,7 @@ export const tripRequestRouter = createTRPCRouter({
 			return tripRequest;
 		}),
 
-	// ADMIN: Update trip request status
+	// ADMIN: Update trip request status (guarded transitions)
 	updateStatus: adminProcedure
 		.input(
 			z.object({
@@ -279,51 +279,44 @@ export const tripRequestRouter = createTRPCRouter({
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
+			const VALID_TRANSITIONS: Partial<
+				Record<TripRequestStatus, TripRequestStatus[]>
+			> = {
+				PENDING: [
+					TripRequestStatus.QUOTED,
+					TripRequestStatus.REJECTED,
+					TripRequestStatus.CANCELLED,
+				],
+				QUOTED: [
+					TripRequestStatus.PENDING,
+					TripRequestStatus.REJECTED,
+					TripRequestStatus.CANCELLED,
+				],
+				ACCEPTED: [TripRequestStatus.CONFIRMED, TripRequestStatus.CANCELLED],
+				CONFIRMED: [TripRequestStatus.COMPLETED, TripRequestStatus.CANCELLED],
+				COMPLETED: [],
+				REJECTED: [TripRequestStatus.PENDING],
+				CANCELLED: [TripRequestStatus.PENDING],
+			};
+
+			const current = await ctx.db.tripRequest.findUnique({
+				where: { id: input.id },
+				select: { status: true },
+			});
+			if (!current) throw new TRPCError({ code: "NOT_FOUND" });
+
+			const allowed = VALID_TRANSITIONS[current.status] ?? [];
+			if (!allowed.includes(input.status)) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: `Cannot transition from ${current.status} to ${input.status}`,
+				});
+			}
+
 			return ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { status: input.status },
 			});
-		}),
-
-	// USER: Confirm trip with pickup details after accepting quotation
-	confirm: protectedProcedure
-		.input(
-			z.object({
-				id: z.string(),
-				pickupDate: z.date(),
-				pickupTime: z.string(),
-				flightNumber: z.string().optional(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const { id, ...data } = input;
-
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { id },
-			});
-
-			if (!tripRequest) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
-
-			if (tripRequest.userId !== ctx.session.user.id) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
-
-			const updated = await ctx.db.tripRequest.update({
-				where: { id },
-				data: { ...data, status: "CONFIRMED" },
-			});
-
-			await sendTripConfirmedToAdmins({
-				id: tripRequest.id,
-				companyId: tripRequest.companyId,
-				firstName: tripRequest.firstName,
-				lastName: tripRequest.lastName,
-				orderNumber: tripRequest.orderNumber,
-			});
-
-			return updated;
 		}),
 
 	// PUBLIC: Get trip request by token (for anonymous customers)
@@ -398,6 +391,7 @@ export const tripRequestRouter = createTRPCRouter({
 					firstName: true,
 					lastName: true,
 					status: true,
+					language: true,
 				},
 			});
 
@@ -471,6 +465,7 @@ export const tripRequestRouter = createTRPCRouter({
 					lastName: true,
 					customerEmail: true,
 					orderNumber: true,
+					language: true,
 				},
 			});
 
@@ -482,6 +477,7 @@ export const tripRequestRouter = createTRPCRouter({
 				lastName: tripRequest.lastName,
 				orderNumber: tripRequest.orderNumber,
 				token: tripRequest.token,
+				language: tripRequest.language,
 			});
 		}),
 
@@ -513,6 +509,7 @@ export const tripRequestRouter = createTRPCRouter({
 				lastName: tripRequest.lastName,
 				orderNumber: tripRequest.orderNumber,
 				token: tripRequest.token,
+				language: tripRequest.language,
 			});
 
 			return updated;

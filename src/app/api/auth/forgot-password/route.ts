@@ -13,7 +13,18 @@ export async function POST(request: Request) {
 			return NextResponse.json({ error: "Email is required" }, { status: 400 });
 		}
 
+		const user = await db.user.findUnique({
+			where: { email },
+			select: { id: true, password: true },
+		});
+
+		// Always return success to avoid email enumeration
+		if (!user?.password) {
+			return NextResponse.json({ success: true });
+		}
+
 		// Rate limit: max 3 reset attempts per email per hour
+		// Checked after user lookup so the 429 response doesn't reveal whether an email exists
 		const recentAttempts = await db.passwordResetToken.count({
 			where: {
 				email,
@@ -25,16 +36,6 @@ export async function POST(request: Request) {
 				{ error: "Too many requests. Please try again later." },
 				{ status: 429 },
 			);
-		}
-
-		const user = await db.user.findUnique({
-			where: { email },
-			select: { id: true, password: true },
-		});
-
-		// Always return success to avoid email enumeration
-		if (!user?.password) {
-			return NextResponse.json({ success: true });
 		}
 
 		// Delete any existing reset tokens for this email

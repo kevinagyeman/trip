@@ -90,6 +90,7 @@ export const quotationRouter = createTRPCRouter({
 					customerEmail: true,
 					orderNumber: true,
 					companyId: true,
+					language: true,
 				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
@@ -143,6 +144,7 @@ export const quotationRouter = createTRPCRouter({
 				lastName: tripRequest.lastName,
 				orderNumber: tripRequest.orderNumber,
 				token: tripRequest.token,
+				language: tripRequest.language,
 			});
 
 			return quotation;
@@ -162,6 +164,7 @@ export const quotationRouter = createTRPCRouter({
 							lastName: true,
 							customerEmail: true,
 							orderNumber: true,
+							language: true,
 						},
 					},
 				},
@@ -202,6 +205,7 @@ export const quotationRouter = createTRPCRouter({
 				lastName: quotation.tripRequest.lastName,
 				orderNumber: quotation.tripRequest.orderNumber,
 				token: quotation.tripRequest.token,
+				language: quotation.tripRequest.language,
 			});
 
 			return updated;
