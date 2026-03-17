@@ -21,7 +21,8 @@ import { useForm } from "react-hook-form";
 function SignInForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const callbackUrl = searchParams.get("callbackUrl") ?? "/dashboard";
+	const rawCallback = searchParams.get("callbackUrl") ?? "/dashboard";
+	const callbackUrl = rawCallback.startsWith("/") ? rawCallback : "/dashboard";
 	const verified = searchParams.get("verified") === "true";
 	const registered = searchParams.get("registered") === "true";
 	const t = useTranslations("auth");
@@ -115,7 +116,7 @@ function SignInForm() {
 								href="/auth/forgot-password"
 								className="text-muted-foreground hover:underline"
 							>
-								Forgot password?
+								{t("forgotPasswordLink")}
 							</Link>
 						</div>
 

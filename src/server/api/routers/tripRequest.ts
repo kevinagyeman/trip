@@ -166,18 +166,36 @@ export const tripRequestRouter = createTRPCRouter({
 		}
 		const where = companyId ? { companyId } : {};
 
-		const [total, pending, quoted, accepted, completed, rejected, cancelled] =
-			await Promise.all([
-				ctx.db.tripRequest.count({ where }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "PENDING" } }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "QUOTED" } }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "ACCEPTED" } }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "COMPLETED" } }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "REJECTED" } }),
-				ctx.db.tripRequest.count({ where: { ...where, status: "CANCELLED" } }),
-			]);
+		const [
+			total,
+			pending,
+			quoted,
+			accepted,
+			confirmed,
+			completed,
+			rejected,
+			cancelled,
+		] = await Promise.all([
+			ctx.db.tripRequest.count({ where }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "PENDING" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "QUOTED" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "ACCEPTED" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "CONFIRMED" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "COMPLETED" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "REJECTED" } }),
+			ctx.db.tripRequest.count({ where: { ...where, status: "CANCELLED" } }),
+		]);
 
-		return { total, pending, quoted, accepted, completed, rejected, cancelled };
+		return {
+			total,
+			pending,
+			quoted,
+			accepted,
+			confirmed,
+			completed,
+			rejected,
+			cancelled,
+		};
 	}),
 
 	// ADMIN: Get all trip requests (scoped to company)
@@ -317,6 +335,19 @@ export const tripRequestRouter = createTRPCRouter({
 				});
 			}
 
+			if (input.status === TripRequestStatus.CONFIRMED) {
+				const full = await ctx.db.tripRequest.findUnique({
+					where: { id: input.id },
+					select: { pickupDate: true, pickupTime: true },
+				});
+				if (!full?.pickupDate || !full?.pickupTime) {
+					throw new TRPCError({
+						code: "BAD_REQUEST",
+						message: "Pickup date and time are required before confirming",
+					});
+				}
+			}
+
 			return ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { status: input.status },
@@ -403,17 +434,27 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			if (tripRequest.status === "CONFIRMED") {
+			if (
+				["CONFIRMED", "COMPLETED", "CANCELLED"].includes(tripRequest.status)
+			) {
 				throw new TRPCError({
 					code: "FORBIDDEN",
-					message: "Trip is already confirmed",
+					message: "Trip cannot be modified in its current status",
+				});
+			}
+
+			const pickupDate = new Date(input.pickupDate);
+			if (Number.isNaN(pickupDate.getTime())) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Invalid pickup date",
 				});
 			}
 
 			await ctx.db.tripRequest.update({
 				where: { token: input.token },
 				data: {
-					pickupDate: new Date(input.pickupDate),
+					pickupDate,
 					pickupTime: input.pickupTime,
 					flightNumber: input.flightNumber ?? null,
 				},

@@ -5,6 +5,13 @@ import { APP_URL, sendEmail } from "@/server/email";
 import { GenericEmail } from "@/emails/generic-email";
 import { createElement } from "react";
 import { randomBytes } from "node:crypto";
+import { z } from "zod";
+
+const bodySchema = z.object({
+	email: z.string().email(),
+	companyName: z.string().min(1),
+	companyId: z.string().min(1),
+});
 
 export async function POST(request: Request) {
 	const session = await auth();
@@ -13,15 +20,14 @@ export async function POST(request: Request) {
 		return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 	}
 
-	const { email, companyName, companyId } = (await request.json()) as {
-		email: string;
-		companyName: string;
-		companyId: string;
-	};
-
-	if (!email) {
-		return NextResponse.json({ error: "Email is required" }, { status: 400 });
+	const parsed = bodySchema.safeParse(await request.json());
+	if (!parsed.success) {
+		return NextResponse.json(
+			{ error: "Invalid request body" },
+			{ status: 400 },
+		);
 	}
+	const { email, companyName, companyId } = parsed.data;
 
 	const user = await db.user.findUnique({
 		where: { email },
@@ -63,7 +69,7 @@ export async function POST(request: Request) {
 			data: {
 				preview: "Set your password",
 				title: "You've been invited",
-				subtitle: `You've been added as an admin for ${companyName} on dantrip.com. Click the button below to set your password and get started.`,
+				subtitle: `You've been added as an admin for ${companyName}. Click the button below to set your password and get started.`,
 				buttonLabel: "Set Password",
 				secondaryText:
 					"This link expires in 24 hours. If you weren't expecting this invitation, you can safely ignore this email.",

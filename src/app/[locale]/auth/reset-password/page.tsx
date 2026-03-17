@@ -10,10 +10,12 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 
 function ResetPasswordForm() {
+	const t = useTranslations("auth");
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token") ?? "";
 	const [password, setPassword] = useState("");
@@ -25,7 +27,7 @@ function ResetPasswordForm() {
 	if (!token) {
 		return (
 			<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-				Invalid reset link.
+				{t("invalidResetLink")}
 			</div>
 		);
 	}
@@ -34,11 +36,11 @@ function ResetPasswordForm() {
 		e.preventDefault();
 		setError("");
 		if (password !== confirm) {
-			setError("Passwords do not match");
+			setError(t("passwordMismatch"));
 			return;
 		}
 		if (password.length < 6) {
-			setError("Password must be at least 6 characters");
+			setError(t("passwordTooShort"));
 			return;
 		}
 		setLoading(true);
@@ -50,12 +52,12 @@ function ResetPasswordForm() {
 			});
 			const data = (await res.json()) as { error?: string };
 			if (!res.ok) {
-				setError(data.error ?? "Something went wrong");
+				setError(data.error ?? t("somethingWentWrong"));
 			} else {
 				setDone(true);
 			}
 		} catch {
-			setError("Something went wrong");
+			setError(t("somethingWentWrong"));
 		} finally {
 			setLoading(false);
 		}
@@ -67,20 +69,19 @@ function ResetPasswordForm() {
 				<div className="space-y-4">
 					<div className="rounded-md border border-green-200 bg-green-50 p-3">
 						<p className="text-sm text-green-800">
-							Password reset successfully. You can now sign in with your new
-							password.
+							{t("passwordResetSuccess")}
 						</p>
 					</div>
 					<div className="text-center text-sm">
 						<Link href="/auth/signin" className="text-blue-600 hover:underline">
-							Sign In
+							{t("signIn")}
 						</Link>
 					</div>
 				</div>
 			) : (
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<CustomInput
-						labelText="New Password"
+						labelText={t("newPassword")}
 						inputType="password"
 						placeholder="At least 6 characters"
 						inputProps={{
@@ -91,7 +92,7 @@ function ResetPasswordForm() {
 						}}
 					/>
 					<CustomInput
-						labelText="Confirm New Password"
+						labelText={t("confirmNewPassword")}
 						inputType="password"
 						placeholder="Repeat password"
 						inputProps={{
@@ -107,7 +108,7 @@ function ResetPasswordForm() {
 						</div>
 					)}
 					<Button type="submit" className="w-full" disabled={loading}>
-						{loading ? "Saving..." : "Reset Password"}
+						{loading ? t("saving") : t("resetPasswordButton")}
 					</Button>
 				</form>
 			)}
@@ -116,15 +117,16 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+	const t = useTranslations("auth");
 	return (
 		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
-						Reset Password
+						{t("resetPasswordTitle")}
 					</CardTitle>
 					<CardDescription className="text-center">
-						Choose a new password for your account
+						{t("resetPasswordSubtitle")}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>

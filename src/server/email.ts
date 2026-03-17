@@ -27,7 +27,7 @@ export async function resolveAdminEmails(
 		const emails = adminUsers
 			.map((u) => u.email)
 			.filter((e): e is string => !!e);
-		return emails;
+		if (emails.length > 0) return emails;
 	}
 	return ADMIN_EMAIL ? [ADMIN_EMAIL] : [];
 }

@@ -16,6 +16,28 @@ import {
 	TripRequestStatus,
 } from "../../../../generated/prisma";
 
+const QUOTATION_VALID_TRANSITIONS: Partial<
+	Record<QuotationStatus, QuotationStatus[]>
+> = {
+	[QuotationStatus.PENDING]: [
+		QuotationStatus.ACCEPTED,
+		QuotationStatus.REJECTED,
+	],
+};
+
+function assertQuotationTransition(
+	current: QuotationStatus,
+	next: QuotationStatus,
+) {
+	const allowed = QUOTATION_VALID_TRANSITIONS[current] ?? [];
+	if (!allowed.includes(next)) {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: `Quotation cannot be ${next.toLowerCase()} in its current state`,
+		});
+	}
+}
+
 export const quotationRouter = createTRPCRouter({
 	// ADMIN: Save (create or update) the single quotation for a trip request
 	save: adminProcedure
@@ -36,6 +58,10 @@ export const quotationRouter = createTRPCRouter({
 				where: { id: tripRequestId },
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			const existing = await ctx.db.quotation.findFirst({
 				where: { tripRequestId },
@@ -94,6 +120,10 @@ export const quotationRouter = createTRPCRouter({
 				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId: adminCompanyId } = ctx.session.user;
+			if (adminCompanyId && tripRequest.companyId !== adminCompanyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			const existing = await ctx.db.quotation.findFirst({
 				where: { tripRequestId },
@@ -154,8 +184,12 @@ export const quotationRouter = createTRPCRouter({
 	notify: adminProcedure
 		.input(z.object({ tripRequestId: z.string() }))
 		.mutation(async ({ ctx, input }) => {
+			const { companyId } = ctx.session.user;
 			const quotation = await ctx.db.quotation.findFirst({
-				where: { tripRequestId: input.tripRequestId },
+				where: {
+					tripRequestId: input.tripRequestId,
+					...(companyId ? { tripRequest: { companyId } } : {}),
+				},
 				include: {
 					tripRequest: {
 						select: {
@@ -176,10 +210,6 @@ export const quotationRouter = createTRPCRouter({
 					code: "NOT_FOUND",
 					message: "No quotation found for this request",
 				});
-			}
-			const { companyId } = ctx.session.user;
-			if (companyId && quotation.tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 			if (quotation.status === QuotationStatus.ACCEPTED) {
 				throw new TRPCError({
@@ -231,17 +261,26 @@ export const quotationRouter = createTRPCRouter({
 			if (quotation.tripRequest.userId !== ctx.session.user.id) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
-			if (quotation.status !== QuotationStatus.PENDING) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation cannot be accepted",
-				});
-			}
+			assertQuotationTransition(quotation.status, QuotationStatus.ACCEPTED);
 
 			const updated = await ctx.db.$transaction(async (tx) => {
 				const result = await tx.quotation.update({
 					where: { id: input.id },
 					data: { status: QuotationStatus.ACCEPTED, respondedAt: new Date() },
+					select: {
+						id: true,
+						price: true,
+						currency: true,
+						isPriceEachWay: true,
+						areCarSeatsIncluded: true,
+						quotationAdditionalInfo: true,
+						status: true,
+						notifiedAt: true,
+						respondedAt: true,
+						createdAt: true,
+						updatedAt: true,
+						tripRequestId: true,
+					},
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
@@ -276,17 +315,26 @@ export const quotationRouter = createTRPCRouter({
 			if (quotation.tripRequest.token !== input.token) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
-			if (quotation.status !== QuotationStatus.PENDING) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation cannot be accepted",
-				});
-			}
+			assertQuotationTransition(quotation.status, QuotationStatus.ACCEPTED);
 
 			const updated = await ctx.db.$transaction(async (tx) => {
 				const result = await tx.quotation.update({
 					where: { id: input.id },
 					data: { status: QuotationStatus.ACCEPTED, respondedAt: new Date() },
+					select: {
+						id: true,
+						price: true,
+						currency: true,
+						isPriceEachWay: true,
+						areCarSeatsIncluded: true,
+						quotationAdditionalInfo: true,
+						status: true,
+						notifiedAt: true,
+						respondedAt: true,
+						createdAt: true,
+						updatedAt: true,
+						tripRequestId: true,
+					},
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
@@ -321,17 +369,26 @@ export const quotationRouter = createTRPCRouter({
 			if (quotation.tripRequest.token !== input.token) {
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
-			if (quotation.status !== QuotationStatus.PENDING) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Quotation cannot be rejected",
-				});
-			}
+			assertQuotationTransition(quotation.status, QuotationStatus.REJECTED);
 
 			const updated = await ctx.db.$transaction(async (tx) => {
 				const result = await tx.quotation.update({
 					where: { id: input.id },
 					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
+					select: {
+						id: true,
+						price: true,
+						currency: true,
+						isPriceEachWay: true,
+						areCarSeatsIncluded: true,
+						quotationAdditionalInfo: true,
+						status: true,
+						notifiedAt: true,
+						respondedAt: true,
+						createdAt: true,
+						updatedAt: true,
+						tripRequestId: true,
+					},
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },

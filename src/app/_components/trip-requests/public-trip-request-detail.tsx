@@ -26,7 +26,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
-	const { data: request, isLoading } = api.tripRequest.getByToken.useQuery({
+	const {
+		data: request,
+		isLoading,
+		isError,
+	} = api.tripRequest.getByToken.useQuery({
 		token,
 	});
 
@@ -70,6 +74,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	});
 
 	if (isLoading) return <div>{t("loading")}</div>;
+	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = parseRoutes(request.routes);

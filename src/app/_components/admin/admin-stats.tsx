@@ -30,19 +30,29 @@ export function AdminStats() {
 			className: "text-green-600 dark:text-green-400",
 		},
 		{
+			label: t("statConfirmed"),
+			value: data?.confirmed ?? 0,
+			className: "text-emerald-600 dark:text-emerald-400",
+		},
+		{
 			label: t("statCompleted"),
 			value: data?.completed ?? 0,
 			className: "text-gray-600 dark:text-gray-400",
 		},
 		{
-			label: t("statCancelled"),
-			value: (data?.rejected ?? 0) + (data?.cancelled ?? 0),
+			label: t("statRejected"),
+			value: data?.rejected ?? 0,
 			className: "text-red-600 dark:text-red-400",
+		},
+		{
+			label: t("statCancelled"),
+			value: data?.cancelled ?? 0,
+			className: "text-orange-600 dark:text-orange-400",
 		},
 	];
 
 	return (
-		<div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+		<div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
 			{stats.map((stat) => (
 				<Card key={stat.label}>
 					<CardHeader className="pb-2 pt-4">

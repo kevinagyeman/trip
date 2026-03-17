@@ -168,22 +168,6 @@ export async function sendRequestReceivedToCustomer(t: CustomerTarget) {
 	});
 }
 
-export async function sendTripConfirmedToAdmins(t: AdminTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	await notifyAdmins(
-		t.companyId,
-		`${o} - TRIP CONFIRMED | ${name}`,
-		{
-			preview: "View request",
-			title: `${name} confirmed their trip — ${o}`,
-			subtitle: "The trip is ready to be finalised.",
-			buttonLabel: "View Request",
-		},
-		`${APP_URL}/admin/requests/${t.id}`,
-	);
-}
-
 export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
 	const name = `${t.firstName} ${t.lastName}`;

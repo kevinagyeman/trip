@@ -37,7 +37,7 @@
 		"feature4Title": "Built-in Messaging",
 		"feature4Desc": "Chat directly with customers inside each request. No more lost emails or WhatsApp threads.",
 		"feature5Title": "Multi-language Support",
-		"feature5Desc": "Available in English, Italian, German, and French. Serve international customers effortlessly.",
+		"feature5Desc": "Available in English and Italian. Serve international customers effortlessly.",
 		"feature6Title": "Multi-company Ready",
 		"feature6Desc": "Run multiple brands or companies from a single platform. Each has its own portal, admins, and requests.",
 		"stepsTitle": "How it works",
@@ -88,7 +88,23 @@
 		"verifyEmailSubtitle": "Please verify your email address",
 		"productionNote": "(In production, this link would be sent via email)",
 		"registrationNotAllowed": "Registration Not Available",
-		"registrationNotAllowedDesc": "To create an account, please use the link provided by your transport company."
+		"registrationNotAllowedDesc": "To create an account, please use the link provided by your transport company.",
+		"forgotPasswordLink": "Forgot password?",
+		"forgotPasswordTitle": "Forgot Password",
+		"forgotPasswordSubtitle": "Enter your email to receive a reset link",
+		"forgotPasswordEmailSent": "If an account exists for {email}, a password reset link has been sent. Check your inbox and spam folder.",
+		"backToSignIn": "Back to Sign In",
+		"somethingWentWrong": "Something went wrong",
+		"sending": "Sending...",
+		"sendResetLink": "Send Reset Link",
+		"resetPasswordTitle": "Reset Password",
+		"resetPasswordSubtitle": "Choose a new password for your account",
+		"invalidResetLink": "Invalid reset link.",
+		"passwordResetSuccess": "Password reset successfully. You can now sign in with your new password.",
+		"newPassword": "New Password",
+		"confirmNewPassword": "Confirm New Password",
+		"saving": "Saving...",
+		"resetPasswordButton": "Reset Password"
 	},
 	"dashboard": {
 		"title": "My Trip Requests",
@@ -269,8 +285,10 @@
 		"statPending": "Pending",
 		"statQuoted": "Quoted",
 		"statAccepted": "Accepted",
+		"statConfirmed": "Confirmed",
 		"statCompleted": "Completed",
-		"statCancelled": "Rejected / Cancelled"
+		"statRejected": "Rejected",
+		"statCancelled": "Cancelled"
 	},
 	"adminRequests": {
 		"loading": "Loading...",
@@ -289,8 +307,7 @@
 		"quotationsCount": "{count} quotation(s)",
 		"manage": "Manage",
 		"searchPlaceholder": "Search by name or email...",
-		"loadMore": "Load more",
-		"statusCancelled": "Cancelled"
+		"loadMore": "Load more"
 	},
 	"adminDetail": {
 		"loading": "Loading...",
@@ -404,6 +421,29 @@
 		"createAccount": "Create Account",
 		"signIn": "Already have an account? Sign In",
 		"poweredBy": "Powered by Trip Manager"
+	},
+	"settings": {
+		"title": "Settings",
+		"quickFillTitle": "Quick Fill Options",
+		"quickFillDesc": "These shortcuts appear on the booking form so customers can quickly fill in pickup and destination fields (e.g. airports, stations).",
+		"quickFillPlaceholder": "e.g. Verona Villafranca Airport",
+		"noOptions": "No options yet.",
+		"changeEmailTitle": "Change Email",
+		"changePasswordTitle": "Change Password",
+		"emailNotice": "This is the address where all notifications are sent — new trip requests, quotation responses, and booking confirmations.",
+		"currentEmail": "Current email",
+		"newEmail": "New Email",
+		"currentPassword": "Current Password",
+		"newPassword": "New Password",
+		"confirmNewPassword": "Confirm New Password",
+		"emailUpdated": "Email updated successfully. Please sign in again.",
+		"passwordChanged": "Password changed successfully.",
+		"loading": "Loading...",
+		"saving": "Saving...",
+		"save": "Save",
+		"saved": "Saved!",
+		"changeEmailButton": "Change Email",
+		"changePasswordButton": "Change Password"
 	},
 	"superAdmin": {
 		"title": "Super Admin Dashboard",

@@ -7,7 +7,8 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export function ChangePasswordForm() {
-	const t = useTranslations("register");
+	const t = useTranslations("settings");
+	const tAuth = useTranslations("auth");
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -34,11 +35,11 @@ export function ChangePasswordForm() {
 		setSuccess(false);
 
 		if (newPassword !== confirmPassword) {
-			setError(t("passwordMismatch"));
+			setError(tAuth("passwordMismatch"));
 			return;
 		}
 		if (newPassword.length < 6) {
-			setError(t("passwordTooShort"));
+			setError(tAuth("passwordTooShort"));
 			return;
 		}
 
@@ -48,7 +49,7 @@ export function ChangePasswordForm() {
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4 max-w-sm">
 			<CustomInput
-				labelText="Current Password"
+				labelText={t("currentPassword")}
 				inputType="password"
 				inputProps={{
 					value: currentPassword,
@@ -57,7 +58,7 @@ export function ChangePasswordForm() {
 				}}
 			/>
 			<CustomInput
-				labelText="New Password"
+				labelText={t("newPassword")}
 				inputType="password"
 				inputProps={{
 					value: newPassword,
@@ -66,7 +67,7 @@ export function ChangePasswordForm() {
 				}}
 			/>
 			<CustomInput
-				labelText="Confirm New Password"
+				labelText={t("confirmNewPassword")}
 				inputType="password"
 				inputProps={{
 					value: confirmPassword,
@@ -77,11 +78,11 @@ export function ChangePasswordForm() {
 			{error && <p className="text-sm text-destructive">{error}</p>}
 			{success && (
 				<p className="text-sm text-green-600 dark:text-green-400">
-					Password changed successfully.
+					{t("passwordChanged")}
 				</p>
 			)}
 			<Button type="submit" disabled={changePassword.isPending}>
-				{changePassword.isPending ? "Saving..." : "Change Password"}
+				{changePassword.isPending ? t("saving") : t("changePasswordButton")}
 			</Button>
 		</form>
 	);

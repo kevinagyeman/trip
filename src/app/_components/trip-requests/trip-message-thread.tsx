@@ -4,7 +4,8 @@ import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
+import { enUS, it as itLocale } from "date-fns/locale";
+import { useLocale, useTranslations } from "next-intl";
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { MessageSenderType } from "../../../../generated/prisma";
@@ -15,6 +16,8 @@ type Props =
 
 export function TripMessageThread(props: Props) {
 	const t = useTranslations("messages");
+	const locale = useLocale();
+	const dateFnsLocale = locale === "it" ? itLocale : enUS;
 	const utils = api.useUtils();
 	const [body, setBody] = useState("");
 	const bottomRef = useRef<HTMLDivElement>(null);
@@ -108,7 +111,9 @@ export function TripMessageThread(props: Props) {
 								</div>
 								<p className="mt-1 text-xs text-muted-foreground">
 									{isOwnMessage ? t("you") : msg.senderName} ·{" "}
-									{format(new Date(msg.createdAt), "MMM d, HH:mm")}
+									{format(new Date(msg.createdAt), "MMM d, HH:mm", {
+										locale: dateFnsLocale,
+									})}
 								</p>
 							</div>
 						);

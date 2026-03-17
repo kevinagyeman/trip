@@ -1,5 +1,6 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
 import { db } from "@/server/db";
+import { parseQuickFillOptions } from "@/lib/trip-utils";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -12,12 +13,16 @@ export default async function BookingPortalPage({
 
 	const company = await db.company.findUnique({
 		where: { slug, isActive: true },
-		select: { name: true, slug: true, logoUrl: true },
+		select: { name: true, slug: true, logoUrl: true, quickFillOptions: true },
 	});
 
 	if (!company) {
 		notFound();
 	}
+
+	const quickFillOptions = parseQuickFillOptions(
+		company.quickFillOptions ?? "",
+	);
 
 	return (
 		<div className="min-h-[calc(100vh-65px)] p-4">
@@ -36,7 +41,10 @@ export default async function BookingPortalPage({
 				</div>
 
 				<div>
-					<CreateTripRequestForm companySlug={slug} />
+					<CreateTripRequestForm
+						companySlug={slug}
+						quickFillOptions={quickFillOptions}
+					/>
 				</div>
 			</div>
 		</div>

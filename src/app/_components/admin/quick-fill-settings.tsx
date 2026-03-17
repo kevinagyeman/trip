@@ -3,19 +3,22 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
+import { useTranslations } from "next-intl";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 export function QuickFillSettings() {
+	const t = useTranslations("settings");
 	const { data, isLoading } = api.company.getQuickFill.useQuery();
 
 	if (isLoading)
-		return <p className="text-sm text-muted-foreground">Loading...</p>;
+		return <p className="text-sm text-muted-foreground">{t("loading")}</p>;
 
 	return <QuickFillForm initialOptions={data ?? []} />;
 }
 
 function QuickFillForm({ initialOptions }: { initialOptions: string[] }) {
+	const t = useTranslations("settings");
 	const utils = api.useUtils();
 	const [options, setOptions] = useState<string[]>(initialOptions);
 	const [newValue, setNewValue] = useState("");
@@ -47,16 +50,13 @@ function QuickFillForm({ initialOptions }: { initialOptions: string[] }) {
 
 	return (
 		<div className="space-y-4 max-w-sm">
-			<p className="text-sm text-muted-foreground">
-				These shortcuts appear on the booking form so customers can quickly fill
-				in pickup and destination fields (e.g. airports, stations).
-			</p>
+			<p className="text-sm text-muted-foreground">{t("quickFillDesc")}</p>
 
 			{/* Existing options */}
 			<div className="space-y-2">
 				{options.length === 0 && (
 					<p className="text-sm text-muted-foreground italic">
-						No options yet.
+						{t("noOptions")}
 					</p>
 				)}
 				{options.map((opt, i) => (
@@ -79,7 +79,7 @@ function QuickFillForm({ initialOptions }: { initialOptions: string[] }) {
 			{/* Add new */}
 			<div className="flex gap-2">
 				<Input
-					placeholder="e.g. Verona Villafranca Airport"
+					placeholder={t("quickFillPlaceholder")}
 					value={newValue}
 					onChange={(e) => setNewValue(e.target.value)}
 					onKeyDown={(e) => e.key === "Enter" && addOption()}
@@ -103,11 +103,11 @@ function QuickFillForm({ initialOptions }: { initialOptions: string[] }) {
 					}}
 					disabled={update.isPending}
 				>
-					{update.isPending ? "Saving..." : "Save"}
+					{update.isPending ? t("saving") : t("save")}
 				</Button>
 				{saved && (
 					<span className="text-sm text-green-600 dark:text-green-400">
-						Saved!
+						{t("saved")}
 					</span>
 				)}
 			</div>

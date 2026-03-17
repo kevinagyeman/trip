@@ -10,9 +10,11 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function ForgotPasswordPage() {
+	const t = useTranslations("auth");
 	const [email, setEmail] = useState("");
 	const [submitted, setSubmitted] = useState(false);
 	const [error, setError] = useState("");
@@ -30,12 +32,12 @@ export default function ForgotPasswordPage() {
 			});
 			if (!res.ok) {
 				const data = (await res.json()) as { error?: string };
-				setError(data.error ?? "Something went wrong");
+				setError(data.error ?? t("somethingWentWrong"));
 			} else {
 				setSubmitted(true);
 			}
 		} catch {
-			setError("Something went wrong");
+			setError(t("somethingWentWrong"));
 		} finally {
 			setLoading(false);
 		}
@@ -46,10 +48,10 @@ export default function ForgotPasswordPage() {
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
-						Forgot Password
+						{t("forgotPasswordTitle")}
 					</CardTitle>
 					<CardDescription className="text-center">
-						Enter your email to receive a reset link
+						{t("forgotPasswordSubtitle")}
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -57,8 +59,7 @@ export default function ForgotPasswordPage() {
 						<div className="space-y-4">
 							<div className="rounded-md border border-green-200 bg-green-50 p-3">
 								<p className="text-sm text-green-800">
-									If an account exists for <strong>{email}</strong>, a password
-									reset link has been sent. Check your inbox and spam folder.
+									{t("forgotPasswordEmailSent", { email })}
 								</p>
 							</div>
 							<div className="text-center text-sm">
@@ -66,14 +67,14 @@ export default function ForgotPasswordPage() {
 									href="/auth/signin"
 									className="text-blue-600 hover:underline"
 								>
-									Back to Sign In
+									{t("backToSignIn")}
 								</Link>
 							</div>
 						</div>
 					) : (
 						<form onSubmit={handleSubmit} className="space-y-4">
 							<CustomInput
-								labelText="Email"
+								labelText={t("email")}
 								inputType="email"
 								placeholder="your@email.com"
 								inputProps={{
@@ -89,14 +90,14 @@ export default function ForgotPasswordPage() {
 								</div>
 							)}
 							<Button type="submit" className="w-full" disabled={loading}>
-								{loading ? "Sending..." : "Send Reset Link"}
+								{loading ? t("sending") : t("sendResetLink")}
 							</Button>
 							<div className="text-center text-sm">
 								<Link
 									href="/auth/signin"
 									className="text-blue-600 hover:underline"
 								>
-									Back to Sign In
+									{t("backToSignIn")}
 								</Link>
 							</div>
 						</form>

@@ -37,7 +37,7 @@
 		"feature4Title": "Messaggistica Integrata",
 		"feature4Desc": "Chatta direttamente con i clienti all'interno di ogni richiesta. Niente più email perse o conversazioni WhatsApp.",
 		"feature5Title": "Supporto Multilingua",
-		"feature5Desc": "Disponibile in inglese, italiano, tedesco e francese. Servi i clienti internazionali senza sforzo.",
+		"feature5Desc": "Disponibile in inglese e italiano. Servi i clienti internazionali senza sforzo.",
 		"feature6Title": "Multi-azienda",
 		"feature6Desc": "Gestisci più brand o aziende da un'unica piattaforma. Ognuna ha il proprio portale, admin e richieste.",
 		"stepsTitle": "Come funziona",
@@ -88,7 +88,23 @@
 		"verifyEmailSubtitle": "Verifica il tuo indirizzo email",
 		"productionNote": "(In produzione, questo link verrebbe inviato via email)",
 		"registrationNotAllowed": "Registrazione Non Disponibile",
-		"registrationNotAllowedDesc": "Per creare un account, utilizza il link fornito dalla tua azienda di trasporti."
+		"registrationNotAllowedDesc": "Per creare un account, utilizza il link fornito dalla tua azienda di trasporti.",
+		"forgotPasswordLink": "Password dimenticata?",
+		"forgotPasswordTitle": "Password Dimenticata",
+		"forgotPasswordSubtitle": "Inserisci la tua email per ricevere un link di reset",
+		"forgotPasswordEmailSent": "Se esiste un account per {email}, è stato inviato un link di reset. Controlla la posta in arrivo e la cartella spam.",
+		"backToSignIn": "Torna all'accesso",
+		"somethingWentWrong": "Qualcosa è andato storto",
+		"sending": "Invio in corso...",
+		"sendResetLink": "Invia Link di Reset",
+		"resetPasswordTitle": "Reimposta Password",
+		"resetPasswordSubtitle": "Scegli una nuova password per il tuo account",
+		"invalidResetLink": "Link di reset non valido.",
+		"passwordResetSuccess": "Password reimpostata con successo. Ora puoi accedere con la tua nuova password.",
+		"newPassword": "Nuova Password",
+		"confirmNewPassword": "Conferma Nuova Password",
+		"saving": "Salvataggio...",
+		"resetPasswordButton": "Reimposta Password"
 	},
 	"dashboard": {
 		"title": "Le Mie Richieste di Viaggio",
@@ -269,8 +285,10 @@
 		"statPending": "In Attesa",
 		"statQuoted": "Preventivati",
 		"statAccepted": "Accettati",
+		"statConfirmed": "Confermati",
 		"statCompleted": "Completati",
-		"statCancelled": "Rifiutati / Annullati"
+		"statRejected": "Rifiutati",
+		"statCancelled": "Annullati"
 	},
 	"adminRequests": {
 		"loading": "Caricamento...",
@@ -289,8 +307,7 @@
 		"quotationsCount": "{count} preventivo/i",
 		"manage": "Gestisci",
 		"searchPlaceholder": "Cerca per nome o email...",
-		"loadMore": "Carica altri",
-		"statusCancelled": "Annullato"
+		"loadMore": "Carica altri"
 	},
 	"adminDetail": {
 		"loading": "Caricamento...",
@@ -404,6 +421,29 @@
 		"createAccount": "Crea Account",
 		"signIn": "Hai già un account? Accedi",
 		"poweredBy": "Powered by Trip Manager"
+	},
+	"settings": {
+		"title": "Impostazioni",
+		"quickFillTitle": "Opzioni Risposta Rapida",
+		"quickFillDesc": "Questi shortcut appaiono nel modulo di prenotazione per permettere ai clienti di compilare rapidamente i campi di ritiro e destinazione (es. aeroporti, stazioni).",
+		"quickFillPlaceholder": "es. Aeroporto di Verona Villafranca",
+		"noOptions": "Nessuna opzione ancora.",
+		"changeEmailTitle": "Cambia Email",
+		"changePasswordTitle": "Cambia Password",
+		"emailNotice": "Questo è l'indirizzo dove vengono inviate tutte le notifiche — nuove richieste, risposte ai preventivi e conferme di prenotazione.",
+		"currentEmail": "Email attuale",
+		"newEmail": "Nuova Email",
+		"currentPassword": "Password Attuale",
+		"newPassword": "Nuova Password",
+		"confirmNewPassword": "Conferma Nuova Password",
+		"emailUpdated": "Email aggiornata con successo. Per favore accedi di nuovo.",
+		"passwordChanged": "Password cambiata con successo.",
+		"loading": "Caricamento...",
+		"saving": "Salvataggio...",
+		"save": "Salva",
+		"saved": "Salvato!",
+		"changeEmailButton": "Cambia Email",
+		"changePasswordButton": "Cambia Password"
 	},
 	"superAdmin": {
 		"title": "Dashboard Super Admin",

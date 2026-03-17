@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
@@ -21,14 +22,16 @@ export default async function AdminSettingsPage({
 		redirect("/dashboard");
 	}
 
+	const t = await getTranslations("settings");
+
 	return (
 		<div className="container mx-auto px-4 py-8">
-			<h1 className="mb-6 text-3xl font-bold">Settings</h1>
+			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{session.user.role === "ADMIN" && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Quick Fill Options</CardTitle>
+							<CardTitle>{t("quickFillTitle")}</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<QuickFillSettings />
@@ -37,7 +40,7 @@ export default async function AdminSettingsPage({
 				)}
 				<Card>
 					<CardHeader>
-						<CardTitle>Change Email</CardTitle>
+						<CardTitle>{t("changeEmailTitle")}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ChangeEmailForm currentEmail={session.user.email ?? ""} />
@@ -45,7 +48,7 @@ export default async function AdminSettingsPage({
 				</Card>
 				<Card>
 					<CardHeader>
-						<CardTitle>Change Password</CardTitle>
+						<CardTitle>{t("changePasswordTitle")}</CardTitle>
 					</CardHeader>
 					<CardContent>
 						<ChangePasswordForm />

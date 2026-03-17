@@ -34,6 +34,13 @@ export const createTripRequestSchema = z
 		additionalInfo: z.string().optional(),
 	})
 	.superRefine((data, ctx) => {
+		if (data.areThereChildren && !data.numberOfChildren) {
+			ctx.addIssue({
+				path: ["numberOfChildren"],
+				code: z.ZodIssueCode.custom,
+				message: "Number of children must be at least 1",
+			});
+		}
 		if (data.areThereChildren && data.numberOfChildren) {
 			const count = Number(data.numberOfChildren);
 			for (let i = 0; i < count; i++) {

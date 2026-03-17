@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { COUNTRY_CODES } from "@/lib/phone";
 import { LANGUAGES } from "@/lib/quick-fill";
-import { parseQuickFillOptions } from "@/lib/trip-utils";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
@@ -32,16 +31,12 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm({
 	companySlug,
+	quickFillOptions,
 }: {
 	companySlug: string;
+	quickFillOptions: string[];
 }) {
 	const router = useRouter();
-	const { data: companyData } = api.company.getBySlug.useQuery({
-		slug: companySlug,
-	});
-	const quickFillOptions: string[] = companyData?.quickFillOptions
-		? parseQuickFillOptions(companyData.quickFillOptions)
-		: [];
 	const t = useTranslations("tripRequest");
 
 	const {
@@ -89,7 +84,7 @@ export function CreateTripRequestForm({
 				unit: current[i]?.unit ?? "years",
 			})),
 		);
-	}, [numberOfChildren]);
+	}, [numberOfChildren, getValues, replaceChildrenAges]);
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
