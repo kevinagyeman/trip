@@ -165,6 +165,7 @@ export const quotationRouter = createTRPCRouter({
 							customerEmail: true,
 							orderNumber: true,
 							language: true,
+							companyId: true,
 						},
 					},
 				},
@@ -175,6 +176,10 @@ export const quotationRouter = createTRPCRouter({
 					code: "NOT_FOUND",
 					message: "No quotation found for this request",
 				});
+			}
+			const { companyId } = ctx.session.user;
+			if (companyId && quotation.tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 			if (quotation.status === QuotationStatus.ACCEPTED) {
 				throw new TRPCError({
@@ -218,12 +223,7 @@ export const quotationRouter = createTRPCRouter({
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
 				include: {
-					tripRequest: {
-						include: {
-							user: { select: { email: true, name: true } },
-							company: { select: { adminEmail: true } },
-						},
-					},
+					tripRequest: true,
 				},
 			});
 
@@ -268,11 +268,7 @@ export const quotationRouter = createTRPCRouter({
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
 				include: {
-					tripRequest: {
-						include: {
-							company: { select: { adminEmail: true } },
-						},
-					},
+					tripRequest: true,
 				},
 			});
 
@@ -317,11 +313,7 @@ export const quotationRouter = createTRPCRouter({
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
 				include: {
-					tripRequest: {
-						include: {
-							company: { select: { adminEmail: true } },
-						},
-					},
+					tripRequest: true,
 				},
 			});
 
@@ -362,8 +354,13 @@ export const quotationRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
+				include: { tripRequest: { select: { companyId: true } } },
 			});
 			if (!quotation) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && quotation.tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 			if (quotation.status === QuotationStatus.ACCEPTED) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",

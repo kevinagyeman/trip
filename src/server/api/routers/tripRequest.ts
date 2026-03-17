@@ -301,9 +301,13 @@ export const tripRequestRouter = createTRPCRouter({
 
 			const current = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
-				select: { status: true },
+				select: { status: true, companyId: true },
 			});
 			if (!current) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && current.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			const allowed = VALID_TRANSITIONS[current.status] ?? [];
 			if (!allowed.includes(input.status)) {

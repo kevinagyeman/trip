@@ -28,6 +28,16 @@ export const tripMessageRouter = createTRPCRouter({
 	getByRequestId: adminProcedure
 		.input(z.object({ requestId: z.string() }))
 		.query(async ({ ctx, input }) => {
+			const request = await ctx.db.tripRequest.findUnique({
+				where: { id: input.requestId },
+				select: { companyId: true },
+			});
+			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && request.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
+
 			return ctx.db.tripMessage.findMany({
 				where: { tripRequestId: input.requestId },
 				orderBy: { createdAt: "asc" },
@@ -61,8 +71,13 @@ export const tripMessageRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const request = await ctx.db.tripRequest.findUnique({
 				where: { id: input.requestId },
+				select: { id: true, companyId: true, firstName: true, lastName: true },
 			});
 			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && request.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 
 			const adminName =
 				ctx.session.user.name ?? ctx.session.user.email ?? "Admin";
