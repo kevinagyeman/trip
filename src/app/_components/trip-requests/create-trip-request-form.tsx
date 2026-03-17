@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { COUNTRY_CODES } from "@/lib/phone";
 import { LANGUAGES } from "@/lib/quick-fill";
+import { parseQuickFillOptions } from "@/lib/trip-utils";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,
@@ -39,7 +40,7 @@ export function CreateTripRequestForm({
 		slug: companySlug,
 	});
 	const quickFillOptions: string[] = companyData?.quickFillOptions
-		? (JSON.parse(companyData.quickFillOptions) as string[])
+		? parseQuickFillOptions(companyData.quickFillOptions)
 		: [];
 	const t = useTranslations("tripRequest");
 

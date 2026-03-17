@@ -3,9 +3,11 @@
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export function ChangePasswordForm() {
+	const t = useTranslations("register");
 	const [currentPassword, setCurrentPassword] = useState("");
 	const [newPassword, setNewPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -32,11 +34,11 @@ export function ChangePasswordForm() {
 		setSuccess(false);
 
 		if (newPassword !== confirmPassword) {
-			setError("New passwords do not match");
+			setError(t("passwordMismatch"));
 			return;
 		}
 		if (newPassword.length < 6) {
-			setError("New password must be at least 6 characters");
+			setError(t("passwordTooShort"));
 			return;
 		}
 

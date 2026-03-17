@@ -9,27 +9,12 @@ import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
-type Route = {
-	pickup: string;
-	destination: string;
-	departureDate?: string;
-	departureTime?: string;
-};
-
-const statusColors: Record<string, string> = {
-	PENDING: "bg-yellow-500",
-	QUOTED: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	CONFIRMED: "bg-emerald-600",
-	REJECTED: "bg-red-500",
-	COMPLETED: "bg-gray-500",
-	CANCELLED: "bg-gray-400",
-};
-
-const quotationStatusColors: Record<string, string> = {
-	PENDING: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-};
+import {
+	parseRoutes,
+	STATUS_COLORS,
+	QUOTATION_STATUS_COLORS,
+} from "@/lib/trip-utils";
+import type { Route } from "@/lib/trip-utils";
 
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -58,7 +43,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const routes: Route[] = parseRoutes(request.routes);
 
 	return (
 		<div className="space-y-6">
@@ -93,7 +78,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							</div>
 						</div>
 						<div className="flex gap-2">
-							<Badge className={statusColors[request.status]}>
+							<Badge className={STATUS_COLORS[request.status]}>
 								{statusLabels[request.status] ?? request.status}
 							</Badge>
 						</div>
@@ -255,7 +240,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 											</p>
 										)}
 									</div>
-									<Badge className={quotationStatusColors[quotation.status]}>
+									<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
 										{quotation.status}
 									</Badge>
 								</div>

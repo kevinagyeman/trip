@@ -4,25 +4,10 @@ import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
-
-type Route = {
-	pickup: string;
-	destination: string;
-	departureDate?: string;
-	departureTime?: string;
-};
-
-const statusColors: Record<string, string> = {
-	PENDING: "bg-yellow-500",
-	QUOTED: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
-	COMPLETED: "bg-gray-500",
-	CANCELLED: "bg-gray-400",
-};
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
@@ -63,7 +48,7 @@ export function MyTripRequests() {
 								<CardTitle>
 									{request.firstName} {request.lastName}
 								</CardTitle>
-								{(JSON.parse(request.routes) as Route[]).map((route, i) => (
+								{parseRoutes(request.routes).map((route, i) => (
 									<p key={i} className="text-xs text-muted-foreground">
 										{route.pickup} → {route.destination}
 										{(route.departureTime ?? route.departureDate) && (
@@ -76,7 +61,7 @@ export function MyTripRequests() {
 									</p>
 								))}
 							</div>
-							<Badge className={statusColors[request.status]}>
+							<Badge className={STATUS_COLORS[request.status]}>
 								{statusLabels[request.status] ?? request.status}
 							</Badge>
 						</div>

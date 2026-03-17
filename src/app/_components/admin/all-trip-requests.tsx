@@ -12,27 +12,12 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
+import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
-
-type Route = {
-	pickup: string;
-	destination: string;
-	departureDate?: string;
-	departureTime?: string;
-};
-
-const statusColors: Record<string, string> = {
-	PENDING: "bg-yellow-500",
-	QUOTED: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
-	COMPLETED: "bg-gray-500",
-	CANCELLED: "bg-gray-400",
-};
 
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
@@ -50,14 +35,13 @@ export function AllTripRequests() {
 	const [search, setSearch] = useState("");
 	const [debouncedSearch, setDebouncedSearch] = useState("");
 
+	const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
 	// Debounce search input
 	const handleSearch = (value: string) => {
 		setSearch(value);
-		clearTimeout((handleSearch as { _t?: ReturnType<typeof setTimeout> })._t);
-		(handleSearch as { _t?: ReturnType<typeof setTimeout> })._t = setTimeout(
-			() => setDebouncedSearch(value),
-			400,
-		);
+		clearTimeout(debounceRef.current);
+		debounceRef.current = setTimeout(() => setDebouncedSearch(value), 400);
 	};
 
 	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -130,7 +114,7 @@ export function AllTripRequests() {
 												request.user?.email ??
 												request.customerEmail}
 										</p>
-										{(JSON.parse(request.routes) as Route[]).map((route, i) => (
+										{parseRoutes(request.routes).map((route, i) => (
 											<p key={i} className="text-xs text-muted-foreground">
 												{route.pickup} → {route.destination}
 												{(route.departureTime ?? route.departureDate) && (
@@ -143,7 +127,7 @@ export function AllTripRequests() {
 											</p>
 										))}
 									</div>
-									<Badge className={statusColors[request.status]}>
+									<Badge className={STATUS_COLORS[request.status]}>
 										{statusLabels[request.status] ?? request.status}
 									</Badge>
 								</div>

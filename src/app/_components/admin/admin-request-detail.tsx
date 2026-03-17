@@ -25,14 +25,6 @@ import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
-type Route = {
-	pickup: string;
-	destination: string;
-	departureDate?: string;
-	departureTime?: string;
-	flightNumber?: string;
-};
-
 function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
 	if (timeStr) {
@@ -95,15 +87,8 @@ function googleCalendarUrl(params: {
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
-const statusColors: Record<string, string> = {
-	PENDING: "bg-yellow-500",
-	QUOTED: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	CONFIRMED: "bg-emerald-600",
-	REJECTED: "bg-red-500",
-	COMPLETED: "bg-gray-500",
-	CANCELLED: "bg-gray-400",
-};
+import { parseRoutes, STATUS_COLORS } from "@/lib/trip-utils";
+import type { Route } from "@/lib/trip-utils";
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -129,7 +114,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	useEffect(() => {
 		if (request) {
-			const parsed = JSON.parse(request.routes) as Route[];
+			const parsed = parseRoutes(request.routes);
 			setAdminRouteDepartures(
 				parsed.map((r) => ({
 					departureDate: r.departureDate ?? "",
@@ -203,7 +188,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const routes: Route[] = parseRoutes(request.routes);
 	const firstRoute = routes[0]!;
 
 	return (
@@ -243,7 +228,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 						<div className="flex flex-col items-end gap-2">
 							<div className="flex items-center gap-2">
-								<Badge className={statusColors[request.status]}>
+								<Badge className={STATUS_COLORS[request.status]}>
 									{t(
 										`status${request.status.charAt(0) + request.status.slice(1).toLowerCase()}` as never,
 									)}

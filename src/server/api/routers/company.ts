@@ -144,7 +144,12 @@ export const companyRouter = createTRPCRouter({
 			select: { quickFillOptions: true },
 		});
 		if (!company?.quickFillOptions) return [];
-		return JSON.parse(company.quickFillOptions) as string[];
+		try {
+			const parsed = JSON.parse(company.quickFillOptions) as unknown;
+			return Array.isArray(parsed) ? (parsed as string[]) : [];
+		} catch {
+			return [];
+		}
 	}),
 
 	// ADMIN: Update own company quick fill options

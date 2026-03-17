@@ -13,29 +13,12 @@ import { TripMessageThread } from "./trip-message-thread";
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 
-type Route = {
-	pickup: string;
-	destination: string;
-	departureDate?: string;
-	departureTime?: string;
-	flightNumber?: string;
-};
-
-const statusColors: Record<string, string> = {
-	PENDING: "bg-yellow-500",
-	QUOTED: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	CONFIRMED: "bg-emerald-600",
-	REJECTED: "bg-red-500",
-	COMPLETED: "bg-gray-500",
-	CANCELLED: "bg-gray-400",
-};
-
-const quotationStatusColors: Record<string, string> = {
-	PENDING: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
-};
+import {
+	parseRoutes,
+	STATUS_COLORS,
+	QUOTATION_STATUS_COLORS,
+} from "@/lib/trip-utils";
+import type { Route } from "@/lib/trip-utils";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
@@ -64,7 +47,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	useEffect(() => {
 		if (request) {
-			const parsed = JSON.parse(request.routes) as Route[];
+			const parsed = parseRoutes(request.routes);
 			setRouteDepartures(
 				parsed.map((r) => ({
 					departureDate: r.departureDate ?? "",
@@ -96,7 +79,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = JSON.parse(request.routes) as Route[];
+	const routes: Route[] = parseRoutes(request.routes);
 	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
 		request.status,
 	);
@@ -138,7 +121,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</div>
 						</div>
 						<div className="flex gap-2">
-							<Badge className={statusColors[request.status]}>
+							<Badge className={STATUS_COLORS[request.status]}>
 								{statusLabels[request.status] ?? request.status}
 							</Badge>
 						</div>
@@ -389,7 +372,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 											</p>
 										)}
 									</div>
-									<Badge className={quotationStatusColors[quotation.status]}>
+									<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
 										{quotation.status}
 									</Badge>
 								</div>
