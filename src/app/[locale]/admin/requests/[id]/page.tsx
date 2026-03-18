@@ -1,8 +1,8 @@
-import { notFound, redirect } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { AdminRequestDetail } from "@/app/_components/admin/admin-request-detail";
 import { auth } from "@/server/auth";
 import { api, HydrateClient } from "@/trpc/server";
-import { AdminRequestDetail } from "@/app/_components/admin/admin-request-detail";
+import { setRequestLocale } from "next-intl/server";
+import { notFound, redirect } from "next/navigation";
 
 export default async function AdminRequestPage({
 	params,
@@ -26,7 +26,7 @@ export default async function AdminRequestPage({
 
 	return (
 		<HydrateClient>
-			<div className="container mx-auto px-4 py-8">
+			<div className="container mx-auto max-w-3xl py-8 px-4">
 				<AdminRequestDetail requestId={id} />
 			</div>
 		</HydrateClient>
