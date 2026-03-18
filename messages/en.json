@@ -1,13 +1,13 @@
 {
 	"navigation": {
-		"brand": "Trip Manager",
+		"brand": "dantrip.com",
 		"myTrips": "My Trips",
 		"adminDashboard": "Admin Dashboard",
 		"superAdminDashboard": "Super Admin",
 		"signOut": "Sign Out"
 	},
 	"home": {
-		"title": "Welcome to Trip Manager",
+		"title": "Welcome to dantrip.com",
 		"subtitle": "Plan your perfect trip! Request customized travel packages and get personalized quotations from our team.",
 		"getStarted": "Get Started",
 		"signIn": "Sign In",
@@ -23,7 +23,7 @@
 		"heroBadge": "Transfer Management Platform",
 		"heroHeadline": "Run your transfer business",
 		"heroHeadlineHighlight": "without the chaos",
-		"heroSubtitle": "Trip Manager helps transport companies handle customer transfer requests, send professional quotations, and confirm bookings — all in one place, with zero friction.",
+		"heroSubtitle": "dantrip.com helps transport companies handle customer transfer requests, send professional quotations, and confirm bookings — all in one place, with zero friction.",
 		"ctaStart": "Get Started",
 		"ctaSignIn": "Sign In",
 		"featuresTitle": "Everything you need",
@@ -54,7 +54,7 @@
 	},
 	"auth": {
 		"welcomeBack": "Welcome Back",
-		"signInSubtitle": "Sign in to your Trip Manager account",
+		"signInSubtitle": "Sign in to your dantrip.com account",
 		"email": "Email",
 		"password": "Password",
 		"signingIn": "Signing in...",
@@ -69,7 +69,7 @@
 		"invalidCredentials": "Invalid email or password.",
 		"unexpectedError": "An unexpected error occurred.",
 		"createAccount": "Create an Account",
-		"registerSubtitle": "Enter your details to register for Trip Manager",
+		"registerSubtitle": "Enter your details to register for dantrip.com",
 		"name": "Name (Optional)",
 		"confirmPassword": "Confirm Password *",
 		"passwordRequired": "Password *",
@@ -420,7 +420,7 @@
 		"subtitle": "Book your transfer with us",
 		"createAccount": "Create Account",
 		"signIn": "Already have an account? Sign In",
-		"poweredBy": "Powered by Trip Manager"
+		"poweredBy": "Powered by dantrip.com"
 	},
 	"settings": {
 		"title": "Settings",

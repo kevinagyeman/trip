@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-	title: "Trip Manager",
+	title: "dantrip.com",
 	description: "Request trips and manage quotations",
 	icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

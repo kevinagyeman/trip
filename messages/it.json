@@ -23,7 +23,7 @@
 		"heroBadge": "Piattaforma di Gestione Trasferimenti",
 		"heroHeadline": "Gestisci la tua attività di trasferimento",
 		"heroHeadlineHighlight": "senza il caos",
-		"heroSubtitle": "Trip Manager aiuta le aziende di trasporti a gestire le richieste dei clienti, inviare preventivi professionali e confermare le prenotazioni — tutto in un unico posto, senza attrito.",
+		"heroSubtitle": "dantrip.com aiuta le aziende di trasporti a gestire le richieste dei clienti, inviare preventivi professionali e confermare le prenotazioni — tutto in un unico posto, senza attrito.",
 		"ctaStart": "Inizia Ora",
 		"ctaSignIn": "Accedi",
 		"featuresTitle": "Tutto ciò di cui hai bisogno",
@@ -420,7 +420,7 @@
 		"subtitle": "Prenota il tuo trasferimento con noi",
 		"createAccount": "Crea Account",
 		"signIn": "Hai già un account? Accedi",
-		"poweredBy": "Powered by Trip Manager"
+		"poweredBy": "Powered by dantrip.com"
 	},
 	"settings": {
 		"title": "Impostazioni",
