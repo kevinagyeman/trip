@@ -51,9 +51,14 @@ export async function Navigation() {
 								</Link>
 							)}
 							{isAdmin && !isSuperAdmin && (
-								<Link href="/admin">
-									<Button variant="ghost">{t("adminDashboard")}</Button>
-								</Link>
+								<>
+									<Link href="/admin">
+										<Button variant="ghost">{t("adminDashboard")}</Button>
+									</Link>
+									<Link href="/admin/stats">
+										<Button variant="ghost">{t("adminStats")}</Button>
+									</Link>
+								</>
 							)}
 							{isSuperAdmin && (
 								<Link href="/super-admin">

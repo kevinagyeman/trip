@@ -64,6 +64,7 @@ export const tripRequestRouter = createTRPCRouter({
 					customerEmail: email,
 					companyId: company.id,
 					status: TripRequestStatus.PENDING,
+					privacyAcceptedAt: new Date(),
 				},
 			});
 

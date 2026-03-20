@@ -2,8 +2,9 @@
 	"navigation": {
 		"brand": "dantrip.com",
 		"myTrips": "My Trips",
-		"adminDashboard": "Admin Dashboard",
-		"superAdminDashboard": "Super Admin",
+		"adminDashboard": "Dashboard",
+		"superAdminDashboard": "Dashboard",
+		"adminStats": "Stats",
 		"signOut": "Sign Out"
 	},
 	"home": {
@@ -152,6 +153,8 @@
 		"routeDepartureTime": "Departure Time",
 		"routeFlightNumber": "Flight Number",
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
+		"privacyPolicyAccept": "I have read and accept the",
+		"privacyPolicyLink": "Privacy Policy",
 		"submitRequest": "Submit Quotation Request",
 		"submitting": "Submitting...",
 		"helpAlertTitle": "Help us.",

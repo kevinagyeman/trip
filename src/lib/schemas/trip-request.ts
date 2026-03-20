@@ -32,6 +32,9 @@ export const createTripRequestSchema = z
 			.optional(),
 		numberOfChildSeats: z.coerce.number().int().min(0).optional(),
 		additionalInfo: z.string().optional(),
+		privacyAccepted: z.boolean().refine((v) => v === true, {
+			message: "You must accept the privacy policy",
+		}),
 	})
 	.superRefine((data, ctx) => {
 		if (data.areThereChildren && !data.numberOfChildren) {

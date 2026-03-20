@@ -8418,6 +8418,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
@@ -8444,6 +8445,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
@@ -8470,6 +8472,7 @@ export namespace Prisma {
     ageOfChildren: number
     numberOfChildSeats: number
     additionalInfo: number
+    privacyAcceptedAt: number
     pickupDate: number
     pickupTime: number
     flightNumber: number
@@ -8512,6 +8515,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
@@ -8538,6 +8542,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
@@ -8564,6 +8569,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
     flightNumber?: true
@@ -8677,6 +8683,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
     flightNumber: string | null
@@ -8722,6 +8729,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
@@ -8753,6 +8761,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
@@ -8781,6 +8790,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
@@ -8809,6 +8819,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
     flightNumber?: boolean
@@ -8818,7 +8829,7 @@ export namespace Prisma {
     companyId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "pickupDate" | "pickupTime" | "flightNumber" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | TripRequest$companyArgs<ExtArgs>
@@ -8860,6 +8871,7 @@ export namespace Prisma {
       ageOfChildren: string | null
       numberOfChildSeats: number | null
       additionalInfo: string | null
+      privacyAcceptedAt: Date | null
       pickupDate: Date | null
       pickupTime: string | null
       flightNumber: string | null
@@ -9310,6 +9322,7 @@ export namespace Prisma {
     readonly ageOfChildren: FieldRef<"TripRequest", 'String'>
     readonly numberOfChildSeats: FieldRef<"TripRequest", 'Int'>
     readonly additionalInfo: FieldRef<"TripRequest", 'String'>
+    readonly privacyAcceptedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly pickupDate: FieldRef<"TripRequest", 'DateTime'>
     readonly pickupTime: FieldRef<"TripRequest", 'String'>
     readonly flightNumber: FieldRef<"TripRequest", 'String'>
@@ -12233,6 +12246,7 @@ export namespace Prisma {
     ageOfChildren: 'ageOfChildren',
     numberOfChildSeats: 'numberOfChildSeats',
     additionalInfo: 'additionalInfo',
+    privacyAcceptedAt: 'privacyAcceptedAt',
     pickupDate: 'pickupDate',
     pickupTime: 'pickupTime',
     flightNumber: 'flightNumber',
@@ -12865,6 +12879,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
@@ -12895,6 +12910,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrderInput | SortOrder
     numberOfChildSeats?: SortOrderInput | SortOrder
     additionalInfo?: SortOrderInput | SortOrder
+    privacyAcceptedAt?: SortOrderInput | SortOrder
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
     flightNumber?: SortOrderInput | SortOrder
@@ -12928,6 +12944,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
@@ -12958,6 +12975,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrderInput | SortOrder
     numberOfChildSeats?: SortOrderInput | SortOrder
     additionalInfo?: SortOrderInput | SortOrder
+    privacyAcceptedAt?: SortOrderInput | SortOrder
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
     flightNumber?: SortOrderInput | SortOrder
@@ -12992,6 +13010,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableWithAggregatesFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    privacyAcceptedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
@@ -13624,6 +13643,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -13652,6 +13672,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -13679,6 +13700,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13707,6 +13729,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13735,6 +13758,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -13760,6 +13784,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13784,6 +13809,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14460,6 +14486,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
@@ -14493,6 +14520,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
@@ -14519,6 +14547,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
     flightNumber?: SortOrder
@@ -15580,6 +15609,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -15607,6 +15637,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -15693,6 +15724,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
     flightNumber?: StringNullableFilter<"TripRequest"> | string | null
@@ -15956,6 +15988,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -15983,6 +16016,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16464,6 +16498,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16491,6 +16526,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16533,6 +16569,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16560,6 +16597,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16587,6 +16625,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16614,6 +16653,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16689,6 +16729,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16716,6 +16757,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16792,6 +16834,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -16854,6 +16897,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16881,6 +16925,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16908,6 +16953,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16954,6 +17000,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
     flightNumber?: string | null
@@ -17057,6 +17104,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17084,6 +17132,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17111,6 +17160,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null

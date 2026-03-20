@@ -147,6 +147,9 @@ model TripRequest {
   numberOfChildSeats Int?
   additionalInfo     String? @db.Text
 
+  // Privacy consent
+  privacyAcceptedAt DateTime?
+
   // Pickup details — set after quotation accepted
   pickupDate   DateTime?
   pickupTime   String?

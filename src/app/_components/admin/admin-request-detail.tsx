@@ -1,12 +1,12 @@
 "use client";
 
-import { api } from "@/trpc/react";
+import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
 	Select,
 	SelectContent,
@@ -14,15 +14,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { LANGUAGE_LABELS } from "@/lib/quick-fill";
+import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
-import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
@@ -87,12 +86,12 @@ function googleCalendarUrl(params: {
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
+import type { Route } from "@/lib/trip-utils";
 import {
 	buildStatusLabels,
 	parseRoutes,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
-import type { Route } from "@/lib/trip-utils";
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -458,81 +457,74 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 
-					{/* Contact Details */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">
-							{t("contactDetails")}
-						</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("email")}</p>
-								<p className="font-medium">
+					{/* Passenger & Contact Info */}
+					<div className="rounded-lg border p-3 text-sm">
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
+							<span>
+								<span className="text-muted-foreground">{t("name")}: </span>
+								<span className="font-medium">
+									{request.firstName} {request.lastName}
+								</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("email")}: </span>
+								<span className="font-medium">
 									{request.user?.email ?? request.customerEmail}
-								</p>
-							</div>
-							<div>
-								<p className="text-sm text-muted-foreground">{t("phone")}</p>
-								<p className="font-medium">{request.phone}</p>
-							</div>
-						</div>
-					</div>
-
-					{/* Passengers */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">{t("passengers")}</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("adults")}</p>
-								<p className="font-medium">{request.numberOfAdults}</p>
-							</div>
+								</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("phone")}: </span>
+								<span className="font-medium">{request.phone}</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("adults")}: </span>
+								<span className="font-medium">{request.numberOfAdults}</span>
+							</span>
 							{request.areThereChildren &&
 								request.numberOfChildren !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("numberOfChildren")}
-										</p>
-										<p className="font-medium">{request.numberOfChildren}</p>
-									</div>
+									<span>
+										<span className="text-muted-foreground">
+											{t("numberOfChildren")}:{" "}
+										</span>
+										<span className="font-medium">
+											{request.numberOfChildren}
+										</span>
+									</span>
 								)}
 							{request.areThereChildren && request.ageOfChildren && (
-								<div>
-									<p className="text-sm text-muted-foreground">
-										{t("agesOfChildren")}
-									</p>
-									<p className="font-medium">{request.ageOfChildren}</p>
-								</div>
+								<span>
+									<span className="text-muted-foreground">
+										{t("agesOfChildren")}:{" "}
+									</span>
+									<span className="font-medium">{request.ageOfChildren}</span>
+								</span>
 							)}
 							{request.areThereChildren &&
 								request.numberOfChildSeats !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("childSeatsNeeded")}
-										</p>
-										<p className="font-medium">{request.numberOfChildSeats}</p>
-									</div>
+									<span>
+										<span className="text-muted-foreground">
+											{t("childSeatsNeeded")}:{" "}
+										</span>
+										<span className="font-medium">
+											{request.numberOfChildSeats}
+										</span>
+									</span>
 								)}
-						</div>
-					</div>
-
-					{/* Preferences */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">{t("preferences")}</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">
+							<span>
+								<span className="text-muted-foreground">{t("language")}: </span>
+								<span className="font-medium">
 									{LANGUAGE_LABELS[request.language] ?? request.language}
-								</p>
-							</div>
-							<div>
-								<p className="text-sm text-muted-foreground">{t("created")}</p>
-								<p className="font-medium">
+								</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("created")}: </span>
+								<span className="font-medium">
 									{format(new Date(request.createdAt), "PPP")}
-								</p>
-							</div>
+								</span>
+							</span>
 						</div>
 						{request.additionalInfo && (
-							<p className="mt-3 whitespace-pre-wrap rounded-lg bg-muted p-3 text-sm">
+							<p className="mt-2 whitespace-pre-wrap rounded bg-muted px-2 py-1 text-xs">
 								{request.additionalInfo}
 							</p>
 						)}

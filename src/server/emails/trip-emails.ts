@@ -28,7 +28,7 @@ type CustomerTarget = TripRequestBase & {
 const TRANSLATIONS = {
 	en: {
 		requestReceived: {
-			subject: (o: string, name: string) => `${o} - REQUEST RECEIVED | ${name}`,
+			subject: (o: string, name: string) => `${o} - Request received | ${name}`,
 			preview: "View your request",
 			title: (firstName: string, lastName: string, o: string) =>
 				`Dear ${firstName} ${lastName}, your request ${o} has been received.`,
@@ -36,7 +36,7 @@ const TRANSLATIONS = {
 			button: "View Request",
 		},
 		requestDetails: {
-			subject: (o: string, name: string) => `${o} - ACTION REQUIRED | ${name}`,
+			subject: (o: string, name: string) => `${o} - Action required | ${name}`,
 			preview: "Complete your trip details",
 			title: (firstName: string) =>
 				`Dear ${firstName}, please complete your departure details.`,
@@ -45,7 +45,7 @@ const TRANSLATIONS = {
 			button: "Complete Details",
 		},
 		quotationReady: {
-			subject: (o: string, name: string) => `${o} - QUOTATION READY | ${name}`,
+			subject: (o: string, name: string) => `${o} - Quotation ready | ${name}`,
 			preview: "View quotation",
 			title: (firstName: string, o: string) =>
 				`Dear ${firstName}, your quotation for request ${o} is ready.`,
@@ -53,7 +53,7 @@ const TRANSLATIONS = {
 			button: "View Quotation",
 		},
 		tripConfirmed: {
-			subject: (o: string, name: string) => `${o} - TRIP CONFIRMED | ${name}`,
+			subject: (o: string, name: string) => `${o} - Trip confirmed | ${name}`,
 			preview: "Your trip is confirmed",
 			title: (firstName: string) =>
 				`Dear ${firstName}, your trip is confirmed!`,
@@ -64,7 +64,7 @@ const TRANSLATIONS = {
 	it: {
 		requestReceived: {
 			subject: (o: string, name: string) =>
-				`${o} - RICHIESTA RICEVUTA | ${name}`,
+				`${o} - Richiesta ricevuta | ${name}`,
 			preview: "Visualizza la tua richiesta",
 			title: (firstName: string, lastName: string, o: string) =>
 				`Gentile ${firstName} ${lastName}, la tua richiesta ${o} è stata ricevuta.`,
@@ -72,7 +72,7 @@ const TRANSLATIONS = {
 			button: "Visualizza Richiesta",
 		},
 		requestDetails: {
-			subject: (o: string, name: string) => `${o} - AZIONE RICHIESTA | ${name}`,
+			subject: (o: string, name: string) => `${o} - Azione richiesta | ${name}`,
 			preview: "Completa i dettagli del viaggio",
 			title: (firstName: string) =>
 				`Gentile ${firstName}, completa i dettagli di partenza.`,
@@ -82,7 +82,7 @@ const TRANSLATIONS = {
 		},
 		quotationReady: {
 			subject: (o: string, name: string) =>
-				`${o} - PREVENTIVO PRONTO | ${name}`,
+				`${o} - Preventivo pronto | ${name}`,
 			preview: "Visualizza preventivo",
 			title: (firstName: string, o: string) =>
 				`Gentile ${firstName}, il tuo preventivo per la richiesta ${o} è pronto.`,
@@ -91,7 +91,7 @@ const TRANSLATIONS = {
 		},
 		tripConfirmed: {
 			subject: (o: string, name: string) =>
-				`${o} - VIAGGIO CONFERMATO | ${name}`,
+				`${o} - Viaggio confermato | ${name}`,
 			preview: "Il tuo viaggio è confermato",
 			title: (firstName: string) =>
 				`Gentile ${firstName}, il tuo viaggio è confermato!`,

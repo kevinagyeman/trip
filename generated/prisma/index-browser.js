@@ -198,6 +198,7 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   ageOfChildren: 'ageOfChildren',
   numberOfChildSeats: 'numberOfChildSeats',
   additionalInfo: 'additionalInfo',
+  privacyAcceptedAt: 'privacyAcceptedAt',
   pickupDate: 'pickupDate',
   pickupTime: 'pickupTime',
   flightNumber: 'flightNumber',

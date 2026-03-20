@@ -59,6 +59,7 @@ export function CreateTripRequestForm({
 			numberOfChildren: 0,
 			childrenAges: [],
 			numberOfChildSeats: 0,
+			privacyAccepted: false,
 		},
 	});
 
@@ -551,6 +552,33 @@ export function CreateTripRequestForm({
 					rows={4}
 					textAreaProps={{ ...register("additionalInfo") }}
 				/>
+			</div>
+
+			{/* Privacy Policy */}
+			<div className="space-y-1">
+				<label className="flex cursor-pointer items-start gap-2 text-sm">
+					<input
+						type="checkbox"
+						className="mt-0.5 h-4 w-4 shrink-0 rounded border"
+						{...register("privacyAccepted")}
+					/>
+					<span>
+						{t("privacyPolicyAccept")}{" "}
+						<a
+							href="/privacy"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="underline"
+						>
+							{t("privacyPolicyLink")}
+						</a>
+					</span>
+				</label>
+				{errors.privacyAccepted && (
+					<p className="text-xs text-destructive">
+						{errors.privacyAccepted.message}
+					</p>
+				)}
 			</div>
 
 			<Button

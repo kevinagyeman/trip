@@ -1,10 +1,10 @@
-import { AllTripRequests } from "@/app/_components/admin/all-trip-requests";
+import { AdminStats } from "@/app/_components/admin/admin-stats";
 import { auth } from "@/server/auth";
 import { api, HydrateClient } from "@/trpc/server";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
 
-export default async function AdminDashboardPage({
+export default async function AdminStatsPage({
 	params,
 }: {
 	params: Promise<{ locale: string }>;
@@ -38,7 +38,7 @@ export default async function AdminDashboardPage({
 			<div className="container mx-auto px-4 py-8">
 				<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 				<div className="space-y-8">
-					<AllTripRequests />
+					<AdminStats />
 				</div>
 			</div>
 		</HydrateClient>
