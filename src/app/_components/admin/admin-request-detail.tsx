@@ -457,8 +457,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 
-					{/* Passenger & Contact Info */}
-					<div className="rounded-lg border p-3 text-sm">
+					{/* Contact Details */}
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							{t("contactDetails")}
+						</p>
 						<div className="flex flex-wrap gap-x-6 gap-y-1">
 							<span>
 								<span className="text-muted-foreground">{t("name")}: </span>
@@ -476,6 +479,15 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<span className="text-muted-foreground">{t("phone")}: </span>
 								<span className="font-medium">{request.phone}</span>
 							</span>
+						</div>
+					</div>
+
+					{/* Passengers */}
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							{t("passengers")}
+						</p>
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
 							<span>
 								<span className="text-muted-foreground">{t("adults")}: </span>
 								<span className="font-medium">{request.numberOfAdults}</span>
@@ -510,6 +522,15 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</span>
 									</span>
 								)}
+						</div>
+					</div>
+
+					{/* Preferences */}
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							{t("preferences")}
+						</p>
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
 							<span>
 								<span className="text-muted-foreground">{t("language")}: </span>
 								<span className="font-medium">
@@ -524,9 +545,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							</span>
 						</div>
 						{request.additionalInfo && (
-							<p className="mt-2 whitespace-pre-wrap rounded bg-muted px-2 py-1 text-xs">
-								{request.additionalInfo}
-							</p>
+							<span>
+								<span className="text-muted-foreground">
+									{t("additionalInformation")}:{" "}
+								</span>
+								<span className="font-medium">{request.additionalInfo}</span>
+							</span>
 						)}
 					</div>
 				</CardContent>

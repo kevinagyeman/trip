@@ -396,7 +396,8 @@
 		"routeFlightNumber": "Flight Number",
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
 		"routeDepartureDetails": "Departure details",
-		"saveRouteDetails": "Save details"
+		"saveRouteDetails": "Save details",
+		"name": "Name"
 	},
 	"notFound": {
 		"heading": "Page Not Found",

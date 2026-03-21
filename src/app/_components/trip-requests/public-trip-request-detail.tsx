@@ -273,81 +273,92 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					</div>
 
 					{/* Contact Details */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 							{t("contactDetails")}
-						</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div className="col-span-2">
-								<p className="text-sm text-muted-foreground">{t("email")}</p>
-								<p className="font-medium">{request.customerEmail}</p>
-							</div>
-							<div>
-								<p className="text-sm text-muted-foreground">{t("phone")}</p>
-								<p className="font-medium">{request.phone}</p>
-							</div>
+						</p>
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
+							<span>
+								<span className="text-muted-foreground">{t("email")}: </span>
+								<span className="font-medium">{request.customerEmail}</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("phone")}: </span>
+								<span className="font-medium">{request.phone}</span>
+							</span>
 						</div>
 					</div>
 
 					{/* Passengers */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">{t("passengers")}</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("adults")}</p>
-								<p className="font-medium">{request.numberOfAdults}</p>
-							</div>
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							{t("passengers")}
+						</p>
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
+							<span>
+								<span className="text-muted-foreground">{t("adults")}: </span>
+								<span className="font-medium">{request.numberOfAdults}</span>
+							</span>
 							{request.areThereChildren &&
 								request.numberOfChildren !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("numberOfChildren")}
-										</p>
-										<p className="font-medium">{request.numberOfChildren}</p>
-									</div>
+									<span>
+										<span className="text-muted-foreground">
+											{t("numberOfChildren")}:{" "}
+										</span>
+										<span className="font-medium">
+											{request.numberOfChildren}
+										</span>
+									</span>
 								)}
 							{request.areThereChildren && request.ageOfChildren && (
-								<div>
-									<p className="text-sm text-muted-foreground">
-										{t("agesOfChildren")}
-									</p>
-									<p className="font-medium">{request.ageOfChildren}</p>
-								</div>
+								<span>
+									<span className="text-muted-foreground">
+										{t("agesOfChildren")}:{" "}
+									</span>
+									<span className="font-medium">{request.ageOfChildren}</span>
+								</span>
 							)}
 							{request.areThereChildren &&
 								request.numberOfChildSeats !== null && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("childSeatsNeeded")}
-										</p>
-										<p className="font-medium">{request.numberOfChildSeats}</p>
-									</div>
+									<span>
+										<span className="text-muted-foreground">
+											{t("childSeatsNeeded")}:{" "}
+										</span>
+										<span className="font-medium">
+											{request.numberOfChildSeats}
+										</span>
+									</span>
 								)}
 						</div>
 					</div>
 
 					{/* Preferences */}
-					<div>
-						<h3 className="mb-3 text-lg font-semibold">{t("preferences")}</h3>
-						<div className="grid grid-cols-2 gap-4">
-							<div>
-								<p className="text-sm text-muted-foreground">{t("language")}</p>
-								<p className="font-medium">
+					<div className="space-y-1 rounded-lg border p-3 text-sm">
+						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+							{t("preferences")}
+						</p>
+						<div className="flex flex-wrap gap-x-6 gap-y-1">
+							<span>
+								<span className="text-muted-foreground">{t("language")}: </span>
+								<span className="font-medium">
 									{LANGUAGE_LABELS[request.language] ?? request.language}
-								</p>
-							</div>
-							<div>
-								<p className="text-sm text-muted-foreground">{t("created")}</p>
-								<p className="font-medium">
+								</span>
+							</span>
+							<span>
+								<span className="text-muted-foreground">{t("created")}: </span>
+								<span className="font-medium">
 									{format(new Date(request.createdAt), "PPP")}
-								</p>
-							</div>
+								</span>
+							</span>
+							{request.additionalInfo && (
+								<span>
+									<span className="text-muted-foreground">
+										{t("additionalInformation")}:{" "}
+									</span>
+									<span className="font-medium">{request.additionalInfo}</span>
+								</span>
+							)}
 						</div>
-						{request.additionalInfo && (
-							<p className="mt-3 whitespace-pre-wrap rounded-lg bg-muted p-3 text-sm">
-								{request.additionalInfo}
-							</p>
-						)}
 					</div>
 				</CardContent>
 			</Card>
