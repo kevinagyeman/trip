@@ -276,8 +276,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
 						<div className="space-y-2">
 							{routes.map((route, i) => (
-								<div key={i}>
-									<div className="rounded-lg border p-3 text-sm">
+								<div key={i} className="rounded-lg border text-sm">
+									<div className="p-3">
 										<p className="mb-1 text-xs font-medium text-muted-foreground">
 											{t("routeN", { n: i + 1 })}
 										</p>
@@ -365,7 +365,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											</div>
 										)}
 									</div>
-									<div className="mt-2 rounded-lg border border-dashed p-3">
+									<div className="border-t border-dashed p-3">
 										<p className="mb-2 text-xs font-medium text-muted-foreground">
 											{t("routeDepartureDetails")}
 										</p>
