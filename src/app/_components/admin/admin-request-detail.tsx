@@ -203,7 +203,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			{/* Customer Information */}
 			<Card>
 				<CardHeader>
-					<div className="flex items-start justify-between">
+					<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 						<div className="space-y-1">
 							<p className="text-xs font-medium text-muted-foreground">
 								#{String(request.orderNumber).padStart(7, "0")}
@@ -229,46 +229,44 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								))}
 							</div>
 						</div>
-						<div className="flex flex-col items-end gap-2">
-							<div className="flex items-center gap-2">
-								<Badge className={STATUS_COLORS[request.status]}>
-									{statusLabels[request.status] ?? request.status}
-								</Badge>
-								{!["COMPLETED", "CANCELLED"].includes(request.status) && (
-									<Select
-										value={pendingStatus ?? ""}
-										onValueChange={(value) =>
-											setPendingStatus(value as TripRequestStatus)
-										}
-									>
-										<SelectTrigger className="w-[160px]">
-											<SelectValue placeholder={t("markAs")} />
-										</SelectTrigger>
-										<SelectContent>
-											<SelectItem value="COMPLETED">
-												{t("statusCompleted")}
-											</SelectItem>
-											<SelectItem value="CANCELLED">
-												{t("statusCancelled")}
-											</SelectItem>
-										</SelectContent>
-									</Select>
-								)}
-								{pendingStatus && pendingStatus !== request.status && (
-									<Button
-										size="sm"
-										disabled={updateStatus.isPending}
-										onClick={() => {
-											updateStatus.mutate(
-												{ id: requestId, status: pendingStatus },
-												{ onSuccess: () => setPendingStatus(null) },
-											);
-										}}
-									>
-										{updateStatus.isPending ? t("saving") : t("saveStatus")}
-									</Button>
-								)}
-							</div>
+						<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
+							<Badge className={STATUS_COLORS[request.status]}>
+								{statusLabels[request.status] ?? request.status}
+							</Badge>
+							{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+								<Select
+									value={pendingStatus ?? ""}
+									onValueChange={(value) =>
+										setPendingStatus(value as TripRequestStatus)
+									}
+								>
+									<SelectTrigger className="w-[140px]">
+										<SelectValue placeholder={t("markAs")} />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="COMPLETED">
+											{t("statusCompleted")}
+										</SelectItem>
+										<SelectItem value="CANCELLED">
+											{t("statusCancelled")}
+										</SelectItem>
+									</SelectContent>
+								</Select>
+							)}
+							{pendingStatus && pendingStatus !== request.status && (
+								<Button
+									size="sm"
+									disabled={updateStatus.isPending}
+									onClick={() => {
+										updateStatus.mutate(
+											{ id: requestId, status: pendingStatus },
+											{ onSuccess: () => setPendingStatus(null) },
+										);
+									}}
+								>
+									{updateStatus.isPending ? t("saving") : t("saveStatus")}
+								</Button>
+							)}
 						</div>
 					</div>
 				</CardHeader>
