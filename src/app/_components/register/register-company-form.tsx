@@ -18,6 +18,7 @@ import {
 	registerCompanySchema,
 	type RegisterCompanyFormValues,
 } from "@/lib/schemas/auth";
+import { COUNTRIES } from "@/lib/countries";
 
 export function RegisterCompanyForm() {
 	const t = useTranslations("registerCompany");
@@ -128,13 +129,26 @@ export function RegisterCompanyForm() {
 							error={errors.address?.message}
 							inputProps={{ ...register("address"), disabled: isSubmitting }}
 						/>
-						<CustomInput
-							labelText={`${t("country")} *`}
-							inputType="text"
-							placeholder={t("countryPlaceholder")}
-							error={errors.country?.message}
-							inputProps={{ ...register("country"), disabled: isSubmitting }}
-						/>
+						<div className="space-y-1">
+							<label className="text-sm font-medium">{t("country")} *</label>
+							<select
+								{...register("country")}
+								disabled={isSubmitting}
+								className="w-full rounded-md border bg-background px-3 py-2 text-sm disabled:opacity-50"
+							>
+								<option value="">{t("countryPlaceholder")}</option>
+								{COUNTRIES.map((c) => (
+									<option key={c} value={c}>
+										{c}
+									</option>
+								))}
+							</select>
+							{errors.country && (
+								<p className="text-xs text-destructive">
+									{errors.country.message}
+								</p>
+							)}
+						</div>
 						<CustomInput
 							labelText={t("website")}
 							inputType="url"

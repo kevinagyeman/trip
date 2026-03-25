@@ -509,7 +509,7 @@
 		"address": "Address",
 		"addressPlaceholder": "Via Roma 1, 00100 Rome",
 		"country": "Country",
-		"countryPlaceholder": "Italy",
+		"countryPlaceholder": "Select your country",
 		"website": "Website (optional)",
 		"fullName": "Full Name",
 		"fullNamePlaceholder": "John Smith",

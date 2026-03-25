@@ -101,31 +101,6 @@ export const companyRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			const { id, ...data } = input;
-
-			// If activating, check if it was previously inactive → send approval email
-			if (data.isActive === true) {
-				const before = await ctx.db.company.findUnique({
-					where: { id },
-					select: { isActive: true, name: true, adminEmail: true },
-				});
-				if (before && !before.isActive && before.adminEmail) {
-					await sendEmail({
-						to: before.adminEmail,
-						subject: "Your company has been approved – dantrip.com",
-						react: createElement(GenericEmail, {
-							href: `${APP_URL}/auth/signin`,
-							data: {
-								preview: "Your account is ready",
-								title: `${before.name} has been approved!`,
-								subtitle:
-									"Your company account has been reviewed and activated. You can now sign in and start managing your trips.",
-								buttonLabel: "Sign In",
-							},
-						}),
-					});
-				}
-			}
-
 			return ctx.db.company.update({ where: { id }, data });
 		}),
 
