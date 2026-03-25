@@ -25,6 +25,18 @@ export default function RootLayout({
 		<html lang="en" className={geist.variable} suppressHydrationWarning>
 			<head>
 				<Script
+					src="https://www.googletagmanager.com/gtag/js?id=G-KQZTYP1ESD"
+					strategy="afterInteractive"
+				/>
+				<Script id="google-analytics" strategy="afterInteractive">
+					{`
+						window.dataLayer = window.dataLayer || [];
+						function gtag(){dataLayer.push(arguments);}
+						gtag('js', new Date());
+						gtag('config', 'G-KQZTYP1ESD');
+					`}
+				</Script>
+				<Script
 					src="https://embeds.iubenda.com/widgets/0512a527-10f7-42e5-bf61-c41481af9bb2.js"
 					strategy="afterInteractive"
 				/>
