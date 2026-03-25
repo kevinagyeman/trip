@@ -239,14 +239,91 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  adminEmail: 'adminEmail',
+  quickFillOptions: 'quickFillOptions'
+};
+
+exports.Prisma.AccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state'
+};
+
+exports.Prisma.SessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId'
+};
+
+exports.Prisma.UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  image: 'image',
+  companyId: 'companyId'
+};
+
+exports.Prisma.VerificationTokenOrderByRelevanceFieldEnum = {
+  identifier: 'identifier',
+  token: 'token'
+};
+
+exports.Prisma.PasswordResetTokenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token'
+};
+
+exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
+  id: 'id',
+  token: 'token',
+  routes: 'routes',
+  customerEmail: 'customerEmail',
+  language: 'language',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  ageOfChildren: 'ageOfChildren',
+  additionalInfo: 'additionalInfo',
+  pickupTime: 'pickupTime',
+  flightNumber: 'flightNumber',
+  userId: 'userId',
+  companyId: 'companyId'
+};
+
+exports.Prisma.TripMessageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  body: 'body',
+  senderName: 'senderName',
+  tripRequestId: 'tripRequestId'
+};
+
+exports.Prisma.QuotationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  quotationAdditionalInfo: 'quotationAdditionalInfo',
+  internalNotes: 'internalNotes',
+  tripRequestId: 'tripRequestId',
+  createdById: 'createdById'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',

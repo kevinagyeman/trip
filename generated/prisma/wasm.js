@@ -211,14 +211,91 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.QueryMode = {
-  default: 'default',
-  insensitive: 'insensitive'
-};
-
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  logoUrl: 'logoUrl',
+  adminEmail: 'adminEmail',
+  quickFillOptions: 'quickFillOptions'
+};
+
+exports.Prisma.AccountOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state'
+};
+
+exports.Prisma.SessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  userId: 'userId'
+};
+
+exports.Prisma.UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  image: 'image',
+  companyId: 'companyId'
+};
+
+exports.Prisma.VerificationTokenOrderByRelevanceFieldEnum = {
+  identifier: 'identifier',
+  token: 'token'
+};
+
+exports.Prisma.PasswordResetTokenOrderByRelevanceFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token'
+};
+
+exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
+  id: 'id',
+  token: 'token',
+  routes: 'routes',
+  customerEmail: 'customerEmail',
+  language: 'language',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  phone: 'phone',
+  ageOfChildren: 'ageOfChildren',
+  additionalInfo: 'additionalInfo',
+  pickupTime: 'pickupTime',
+  flightNumber: 'flightNumber',
+  userId: 'userId',
+  companyId: 'companyId'
+};
+
+exports.Prisma.TripMessageOrderByRelevanceFieldEnum = {
+  id: 'id',
+  body: 'body',
+  senderName: 'senderName',
+  tripRequestId: 'tripRequestId'
+};
+
+exports.Prisma.QuotationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  currency: 'currency',
+  quotationAdditionalInfo: 'quotationAdditionalInfo',
+  internalNotes: 'internalNotes',
+  tripRequestId: 'tripRequestId',
+  createdById: 'createdById'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
@@ -296,7 +373,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "postgresql",
+  "activeProvider": "mysql",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -305,8 +382,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below\n  // Further reading:\n  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema\n  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enums for the trip management system\nenum UserRole {\n  USER\n  ADMIN\n  SUPER_ADMIN\n}\n\nenum TripRequestStatus {\n  PENDING\n  QUOTED\n  ACCEPTED\n  CONFIRMED\n  REJECTED\n  COMPLETED\n  CANCELLED\n}\n\nenum QuotationStatus {\n  PENDING\n  ACCEPTED\n  REJECTED\n}\n\nenum MessageSenderType {\n  CUSTOMER\n  ADMIN\n}\n\nmodel Company {\n  id               String   @id @default(cuid())\n  name             String\n  slug             String   @unique\n  logoUrl          String?\n  adminEmail       String?\n  isActive         Boolean  @default(true)\n  quickFillOptions String?  @db.Text\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n\n  users        User[]\n  tripRequests TripRequest[]\n\n  @@index([slug])\n}\n\n// Necessary for Next auth\nmodel Account {\n  id                       String  @id @default(cuid())\n  userId                   String\n  type                     String\n  provider                 String\n  providerAccountId        String\n  refresh_token            String? // @db.Text\n  access_token             String? // @db.Text\n  expires_at               Int?\n  token_type               String?\n  scope                    String?\n  id_token                 String? // @db.Text\n  session_state            String?\n  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  refresh_token_expires_in Int?\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel User {\n  id            String        @id @default(cuid())\n  name          String?\n  email         String?       @unique\n  emailVerified DateTime?\n  password      String?\n  image         String?\n  role          UserRole      @default(USER)\n  companyId     String?\n  company       Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)\n  accounts      Account[]\n  sessions      Session[]\n  tripRequests  TripRequest[]\n  quotations    Quotation[]\n\n  @@index([companyId])\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel PasswordResetToken {\n  id        String   @id @default(cuid())\n  email     String\n  token     String   @unique\n  expires   DateTime\n  createdAt DateTime @default(now())\n\n  @@index([email])\n}\n\n// Trip management models\nmodel TripRequest {\n  id          String            @id @default(cuid())\n  token       String            @unique @default(cuid())\n  orderNumber Int               @unique @default(autoincrement())\n  status      TripRequestStatus @default(PENDING)\n\n  // Route(s) — JSON array of {pickup: string, destination: string}\n  routes String @db.Text\n\n  // Travel information\n  customerEmail      String\n  language           String\n  firstName          String\n  lastName           String\n  phone              String\n  numberOfAdults     Int\n  areThereChildren   Boolean @default(false)\n  numberOfChildren   Int?\n  ageOfChildren      String? @db.Text\n  numberOfChildSeats Int?\n  additionalInfo     String? @db.Text\n\n  // Privacy consent\n  privacyAcceptedAt DateTime?\n\n  // Pickup details — set after quotation accepted\n  pickupDate   DateTime?\n  pickupTime   String?\n  flightNumber String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  userId     String?\n  user       User?         @relation(fields: [userId], references: [id], onDelete: SetNull)\n  companyId  String?\n  company    Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)\n  quotations Quotation[]\n  messages   TripMessage[]\n\n  @@index([userId])\n  @@index([companyId])\n  @@index([status])\n  @@index([createdAt])\n}\n\nmodel TripMessage {\n  id         String            @id @default(cuid())\n  body       String            @db.Text\n  senderType MessageSenderType\n  senderName String\n\n  createdAt DateTime @default(now())\n\n  tripRequestId String\n  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)\n\n  @@index([tripRequestId])\n  @@index([createdAt])\n}\n\nmodel Quotation {\n  id                      String          @id @default(cuid())\n  price                   Decimal         @db.Decimal(10, 2)\n  currency                String          @default(\"EUR\")\n  isPriceEachWay          Boolean         @default(false)\n  areCarSeatsIncluded     Boolean         @default(false)\n  quotationAdditionalInfo String?         @db.Text\n  status                  QuotationStatus @default(PENDING)\n  internalNotes           String?         @db.Text\n  notifiedAt              DateTime?\n  respondedAt             DateTime?\n  createdAt               DateTime        @default(now())\n  updatedAt               DateTime        @updatedAt\n\n  tripRequestId String\n  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)\n\n  createdById String?\n  createdBy   User?   @relation(fields: [createdById], references: [id])\n\n  @@index([tripRequestId])\n  @@index([status])\n  @@index([createdAt])\n}\n",
-  "inlineSchemaHash": "49b2cc5e91dc19003fba53402720691d4c827fd4f83acff8c0d19430ca528f46",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\n// Enums for the trip management system\nenum UserRole {\n  USER\n  ADMIN\n  SUPER_ADMIN\n}\n\nenum TripRequestStatus {\n  PENDING\n  QUOTED\n  ACCEPTED\n  CONFIRMED\n  REJECTED\n  COMPLETED\n  CANCELLED\n}\n\nenum QuotationStatus {\n  PENDING\n  ACCEPTED\n  REJECTED\n}\n\nenum MessageSenderType {\n  CUSTOMER\n  ADMIN\n}\n\nmodel Company {\n  id               String   @id @default(cuid())\n  name             String\n  slug             String   @unique\n  logoUrl          String?\n  adminEmail       String?\n  isActive         Boolean  @default(true)\n  quickFillOptions String?  @db.Text\n  createdAt        DateTime @default(now())\n  updatedAt        DateTime @updatedAt\n\n  users        User[]\n  tripRequests TripRequest[]\n\n  @@index([slug])\n}\n\n// Necessary for Next auth\nmodel Account {\n  id                       String  @id @default(cuid())\n  userId                   String\n  type                     String\n  provider                 String\n  providerAccountId        String\n  refresh_token            String? @db.Text\n  access_token             String? @db.Text\n  expires_at               Int?\n  token_type               String?\n  scope                    String?\n  id_token                 String? @db.Text\n  session_state            String?\n  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)\n  refresh_token_expires_in Int?\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel User {\n  id            String        @id @default(cuid())\n  name          String?\n  email         String?       @unique\n  emailVerified DateTime?\n  password      String?\n  image         String?\n  role          UserRole      @default(USER)\n  companyId     String?\n  company       Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)\n  accounts      Account[]\n  sessions      Session[]\n  tripRequests  TripRequest[]\n  quotations    Quotation[]\n\n  @@index([companyId])\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\nmodel PasswordResetToken {\n  id        String   @id @default(cuid())\n  email     String\n  token     String   @unique\n  expires   DateTime\n  createdAt DateTime @default(now())\n\n  @@index([email])\n}\n\n// Trip management models\nmodel TripRequest {\n  id          String            @id @default(cuid())\n  token       String            @unique @default(cuid())\n  orderNumber Int               @unique @default(autoincrement())\n  status      TripRequestStatus @default(PENDING)\n\n  // Route(s) — JSON array of {pickup: string, destination: string}\n  routes String @db.Text\n\n  // Travel information\n  customerEmail      String\n  language           String\n  firstName          String\n  lastName           String\n  phone              String\n  numberOfAdults     Int\n  areThereChildren   Boolean @default(false)\n  numberOfChildren   Int?\n  ageOfChildren      String? @db.Text\n  numberOfChildSeats Int?\n  additionalInfo     String? @db.Text\n\n  // Privacy consent\n  privacyAcceptedAt DateTime?\n\n  // Pickup details — set after quotation accepted\n  pickupDate   DateTime?\n  pickupTime   String?\n  flightNumber String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  userId     String?\n  user       User?         @relation(fields: [userId], references: [id], onDelete: SetNull)\n  companyId  String?\n  company    Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)\n  quotations Quotation[]\n  messages   TripMessage[]\n\n  @@index([userId])\n  @@index([companyId])\n  @@index([status])\n  @@index([createdAt])\n}\n\nmodel TripMessage {\n  id         String            @id @default(cuid())\n  body       String            @db.Text\n  senderType MessageSenderType\n  senderName String\n\n  createdAt DateTime @default(now())\n\n  tripRequestId String\n  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)\n\n  @@index([tripRequestId])\n  @@index([createdAt])\n}\n\nmodel Quotation {\n  id                      String          @id @default(cuid())\n  price                   Decimal         @db.Decimal(10, 2)\n  currency                String          @default(\"EUR\")\n  isPriceEachWay          Boolean         @default(false)\n  areCarSeatsIncluded     Boolean         @default(false)\n  quotationAdditionalInfo String?         @db.Text\n  status                  QuotationStatus @default(PENDING)\n  internalNotes           String?         @db.Text\n  notifiedAt              DateTime?\n  respondedAt             DateTime?\n  createdAt               DateTime        @default(now())\n  updatedAt               DateTime        @updatedAt\n\n  tripRequestId String\n  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)\n\n  createdById String?\n  createdBy   User?   @relation(fields: [createdById], references: [id])\n\n  @@index([tripRequestId])\n  @@index([status])\n  @@index([createdAt])\n}\n",
+  "inlineSchemaHash": "f03c081b1c9692bfe939fd2e31ce7e6f4476143040890df846c8831c512dd989",
   "copyEngine": true
 }
 config.dirname = '/'
