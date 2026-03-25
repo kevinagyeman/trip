@@ -5,7 +5,6 @@ import { auth } from "@/server/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
-import { QuickFillSettings } from "@/app/_components/admin/quick-fill-settings";
 
 export default async function AdminSettingsPage({
 	params,
@@ -28,16 +27,6 @@ export default async function AdminSettingsPage({
 		<div className="container mx-auto px-4 py-8">
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
-				{session.user.role === "ADMIN" && (
-					<Card>
-						<CardHeader>
-							<CardTitle>{t("quickFillTitle")}</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<QuickFillSettings />
-						</CardContent>
-					</Card>
-				)}
 				<Card>
 					<CardHeader>
 						<CardTitle>{t("changeEmailTitle")}</CardTitle>

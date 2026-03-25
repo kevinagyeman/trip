@@ -1,5 +1,4 @@
 import {
-	adminProcedure,
 	createTRPCRouter,
 	superAdminProcedure,
 	publicProcedure,
@@ -48,7 +47,6 @@ export const companyRouter = createTRPCRouter({
 					name: true,
 					slug: true,
 					logoUrl: true,
-					quickFillOptions: true,
 				},
 			});
 
@@ -127,49 +125,6 @@ export const companyRouter = createTRPCRouter({
 			return ctx.db.user.update({
 				where: { id: input.userId },
 				data: { companyId: null, role: "USER" },
-			});
-		}),
-
-	// ADMIN: Get own company quick fill options
-	getQuickFill: adminProcedure.query(async ({ ctx }) => {
-		const user = await ctx.db.user.findUnique({
-			where: { id: ctx.session.user.id },
-			select: { companyId: true },
-		});
-		if (!user?.companyId) return [];
-		const company = await ctx.db.company.findUnique({
-			where: { id: user.companyId },
-			select: { quickFillOptions: true },
-		});
-		if (!company?.quickFillOptions) return [];
-		try {
-			const parsed = JSON.parse(company.quickFillOptions) as unknown;
-			return Array.isArray(parsed) ? (parsed as string[]) : [];
-		} catch {
-			return [];
-		}
-	}),
-
-	// ADMIN: Update own company quick fill options
-	updateQuickFill: adminProcedure
-		.input(
-			z.object({
-				options: z.array(z.string().min(1)),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const user = await ctx.db.user.findUnique({
-				where: { id: ctx.session.user.id },
-				select: { companyId: true },
-			});
-			if (!user?.companyId)
-				throw new TRPCError({
-					code: "FORBIDDEN",
-					message: "No company assigned to your account",
-				});
-			await ctx.db.company.update({
-				where: { id: user.companyId },
-				data: { quickFillOptions: JSON.stringify(input.options) },
 			});
 		}),
 });

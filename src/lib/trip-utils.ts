@@ -31,15 +31,6 @@ export function parseRoutes(json: string): Route[] {
 	}
 }
 
-export function parseQuickFillOptions(json: string): string[] {
-	try {
-		const parsed = JSON.parse(json);
-		return Array.isArray(parsed) ? (parsed as string[]) : [];
-	} catch {
-		return [];
-	}
-}
-
 // Accepts any t() function that covers the status keys — works with all namespaces
 // that define statusPending, statusQuoted, etc.
 export function buildStatusLabels(

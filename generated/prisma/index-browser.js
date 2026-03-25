@@ -131,7 +131,6 @@ exports.Prisma.CompanyScalarFieldEnum = {
   address: 'address',
   country: 'country',
   website: 'website',
-  quickFillOptions: 'quickFillOptions',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -256,8 +255,7 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   vat: 'vat',
   address: 'address',
   country: 'country',
-  website: 'website',
-  quickFillOptions: 'quickFillOptions'
+  website: 'website'
 };
 
 exports.Prisma.AccountOrderByRelevanceFieldEnum = {

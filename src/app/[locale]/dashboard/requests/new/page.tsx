@@ -3,7 +3,6 @@ import { setRequestLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
-import { parseQuickFillOptions } from "@/lib/trip-utils";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -27,16 +26,13 @@ export default async function NewTripRequestPage({
 
 	const company = await db.company.findUnique({
 		where: { id: companyId },
-		select: { slug: true, quickFillOptions: true },
+		select: { slug: true },
 	});
 
 	if (!company) {
 		redirect("/dashboard");
 	}
 
-	const quickFillOptions = parseQuickFillOptions(
-		company.quickFillOptions ?? "",
-	);
 	const t = await getTranslations("pages");
 
 	return (
@@ -47,10 +43,7 @@ export default async function NewTripRequestPage({
 				</Link>
 			</div>
 			<h1 className="mb-6 text-3xl font-bold">{t("newTripRequest")}</h1>
-			<CreateTripRequestForm
-				companySlug={company.slug}
-				quickFillOptions={quickFillOptions}
-			/>
+			<CreateTripRequestForm companySlug={company.slug} />
 		</div>
 	);
 }

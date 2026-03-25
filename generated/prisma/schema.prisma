@@ -40,18 +40,17 @@ enum MessageSenderType {
 }
 
 model Company {
-  id               String   @id @default(cuid())
-  name             String
-  slug             String   @unique
-  logoUrl          String?
-  isActive         Boolean  @default(true)
-  vat              String?
-  address          String?
-  country          String?
-  website          String?
-  quickFillOptions String?  @db.Text
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  logoUrl   String?
+  isActive  Boolean  @default(true)
+  vat       String?
+  address   String?
+  country   String?
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   users        User[]
   tripRequests TripRequest[]

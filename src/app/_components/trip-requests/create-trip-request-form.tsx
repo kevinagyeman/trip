@@ -31,10 +31,8 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm({
 	companySlug,
-	quickFillOptions,
 }: {
 	companySlug: string;
-	quickFillOptions: string[];
 }) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
@@ -175,26 +173,6 @@ export function CreateTripRequestForm({
 								error={errors.routes?.[index]?.pickup?.message}
 								inputProps={{ ...register(`routes.${index}.pickup`) }}
 							/>
-							{quickFillOptions.length > 0 && (
-								<div className="flex flex-wrap items-center gap-2">
-									<p className="text-xs text-muted-foreground">
-										{t("quickFill")}
-									</p>
-									{quickFillOptions.map((quickFill) => (
-										<Button
-											key={quickFill}
-											type="button"
-											variant="outline"
-											size="xs"
-											onClick={() =>
-												setValue(`routes.${index}.pickup`, quickFill)
-											}
-										>
-											{quickFill}
-										</Button>
-									))}
-								</div>
-							)}
 						</div>
 
 						{/* Destination */}
@@ -205,26 +183,6 @@ export function CreateTripRequestForm({
 								error={errors.routes?.[index]?.destination?.message}
 								inputProps={{ ...register(`routes.${index}.destination`) }}
 							/>
-							{quickFillOptions.length > 0 && (
-								<div className="flex flex-wrap items-center gap-2">
-									<p className="text-xs text-muted-foreground">
-										{t("quickFill")}
-									</p>
-									{quickFillOptions.map((quickFill) => (
-										<Button
-											key={quickFill}
-											type="button"
-											variant="outline"
-											size="xs"
-											onClick={() =>
-												setValue(`routes.${index}.destination`, quickFill)
-											}
-										>
-											{quickFill}
-										</Button>
-									))}
-								</div>
-							)}
 						</div>
 
 						{/* Optional departure details */}
