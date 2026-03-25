@@ -229,9 +229,9 @@ export const tripRequestRouter = createTRPCRouter({
 					...(companyId ? { companyId } : {}),
 					...(search && {
 						OR: [
-							{ customerEmail: { contains: search, mode: "insensitive" } },
-							{ firstName: { contains: search, mode: "insensitive" } },
-							{ lastName: { contains: search, mode: "insensitive" } },
+							{ customerEmail: { contains: search } },
+							{ firstName: { contains: search } },
+							{ lastName: { contains: search } },
 							...(Number.isFinite(Number(search.replace(/^0+/, "") || "0")) &&
 							!Number.isNaN(Number(search))
 								? [{ orderNumber: Number(search) }]
