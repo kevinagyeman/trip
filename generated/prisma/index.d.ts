@@ -1729,8 +1729,11 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     logoUrl: string | null
-    adminEmail: string | null
     isActive: boolean | null
+    vat: string | null
+    address: string | null
+    country: string | null
+    website: string | null
     quickFillOptions: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1741,8 +1744,11 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     logoUrl: string | null
-    adminEmail: string | null
     isActive: boolean | null
+    vat: string | null
+    address: string | null
+    country: string | null
+    website: string | null
     quickFillOptions: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1753,8 +1759,11 @@ export namespace Prisma {
     name: number
     slug: number
     logoUrl: number
-    adminEmail: number
     isActive: number
+    vat: number
+    address: number
+    country: number
+    website: number
     quickFillOptions: number
     createdAt: number
     updatedAt: number
@@ -1767,8 +1776,11 @@ export namespace Prisma {
     name?: true
     slug?: true
     logoUrl?: true
-    adminEmail?: true
     isActive?: true
+    vat?: true
+    address?: true
+    country?: true
+    website?: true
     quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
@@ -1779,8 +1791,11 @@ export namespace Prisma {
     name?: true
     slug?: true
     logoUrl?: true
-    adminEmail?: true
     isActive?: true
+    vat?: true
+    address?: true
+    country?: true
+    website?: true
     quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
@@ -1791,8 +1806,11 @@ export namespace Prisma {
     name?: true
     slug?: true
     logoUrl?: true
-    adminEmail?: true
     isActive?: true
+    vat?: true
+    address?: true
+    country?: true
+    website?: true
     quickFillOptions?: true
     createdAt?: true
     updatedAt?: true
@@ -1876,8 +1894,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl: string | null
-    adminEmail: string | null
     isActive: boolean
+    vat: string | null
+    address: string | null
+    country: string | null
+    website: string | null
     quickFillOptions: string | null
     createdAt: Date
     updatedAt: Date
@@ -1905,8 +1926,11 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     logoUrl?: boolean
-    adminEmail?: boolean
     isActive?: boolean
+    vat?: boolean
+    address?: boolean
+    country?: boolean
+    website?: boolean
     quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -1922,14 +1946,17 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     logoUrl?: boolean
-    adminEmail?: boolean
     isActive?: boolean
+    vat?: boolean
+    address?: boolean
+    country?: boolean
+    website?: boolean
     quickFillOptions?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "adminEmail" | "isActive" | "quickFillOptions" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "quickFillOptions" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -1947,8 +1974,11 @@ export namespace Prisma {
       name: string
       slug: string
       logoUrl: string | null
-      adminEmail: string | null
       isActive: boolean
+      vat: string | null
+      address: string | null
+      country: string | null
+      website: string | null
       quickFillOptions: string | null
       createdAt: Date
       updatedAt: Date
@@ -2327,8 +2357,11 @@ export namespace Prisma {
     readonly name: FieldRef<"Company", 'String'>
     readonly slug: FieldRef<"Company", 'String'>
     readonly logoUrl: FieldRef<"Company", 'String'>
-    readonly adminEmail: FieldRef<"Company", 'String'>
     readonly isActive: FieldRef<"Company", 'Boolean'>
+    readonly vat: FieldRef<"Company", 'String'>
+    readonly address: FieldRef<"Company", 'String'>
+    readonly country: FieldRef<"Company", 'String'>
+    readonly website: FieldRef<"Company", 'String'>
     readonly quickFillOptions: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
@@ -4732,6 +4765,7 @@ export namespace Prisma {
     password: string | null
     image: string | null
     role: $Enums.UserRole | null
+    privacyAcceptedAt: Date | null
     companyId: string | null
   }
 
@@ -4743,6 +4777,7 @@ export namespace Prisma {
     password: string | null
     image: string | null
     role: $Enums.UserRole | null
+    privacyAcceptedAt: Date | null
     companyId: string | null
   }
 
@@ -4754,6 +4789,7 @@ export namespace Prisma {
     password: number
     image: number
     role: number
+    privacyAcceptedAt: number
     companyId: number
     _all: number
   }
@@ -4767,6 +4803,7 @@ export namespace Prisma {
     password?: true
     image?: true
     role?: true
+    privacyAcceptedAt?: true
     companyId?: true
   }
 
@@ -4778,6 +4815,7 @@ export namespace Prisma {
     password?: true
     image?: true
     role?: true
+    privacyAcceptedAt?: true
     companyId?: true
   }
 
@@ -4789,6 +4827,7 @@ export namespace Prisma {
     password?: true
     image?: true
     role?: true
+    privacyAcceptedAt?: true
     companyId?: true
     _all?: true
   }
@@ -4873,6 +4912,7 @@ export namespace Prisma {
     password: string | null
     image: string | null
     role: $Enums.UserRole
+    privacyAcceptedAt: Date | null
     companyId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -4901,6 +4941,7 @@ export namespace Prisma {
     password?: boolean
     image?: boolean
     role?: boolean
+    privacyAcceptedAt?: boolean
     companyId?: boolean
     company?: boolean | User$companyArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -4920,10 +4961,11 @@ export namespace Prisma {
     password?: boolean
     image?: boolean
     role?: boolean
+    privacyAcceptedAt?: boolean
     companyId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "password" | "image" | "role" | "companyId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "password" | "image" | "role" | "privacyAcceptedAt" | "companyId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | User$companyArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -4950,6 +4992,7 @@ export namespace Prisma {
       password: string | null
       image: string | null
       role: $Enums.UserRole
+      privacyAcceptedAt: Date | null
       companyId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -5332,6 +5375,7 @@ export namespace Prisma {
     readonly password: FieldRef<"User", 'String'>
     readonly image: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
+    readonly privacyAcceptedAt: FieldRef<"User", 'DateTime'>
     readonly companyId: FieldRef<"User", 'String'>
   }
     
@@ -7866,7 +7910,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     userId: string | null
-    companyId: string | null
+    companyId: string
     _count: TripRequestCountAggregateOutputType | null
     _avg: TripRequestAvgAggregateOutputType | null
     _sum: TripRequestSumAggregateOutputType | null
@@ -7914,7 +7958,7 @@ export namespace Prisma {
     userId?: boolean
     companyId?: boolean
     user?: boolean | TripRequest$userArgs<ExtArgs>
-    company?: boolean | TripRequest$companyArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
@@ -7952,7 +7996,7 @@ export namespace Prisma {
   export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
-    company?: boolean | TripRequest$companyArgs<ExtArgs>
+    company?: boolean | CompanyDefaultArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
@@ -7962,7 +8006,7 @@ export namespace Prisma {
     name: "TripRequest"
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
-      company: Prisma.$CompanyPayload<ExtArgs> | null
+      company: Prisma.$CompanyPayload<ExtArgs>
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
       messages: Prisma.$TripMessagePayload<ExtArgs>[]
     }
@@ -7990,7 +8034,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       userId: string | null
-      companyId: string | null
+      companyId: string
     }, ExtArgs["result"]["tripRequest"]>
     composites: {}
   }
@@ -8332,7 +8376,7 @@ export namespace Prisma {
   export interface Prisma__TripRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends TripRequest$userArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    company<T extends TripRequest$companyArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     quotations<T extends TripRequest$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messages<T extends TripRequest$messagesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -8747,25 +8791,6 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
-  }
-
-  /**
-   * TripRequest.company
-   */
-  export type TripRequest$companyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Company
-     */
-    select?: CompanySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Company
-     */
-    omit?: CompanyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CompanyInclude<ExtArgs> | null
-    where?: CompanyWhereInput
   }
 
   /**
@@ -10008,7 +10033,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     tripRequestId: string
-    createdById: string | null
+    createdById: string
     _count: QuotationCountAggregateOutputType | null
     _avg: QuotationAvgAggregateOutputType | null
     _sum: QuotationSumAggregateOutputType | null
@@ -10046,7 +10071,7 @@ export namespace Prisma {
     tripRequestId?: boolean
     createdById?: boolean
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["quotation"]>
 
 
@@ -10071,14 +10096,14 @@ export namespace Prisma {
   export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "internalNotes" | "notifiedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
-    createdBy?: boolean | Quotation$createdByArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
   }
 
   export type $QuotationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Quotation"
     objects: {
       tripRequest: Prisma.$TripRequestPayload<ExtArgs>
-      createdBy: Prisma.$UserPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10094,7 +10119,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       tripRequestId: string
-      createdById: string | null
+      createdById: string
     }, ExtArgs["result"]["quotation"]>
     composites: {}
   }
@@ -10436,7 +10461,7 @@ export namespace Prisma {
   export interface Prisma__QuotationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tripRequest<T extends TripRequestDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TripRequestDefaultArgs<ExtArgs>>): Prisma__TripRequestClient<$Result.GetResult<Prisma.$TripRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    createdBy<T extends Quotation$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Quotation$createdByArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10823,25 +10848,6 @@ export namespace Prisma {
   }
 
   /**
-   * Quotation.createdBy
-   */
-  export type Quotation$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
    * Quotation without action
    */
   export type QuotationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10879,8 +10885,11 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     logoUrl: 'logoUrl',
-    adminEmail: 'adminEmail',
     isActive: 'isActive',
+    vat: 'vat',
+    address: 'address',
+    country: 'country',
+    website: 'website',
     quickFillOptions: 'quickFillOptions',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -10926,6 +10935,7 @@ export namespace Prisma {
     password: 'password',
     image: 'image',
     role: 'role',
+    privacyAcceptedAt: 'privacyAcceptedAt',
     companyId: 'companyId'
   };
 
@@ -11035,7 +11045,10 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     logoUrl: 'logoUrl',
-    adminEmail: 'adminEmail',
+    vat: 'vat',
+    address: 'address',
+    country: 'country',
+    website: 'website',
     quickFillOptions: 'quickFillOptions'
   };
 
@@ -11225,8 +11238,11 @@ export namespace Prisma {
     name?: StringFilter<"Company"> | string
     slug?: StringFilter<"Company"> | string
     logoUrl?: StringNullableFilter<"Company"> | string | null
-    adminEmail?: StringNullableFilter<"Company"> | string | null
     isActive?: BoolFilter<"Company"> | boolean
+    vat?: StringNullableFilter<"Company"> | string | null
+    address?: StringNullableFilter<"Company"> | string | null
+    country?: StringNullableFilter<"Company"> | string | null
+    website?: StringNullableFilter<"Company"> | string | null
     quickFillOptions?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
@@ -11239,8 +11255,11 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     logoUrl?: SortOrderInput | SortOrder
-    adminEmail?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    vat?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
     quickFillOptions?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11257,8 +11276,11 @@ export namespace Prisma {
     NOT?: CompanyWhereInput | CompanyWhereInput[]
     name?: StringFilter<"Company"> | string
     logoUrl?: StringNullableFilter<"Company"> | string | null
-    adminEmail?: StringNullableFilter<"Company"> | string | null
     isActive?: BoolFilter<"Company"> | boolean
+    vat?: StringNullableFilter<"Company"> | string | null
+    address?: StringNullableFilter<"Company"> | string | null
+    country?: StringNullableFilter<"Company"> | string | null
+    website?: StringNullableFilter<"Company"> | string | null
     quickFillOptions?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
@@ -11271,8 +11293,11 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     logoUrl?: SortOrderInput | SortOrder
-    adminEmail?: SortOrderInput | SortOrder
     isActive?: SortOrder
+    vat?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
     quickFillOptions?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11289,8 +11314,11 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Company"> | string
     slug?: StringWithAggregatesFilter<"Company"> | string
     logoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
-    adminEmail?: StringNullableWithAggregatesFilter<"Company"> | string | null
     isActive?: BoolWithAggregatesFilter<"Company"> | boolean
+    vat?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    country?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    website?: StringNullableWithAggregatesFilter<"Company"> | string | null
     quickFillOptions?: StringNullableWithAggregatesFilter<"Company"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
@@ -11457,6 +11485,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     companyId?: StringNullableFilter<"User"> | string | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     accounts?: AccountListRelationFilter
@@ -11473,6 +11502,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     role?: SortOrder
+    privacyAcceptedAt?: SortOrderInput | SortOrder
     companyId?: SortOrderInput | SortOrder
     company?: CompanyOrderByWithRelationInput
     accounts?: AccountOrderByRelationAggregateInput
@@ -11493,6 +11523,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     companyId?: StringNullableFilter<"User"> | string | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     accounts?: AccountListRelationFilter
@@ -11509,6 +11540,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     role?: SortOrder
+    privacyAcceptedAt?: SortOrderInput | SortOrder
     companyId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -11526,6 +11558,7 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    privacyAcceptedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     companyId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
@@ -11653,9 +11686,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringNullableFilter<"TripRequest"> | string | null
+    companyId?: StringFilter<"TripRequest"> | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
   }
@@ -11684,7 +11717,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
-    companyId?: SortOrderInput | SortOrder
+    companyId?: SortOrder
     user?: UserOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     quotations?: QuotationOrderByRelationAggregateInput
@@ -11719,9 +11752,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringNullableFilter<"TripRequest"> | string | null
+    companyId?: StringFilter<"TripRequest"> | string
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
+    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
   }, "id" | "token" | "orderNumber">
@@ -11750,7 +11783,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
-    companyId?: SortOrderInput | SortOrder
+    companyId?: SortOrder
     _count?: TripRequestCountOrderByAggregateInput
     _avg?: TripRequestAvgOrderByAggregateInput
     _max?: TripRequestMaxOrderByAggregateInput
@@ -11785,7 +11818,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
-    companyId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    companyId?: StringWithAggregatesFilter<"TripRequest"> | string
   }
 
   export type TripMessageWhereInput = {
@@ -11866,9 +11899,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringNullableFilter<"Quotation"> | string | null
+    createdById?: StringFilter<"Quotation"> | string
     tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
-    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
   export type QuotationOrderByWithRelationInput = {
@@ -11885,7 +11918,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
-    createdById?: SortOrderInput | SortOrder
+    createdById?: SortOrder
     tripRequest?: TripRequestOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
     _relevance?: QuotationOrderByRelevanceInput
@@ -11908,9 +11941,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringNullableFilter<"Quotation"> | string | null
+    createdById?: StringFilter<"Quotation"> | string
     tripRequest?: XOR<TripRequestScalarRelationFilter, TripRequestWhereInput>
-    createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
   export type QuotationOrderByWithAggregationInput = {
@@ -11927,7 +11960,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
-    createdById?: SortOrderInput | SortOrder
+    createdById?: SortOrder
     _count?: QuotationCountOrderByAggregateInput
     _avg?: QuotationAvgOrderByAggregateInput
     _max?: QuotationMaxOrderByAggregateInput
@@ -11952,7 +11985,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     tripRequestId?: StringWithAggregatesFilter<"Quotation"> | string
-    createdById?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
+    createdById?: StringWithAggregatesFilter<"Quotation"> | string
   }
 
   export type CompanyCreateInput = {
@@ -11960,8 +11993,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11974,8 +12010,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11988,8 +12027,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12002,8 +12044,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12016,8 +12061,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12028,8 +12076,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12040,8 +12091,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12214,6 +12268,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -12229,6 +12284,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -12244,6 +12300,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -12259,6 +12316,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -12274,6 +12332,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
   }
 
@@ -12285,6 +12344,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -12295,6 +12355,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -12420,7 +12481,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    company: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
@@ -12449,7 +12510,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId?: string | null
+    companyId: string
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
@@ -12477,7 +12538,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
@@ -12506,7 +12567,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
@@ -12535,7 +12596,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId?: string | null
+    companyId: string
   }
 
   export type TripRequestUpdateManyMutationInput = {
@@ -12586,7 +12647,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TripMessageCreateInput = {
@@ -12665,7 +12726,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequest: TripRequestCreateNestedOneWithoutQuotationsInput
-    createdBy?: UserCreateNestedOneWithoutQuotationsInput
+    createdBy: UserCreateNestedOneWithoutQuotationsInput
   }
 
   export type QuotationUncheckedCreateInput = {
@@ -12682,7 +12743,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
-    createdById?: string | null
+    createdById: string
   }
 
   export type QuotationUpdateInput = {
@@ -12699,7 +12760,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequest?: TripRequestUpdateOneRequiredWithoutQuotationsNestedInput
-    createdBy?: UserUpdateOneWithoutQuotationsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutQuotationsNestedInput
   }
 
   export type QuotationUncheckedUpdateInput = {
@@ -12716,7 +12777,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
-    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuotationCreateManyInput = {
@@ -12733,7 +12794,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
-    createdById?: string | null
+    createdById: string
   }
 
   export type QuotationUpdateManyMutationInput = {
@@ -12765,7 +12826,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
-    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12850,8 +12911,11 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     logoUrl?: SortOrder
-    adminEmail?: SortOrder
     isActive?: SortOrder
+    vat?: SortOrder
+    address?: SortOrder
+    country?: SortOrder
+    website?: SortOrder
     quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12862,8 +12926,11 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     logoUrl?: SortOrder
-    adminEmail?: SortOrder
     isActive?: SortOrder
+    vat?: SortOrder
+    address?: SortOrder
+    country?: SortOrder
+    website?: SortOrder
     quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12874,8 +12941,11 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     logoUrl?: SortOrder
-    adminEmail?: SortOrder
     isActive?: SortOrder
+    vat?: SortOrder
+    address?: SortOrder
+    country?: SortOrder
+    website?: SortOrder
     quickFillOptions?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13134,6 +13204,7 @@ export namespace Prisma {
     password?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    privacyAcceptedAt?: SortOrder
     companyId?: SortOrder
   }
 
@@ -13145,6 +13216,7 @@ export namespace Prisma {
     password?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    privacyAcceptedAt?: SortOrder
     companyId?: SortOrder
   }
 
@@ -13156,6 +13228,7 @@ export namespace Prisma {
     password?: SortOrder
     image?: SortOrder
     role?: SortOrder
+    privacyAcceptedAt?: SortOrder
     companyId?: SortOrder
   }
 
@@ -13263,6 +13336,11 @@ export namespace Prisma {
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
+  }
+
+  export type CompanyScalarRelationFilter = {
+    is?: CompanyWhereInput
+    isNot?: CompanyWhereInput
   }
 
   export type TripMessageListRelationFilter = {
@@ -13956,12 +14034,10 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTripRequestsInput, UserUpdateWithoutTripRequestsInput>, UserUncheckedUpdateWithoutTripRequestsInput>
   }
 
-  export type CompanyUpdateOneWithoutTripRequestsNestedInput = {
+  export type CompanyUpdateOneRequiredWithoutTripRequestsNestedInput = {
     create?: XOR<CompanyCreateWithoutTripRequestsInput, CompanyUncheckedCreateWithoutTripRequestsInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutTripRequestsInput
     upsert?: CompanyUpsertWithoutTripRequestsInput
-    disconnect?: CompanyWhereInput | boolean
-    delete?: CompanyWhereInput | boolean
     connect?: CompanyWhereUniqueInput
     update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutTripRequestsInput, CompanyUpdateWithoutTripRequestsInput>, CompanyUncheckedUpdateWithoutTripRequestsInput>
   }
@@ -14072,12 +14148,10 @@ export namespace Prisma {
     update?: XOR<XOR<TripRequestUpdateToOneWithWhereWithoutQuotationsInput, TripRequestUpdateWithoutQuotationsInput>, TripRequestUncheckedUpdateWithoutQuotationsInput>
   }
 
-  export type UserUpdateOneWithoutQuotationsNestedInput = {
+  export type UserUpdateOneRequiredWithoutQuotationsNestedInput = {
     create?: XOR<UserCreateWithoutQuotationsInput, UserUncheckedCreateWithoutQuotationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutQuotationsInput
     upsert?: UserUpsertWithoutQuotationsInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuotationsInput, UserUpdateWithoutQuotationsInput>, UserUncheckedUpdateWithoutQuotationsInput>
   }
@@ -14390,6 +14464,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14404,6 +14479,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14513,6 +14589,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     companyId?: StringNullableFilter<"User"> | string | null
   }
 
@@ -14559,7 +14636,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringNullableFilter<"TripRequest"> | string | null
+    companyId?: StringFilter<"TripRequest"> | string
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -14570,6 +14647,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     company?: CompanyCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14584,6 +14662,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14614,6 +14693,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     company?: CompanyUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -14628,6 +14708,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -14642,6 +14723,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14656,6 +14738,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14686,6 +14769,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -14700,6 +14784,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -14711,8 +14796,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14724,8 +14812,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14822,7 +14913,7 @@ export namespace Prisma {
     flightNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    company: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
@@ -14850,7 +14941,7 @@ export namespace Prisma {
     flightNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    companyId?: string | null
+    companyId: string
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
@@ -14923,8 +15014,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14936,8 +15030,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15054,7 +15151,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
-    createdById?: StringNullableFilter<"Quotation"> | string | null
+    createdById?: StringFilter<"Quotation"> | string
   }
 
   export type UserCreateWithoutTripRequestsInput = {
@@ -15065,6 +15162,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -15079,6 +15177,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -15095,8 +15194,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15108,8 +15210,11 @@ export namespace Prisma {
     name: string
     slug: string
     logoUrl?: string | null
-    adminEmail?: string | null
     isActive?: boolean
+    vat?: string | null
+    address?: string | null
+    country?: string | null
+    website?: string | null
     quickFillOptions?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15134,7 +15239,7 @@ export namespace Prisma {
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdBy?: UserCreateNestedOneWithoutQuotationsInput
+    createdBy: UserCreateNestedOneWithoutQuotationsInput
   }
 
   export type QuotationUncheckedCreateWithoutTripRequestInput = {
@@ -15150,7 +15255,7 @@ export namespace Prisma {
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById?: string | null
+    createdById: string
   }
 
   export type QuotationCreateOrConnectWithoutTripRequestInput = {
@@ -15208,6 +15313,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -15222,6 +15328,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -15244,8 +15351,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15257,8 +15367,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    adminEmail?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    vat?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     quickFillOptions?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15333,7 +15446,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    company: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
   }
 
@@ -15361,7 +15474,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId?: string | null
+    companyId: string
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
@@ -15404,7 +15517,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
   }
 
@@ -15432,7 +15545,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
@@ -15460,7 +15573,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    company: CompanyCreateNestedOneWithoutTripRequestsInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
 
@@ -15488,7 +15601,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId?: string | null
+    companyId: string
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
@@ -15505,6 +15618,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -15519,6 +15633,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -15564,7 +15679,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
 
@@ -15592,7 +15707,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
@@ -15615,6 +15730,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -15629,6 +15745,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -15643,6 +15760,7 @@ export namespace Prisma {
     password?: string | null
     image?: string | null
     role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
   }
 
   export type TripRequestCreateManyCompanyInput = {
@@ -15679,6 +15797,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -15693,6 +15812,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -15707,6 +15827,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type TripRequestUpdateWithoutCompanyInput = {
@@ -15834,7 +15955,7 @@ export namespace Prisma {
     flightNumber?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    companyId?: string | null
+    companyId: string
   }
 
   export type QuotationCreateManyCreatedByInput = {
@@ -15938,7 +16059,7 @@ export namespace Prisma {
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
@@ -15966,7 +16087,7 @@ export namespace Prisma {
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
@@ -15994,7 +16115,7 @@ export namespace Prisma {
     flightNumber?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuotationUpdateWithoutCreatedByInput = {
@@ -16058,7 +16179,7 @@ export namespace Prisma {
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    createdById?: string | null
+    createdById: string
   }
 
   export type TripMessageCreateManyTripRequestInput = {
@@ -16082,7 +16203,7 @@ export namespace Prisma {
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdBy?: UserUpdateOneWithoutQuotationsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutQuotationsNestedInput
   }
 
   export type QuotationUncheckedUpdateWithoutTripRequestInput = {
@@ -16098,7 +16219,7 @@ export namespace Prisma {
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuotationUncheckedUpdateManyWithoutTripRequestInput = {
@@ -16114,7 +16235,7 @@ export namespace Prisma {
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
   }
 
   export type TripMessageUpdateWithoutTripRequestInput = {

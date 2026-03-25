@@ -126,8 +126,11 @@ exports.Prisma.CompanyScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   logoUrl: 'logoUrl',
-  adminEmail: 'adminEmail',
   isActive: 'isActive',
+  vat: 'vat',
+  address: 'address',
+  country: 'country',
+  website: 'website',
   quickFillOptions: 'quickFillOptions',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -164,6 +167,7 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   image: 'image',
   role: 'role',
+  privacyAcceptedAt: 'privacyAcceptedAt',
   companyId: 'companyId'
 };
 
@@ -249,7 +253,10 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   name: 'name',
   slug: 'slug',
   logoUrl: 'logoUrl',
-  adminEmail: 'adminEmail',
+  vat: 'vat',
+  address: 'address',
+  country: 'country',
+  website: 'website',
   quickFillOptions: 'quickFillOptions'
 };
 

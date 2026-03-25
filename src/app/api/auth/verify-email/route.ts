@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 			where: { token },
 		});
 
-		// Redirect to sign-in page with success message
+		// Redirect to sign-in
 		return NextResponse.redirect(
 			new URL("/auth/signin?verified=true", request.url),
 		);

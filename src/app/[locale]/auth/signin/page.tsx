@@ -2,7 +2,6 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
 import {
 	Card,
 	CardContent,
@@ -10,6 +9,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
@@ -61,7 +61,7 @@ function SignInForm() {
 	};
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center">
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
@@ -120,15 +120,17 @@ function SignInForm() {
 							</Link>
 						</div>
 
-						{/* <div className="text-center text-sm">
-							<span className="text-muted-foreground">{t("noAccount")} </span>
+						<div className="text-center text-sm">
+							<span className="text-muted-foreground">
+								{t("isYourCompany")}{" "}
+							</span>
 							<Link
-								href="/auth/register"
+								href="/register-company"
 								className="text-blue-600 hover:underline"
 							>
-								{t("register")}
+								{t("registerCompanyLink")}
 							</Link>
-						</div> */}
+						</div>
 					</form>
 				</CardContent>
 			</Card>

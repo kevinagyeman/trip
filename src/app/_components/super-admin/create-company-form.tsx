@@ -30,7 +30,6 @@ export function CreateCompanyForm() {
 		createCompany.mutate({
 			name: data.get("name") as string,
 			slug: data.get("slug") as string,
-			adminEmail: (data.get("adminEmail") as string) || undefined,
 			logoUrl: (data.get("logoUrl") as string) || undefined,
 		});
 	}
@@ -68,18 +67,6 @@ export function CreateCompanyForm() {
 						<p className="mt-1 text-xs text-muted-foreground">
 							{t("slugHint")}
 						</p>
-					</div>
-
-					<div>
-						<label className="mb-1 block text-sm font-medium">
-							{t("adminEmail")}
-						</label>
-						<input
-							name="adminEmail"
-							type="email"
-							className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-							placeholder="admin@company.com"
-						/>
 					</div>
 
 					<div>

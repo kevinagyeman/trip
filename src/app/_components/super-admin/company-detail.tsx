@@ -4,24 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/react";
-import { FileText, Globe, Mail, Users } from "lucide-react";
+import { FileText, Globe, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 
 export function CompanyDetail({ id }: { id: string }) {
 	const t = useTranslations("superAdmin");
 	const utils = api.useUtils();
 	const { data: company, isLoading } = api.company.getById.useQuery({ id });
-	const [assignEmail, setAssignEmail] = useState("");
-	const [assignRole, setAssignRole] = useState<"USER" | "ADMIN">("ADMIN");
-	const [assignError, setAssignError] = useState<string | null>(null);
-	const [assignSuccess, setAssignSuccess] = useState<string | null>(null);
 
 	const updateCompany = api.company.update.useMutation({
-		onSuccess: () => void utils.company.getById.invalidate({ id }),
-	});
-
-	const removeUser = api.company.removeUser.useMutation({
 		onSuccess: () => void utils.company.getById.invalidate({ id }),
 	});
 
@@ -31,43 +22,6 @@ export function CompanyDetail({ id }: { id: string }) {
 
 	if (!company) {
 		return <p className="text-muted-foreground">{t("notFound")}</p>;
-	}
-
-	async function handleAssignUser(e: React.FormEvent) {
-		e.preventDefault();
-		setAssignError(null);
-		setAssignSuccess(null);
-		try {
-			const res = await fetch("/api/super-admin/find-user", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					email: assignEmail,
-					companyName: company!.name,
-					companyId: id,
-				}),
-			});
-			if (!res.ok) {
-				const data = (await res.json()) as { error?: string };
-				setAssignError(data.error ?? t("userNotFound"));
-				return;
-			}
-			const data = (await res.json()) as { id: string; created: boolean };
-			await utils.client.company.assignUser.mutate({
-				userId: data.id,
-				companyId: id,
-				role: assignRole,
-			});
-			void utils.company.getById.invalidate({ id });
-			setAssignEmail("");
-			setAssignSuccess(
-				data.created
-					? "User created and invite email sent."
-					: "User assigned successfully.",
-			);
-		} catch {
-			setAssignError(t("assignError"));
-		}
 	}
 
 	return (
@@ -132,24 +86,51 @@ export function CompanyDetail({ id }: { id: string }) {
 			</div>
 
 			{/* Company details */}
-			{company.adminEmail && (
-				<Card>
-					<CardHeader>
-						<CardTitle className="text-base">{t("companyInfo")}</CardTitle>
-					</CardHeader>
-					<CardContent className="flex items-center gap-2 text-sm">
-						<Mail className="h-4 w-4 text-muted-foreground" />
-						<span>{company.adminEmail}</span>
-					</CardContent>
-				</Card>
-			)}
+			<Card>
+				<CardHeader>
+					<CardTitle className="text-base">{t("companyInfo")}</CardTitle>
+				</CardHeader>
+				<CardContent className="space-y-2 text-sm">
+					{company.vat && (
+						<div className="flex gap-2">
+							<span className="text-muted-foreground">{t("vat")}:</span>
+							<span>{company.vat}</span>
+						</div>
+					)}
+					{company.address && (
+						<div className="flex gap-2">
+							<span className="text-muted-foreground">{t("address")}:</span>
+							<span>{company.address}</span>
+						</div>
+					)}
+					{company.country && (
+						<div className="flex gap-2">
+							<span className="text-muted-foreground">{t("country")}:</span>
+							<span>{company.country}</span>
+						</div>
+					)}
+					{company.website && (
+						<div className="flex gap-2">
+							<span className="text-muted-foreground">{t("website")}:</span>
+							<a
+								href={company.website}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-primary hover:underline"
+							>
+								{company.website}
+							</a>
+						</div>
+					)}
+				</CardContent>
+			</Card>
 
 			{/* Users */}
 			<Card>
 				<CardHeader>
 					<CardTitle className="text-base">{t("companyUsers")}</CardTitle>
 				</CardHeader>
-				<CardContent className="space-y-4">
+				<CardContent>
 					{company.users.length === 0 ? (
 						<p className="text-sm text-muted-foreground">{t("noUsers")}</p>
 					) : (
@@ -167,54 +148,10 @@ export function CompanyDetail({ id }: { id: string }) {
 											{user.email}
 										</p>
 									</div>
-									<div className="flex items-center gap-2">
-										<Badge variant="outline">{user.role}</Badge>
-										<Button
-											variant="ghost"
-											size="sm"
-											onClick={() => removeUser.mutate({ userId: user.id })}
-											className="text-destructive hover:text-destructive"
-										>
-											{t("removeUser")}
-										</Button>
-									</div>
+									<Badge variant="outline">{user.role}</Badge>
 								</div>
 							))}
 						</div>
-					)}
-
-					{/* Assign user form */}
-					<form onSubmit={handleAssignUser} className="flex gap-2 pt-2">
-						<input
-							type="email"
-							value={assignEmail}
-							onChange={(e) => setAssignEmail(e.target.value)}
-							required
-							placeholder={t("assignUserEmail")}
-							className="flex-1 rounded-md border bg-background px-3 py-2 text-sm"
-						/>
-						<select
-							value={assignRole}
-							onChange={(e) =>
-								setAssignRole(e.target.value as "USER" | "ADMIN")
-							}
-							className="rounded-md border bg-background px-3 py-2 text-sm"
-						>
-							<option value="ADMIN">ADMIN</option>
-
-							{/* <option value="USER">USER</option> */}
-						</select>
-						<Button type="submit" size="sm">
-							{t("assignUser")}
-						</Button>
-					</form>
-					{assignError && (
-						<p className="text-sm text-destructive">{assignError}</p>
-					)}
-					{assignSuccess && (
-						<p className="text-sm text-green-600 dark:text-green-400">
-							{assignSuccess}
-						</p>
 					)}
 				</CardContent>
 			</Card>
