@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import Script from "next/script";
 import { useTranslations } from "next-intl";
 
 export function Footer() {
@@ -12,15 +12,24 @@ export function Footer() {
 				<p>
 					© {new Date().getFullYear()} dantrip.com. {t("allRightsReserved")}
 				</p>
-				<div className="flex gap-2">
-					<Button variant="ghost" size="sm">
+				<div className="flex items-center gap-4">
+					<a
+						href="https://www.iubenda.com/privacy-policy/61494361"
+						className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed hover:text-foreground transition-colors"
+						title="Privacy Policy"
+					>
 						{t("privacyPolicy")}
-					</Button>
-					<Button variant="ghost" size="sm">
-						{t("termsOfService")}
-					</Button>
+					</a>
+					<a
+						href="https://www.iubenda.com/privacy-policy/61494361/cookie-policy"
+						className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed hover:text-foreground transition-colors"
+						title="Cookie Policy"
+					>
+						{t("cookiePolicy")}
+					</a>
 				</div>
 			</div>
+			<Script src="https://cdn.iubenda.com/iubenda.js" strategy="lazyOnload" />
 		</footer>
 	);
 }

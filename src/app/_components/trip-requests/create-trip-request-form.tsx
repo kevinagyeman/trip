@@ -565,10 +565,10 @@ export function CreateTripRequestForm({
 					<span>
 						{t("privacyPolicyAccept")}{" "}
 						<a
-							href="/privacy"
+							href="https://www.iubenda.com/privacy-policy/61494361"
 							target="_blank"
 							rel="noopener noreferrer"
-							className="underline"
+							className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
 						>
 							{t("privacyPolicyLink")}
 						</a>
