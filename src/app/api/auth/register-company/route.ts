@@ -106,7 +106,7 @@ export async function POST(request: Request) {
 
 		return NextResponse.json({ success: true });
 	} catch (error) {
-		console.error("[REGISTER_COMPANY]", error);
+		console.error("[REGISTER_COMPANY]", JSON.stringify(error, null, 2));
 		return NextResponse.json(
 			{ error: "Something went wrong" },
 			{ status: 500 },

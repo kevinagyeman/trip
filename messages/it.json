@@ -450,7 +450,11 @@
 		"save": "Salva",
 		"saved": "Salvato!",
 		"changeEmailButton": "Cambia Email",
-		"changePasswordButton": "Cambia Password"
+		"changePasswordButton": "Cambia Password",
+		"bookingLinkTitle": "Link di Prenotazione",
+		"bookingLinkDesc": "Condividi questo link con i tuoi clienti per ricevere prenotazioni.",
+		"copyLink": "Copia",
+		"copied": "Copiato!"
 	},
 	"superAdmin": {
 		"title": "Super Admin Dashboard",

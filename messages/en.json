@@ -450,7 +450,11 @@
 		"save": "Save",
 		"saved": "Saved!",
 		"changeEmailButton": "Change Email",
-		"changePasswordButton": "Change Password"
+		"changePasswordButton": "Change Password",
+		"bookingLinkTitle": "Booking Link",
+		"bookingLinkDesc": "Share this link with your customers so they can book a trip.",
+		"copyLink": "Copy",
+		"copied": "Copied!"
 	},
 	"superAdmin": {
 		"title": "Super Admin Dashboard",
