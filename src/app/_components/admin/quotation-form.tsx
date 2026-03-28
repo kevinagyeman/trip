@@ -26,7 +26,7 @@ const quotationSchema = z.object({
 type QuotationFormValues = z.infer<typeof quotationSchema>;
 
 type QuotationData = {
-	price: number;
+	price: { toNumber: () => number } | number;
 	isPriceEachWay: boolean;
 	areCarSeatsIncluded: boolean;
 	quotationAdditionalInfo: string | null;
@@ -70,7 +70,10 @@ export function QuotationForm({
 	useEffect(() => {
 		if (quotation) {
 			reset({
-				price: quotation.price,
+				price:
+					typeof quotation.price === "number"
+						? quotation.price
+						: quotation.price.toNumber(),
 				isPriceEachWay: quotation.isPriceEachWay,
 				areCarSeatsIncluded: quotation.areCarSeatsIncluded,
 				additionalInfo: quotation.quotationAdditionalInfo ?? "",
