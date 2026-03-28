@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import {
 	Select,
 	SelectContent,
@@ -14,7 +15,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
@@ -129,45 +129,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		}
 	}, [request?.id]);
 
-	// Quotation form state
-	const [qPrice, setQPrice] = useState("");
-	const [qIsPriceEachWay, setQIsPriceEachWay] = useState(false);
-	const [qAreCarSeatsIncluded, setQAreCarSeatsIncluded] = useState(false);
-	const [qAdditionalInfo, setQAdditionalInfo] = useState("");
-	const [qInternalNotes, setQInternalNotes] = useState("");
-
-	useEffect(() => {
-		const q = request?.quotations[0];
-		if (q) {
-			setQPrice(q.price.toString());
-			setQIsPriceEachWay(q.isPriceEachWay);
-			setQAreCarSeatsIncluded(q.areCarSeatsIncluded);
-			setQAdditionalInfo(q.quotationAdditionalInfo ?? "");
-			setQInternalNotes(q.internalNotes ?? "");
-		}
-	}, [request?.quotations[0]?.id]);
-
 	const updateStatus = api.tripRequest.updateStatus.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-			await utils.tripRequest.getAllRequests.invalidate();
-		},
-	});
-
-	const saveQuotation = api.quotation.save.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-		},
-	});
-
-	const saveAndSend = api.quotation.saveAndSend.useMutation({
-		onSuccess: async () => {
-			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-			await utils.tripRequest.getAllRequests.invalidate();
-		},
-	});
-
-	const notifyQuotation = api.quotation.notify.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 			await utils.tripRequest.getAllRequests.invalidate();
@@ -559,7 +521,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				const quotation = request.quotations[0];
 				const isAccepted = quotation?.status === "ACCEPTED";
 				const isRejected = quotation?.status === "REJECTED";
-				const isEditable = !isAccepted;
 				return (
 					<div className="space-y-4">
 						<h2 className="text-xl font-bold">{t("quotation")}</h2>
@@ -641,141 +602,17 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										)}
 									</>
 								) : (
-									<>
-										{/* Rejected banner */}
-										{isRejected && (
-											<AlertBanner
-												variant="error"
-												title={t("quotationStatusRejected")}
-												description={
-													quotation!.respondedAt
-														? format(new Date(quotation!.respondedAt), "PPP")
-														: undefined
-												}
-											/>
-										)}
-										{/* Price */}
-										<div className="w-48">
-											<Label className="text-sm">{t("price")}</Label>
-											<Input
-												type="number"
-												step="0.01"
-												min="0"
-												placeholder={t("pricePlaceholder")}
-												value={qPrice}
-												onChange={(e) => setQPrice(e.target.value)}
-											/>
-										</div>
-										{/* Checkboxes */}
-										<div className="space-y-2">
-											<label className="flex cursor-pointer items-center gap-2 text-sm">
-												<input
-													type="checkbox"
-													checked={qIsPriceEachWay}
-													onChange={(e) => setQIsPriceEachWay(e.target.checked)}
-												/>
-												{t("isPriceEachWay")}
-											</label>
-											<label className="flex cursor-pointer items-center gap-2 text-sm">
-												<input
-													type="checkbox"
-													checked={qAreCarSeatsIncluded}
-													onChange={(e) =>
-														setQAreCarSeatsIncluded(e.target.checked)
-													}
-												/>
-												{t("areCarSeatsIncluded")}
-											</label>
-										</div>
-										{/* Additional info */}
-										<div>
-											<Label className="text-sm">
-												{t("additionalInfoCustomer")}
-											</Label>
-											<Textarea
-												value={qAdditionalInfo}
-												onChange={(e) => setQAdditionalInfo(e.target.value)}
-												rows={4}
-												placeholder={t("additionalInfoPlaceholder")}
-											/>
-										</div>
-										{/* Internal notes */}
-										<div>
-											<Label className="text-sm">{t("internalNotes")}</Label>
-											<Textarea
-												value={qInternalNotes}
-												onChange={(e) => setQInternalNotes(e.target.value)}
-												rows={2}
-												placeholder={t("internalNotesPlaceholder")}
-											/>
-										</div>
-										{/* Actions */}
-										<div className="flex flex-wrap items-center gap-3">
-											{/* Primary: Save & Send */}
-											<Button
-												disabled={!qPrice || saveAndSend.isPending}
-												onClick={() =>
-													saveAndSend.mutate({
-														tripRequestId: requestId,
-														price: parseFloat(qPrice),
-														isPriceEachWay: qIsPriceEachWay,
-														areCarSeatsIncluded: qAreCarSeatsIncluded,
-														quotationAdditionalInfo:
-															qAdditionalInfo || undefined,
-														internalNotes: qInternalNotes || undefined,
-													})
-												}
-											>
-												{saveAndSend.isPending
-													? t("sending")
-													: isRejected
-														? t("reviseAndResend")
-														: t("saveAndSend")}
-											</Button>
-											{/* Secondary: Save draft */}
-											<Button
-												variant="outline"
-												disabled={!qPrice || saveQuotation.isPending}
-												onClick={() =>
-													saveQuotation.mutate({
-														tripRequestId: requestId,
-														price: parseFloat(qPrice),
-														isPriceEachWay: qIsPriceEachWay,
-														areCarSeatsIncluded: qAreCarSeatsIncluded,
-														quotationAdditionalInfo:
-															qAdditionalInfo || undefined,
-														internalNotes: qInternalNotes || undefined,
-													})
-												}
-											>
-												{saveQuotation.isPending
-													? t("saving")
-													: t("saveQuotation")}
-											</Button>
-											{/* Resend after first notification */}
-											{quotation?.notifiedAt && !isRejected && (
-												<Button
-													variant="ghost"
-													size="sm"
-													disabled={notifyQuotation.isPending}
-													onClick={() =>
-														notifyQuotation.mutate({ tripRequestId: requestId })
-													}
-												>
-													{notifyQuotation.isPending
-														? t("notifying")
-														: t("resendNotification")}
-												</Button>
-											)}
-											{quotation?.notifiedAt && (
-												<p className="text-sm text-muted-foreground">
-													{t("notifiedDate", {
-														date: format(new Date(quotation.notifiedAt), "PPP"),
-													})}
-												</p>
-											)}
-										</div>
-									</>
+									<QuotationForm
+										requestId={requestId}
+										isRejected={isRejected}
+										quotation={quotation}
+										onSuccess={async () => {
+											await utils.tripRequest.getByIdAdmin.invalidate({
+												id: requestId,
+											});
+											await utils.tripRequest.getAllRequests.invalidate();
+										}}
+									/>
 								)}
 							</CardContent>
 						</Card>
