@@ -311,7 +311,7 @@
 		"childrenCount": "{count} bambino/i",
 		"quotationsCount": "{count} preventivo/i",
 		"manage": "Gestisci",
-		"searchPlaceholder": "Cerca per nome o email...",
+		"searchPlaceholder": "Cerca per nome, email o numero d'ordine...",
 		"loadMore": "Carica altri"
 	},
 	"adminDetail": {

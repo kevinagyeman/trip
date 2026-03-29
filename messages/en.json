@@ -311,7 +311,7 @@
 		"childrenCount": "{count} child(ren)",
 		"quotationsCount": "{count} quotation(s)",
 		"manage": "Manage",
-		"searchPlaceholder": "Search by name or email...",
+		"searchPlaceholder": "Search by name, email or order number...",
 		"loadMore": "Load more"
 	},
 	"adminDetail": {
