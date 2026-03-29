@@ -11,12 +11,12 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/trpc/react";
 import {
 	buildStatusLabels,
 	parseRoutes,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
+import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -61,7 +61,7 @@ export function AllTripRequests() {
 			<div className="grid grid-cols-2 gap-3 sm:flex-row sm:items-center">
 				<div className="relative min-w-0 flex-1">
 					<Input
-						className="w-full pl-9"
+						className="w-full"
 						placeholder={t("searchPlaceholder")}
 						value={search}
 						onChange={(e) => handleSearch(e.target.value)}
