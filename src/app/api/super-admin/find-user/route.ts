@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { GenericEmail } from "@/emails/generic-email";
 import { auth } from "@/server/auth";
 import { db } from "@/server/db";
 import { APP_URL, sendEmail } from "@/server/email";
-import { GenericEmail } from "@/emails/generic-email";
-import { createElement } from "react";
+import { NextResponse } from "next/server";
 import { randomBytes } from "node:crypto";
+import { createElement } from "react";
 import { z } from "zod";
 
 const bodySchema = z.object({
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
 	await sendEmail({
 		to: email,
-		subject: `[${companyName}] ADMIN INVITATION`,
+		subject: `${companyName} - Admin invitation`,
 		react: createElement(GenericEmail, {
 			data: {
 				preview: "Set your password",
