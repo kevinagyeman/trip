@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -18,6 +18,7 @@ import {
 } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
+import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -56,7 +57,7 @@ export function AllTripRequests() {
 	const items = data?.pages.flatMap((p) => p.items) ?? [];
 
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 pb-8">
 			{/* Filters */}
 			<div className="grid grid-cols-2 gap-3 sm:flex-row sm:items-center">
 				<div className="relative min-w-0 flex-1">
@@ -99,56 +100,54 @@ export function AllTripRequests() {
 				<>
 					{items.map((request) => (
 						<Card key={request.id}>
-							<CardHeader>
-								<div className="flex items-start justify-between">
-									<div className="space-y-0.5">
-										<p className="text-xs font-medium text-muted-foreground">
-											#{String(request.orderNumber).padStart(7, "0")}
-										</p>
-										<CardTitle>
-											{request.firstName} {request.lastName}
-										</CardTitle>
-										<p className="text-sm text-muted-foreground">
-											{request.user?.name ??
-												request.user?.email ??
-												request.customerEmail}
-										</p>
-										{parseRoutes(request.routes).map((route, i) => (
-											<p key={i} className="text-xs text-muted-foreground">
-												{route.pickup} → {route.destination}
-												{(route.departureTime ?? route.departureDate) && (
-													<span className="ml-2">
-														{route.departureTime}
-														{route.departureDate &&
-															` · ${format(new Date(route.departureDate), "dd/MM")}`}
-													</span>
-												)}
+							<CardContent className="px-3">
+								<div className="flex items-start justify-between gap-3">
+									<div className="min-w-0 space-y-0.5">
+										<div className="flex items-center gap-2">
+											<p className="text-xs text-muted-foreground">
+												#{String(request.orderNumber).padStart(7, "0")}
+												<span className="ml-2">
+													{format(new Date(request.createdAt), "d MMM yyyy")}
+												</span>
 											</p>
-										))}
-									</div>
-									<Badge className={STATUS_COLORS[request.status]}>
-										{statusLabels[request.status] ?? request.status}
-									</Badge>
-								</div>
-							</CardHeader>
-							<CardContent>
-								<div className="flex items-center justify-between">
-									<div className="text-sm">
-										<p>
-											{t("adultsCount", { count: request.numberOfAdults })}
-											{request.numberOfChildren
-												? `, ${t("childrenCount", { count: request.numberOfChildren })}`
-												: ""}
+											<Badge
+												className={`px-1.5 py-0 text-xs font-medium ${STATUS_COLORS[request.status]}`}
+											>
+												{statusLabels[request.status] ?? request.status}
+											</Badge>
+										</div>
+										<p className="truncate text-sm font-semibold mt-3">
+											{request.firstName} {request.lastName}
+											<span className="ml-1.5 font-normal text-muted-foreground">
+												{request.user?.email ?? request.customerEmail}
+											</span>
 										</p>
-										<p className="text-muted-foreground">
-											{t("quotationsCount", {
-												count: request.quotations.length,
-											})}
-										</p>
+										<div className="mt-1.5 space-y-0.5">
+											{parseRoutes(request.routes).map((route, i) => (
+												<p
+													key={i}
+													className="truncate text-xs text-muted-foreground"
+												>
+													{route.pickup} → {route.destination}
+													{(route.departureTime ?? route.departureDate) && (
+														<span className="ml-1.5">
+															{route.departureTime}
+															{route.departureDate &&
+																` · ${format(new Date(route.departureDate), "d MMM")}`}
+														</span>
+													)}
+												</p>
+											))}
+										</div>
 									</div>
-									<Button asChild>
+									<Button
+										asChild
+										variant="ghost"
+										size="icon-sm"
+										className="shrink-0 self-center"
+									>
 										<Link href={`/admin/requests/${request.id}`}>
-											{t("manage")}
+											<ArrowRight className="h-4 w-4" />
 										</Link>
 									</Button>
 								</div>
