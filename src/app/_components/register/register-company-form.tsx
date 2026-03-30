@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Card,
 	CardContent,
@@ -228,9 +229,13 @@ export function RegisterCompanyForm() {
 						</div>
 					)}
 
-					<Button type="submit" className="w-full" disabled={isSubmitting}>
-						{isSubmitting ? t("registering") : t("register")}
-					</Button>
+					<LoadingButton
+						type="submit"
+						className="w-full"
+						isLoading={isSubmitting}
+					>
+						{t("register")}
+					</LoadingButton>
 
 					<p className="text-center text-sm text-muted-foreground">
 						{t("alreadyHaveAccount")}{" "}

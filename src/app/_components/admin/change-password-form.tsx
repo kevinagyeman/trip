@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -81,9 +81,9 @@ export function ChangePasswordForm() {
 					{t("passwordChanged")}
 				</p>
 			)}
-			<Button type="submit" disabled={changePassword.isPending}>
-				{changePassword.isPending ? t("saving") : t("changePasswordButton")}
-			</Button>
+			<LoadingButton type="submit" isLoading={changePassword.isPending}>
+				{t("changePasswordButton")}
+			</LoadingButton>
 		</form>
 	);
 }

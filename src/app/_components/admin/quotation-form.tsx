@@ -4,7 +4,7 @@ import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -159,43 +159,37 @@ export function QuotationForm({
 
 			{/* Actions */}
 			<div className="flex flex-wrap items-center gap-3">
-				<Button
+				<LoadingButton
 					type="button"
-					disabled={saveAndSend.isPending}
+					isLoading={saveAndSend.isPending}
 					onClick={handleSubmit((values) =>
 						saveAndSend.mutate(buildMutationInput(values)),
 					)}
 				>
-					{saveAndSend.isPending
-						? t("sending")
-						: isRejected
-							? t("reviseAndResend")
-							: t("saveAndSend")}
-				</Button>
+					{isRejected ? t("reviseAndResend") : t("saveAndSend")}
+				</LoadingButton>
 
-				<Button
+				<LoadingButton
 					type="button"
 					variant="outline"
-					disabled={saveQuotation.isPending}
+					isLoading={saveQuotation.isPending}
 					onClick={handleSubmit((values) =>
 						saveQuotation.mutate(buildMutationInput(values)),
 					)}
 				>
-					{saveQuotation.isPending ? t("saving") : t("saveQuotation")}
-				</Button>
+					{t("saveQuotation")}
+				</LoadingButton>
 
 				{quotation?.notifiedAt && !isRejected && (
-					<Button
+					<LoadingButton
 						type="button"
 						variant="ghost"
 						size="sm"
-						disabled={notifyQuotation.isPending}
+						isLoading={notifyQuotation.isPending}
 						onClick={() => notifyQuotation.mutate({ tripRequestId: requestId })}
 					>
-						{notifyQuotation.isPending
-							? t("notifying")
-							: t("resendNotification")}
-					</Button>
+						{t("resendNotification")}
+					</LoadingButton>
 				)}
 
 				{quotation?.notifiedAt && (

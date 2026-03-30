@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Card,
 	CardContent,
@@ -89,9 +89,13 @@ export default function ForgotPasswordPage() {
 									{error}
 								</div>
 							)}
-							<Button type="submit" className="w-full" disabled={loading}>
-								{loading ? t("sending") : t("sendResetLink")}
-							</Button>
+							<LoadingButton
+								type="submit"
+								className="w-full"
+								isLoading={loading}
+							>
+								{t("sendResetLink")}
+							</LoadingButton>
 							<div className="text-center text-sm">
 								<Link
 									href="/auth/signin"

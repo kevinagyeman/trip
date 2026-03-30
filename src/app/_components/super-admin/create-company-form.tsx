@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { api } from "@/trpc/react";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
 
@@ -87,13 +88,13 @@ export function CreateCompanyForm() {
 						</p>
 					)}
 
-					<Button
+					<LoadingButton
 						type="submit"
-						disabled={createCompany.isPending}
+						isLoading={createCompany.isPending}
 						className="w-full"
 					>
-						{createCompany.isPending ? t("creating") : t("createCompany")}
-					</Button>
+						{t("createCompany")}
+					</LoadingButton>
 				</form>
 			</CardContent>
 		</Card>

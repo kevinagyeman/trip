@@ -6,6 +6,7 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -539,13 +540,13 @@ export function CreateTripRequestForm({
 				)}
 			</div>
 
-			<Button
+			<LoadingButton
 				type="submit"
-				disabled={createRequest.isPending}
+				isLoading={createRequest.isPending}
 				className="w-full"
 			>
-				{createRequest.isPending ? t("submitting") : t("submitRequest")}
-			</Button>
+				{t("submitRequest")}
+			</LoadingButton>
 
 			{createRequest.error && (
 				<p className="text-sm text-destructive">

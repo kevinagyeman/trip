@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Card,
 	CardContent,
@@ -108,9 +108,13 @@ function SignInForm() {
 							</div>
 						)}
 
-						<Button type="submit" className="w-full" disabled={isSubmitting}>
-							{isSubmitting ? t("signingIn") : t("signIn")}
-						</Button>
+						<LoadingButton
+							type="submit"
+							className="w-full"
+							isLoading={isSubmitting}
+						>
+							{t("signIn")}
+						</LoadingButton>
 						<div className="text-center text-sm">
 							<Link
 								href="/auth/forgot-password"

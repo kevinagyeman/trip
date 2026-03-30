@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Card,
 	CardContent,
@@ -107,9 +107,9 @@ function ResetPasswordForm() {
 							{error}
 						</div>
 					)}
-					<Button type="submit" className="w-full" disabled={loading}>
-						{loading ? t("saving") : t("resetPasswordButton")}
-					</Button>
+					<LoadingButton type="submit" className="w-full" isLoading={loading}>
+						{t("resetPasswordButton")}
+					</LoadingButton>
 				</form>
 			)}
 		</>

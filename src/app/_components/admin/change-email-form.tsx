@@ -1,7 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -66,9 +66,9 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 					{t("emailUpdated")}
 				</p>
 			)}
-			<Button type="submit" disabled={changeEmail.isPending}>
-				{changeEmail.isPending ? t("saving") : t("changeEmailButton")}
-			</Button>
+			<LoadingButton type="submit" isLoading={changeEmail.isPending}>
+				{t("changeEmailButton")}
+			</LoadingButton>
 		</form>
 	);
 }
