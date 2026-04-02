@@ -176,20 +176,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							<p className="text-sm text-muted-foreground">
 								{request.user?.email ?? request.customerEmail}
 							</p>
-							<div className="space-y-0.5">
-								{routes.map((route, i) => (
-									<p key={i} className="text-sm text-muted-foreground">
-										{route.pickup} → {route.destination}
-										{(route.departureTime ?? route.departureDate) && (
-											<span className="ml-2 text-xs">
-												{route.departureTime}
-												{route.departureDate &&
-													` · ${format(new Date(route.departureDate), "dd/MM")}`}
-											</span>
-										)}
-									</p>
-								))}
-							</div>
 						</div>
 						<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
 							<Badge className={STATUS_COLORS[request.status]}>

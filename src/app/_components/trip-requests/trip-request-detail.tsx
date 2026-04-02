@@ -60,20 +60,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							<CardTitle className="text-2xl">
 								{request.firstName} {request.lastName}
 							</CardTitle>
-							<div className="space-y-0.5">
-								{routes.map((route, i) => (
-									<p key={i} className="text-sm text-muted-foreground">
-										{route.pickup} → {route.destination}
-										{(route.departureTime ?? route.departureDate) && (
-											<span className="ml-2 text-xs">
-												{route.departureTime}
-												{route.departureDate &&
-													` · ${format(new Date(route.departureDate), "dd/MM")}`}
-											</span>
-										)}
-									</p>
-								))}
-							</div>
 						</div>
 						<div className="flex gap-2">
 							<Badge className={STATUS_COLORS[request.status]}>
