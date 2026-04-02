@@ -71,9 +71,9 @@ export function QuotationForm({
 		if (quotation) {
 			reset({
 				price:
-					typeof quotation.price === "number"
-						? quotation.price
-						: quotation.price.toNumber(),
+					typeof quotation.price === "object"
+						? quotation.price.toNumber()
+						: quotation.price,
 				isPriceEachWay: quotation.isPriceEachWay,
 				areCarSeatsIncluded: quotation.areCarSeatsIncluded,
 				additionalInfo: quotation.quotationAdditionalInfo ?? "",
