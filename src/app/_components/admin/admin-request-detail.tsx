@@ -596,7 +596,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											await utils.tripRequest.getByIdAdmin.invalidate({
 												id: requestId,
 											});
-											await utils.tripRequest.getAllRequests.invalidate();
 										}}
 									/>
 								)}
