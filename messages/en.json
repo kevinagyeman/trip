@@ -399,6 +399,7 @@
 		"routeFlightNumberPlaceholder": "e.g. FR1234",
 		"routeDepartureDetails": "Departure details",
 		"saveRouteDetails": "Save details",
+		"actions": "Actions",
 		"name": "Name"
 	},
 	"notFound": {

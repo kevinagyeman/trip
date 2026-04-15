@@ -265,47 +265,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												)}
 											</div>
 										)}
-										{route.departureDate && (
-											<div className="mt-2">
-												<Button
-													size="sm"
-													variant="outline"
-													onClick={() => {
-														const [hRaw, mRaw] = (
-															route.departureTime ?? "00:00"
-														)
-															.split(":")
-															.map(Number);
-														const endH = ((hRaw ?? 0) + 1) % 24;
-														const start = toICSDateTime(
-															new Date(route.departureDate!),
-															route.departureTime,
-														);
-														const end = toICSDateTime(
-															new Date(route.departureDate!),
-															`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
-														);
-														const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
-														const desc = route.flightNumber
-															? `${t("routeFlightNumber")}: ${route.flightNumber}`
-															: "";
-														window.open(
-															googleCalendarUrl({
-																summary,
-																description: desc,
-																location: route.pickup,
-																start,
-																end,
-															}),
-															"_blank",
-														);
-													}}
-												>
-													<CalendarPlus className="mr-1 h-3 w-3" />
-													{t("googleCalendar")}
-												</Button>
-											</div>
-										)}
 									</div>
 									<div className="border-t border-dashed p-3">
 										<p className="mb-2 text-xs font-medium text-muted-foreground">
@@ -328,14 +287,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 														})
 													}
 												/>
-												{adminRouteDepartures[i]?.departureDate && (
-													<span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-														{format(
-															new Date(adminRouteDepartures[i]!.departureDate),
-															"d MMM yyyy",
-														)}
-													</span>
-												)}
 											</div>
 											<div className="space-y-1">
 												<Label className="text-xs">
@@ -399,6 +350,52 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												? t("saving")
 												: t("saveRouteDetails")}
 										</Button>
+										{route.departureDate && (
+											<div className="mt-4 border-t pt-3">
+												<p className="mb-2 text-xs font-medium text-muted-foreground">
+													{t("actions")}
+												</p>
+												<div className="flex flex-wrap gap-2">
+													<Button
+														size="sm"
+														variant="outline"
+														onClick={() => {
+															const [hRaw, mRaw] = (
+																route.departureTime ?? "00:00"
+															)
+																.split(":")
+																.map(Number);
+															const endH = ((hRaw ?? 0) + 1) % 24;
+															const start = toICSDateTime(
+																new Date(route.departureDate!),
+																route.departureTime,
+															);
+															const end = toICSDateTime(
+																new Date(route.departureDate!),
+																`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
+															);
+															const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
+															const desc = route.flightNumber
+																? `${t("routeFlightNumber")}: ${route.flightNumber}`
+																: "";
+															window.open(
+																googleCalendarUrl({
+																	summary,
+																	description: desc,
+																	location: route.pickup,
+																	start,
+																	end,
+																}),
+																"_blank",
+															);
+														}}
+													>
+														<CalendarPlus className="mr-1 h-3 w-3" />
+														{t("googleCalendar")}
+													</Button>
+												</div>
+											</div>
+										)}
 									</div>
 								</div>
 							))}
