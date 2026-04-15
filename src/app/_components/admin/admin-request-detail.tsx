@@ -244,29 +244,23 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										{(route.departureDate ??
 											route.departureTime ??
 											route.flightNumber) && (
-											<div className="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground">
-												{route.departureDate && (
-													<span>
-														{t("routeDepartureDate")}:{" "}
-														<span className="font-medium text-foreground">
-															{route.departureDate}
-														</span>
-													</span>
-												)}
-												{route.departureTime && (
-													<span>
-														{t("routeDepartureTime")}:{" "}
-														<span className="font-medium text-foreground">
-															{route.departureTime}
-														</span>
+											<div className="mt-2 flex flex-wrap gap-1.5">
+												{(route.departureDate ?? route.departureTime) && (
+													<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+														{route.departureDate &&
+															format(
+																new Date(route.departureDate),
+																"d MMM yyyy",
+															)}
+														{route.departureDate &&
+															route.departureTime &&
+															" · "}
+														{route.departureTime}
 													</span>
 												)}
 												{route.flightNumber && (
-													<span>
-														{t("routeFlightNumber")}:{" "}
-														<span className="font-medium text-foreground">
-															{route.flightNumber}
-														</span>
+													<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+														{route.flightNumber}
 													</span>
 												)}
 											</div>
@@ -334,6 +328,14 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 														})
 													}
 												/>
+												{adminRouteDepartures[i]?.departureDate && (
+													<span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+														{format(
+															new Date(adminRouteDepartures[i]!.departureDate),
+															"d MMM yyyy",
+														)}
+													</span>
+												)}
 											</div>
 											<div className="space-y-1">
 												<Label className="text-xs">

@@ -130,10 +130,16 @@ export function AllTripRequests() {
 												>
 													{route.pickup} → {route.destination}
 													{(route.departureTime ?? route.departureDate) && (
-														<span className="ml-1.5">
-															{route.departureTime}
+														<span className="ml-1.5 inline-flex items-center gap-1 rounded bg-muted px-1 py-0 text-xs">
 															{route.departureDate &&
-																` · ${format(new Date(route.departureDate), "d MMM")}`}
+																format(
+																	new Date(route.departureDate),
+																	"d MMM yyyy",
+																)}
+															{route.departureTime &&
+																route.departureDate &&
+																" · "}
+															{route.departureTime}
 														</span>
 													)}
 												</p>
