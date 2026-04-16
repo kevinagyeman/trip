@@ -4,7 +4,7 @@ import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { QuotationForm } from "@/app/_components/admin/quotation-form";
@@ -163,16 +163,16 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			</Button>
 
 			{/* Customer Information */}
-			<Card>
-				<CardHeader>
+			<div>
+				<div>
 					<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 						<div className="space-y-1">
 							<p className="text-xs font-medium text-muted-foreground">
 								#{String(request.orderNumber).padStart(7, "0")}
 							</p>
-							<CardTitle className="text-2xl">
+							<h2 className="text-2xl font-bold">
 								{request.firstName} {request.lastName}
-							</CardTitle>
+							</h2>
 							<p className="text-sm text-muted-foreground">
 								{request.user?.email ?? request.customerEmail}
 							</p>
@@ -217,14 +217,14 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							)}
 						</div>
 					</div>
-				</CardHeader>
-				<CardContent className="space-y-6">
+				</div>
+				<div className="mt-6 space-y-6">
 					{/* Routes */}
 					<div>
 						<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
 						<div className="space-y-2">
 							{routes.map((route, i) => (
-								<div key={i} className="rounded-lg border text-sm">
+								<div key={i} className="rounded-lg border-2 text-sm">
 									<div className="p-3">
 										<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 											{t("routeN", { n: i + 1 })}
@@ -395,104 +395,111 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 
-					{/* Contact Details */}
-					<div className="space-y-1 rounded-lg border p-3 text-sm">
-						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-							{t("contactDetails")}
-						</p>
-						<div className="flex flex-wrap gap-x-6 gap-y-1">
-							<span>
-								<span className="text-muted-foreground">{t("name")}: </span>
-								<span className="font-medium">
-									{request.firstName} {request.lastName}
+					{/* Customer details */}
+					<div className="rounded-lg border-2 text-sm divide-y">
+						{/* Contact Details */}
+						<div className="space-y-1 p-3">
+							<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+								{t("contactDetails")}
+							</p>
+							<div className="flex flex-wrap gap-x-6 gap-y-1">
+								<span>
+									<span className="text-muted-foreground">{t("name")}: </span>
+									<span className="font-medium">
+										{request.firstName} {request.lastName}
+									</span>
 								</span>
-							</span>
-							<span>
-								<span className="text-muted-foreground">{t("email")}: </span>
-								<span className="font-medium">
-									{request.user?.email ?? request.customerEmail}
+								<span>
+									<span className="text-muted-foreground">{t("email")}: </span>
+									<span className="font-medium">
+										{request.user?.email ?? request.customerEmail}
+									</span>
 								</span>
-							</span>
-							<span>
-								<span className="text-muted-foreground">{t("phone")}: </span>
-								<span className="font-medium">{request.phone}</span>
-							</span>
+								<span>
+									<span className="text-muted-foreground">{t("phone")}: </span>
+									<span className="font-medium">{request.phone}</span>
+								</span>
+							</div>
 						</div>
-					</div>
 
-					{/* Passengers */}
-					<div className="space-y-1 rounded-lg border p-3 text-sm">
-						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-							{t("passengers")}
-						</p>
-						<div className="flex flex-wrap gap-x-6 gap-y-1">
-							<span>
-								<span className="text-muted-foreground">{t("adults")}: </span>
-								<span className="font-medium">{request.numberOfAdults}</span>
-							</span>
-							{request.areThereChildren &&
-								request.numberOfChildren !== null && (
+						{/* Passengers */}
+						<div className="space-y-1 p-3">
+							<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+								{t("passengers")}
+							</p>
+							<div className="flex flex-wrap gap-x-6 gap-y-1">
+								<span>
+									<span className="text-muted-foreground">{t("adults")}: </span>
+									<span className="font-medium">{request.numberOfAdults}</span>
+								</span>
+								{request.areThereChildren &&
+									request.numberOfChildren !== null && (
+										<span>
+											<span className="text-muted-foreground">
+												{t("numberOfChildren")}:{" "}
+											</span>
+											<span className="font-medium">
+												{request.numberOfChildren}
+											</span>
+										</span>
+									)}
+								{request.areThereChildren && request.ageOfChildren && (
 									<span>
 										<span className="text-muted-foreground">
-											{t("numberOfChildren")}:{" "}
+											{t("agesOfChildren")}:{" "}
 										</span>
-										<span className="font-medium">
-											{request.numberOfChildren}
-										</span>
+										<span className="font-medium">{request.ageOfChildren}</span>
 									</span>
 								)}
-							{request.areThereChildren && request.ageOfChildren && (
+								{request.areThereChildren &&
+									request.numberOfChildSeats !== null && (
+										<span>
+											<span className="text-muted-foreground">
+												{t("childSeatsNeeded")}:{" "}
+											</span>
+											<span className="font-medium">
+												{request.numberOfChildSeats}
+											</span>
+										</span>
+									)}
+							</div>
+						</div>
+
+						{/* Preferences */}
+						<div className="space-y-1 p-3">
+							<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+								{t("preferences")}
+							</p>
+							<div className="flex flex-wrap gap-x-6 gap-y-1">
 								<span>
 									<span className="text-muted-foreground">
-										{t("agesOfChildren")}:{" "}
+										{t("language")}:{" "}
 									</span>
-									<span className="font-medium">{request.ageOfChildren}</span>
+									<span className="font-medium">
+										{LANGUAGE_LABELS[request.language] ?? request.language}
+									</span>
+								</span>
+								<span>
+									<span className="text-muted-foreground">
+										{t("created")}:{" "}
+									</span>
+									<span className="font-medium">
+										{format(new Date(request.createdAt), "PPP")}
+									</span>
+								</span>
+							</div>
+							{request.additionalInfo && (
+								<span>
+									<span className="text-muted-foreground">
+										{t("additionalInformation")}:{" "}
+									</span>
+									<span className="font-medium">{request.additionalInfo}</span>
 								</span>
 							)}
-							{request.areThereChildren &&
-								request.numberOfChildSeats !== null && (
-									<span>
-										<span className="text-muted-foreground">
-											{t("childSeatsNeeded")}:{" "}
-										</span>
-										<span className="font-medium">
-											{request.numberOfChildSeats}
-										</span>
-									</span>
-								)}
 						</div>
 					</div>
-
-					{/* Preferences */}
-					<div className="space-y-1 rounded-lg border p-3 text-sm">
-						<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-							{t("preferences")}
-						</p>
-						<div className="flex flex-wrap gap-x-6 gap-y-1">
-							<span>
-								<span className="text-muted-foreground">{t("language")}: </span>
-								<span className="font-medium">
-									{LANGUAGE_LABELS[request.language] ?? request.language}
-								</span>
-							</span>
-							<span>
-								<span className="text-muted-foreground">{t("created")}: </span>
-								<span className="font-medium">
-									{format(new Date(request.createdAt), "PPP")}
-								</span>
-							</span>
-						</div>
-						{request.additionalInfo && (
-							<span>
-								<span className="text-muted-foreground">
-									{t("additionalInformation")}:{" "}
-								</span>
-								<span className="font-medium">{request.additionalInfo}</span>
-							</span>
-						)}
-					</div>
-				</CardContent>
-			</Card>
+				</div>
+			</div>
 
 			{/* Quotation */}
 			{(() => {
