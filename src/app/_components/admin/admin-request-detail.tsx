@@ -226,21 +226,14 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							{routes.map((route, i) => (
 								<div key={i} className="rounded-lg border text-sm">
 									<div className="p-3">
-										<p className="mb-1 text-xs font-medium text-muted-foreground">
+										<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 											{t("routeN", { n: i + 1 })}
 										</p>
-										<p>
-											<span className="text-muted-foreground">
-												{t("pickup")}:{" "}
-											</span>
-											<span className="font-medium">{route.pickup}</span>
-										</p>
-										<p>
-											<span className="text-muted-foreground">
-												{t("destination")}:{" "}
-											</span>
-											<span className="font-medium">{route.destination}</span>
-										</p>
+										<div className="flex items-center gap-2 text-base font-semibold">
+											<span>{route.pickup}</span>
+											<span className="text-muted-foreground">→</span>
+											<span>{route.destination}</span>
+										</div>
 										{(route.departureDate ??
 											route.departureTime ??
 											route.flightNumber) && (
