@@ -96,6 +96,7 @@ export async function Navigation() {
 							isSuperAdmin={isSuperAdmin}
 							myTripsLabel={t("myTrips")}
 							adminLabel={t("adminDashboard")}
+							adminStatsLabel={t("adminStats")}
 							superAdminLabel={t("superAdminDashboard")}
 						/>
 					</div>

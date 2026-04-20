@@ -13,6 +13,7 @@ interface MobileMenuProps {
 	isSuperAdmin: boolean;
 	myTripsLabel: string;
 	adminLabel: string;
+	adminStatsLabel: string;
 	superAdminLabel: string;
 }
 
@@ -22,6 +23,7 @@ export function MobileMenu({
 	isSuperAdmin,
 	myTripsLabel,
 	adminLabel,
+	adminStatsLabel,
 	superAdminLabel,
 }: MobileMenuProps) {
 	const [open, setOpen] = useState(false);
@@ -51,11 +53,18 @@ export function MobileMenu({
 							</Link>
 						)}
 						{isAdmin && !isSuperAdmin && (
-							<Link href="/admin" onClick={() => setOpen(false)}>
-								<Button variant="ghost" className="w-full justify-start">
-									{adminLabel}
-								</Button>
-							</Link>
+							<>
+								<Link href="/admin" onClick={() => setOpen(false)}>
+									<Button variant="ghost" className="w-full justify-start">
+										{adminLabel}
+									</Button>
+								</Link>
+								<Link href="/admin/stats" onClick={() => setOpen(false)}>
+									<Button variant="ghost" className="w-full justify-start">
+										{adminStatsLabel}
+									</Button>
+								</Link>
+							</>
 						)}
 						{isSuperAdmin && (
 							<Link href="/super-admin" onClick={() => setOpen(false)}>

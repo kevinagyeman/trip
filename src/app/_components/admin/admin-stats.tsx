@@ -1,7 +1,7 @@
 "use client";
 
-import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 
 export function AdminStats() {
@@ -52,7 +52,7 @@ export function AdminStats() {
 	];
 
 	return (
-		<div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
+		<div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
 			{stats.map((stat) => (
 				<Card key={stat.label}>
 					<CardHeader className="pb-2 pt-4">

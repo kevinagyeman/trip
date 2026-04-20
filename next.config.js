@@ -11,7 +11,12 @@ const withNextIntl = createNextIntlPlugin();
 const config = {
     turbopack: {
         root: process.env.TURBOPACK_ROOT || './',
-    }
+    },
+    images: {
+        remotePatterns: [
+            { protocol: "https", hostname: "placehold.co" },
+        ],
+    },
 };
 
 export default withNextIntl(config);
