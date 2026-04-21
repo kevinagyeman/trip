@@ -15,8 +15,10 @@ export default async function RegisterCompanyPage({
 	if (session) redirect("/dashboard");
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
-			<RegisterCompanyForm />
+		<div className="min-h-[calc(100vh-65px)] p-4">
+			<div className="mx-auto max-w-2xl py-8">
+				<RegisterCompanyForm />
+			</div>
 		</div>
 	);
 }
