@@ -146,7 +146,7 @@ export async function LandingPage() {
 						</div>
 						<div className="overflow-hidden rounded-2xl border-2 shadow-xl">
 							<Image
-								src="https://placehold.co/700x500/f1f5f9/94a3b8?text=Request+Portal"
+								src="/numbers-light.png"
 								alt="Request portal"
 								width={700}
 								height={500}
@@ -154,7 +154,7 @@ export async function LandingPage() {
 								unoptimized
 							/>
 							<Image
-								src="https://placehold.co/700x500/0f172a/334155?text=Request+Portal"
+								src="/numbers-dark.png"
 								alt="Request portal"
 								width={700}
 								height={500}
@@ -172,7 +172,7 @@ export async function LandingPage() {
 					<div className="grid items-center gap-16 lg:grid-cols-2">
 						<div className="order-2 overflow-hidden rounded-2xl border-2 shadow-xl lg:order-1">
 							<Image
-								src="https://placehold.co/700x500/f1f5f9/94a3b8?text=Quotation+Builder"
+								src="/quote-light.png"
 								alt="Quotation builder"
 								width={700}
 								height={500}
@@ -180,7 +180,7 @@ export async function LandingPage() {
 								unoptimized
 							/>
 							<Image
-								src="https://placehold.co/700x500/0f172a/334155?text=Quotation+Builder"
+								src="/quote-dark.png"
 								alt="Quotation builder"
 								width={700}
 								height={500}
@@ -244,7 +244,7 @@ export async function LandingPage() {
 						</div>
 						<div className="overflow-hidden rounded-2xl border-2 shadow-xl">
 							<Image
-								src="https://placehold.co/700x500/f1f5f9/94a3b8?text=Messaging+%26+Notifications"
+								src="/messages-light.png"
 								alt="Messaging and notifications"
 								width={700}
 								height={500}
@@ -252,7 +252,7 @@ export async function LandingPage() {
 								unoptimized
 							/>
 							<Image
-								src="https://placehold.co/700x500/0f172a/334155?text=Messaging+%26+Notifications"
+								src="/messages-dark.png"
 								alt="Messaging and notifications"
 								width={700}
 								height={500}

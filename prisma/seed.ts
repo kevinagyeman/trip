@@ -181,6 +181,49 @@ async function main() {
 			});
 		}
 
+		// Add a demo conversation to the QUOTED trip (Emma Rossi)
+		if (trip.status === "QUOTED" && tripData.firstName === "Emma") {
+			const messages = [
+				{
+					senderType: "CUSTOMER" as const,
+					senderName: "Emma Rossi",
+					body: "Hi! I just submitted my transfer request. I wanted to let you know I'm travelling with quite a lot of luggage — 3 large suitcases and 2 carry-ons. Will that be a problem?",
+					createdAt: new Date("2026-04-15T10:05:00Z"),
+				},
+				{
+					senderType: "ADMIN" as const,
+					senderName: "Support",
+					body: "Hi Emma! No problem at all — we'll assign a large vehicle with plenty of boot space. I've also noted it on your booking. I'll send you the quote shortly.",
+					createdAt: new Date("2026-04-15T10:22:00Z"),
+				},
+				{
+					senderType: "CUSTOMER" as const,
+					senderName: "Emma Rossi",
+					body: "Perfect, thank you! Also, is it possible to get a receipt once the trip is confirmed? I need it for work expenses.",
+					createdAt: new Date("2026-04-15T10:35:00Z"),
+				},
+				{
+					senderType: "ADMIN" as const,
+					senderName: "Support",
+					body: "Absolutely, we'll send a full receipt to your email after confirmation. Your quote is now ready — please check it and let us know if you have any questions!",
+					createdAt: new Date("2026-04-15T10:48:00Z"),
+				},
+				{
+					senderType: "CUSTOMER" as const,
+					senderName: "Emma Rossi",
+					body: "Great, the price looks good! I'll accept it now. See you at the airport 🙂",
+					createdAt: new Date("2026-04-15T11:02:00Z"),
+				},
+			];
+
+			for (const msg of messages) {
+				await prisma.tripMessage.create({
+					data: { ...msg, tripRequestId: trip.id },
+				});
+			}
+			console.log(`    💬 5 demo messages added`);
+		}
+
 		console.log(`  ✓ [${trip.status}] ${tripData.firstName} ${tripData.lastName}`);
 	}
 
