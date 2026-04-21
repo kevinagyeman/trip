@@ -19,20 +19,20 @@ export async function LandingPage() {
 	return (
 		<div className="flex flex-col">
 			{/* ── Hero ── */}
-			<section className="px-6 pb-0 pt-20 sm:pt-28">
-				<div className="mx-auto max-w-4xl text-center">
-					<span className="mb-6 inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+			<section className="flex min-h-screen flex-col px-6 pb-0 pt-16 sm:pt-24">
+				<div className="mx-auto w-full max-w-3xl text-center">
+					<span className="mb-5 inline-flex items-center gap-2 rounded-full border bg-muted px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
 						<Zap className="h-3 w-3" />
 						{t("heroBadge")}
 					</span>
-					<h1 className="mb-6 text-5xl font-bold leading-[1.1] tracking-tight sm:text-6xl lg:text-7xl">
+					<h1 className="mb-4 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
 						{t("heroHeadline")}{" "}
 						<span className="text-primary">{t("heroHeadlineHighlight")}</span>
 					</h1>
-					<p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+					<p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
 						{t("heroSubtitle")}
 					</p>
-					<div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+					<div className="flex flex-row items-center justify-center gap-3">
 						<Link href="/auth/signin">
 							<Button size="lg" className="gap-2 px-8 text-base">
 								{t("ctaStart")} <ArrowRight className="h-4 w-4" />
@@ -46,8 +46,8 @@ export async function LandingPage() {
 					</div>
 				</div>
 
-				{/* Product screenshot */}
-				<div className="mx-auto mt-16 max-w-6xl">
+				{/* Product screenshot — pinned to bottom */}
+				<div className="mx-auto mt-auto w-full max-w-6xl pt-12">
 					{/* Desktop — landscape */}
 					<div className="hidden overflow-hidden rounded-t-2xl border-x-2 border-t-2 shadow-2xl sm:block">
 						<Image
