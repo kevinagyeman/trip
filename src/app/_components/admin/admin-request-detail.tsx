@@ -6,6 +6,14 @@ import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -144,8 +152,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	const requestDetails = api.tripRequest.requestDetails.useMutation();
 
+	const [confirmOpen, setConfirmOpen] = useState(false);
+
 	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
 		onSuccess: async () => {
+			setConfirmOpen(false);
 			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 			await utils.tripRequest.getAllRequests.invalidate();
 		},
@@ -563,28 +574,58 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												description={t("tripConfirmedDesc")}
 											/>
 										) : (
-											<div className="flex flex-wrap gap-2 border-t pt-4">
-												<Button
-													disabled={confirmTrip.isPending}
-													onClick={() => confirmTrip.mutate({ id: requestId })}
-												>
-													{confirmTrip.isPending
-														? t("confirming")
-														: t("confirmTrip")}
+											<div className="flex flex-wrap items-start gap-3 border-t pt-4">
+												<Button onClick={() => setConfirmOpen(true)}>
+													{t("confirmTrip")}
 												</Button>
-												<Button
-													variant="outline"
-													disabled={requestDetails.isPending}
-													onClick={() =>
-														requestDetails.mutate({ id: requestId })
-													}
-												>
-													{requestDetails.isPending
-														? t("sending")
-														: t("requestDetails")}
-												</Button>
+												<div className="flex flex-col gap-0.5">
+													<Button
+														variant="outline"
+														disabled={requestDetails.isPending}
+														onClick={() =>
+															requestDetails.mutate({ id: requestId })
+														}
+													>
+														{requestDetails.isPending
+															? t("sending")
+															: t("requestDetails")}
+													</Button>
+													<p className="text-xs text-muted-foreground">
+														{t("requestDetailsHint")}
+													</p>
+												</div>
 											</div>
 										)}
+
+										{/* Confirm Trip Dialog */}
+										<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+											<DialogContent>
+												<DialogHeader>
+													<DialogTitle>{t("confirmModalTitle")}</DialogTitle>
+													<DialogDescription>
+														{t("confirmModalDesc")}
+													</DialogDescription>
+												</DialogHeader>
+												<DialogFooter className="gap-2">
+													<Button
+														variant="outline"
+														onClick={() => setConfirmOpen(false)}
+													>
+														{t("confirmModalCancel")}
+													</Button>
+													<Button
+														disabled={confirmTrip.isPending}
+														onClick={() =>
+															confirmTrip.mutate({ id: requestId })
+														}
+													>
+														{confirmTrip.isPending
+															? t("confirming")
+															: t("confirmModalConfirm")}
+													</Button>
+												</DialogFooter>
+											</DialogContent>
+										</Dialog>
 									</>
 								) : (
 									<QuotationForm
