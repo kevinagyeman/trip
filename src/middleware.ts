@@ -25,6 +25,12 @@ export default auth((req) => {
 	// Redirect logged-in users away from auth pages
 	if (pathWithoutLocale === "/auth/signin") {
 		if (req.auth?.user) {
+			const callbackUrl = req.nextUrl.searchParams.get("callbackUrl");
+			if (callbackUrl?.startsWith("/")) {
+				return NextResponse.redirect(
+					new URL(`${localePrefix}${callbackUrl}`, req.url),
+				);
+			}
 			const role = req.auth.user.role;
 			const dest =
 				role === "SUPER_ADMIN"
@@ -41,7 +47,10 @@ export default auth((req) => {
 		const role = req.auth?.user?.role;
 		if (!role || (role !== "ADMIN" && role !== "SUPER_ADMIN")) {
 			return NextResponse.redirect(
-				new URL(`${localePrefix}/auth/signin`, req.url),
+				new URL(
+					`${localePrefix}/auth/signin?callbackUrl=${encodeURIComponent(pathWithoutLocale)}`,
+					req.url,
+				),
 			);
 		}
 	}
@@ -51,7 +60,10 @@ export default auth((req) => {
 		const role = req.auth?.user?.role;
 		if (role !== "SUPER_ADMIN") {
 			return NextResponse.redirect(
-				new URL(`${localePrefix}/auth/signin`, req.url),
+				new URL(
+					`${localePrefix}/auth/signin?callbackUrl=${encodeURIComponent(pathWithoutLocale)}`,
+					req.url,
+				),
 			);
 		}
 	}
@@ -60,7 +72,10 @@ export default auth((req) => {
 	if (pathWithoutLocale.startsWith("/dashboard")) {
 		if (!req.auth?.user) {
 			return NextResponse.redirect(
-				new URL(`${localePrefix}/auth/signin`, req.url),
+				new URL(
+					`${localePrefix}/auth/signin?callbackUrl=${encodeURIComponent(pathWithoutLocale)}`,
+					req.url,
+				),
 			);
 		}
 	}

@@ -95,6 +95,7 @@ model User {
   image             String?
   role              UserRole      @default(USER)
   privacyAcceptedAt DateTime?
+  preferredLanguage String        @default("en")
   companyId         String?
   company           Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)
   accounts          Account[]

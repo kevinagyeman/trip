@@ -4755,6 +4755,7 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole | null
     privacyAcceptedAt: Date | null
+    preferredLanguage: string | null
     companyId: string | null
   }
 
@@ -4767,6 +4768,7 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole | null
     privacyAcceptedAt: Date | null
+    preferredLanguage: string | null
     companyId: string | null
   }
 
@@ -4779,6 +4781,7 @@ export namespace Prisma {
     image: number
     role: number
     privacyAcceptedAt: number
+    preferredLanguage: number
     companyId: number
     _all: number
   }
@@ -4793,6 +4796,7 @@ export namespace Prisma {
     image?: true
     role?: true
     privacyAcceptedAt?: true
+    preferredLanguage?: true
     companyId?: true
   }
 
@@ -4805,6 +4809,7 @@ export namespace Prisma {
     image?: true
     role?: true
     privacyAcceptedAt?: true
+    preferredLanguage?: true
     companyId?: true
   }
 
@@ -4817,6 +4822,7 @@ export namespace Prisma {
     image?: true
     role?: true
     privacyAcceptedAt?: true
+    preferredLanguage?: true
     companyId?: true
     _all?: true
   }
@@ -4902,6 +4908,7 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole
     privacyAcceptedAt: Date | null
+    preferredLanguage: string
     companyId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -4931,6 +4938,7 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     privacyAcceptedAt?: boolean
+    preferredLanguage?: boolean
     companyId?: boolean
     company?: boolean | User$companyArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -4951,10 +4959,11 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     privacyAcceptedAt?: boolean
+    preferredLanguage?: boolean
     companyId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "password" | "image" | "role" | "privacyAcceptedAt" | "companyId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "password" | "image" | "role" | "privacyAcceptedAt" | "preferredLanguage" | "companyId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     company?: boolean | User$companyArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -4982,6 +4991,7 @@ export namespace Prisma {
       image: string | null
       role: $Enums.UserRole
       privacyAcceptedAt: Date | null
+      preferredLanguage: string
       companyId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -5365,6 +5375,7 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly privacyAcceptedAt: FieldRef<"User", 'DateTime'>
+    readonly preferredLanguage: FieldRef<"User", 'String'>
     readonly companyId: FieldRef<"User", 'String'>
   }
     
@@ -10924,6 +10935,7 @@ export namespace Prisma {
     image: 'image',
     role: 'role',
     privacyAcceptedAt: 'privacyAcceptedAt',
+    preferredLanguage: 'preferredLanguage',
     companyId: 'companyId'
   };
 
@@ -11074,6 +11086,7 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     image: 'image',
+    preferredLanguage: 'preferredLanguage',
     companyId: 'companyId'
   };
 
@@ -11468,6 +11481,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    preferredLanguage?: StringFilter<"User"> | string
     companyId?: StringNullableFilter<"User"> | string | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     accounts?: AccountListRelationFilter
@@ -11485,6 +11499,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     role?: SortOrder
     privacyAcceptedAt?: SortOrderInput | SortOrder
+    preferredLanguage?: SortOrder
     companyId?: SortOrderInput | SortOrder
     company?: CompanyOrderByWithRelationInput
     accounts?: AccountOrderByRelationAggregateInput
@@ -11506,6 +11521,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    preferredLanguage?: StringFilter<"User"> | string
     companyId?: StringNullableFilter<"User"> | string | null
     company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     accounts?: AccountListRelationFilter
@@ -11523,6 +11539,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     role?: SortOrder
     privacyAcceptedAt?: SortOrderInput | SortOrder
+    preferredLanguage?: SortOrder
     companyId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -11541,6 +11558,7 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     privacyAcceptedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    preferredLanguage?: StringWithAggregatesFilter<"User"> | string
     companyId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
@@ -12244,6 +12262,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -12260,6 +12279,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -12276,6 +12296,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -12292,6 +12313,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -12308,6 +12330,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
   }
 
@@ -12320,6 +12343,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -12331,6 +12355,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -13177,6 +13202,7 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     privacyAcceptedAt?: SortOrder
+    preferredLanguage?: SortOrder
     companyId?: SortOrder
   }
 
@@ -13189,6 +13215,7 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     privacyAcceptedAt?: SortOrder
+    preferredLanguage?: SortOrder
     companyId?: SortOrder
   }
 
@@ -13201,6 +13228,7 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     privacyAcceptedAt?: SortOrder
+    preferredLanguage?: SortOrder
     companyId?: SortOrder
   }
 
@@ -14437,6 +14465,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14452,6 +14481,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14562,6 +14592,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     privacyAcceptedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    preferredLanguage?: StringFilter<"User"> | string
     companyId?: StringNullableFilter<"User"> | string | null
   }
 
@@ -14620,6 +14651,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     company?: CompanyCreateNestedOneWithoutUsersInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14635,6 +14667,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14666,6 +14699,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -14681,6 +14715,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -14696,6 +14731,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
@@ -14711,6 +14747,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
@@ -14742,6 +14779,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -14757,6 +14795,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -15131,6 +15170,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -15146,6 +15186,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -15280,6 +15321,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -15295,6 +15337,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -15583,6 +15626,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     company?: CompanyCreateNestedOneWithoutUsersInput
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -15598,6 +15642,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
     companyId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -15695,6 +15740,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     company?: CompanyUpdateOneWithoutUsersNestedInput
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -15710,6 +15756,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -15725,6 +15772,7 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
   }
 
   export type TripRequestCreateManyCompanyInput = {
@@ -15762,6 +15810,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
@@ -15777,6 +15826,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
@@ -15792,6 +15842,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
   }
 
   export type TripRequestUpdateWithoutCompanyInput = {

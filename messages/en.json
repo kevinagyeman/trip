@@ -482,7 +482,12 @@
 		"bookingLinkTitle": "Booking Link",
 		"bookingLinkDesc": "Share this link with your customers so they can book a trip.",
 		"copyLink": "Copy",
-		"copied": "Copied!"
+		"copied": "Copied!",
+		"languageTitle": "Notification Language",
+		"languageNotice": "Choose the language for email notifications you receive.",
+		"preferredLanguage": "Preferred language",
+		"languageUpdated": "Language preference saved.",
+		"changeLanguageButton": "Save Language"
 	},
 	"superAdmin": {
 		"title": "Super Admin Dashboard",

@@ -482,7 +482,12 @@
 		"bookingLinkTitle": "Link di Prenotazione",
 		"bookingLinkDesc": "Condividi questo link con i tuoi clienti per ricevere prenotazioni.",
 		"copyLink": "Copia",
-		"copied": "Copiato!"
+		"copied": "Copiato!",
+		"languageTitle": "Lingua Notifiche",
+		"languageNotice": "Scegli la lingua per le email di notifica che ricevi.",
+		"preferredLanguage": "Lingua preferita",
+		"languageUpdated": "Preferenza di lingua salvata.",
+		"changeLanguageButton": "Salva Lingua"
 	},
 	"superAdmin": {
 		"title": "Super Admin Dashboard",

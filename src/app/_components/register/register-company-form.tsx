@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
@@ -23,6 +23,7 @@ import { COUNTRIES } from "@/lib/countries";
 
 export function RegisterCompanyForm() {
 	const t = useTranslations("registerCompany");
+	const locale = useLocale();
 	const [serverError, setServerError] = useState("");
 	const [success, setSuccess] = useState(false);
 	const [registeredEmail, setRegisteredEmail] = useState("");
@@ -41,7 +42,7 @@ export function RegisterCompanyForm() {
 			const response = await fetch("/api/auth/register-company", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(values),
+				body: JSON.stringify({ ...values, locale }),
 			});
 			const data = await response.json();
 			if (!response.ok) {

@@ -1,5 +1,5 @@
 import { GenericEmail } from "@/emails/generic-email";
-import { APP_URL, resolveAdminEmails, sendEmail } from "@/server/email";
+import { APP_URL, resolveAdminUsers, sendEmail } from "@/server/email";
 import { createElement } from "react";
 
 function order(orderNumber: number) {
@@ -24,6 +24,22 @@ type CustomerTarget = TripRequestBase & {
 };
 
 // ─── Translations ──────────────────────────────────────────────────────────────
+
+const ADMIN_TRANSLATIONS = {
+	en: {
+		subject: (o: string, name: string) => `New activity on ${o} — ${name}`,
+		button: "View Request",
+	},
+	it: {
+		subject: (o: string, name: string) => `Nuova attività su ${o} — ${name}`,
+		button: "Visualizza",
+	},
+} as const;
+
+function adminTr(language: string | null | undefined) {
+	const lang = (language ?? "en") as keyof typeof ADMIN_TRANSLATIONS;
+	return ADMIN_TRANSLATIONS[lang] ?? ADMIN_TRANSLATIONS.en;
+}
 
 const TRANSLATIONS = {
 	en: {
@@ -59,6 +75,14 @@ const TRANSLATIONS = {
 				`Dear ${firstName}, your trip is confirmed!`,
 			subtitle: "The operator has confirmed your booking.",
 			button: "View Details",
+		},
+		newMessage: {
+			subject: (o: string) => `New message on your request ${o}`,
+			preview: "You have a new message",
+			title: (firstName: string) =>
+				`Dear ${firstName}, the operator sent you a new message.`,
+			subtitle: "Log in to your request to read it and reply.",
+			button: "View Request",
 		},
 	},
 	it: {
@@ -98,6 +122,14 @@ const TRANSLATIONS = {
 			subtitle: "L'operatore ha confermato la tua prenotazione.",
 			button: "Visualizza Dettagli",
 		},
+		newMessage: {
+			subject: (o: string) => `Nuovo messaggio sulla tua richiesta ${o}`,
+			preview: "Hai un nuovo messaggio",
+			title: (firstName: string) =>
+				`Gentile ${firstName}, l'operatore ti ha inviato un nuovo messaggio.`,
+			subtitle: "Accedi alla tua richiesta per leggerlo e rispondere.",
+			button: "Visualizza Richiesta",
+		},
 	},
 } as const;
 
@@ -110,44 +142,53 @@ function tr(language: string | null | undefined) {
 
 async function notifyAdmins(
 	companyId: string | null,
-	subject: string,
-	data: {
-		preview: string;
-		title: string;
-		subtitle?: string;
-		buttonLabel: string;
+	buildEmail: (lang: string) => {
+		subject: string;
+		data: {
+			preview: string;
+			title: string;
+			subtitle?: string;
+			buttonLabel: string;
+		};
 	},
 	href: string,
 ) {
-	const emails = await resolveAdminEmails(companyId);
+	const users = await resolveAdminUsers(companyId);
 	await Promise.all(
-		emails.map((to) =>
-			sendEmail({
+		users.map(({ email: to, preferredLanguage }) => {
+			const { subject, data } = buildEmail(preferredLanguage);
+			return sendEmail({
 				to,
 				subject,
 				react: createElement(GenericEmail, { data, href }),
-			}),
-		),
+			});
+		}),
 	);
 }
 
-// ─── Trip Request ─────────────────────────────────────────────────────────────
+// ─── Admin notifications (generic) ────────────────────────────────────────────
 
-export async function sendNewTripRequestToAdmins(t: AdminTarget) {
+async function notifyAdminsGeneric(t: AdminTarget) {
 	const o = order(t.orderNumber);
 	const name = `${t.firstName} ${t.lastName}`;
 	await notifyAdmins(
 		t.companyId,
-		`${o} - NEW TRIP REQUEST | ${name}`,
-		{
-			preview: "View request",
-			title: `New trip request from ${name} — ${o}`,
-			subtitle: "A new request has been submitted and is awaiting your review.",
-			buttonLabel: "View Request",
+		(lang) => {
+			const c = adminTr(lang);
+			const subject = c.subject(o, name);
+			return {
+				subject,
+				data: { preview: subject, title: subject, buttonLabel: c.button },
+			};
 		},
 		`${APP_URL}/admin/requests/${t.id}`,
 	);
 }
+
+export const sendNewTripRequestToAdmins = notifyAdminsGeneric;
+export const sendPickupDetailsToAdmins = notifyAdminsGeneric;
+export const sendQuotationAcceptedToAdmins = notifyAdminsGeneric;
+export const sendQuotationRejectedToAdmins = notifyAdminsGeneric;
 
 export async function sendRequestReceivedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
@@ -187,22 +228,6 @@ export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 	});
 }
 
-export async function sendPickupDetailsToAdmins(t: AdminTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	await notifyAdmins(
-		t.companyId,
-		`${o} - PICKUP DETAILS READY | ${name}`,
-		{
-			preview: "View request",
-			title: `${name} added pickup details`,
-			subtitle: `Order ${o} — ready to confirm`,
-			buttonLabel: "View Request",
-		},
-		`${APP_URL}/admin/requests/${t.id}`,
-	);
-}
-
 export async function sendRequestDetailsToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
 	const name = `${t.firstName} ${t.lastName}`;
@@ -221,6 +246,28 @@ export async function sendRequestDetailsToCustomer(t: CustomerTarget) {
 		}),
 	});
 }
+
+// ─── Messages ─────────────────────────────────────────────────────────────────
+
+export async function sendAdminMessageToCustomer(t: CustomerTarget) {
+	const o = order(t.orderNumber);
+	const c = tr(t.language).newMessage;
+	await sendEmail({
+		to: t.customerEmail,
+		subject: c.subject(o),
+		react: createElement(GenericEmail, {
+			data: {
+				preview: c.preview,
+				title: c.title(t.firstName),
+				subtitle: c.subtitle,
+				buttonLabel: c.button,
+			},
+			href: `${APP_URL}/request/${t.token}`,
+		}),
+	});
+}
+
+export const sendCustomerMessageToAdmins = notifyAdminsGeneric;
 
 // ─── Quotation ────────────────────────────────────────────────────────────────
 
@@ -241,35 +288,4 @@ export async function sendQuotationToCustomer(t: CustomerTarget) {
 			href: `${APP_URL}/request/${t.token}`,
 		}),
 	});
-}
-
-export async function sendQuotationAcceptedToAdmins(t: AdminTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	await notifyAdmins(
-		t.companyId,
-		`${o} - QUOTATION ACCEPTED | ${name}`,
-		{
-			preview: "View request",
-			title: `${name} accepted the quotation for request ${o}.`,
-			buttonLabel: "View Request",
-		},
-		`${APP_URL}/admin/requests/${t.id}`,
-	);
-}
-
-export async function sendQuotationRejectedToAdmins(t: AdminTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	await notifyAdmins(
-		t.companyId,
-		`${o} - QUOTATION REJECTED | ${name}`,
-		{
-			preview: "View request",
-			title: `${name} rejected the quotation for request ${o}.`,
-			subtitle: "You can revise the quotation and resend it.",
-			buttonLabel: "View Request",
-		},
-		`${APP_URL}/admin/requests/${t.id}`,
-	);
 }

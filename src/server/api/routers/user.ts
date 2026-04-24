@@ -46,6 +46,15 @@ export const userRouter = createTRPCRouter({
 			});
 		}),
 
+	changeLanguage: adminProcedure
+		.input(z.object({ language: z.enum(["en", "it"]) }))
+		.mutation(async ({ ctx, input }) => {
+			await ctx.db.user.update({
+				where: { id: ctx.session.user.id },
+				data: { preferredLanguage: input.language },
+			});
+		}),
+
 	changeEmail: adminProcedure
 		.input(
 			z.object({

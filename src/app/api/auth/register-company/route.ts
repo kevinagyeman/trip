@@ -31,6 +31,11 @@ export async function POST(request: Request) {
 			password,
 		} = parsed.data;
 
+		const locale =
+			typeof body.locale === "string" && ["en", "it"].includes(body.locale)
+				? body.locale
+				: "en";
+
 		// Check slug uniqueness
 		const existingCompany = await db.company.findUnique({ where: { slug } });
 		if (existingCompany) {
@@ -74,6 +79,7 @@ export async function POST(request: Request) {
 				companyId: company.id,
 				emailVerified: null,
 				privacyAcceptedAt: new Date(),
+				preferredLanguage: locale,
 			},
 		});
 

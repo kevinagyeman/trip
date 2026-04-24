@@ -3,6 +3,10 @@ import {
 	createTRPCRouter,
 	publicProcedure,
 } from "@/server/api/trpc";
+import {
+	sendAdminMessageToCustomer,
+	sendCustomerMessageToAdmins,
+} from "@/server/emails/trip-emails";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { MessageSenderType } from "../../../../generated/prisma";
@@ -53,7 +57,7 @@ export const tripMessageRouter = createTRPCRouter({
 			});
 			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
 
-			return ctx.db.tripMessage.create({
+			const message = await ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
 					senderType: MessageSenderType.CUSTOMER,
@@ -61,6 +65,16 @@ export const tripMessageRouter = createTRPCRouter({
 					tripRequestId: request.id,
 				},
 			});
+
+			void sendCustomerMessageToAdmins({
+				id: request.id,
+				companyId: request.companyId,
+				firstName: request.firstName,
+				lastName: request.lastName,
+				orderNumber: request.orderNumber,
+			});
+
+			return message;
 		}),
 
 	// ADMIN: Admin sends a message
@@ -71,7 +85,16 @@ export const tripMessageRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const request = await ctx.db.tripRequest.findUnique({
 				where: { id: input.requestId },
-				select: { id: true, companyId: true, firstName: true, lastName: true },
+				select: {
+					id: true,
+					companyId: true,
+					firstName: true,
+					lastName: true,
+					orderNumber: true,
+					customerEmail: true,
+					language: true,
+					token: true,
+				},
 			});
 			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
 			const { companyId } = ctx.session.user;
@@ -82,7 +105,7 @@ export const tripMessageRouter = createTRPCRouter({
 			const adminName =
 				ctx.session.user.name ?? ctx.session.user.email ?? "Admin";
 
-			return ctx.db.tripMessage.create({
+			const message = await ctx.db.tripMessage.create({
 				data: {
 					body: input.body,
 					senderType: MessageSenderType.ADMIN,
@@ -90,5 +113,16 @@ export const tripMessageRouter = createTRPCRouter({
 					tripRequestId: input.requestId,
 				},
 			});
+
+			void sendAdminMessageToCustomer({
+				customerEmail: request.customerEmail,
+				language: request.language,
+				token: request.token,
+				firstName: request.firstName,
+				lastName: request.lastName,
+				orderNumber: request.orderNumber,
+			});
+
+			return message;
 		}),
 });

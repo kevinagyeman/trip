@@ -19,17 +19,24 @@ export const APP_URL = env.APP_URL ?? "http://localhost:3000";
 export async function resolveAdminEmails(
 	companyId: string | null | undefined,
 ): Promise<string[]> {
+	const users = await resolveAdminUsers(companyId);
+	return users.map((u) => u.email);
+}
+
+export async function resolveAdminUsers(
+	companyId: string | null | undefined,
+): Promise<{ email: string; preferredLanguage: string }[]> {
 	if (companyId) {
 		const adminUsers = await db.user.findMany({
 			where: { companyId, role: "ADMIN" },
-			select: { email: true },
+			select: { email: true, preferredLanguage: true },
 		});
-		const emails = adminUsers
-			.map((u) => u.email)
-			.filter((e): e is string => !!e);
-		if (emails.length > 0) return emails;
+		const users = adminUsers.filter(
+			(u): u is { email: string; preferredLanguage: string } => !!u.email,
+		);
+		if (users.length > 0) return users;
 	}
-	return ADMIN_EMAIL ? [ADMIN_EMAIL] : [];
+	return ADMIN_EMAIL ? [{ email: ADMIN_EMAIL, preferredLanguage: "en" }] : [];
 }
 
 export async function sendEmail({

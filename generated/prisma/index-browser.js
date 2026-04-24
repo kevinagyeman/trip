@@ -167,6 +167,7 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   role: 'role',
   privacyAcceptedAt: 'privacyAcceptedAt',
+  preferredLanguage: 'preferredLanguage',
   companyId: 'companyId'
 };
 
@@ -284,6 +285,7 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   email: 'email',
   password: 'password',
   image: 'image',
+  preferredLanguage: 'preferredLanguage',
   companyId: 'companyId'
 };
 

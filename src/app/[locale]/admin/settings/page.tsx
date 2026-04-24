@@ -6,6 +6,7 @@ import { env } from "@/env";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
+import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
 import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 
 export default async function AdminSettingsPage({
@@ -25,6 +26,11 @@ export default async function AdminSettingsPage({
 
 	const t = await getTranslations("settings");
 
+	const dbUser = await db.user.findUnique({
+		where: { id: session.user.id },
+		select: { preferredLanguage: true },
+	});
+
 	const companySlug = session.user.companyId
 		? (
 				await db.company.findUnique({
@@ -41,6 +47,16 @@ export default async function AdminSettingsPage({
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}
+				<Card>
+					<CardHeader>
+						<CardTitle>{t("languageTitle")}</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<ChangeLanguageForm
+							currentLanguage={dbUser?.preferredLanguage ?? "en"}
+						/>
+					</CardContent>
+				</Card>
 				<Card>
 					<CardHeader>
 						<CardTitle>{t("changeEmailTitle")}</CardTitle>
