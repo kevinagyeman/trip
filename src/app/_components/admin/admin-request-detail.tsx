@@ -101,6 +101,11 @@ import {
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
 
+const DEPARTURE_REQUEST_MESSAGES: Record<string, string> = {
+	en: "Hi, could you please provide your departure date, time, and flight number (if applicable)? We need these details to confirm your booking.",
+	it: "Ciao, potresti fornirci la data di partenza, l'orario e il numero di volo (se applicabile)? Abbiamo bisogno di questi dettagli per confermare la tua prenotazione.",
+};
+
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
@@ -150,9 +155,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	const requestDetails = api.tripRequest.requestDetails.useMutation();
-
 	const [confirmOpen, setConfirmOpen] = useState(false);
+	const [prefillMessage, setPrefillMessage] = useState("");
+	const [prefillTrigger, setPrefillTrigger] = useState(0);
 
 	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
 		onSuccess: async () => {
@@ -578,22 +583,18 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												<Button onClick={() => setConfirmOpen(true)}>
 													{t("confirmTrip")}
 												</Button>
-												<div className="flex flex-col gap-0.5">
-													<Button
-														variant="outline"
-														disabled={requestDetails.isPending}
-														onClick={() =>
-															requestDetails.mutate({ id: requestId })
-														}
-													>
-														{requestDetails.isPending
-															? t("sending")
-															: t("requestDetails")}
-													</Button>
-													<p className="text-xs text-muted-foreground">
-														{t("requestDetailsHint")}
-													</p>
-												</div>
+												<Button
+													variant="outline"
+													onClick={() => {
+														setPrefillMessage(
+															DEPARTURE_REQUEST_MESSAGES[request.language] ??
+																DEPARTURE_REQUEST_MESSAGES.en!,
+														);
+														setPrefillTrigger((n) => n + 1);
+													}}
+												>
+													{t("requestDetails")}
+												</Button>
 											</div>
 										)}
 
@@ -648,7 +649,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			{/* Message Thread */}
 			<Card>
 				<CardContent>
-					<TripMessageThread mode="admin" requestId={requestId} />
+					<TripMessageThread
+						mode="admin"
+						requestId={requestId}
+						prefillMessage={prefillMessage}
+						prefillTrigger={prefillTrigger}
+					/>
 				</CardContent>
 			</Card>
 		</div>

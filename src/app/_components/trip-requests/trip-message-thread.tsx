@@ -11,8 +11,18 @@ import { cn } from "@/lib/utils";
 import { MessageSenderType } from "../../../../generated/prisma";
 
 type Props =
-	| { mode: "customer"; token: string }
-	| { mode: "admin"; requestId: string };
+	| {
+			mode: "customer";
+			token: string;
+			prefillMessage?: never;
+			prefillTrigger?: never;
+	  }
+	| {
+			mode: "admin";
+			requestId: string;
+			prefillMessage?: string;
+			prefillTrigger?: number;
+	  };
 
 export function TripMessageThread(props: Props) {
 	const t = useTranslations("messages");
@@ -21,6 +31,7 @@ export function TripMessageThread(props: Props) {
 	const utils = api.useUtils();
 	const [body, setBody] = useState("");
 	const bottomRef = useRef<HTMLDivElement>(null);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const token = props.mode === "customer" ? props.token : "";
 	const requestId = props.mode === "admin" ? props.requestId : "";
@@ -70,6 +81,18 @@ export function TripMessageThread(props: Props) {
 	useEffect(() => {
 		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 	}, [messages.data?.length]);
+
+	// Prefill textarea when requested
+	useEffect(() => {
+		if (props.prefillMessage) {
+			setBody(props.prefillMessage);
+			textareaRef.current?.focus();
+			textareaRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}
+	}, [props.prefillTrigger]);
 
 	const data = messages.data ?? [];
 
@@ -125,6 +148,7 @@ export function TripMessageThread(props: Props) {
 			{/* Compose */}
 			<div className="flex gap-2">
 				<Textarea
+					ref={textareaRef}
 					value={body}
 					onChange={(e) => setBody(e.target.value)}
 					placeholder={t("placeholder")}

@@ -7,7 +7,6 @@ import {
 import {
 	sendNewTripRequestToAdmins,
 	sendPickupDetailsToAdmins,
-	sendRequestDetailsToCustomer,
 	sendRequestReceivedToCustomer,
 	sendTripConfirmedToCustomer,
 } from "@/server/emails/trip-emails";
@@ -500,39 +499,6 @@ export const tripRequestRouter = createTRPCRouter({
 			await ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { routes: JSON.stringify(input.routes) },
-			});
-		}),
-
-	// ADMIN: Request customer to fill in missing departure details
-	requestDetails: adminProcedure
-		.input(z.object({ id: z.string() }))
-		.mutation(async ({ ctx, input }) => {
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { id: input.id },
-				select: {
-					token: true,
-					firstName: true,
-					lastName: true,
-					customerEmail: true,
-					orderNumber: true,
-					language: true,
-					companyId: true,
-				},
-			});
-
-			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
-
-			await sendRequestDetailsToCustomer({
-				customerEmail: tripRequest.customerEmail,
-				firstName: tripRequest.firstName,
-				lastName: tripRequest.lastName,
-				orderNumber: tripRequest.orderNumber,
-				token: tripRequest.token,
-				language: tripRequest.language,
 			});
 		}),
 

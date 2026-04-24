@@ -51,15 +51,7 @@ const TRANSLATIONS = {
 			subtitle: "We'll notify you as soon as a quotation is ready.",
 			button: "View Request",
 		},
-		requestDetails: {
-			subject: (o: string, name: string) => `${o} - Action required | ${name}`,
-			preview: "Complete your trip details",
-			title: (firstName: string) =>
-				`Dear ${firstName}, please complete your departure details.`,
-			subtitle:
-				"Your quotation has been accepted. To finalise your booking, please fill in the departure date, time.",
-			button: "Complete Details",
-		},
+
 		quotationReady: {
 			subject: (o: string, name: string) => `${o} - Quotation ready | ${name}`,
 			preview: "View quotation",
@@ -95,15 +87,7 @@ const TRANSLATIONS = {
 			subtitle: "Ti avviseremo non appena sarà pronto un preventivo.",
 			button: "Visualizza Richiesta",
 		},
-		requestDetails: {
-			subject: (o: string, name: string) => `${o} - Azione richiesta | ${name}`,
-			preview: "Completa i dettagli del viaggio",
-			title: (firstName: string) =>
-				`Gentile ${firstName}, completa i dettagli di partenza.`,
-			subtitle:
-				"Il tuo preventivo è stato accettato. Per finalizzare la prenotazione, inserisci la data e l'ora di partenza.",
-			button: "Completa i Dettagli",
-		},
+
 		quotationReady: {
 			subject: (o: string, name: string) =>
 				`${o} - Preventivo pronto | ${name}`,
@@ -213,25 +197,6 @@ export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
 	const name = `${t.firstName} ${t.lastName}`;
 	const c = tr(t.language).tripConfirmed;
-	await sendEmail({
-		to: t.customerEmail,
-		subject: c.subject(o, name),
-		react: createElement(GenericEmail, {
-			data: {
-				preview: c.preview,
-				title: c.title(t.firstName),
-				subtitle: c.subtitle,
-				buttonLabel: c.button,
-			},
-			href: `${APP_URL}/request/${t.token}`,
-		}),
-	});
-}
-
-export async function sendRequestDetailsToCustomer(t: CustomerTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	const c = tr(t.language).requestDetails;
 	await sendEmail({
 		to: t.customerEmail,
 		subject: c.subject(o, name),
