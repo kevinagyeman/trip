@@ -1,6 +1,11 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
+import { CredentialsSignin } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+class VerifyEmailError extends CredentialsSignin {
+	code = "verify_email";
+}
 import bcrypt from "bcryptjs";
 import type { UserRole } from "../../../generated/prisma";
 
@@ -62,6 +67,10 @@ export const authConfig = {
 
 				if (!isPasswordValid) {
 					return null;
+				}
+
+				if (!user.emailVerified) {
+					throw new VerifyEmailError();
 				}
 
 				return {

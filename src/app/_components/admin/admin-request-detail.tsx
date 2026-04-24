@@ -1,5 +1,6 @@
 "use client";
 
+import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import {
 	Select,
 	SelectContent,
@@ -510,7 +510,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					<div className="space-y-4">
 						<h2 className="text-xl font-bold">{t("quotation")}</h2>
 						<Card>
-							<CardContent className="space-y-4 pt-6">
+							<CardContent className="space-y-4">
 								{isAccepted ? (
 									<>
 										<div className="flex items-start justify-between">
@@ -606,7 +606,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Message Thread */}
 			<Card>
-				<CardContent className="pt-6">
+				<CardContent>
 					<TripMessageThread mode="admin" requestId={requestId} />
 				</CardContent>
 			</Card>

@@ -39,7 +39,7 @@ function ResetPasswordForm() {
 			setError(t("passwordMismatch"));
 			return;
 		}
-		if (password.length < 6) {
+		if (password.length < 8) {
 			setError(t("passwordTooShort"));
 			return;
 		}

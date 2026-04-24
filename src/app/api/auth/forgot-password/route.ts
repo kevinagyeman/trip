@@ -52,7 +52,7 @@ export async function POST(request: Request) {
 
 		await sendEmail({
 			to: email,
-			subject: "RESET YOUR PASSWORD",
+			subject: "Reset your password",
 			react: createElement(GenericEmail, {
 				data: {
 					preview: "Reset your password",
