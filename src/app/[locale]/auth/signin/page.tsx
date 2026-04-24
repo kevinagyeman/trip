@@ -2,13 +2,7 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,83 +55,73 @@ function SignInForm() {
 	};
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center">
-			<Card className="w-full max-w-md">
-				<CardHeader className="space-y-1">
-					<CardTitle className="text-center text-2xl font-bold">
-						{t("welcomeBack")}
-					</CardTitle>
-					<CardDescription className="text-center">
+		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center p-4">
+			<div className="w-full max-w-sm">
+				<div className="mb-8">
+					<h1 className="text-2xl font-bold">{t("welcomeBack")}</h1>
+					<p className="mt-1 text-sm text-muted-foreground">
 						{t("signInSubtitle")}
-					</CardDescription>
-				</CardHeader>
-				<CardContent>
-					{verified && (
-						<div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
-							<p className="text-sm text-green-800">{t("emailVerified")}</p>
+					</p>
+				</div>
+
+				{verified && (
+					<div className="mb-4 rounded-md border border-green-200 bg-green-50 p-3">
+						<p className="text-sm text-green-800">{t("emailVerified")}</p>
+					</div>
+				)}
+				{registered && (
+					<div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
+						<p className="text-sm text-blue-800">{t("registrationSuccess")}</p>
+					</div>
+				)}
+
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+					<CustomInput
+						labelText={t("email")}
+						inputType="email"
+						placeholder="your@email.com"
+						error={errors.email?.message}
+						inputProps={{ ...register("email"), disabled: isSubmitting }}
+					/>
+
+					<CustomInput
+						labelText={t("password")}
+						inputType="password"
+						placeholder="Password"
+						error={errors.password?.message}
+						inputProps={{ ...register("password"), disabled: isSubmitting }}
+					/>
+
+					{serverError && (
+						<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+							{serverError}
 						</div>
 					)}
-					{registered && (
-						<div className="mb-4 rounded-md border border-blue-200 bg-blue-50 p-3">
-							<p className="text-sm text-blue-800">
-								{t("registrationSuccess")}
-							</p>
-						</div>
-					)}
 
-					<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-						<CustomInput
-							labelText={t("email")}
-							inputType="email"
-							placeholder="your@email.com"
-							error={errors.email?.message}
-							inputProps={{ ...register("email"), disabled: isSubmitting }}
-						/>
-
-						<CustomInput
-							labelText={t("password")}
-							inputType="password"
-							placeholder="Password"
-							error={errors.password?.message}
-							inputProps={{ ...register("password"), disabled: isSubmitting }}
-						/>
-
-						{serverError && (
-							<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-								{serverError}
-							</div>
-						)}
-
-						<LoadingButton
-							type="submit"
-							className="w-full"
-							isLoading={isSubmitting}
+					<LoadingButton
+						type="submit"
+						className="w-full"
+						isLoading={isSubmitting}
+					>
+						{t("signIn")}
+					</LoadingButton>
+					<div className="text-center text-sm">
+						<Link
+							href="/auth/forgot-password"
+							className="text-muted-foreground hover:underline"
 						>
-							{t("signIn")}
-						</LoadingButton>
-						<div className="text-center text-sm">
-							<Link
-								href="/auth/forgot-password"
-								className="text-muted-foreground hover:underline"
-							>
-								{t("forgotPasswordLink")}
-							</Link>
-						</div>
+							{t("forgotPasswordLink")}
+						</Link>
+					</div>
 
-						<div className="text-center text-sm">
-							<span className="text-muted-foreground">
-								{t("isYourCompany")}{" "}
-							</span>
-							<Link
-								href="/register-company"
-								className="text-blue-600 hover:underline"
-							>
-								{t("registerCompanyLink")}
-							</Link>
-						</div>
-					</form>
-				</CardContent>
-			</Card>
+					<div className="rounded-lg border p-4 text-center text-sm">
+						<p className="mb-2 text-muted-foreground">{t("isYourCompany")}</p>
+						<Button variant="outline" className="w-full" type="button" asChild>
+							<Link href="/register-company">{t("registerCompanyLink")}</Link>
+						</Button>
+					</div>
+				</form>
+			</div>
 		</div>
 	);
 }
