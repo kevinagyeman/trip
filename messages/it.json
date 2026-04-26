@@ -495,7 +495,9 @@
     "languageNotice": "Scegli la lingua per le email di notifica che ricevi.",
     "preferredLanguage": "Lingua preferita",
     "languageUpdated": "Preferenza di lingua salvata.",
-    "changeLanguageButton": "Salva Lingua"
+    "changeLanguageButton": "Salva Lingua",
+    "estimateNoticeTitle": "Avviso preventivo",
+    "estimateNoticeDesc": "Questo testo verrà pre-compilato nel campo Informazioni Aggiuntive quando si crea un nuovo preventivo. Puoi modificarlo per ogni preventivo prima di inviarlo."
   },
   "superAdmin": {
     "title": "Super Admin Dashboard",

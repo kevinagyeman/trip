@@ -40,6 +40,7 @@ type Props = {
 	requestId: string;
 	isRejected: boolean;
 	quotation: QuotationData | null | undefined;
+	estimateNotice?: string | null;
 	onSuccess: () => void;
 };
 
@@ -47,6 +48,7 @@ export function QuotationForm({
 	requestId,
 	isRejected,
 	quotation,
+	estimateNotice,
 	onSuccess,
 }: Props) {
 	const t = useTranslations("adminDetail");
@@ -62,7 +64,7 @@ export function QuotationForm({
 			price: undefined,
 			isPriceEachWay: false,
 			areCarSeatsIncluded: false,
-			additionalInfo: "",
+			additionalInfo: estimateNotice ?? "",
 			internalNotes: "",
 		},
 	});

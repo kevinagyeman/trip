@@ -8,6 +8,7 @@ import { ChangePasswordForm } from "@/app/_components/admin/change-password-form
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
 import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
+import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
 
 export default async function AdminSettingsPage({
 	params,
@@ -26,21 +27,25 @@ export default async function AdminSettingsPage({
 
 	const t = await getTranslations("settings");
 
-	const dbUser = await db.user.findUnique({
-		where: { id: session.user.id },
-		select: { preferredLanguage: true },
-	});
-
-	const companySlug = session.user.companyId
-		? (
-				await db.company.findUnique({
+	const [dbUser, company] = await Promise.all([
+		db.user.findUnique({
+			where: { id: session.user.id },
+			select: { preferredLanguage: true },
+		}),
+		session.user.companyId
+			? db.company.findUnique({
 					where: { id: session.user.companyId },
-					select: { slug: true },
+					select: {
+						slug: true,
+						estimateNotice: true,
+					},
 				})
-			)?.slug
-		: null;
+			: null,
+	]);
 
-	const bookingUrl = companySlug ? `${env.APP_URL}/book/${companySlug}` : null;
+	const bookingUrl = company?.slug
+		? `${env.APP_URL}/book/${company.slug}`
+		: null;
 
 	return (
 		<div className="container mx-auto px-4 py-8">
@@ -57,6 +62,19 @@ export default async function AdminSettingsPage({
 						/>
 					</CardContent>
 				</Card>
+				{company && (
+					<Card>
+						<CardHeader>
+							<CardTitle>{t("estimateNoticeTitle")}</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<EstimateNoticeForm
+								currentEn={company.estimateNoticeEn ?? ""}
+								currentIt={company.estimateNoticeIt ?? ""}
+							/>
+						</CardContent>
+					</Card>
+				)}
 				<Card>
 					<CardHeader>
 						<CardTitle>{t("changeEmailTitle")}</CardTitle>

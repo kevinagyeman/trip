@@ -55,6 +55,17 @@ export const userRouter = createTRPCRouter({
 			});
 		}),
 
+	updateEstimateNotice: adminProcedure
+		.input(z.object({ notices: z.record(z.string()) }))
+		.mutation(async ({ ctx, input }) => {
+			const { companyId } = ctx.session.user;
+			if (!companyId) throw new TRPCError({ code: "FORBIDDEN" });
+			await ctx.db.company.update({
+				where: { id: companyId },
+				data: { estimateNotice: JSON.stringify(input.notices) },
+			});
+		}),
+
 	changeEmail: adminProcedure
 		.input(
 			z.object({

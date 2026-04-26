@@ -495,7 +495,9 @@
     "languageNotice": "Choose the language for email notifications you receive.",
     "preferredLanguage": "Preferred language",
     "languageUpdated": "Language preference saved.",
-    "changeLanguageButton": "Save Language"
+    "changeLanguageButton": "Save Language",
+    "estimateNoticeTitle": "Estimate notice",
+    "estimateNoticeDesc": "This text will be pre-filled in the Additional Information field when creating a new quotation. You can edit it per-quotation before sending."
   },
   "superAdmin": {
     "title": "Super Admin Dashboard",

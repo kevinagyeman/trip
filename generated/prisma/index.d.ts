@@ -1734,6 +1734,7 @@ export namespace Prisma {
     address: string | null
     country: string | null
     website: string | null
+    estimateNotice: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1748,6 +1749,7 @@ export namespace Prisma {
     address: string | null
     country: string | null
     website: string | null
+    estimateNotice: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1762,6 +1764,7 @@ export namespace Prisma {
     address: number
     country: number
     website: number
+    estimateNotice: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1778,6 +1781,7 @@ export namespace Prisma {
     address?: true
     country?: true
     website?: true
+    estimateNotice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1792,6 +1796,7 @@ export namespace Prisma {
     address?: true
     country?: true
     website?: true
+    estimateNotice?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1806,6 +1811,7 @@ export namespace Prisma {
     address?: true
     country?: true
     website?: true
+    estimateNotice?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1893,6 +1899,7 @@ export namespace Prisma {
     address: string | null
     country: string | null
     website: string | null
+    estimateNotice: string | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -1924,6 +1931,7 @@ export namespace Prisma {
     address?: boolean
     country?: boolean
     website?: boolean
+    estimateNotice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -1943,11 +1951,12 @@ export namespace Prisma {
     address?: boolean
     country?: boolean
     website?: boolean
+    estimateNotice?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -1970,6 +1979,7 @@ export namespace Prisma {
       address: string | null
       country: string | null
       website: string | null
+      estimateNotice: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2352,6 +2362,7 @@ export namespace Prisma {
     readonly address: FieldRef<"Company", 'String'>
     readonly country: FieldRef<"Company", 'String'>
     readonly website: FieldRef<"Company", 'String'>
+    readonly estimateNotice: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -10890,6 +10901,7 @@ export namespace Prisma {
     address: 'address',
     country: 'country',
     website: 'website',
+    estimateNotice: 'estimateNotice',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11048,7 +11060,8 @@ export namespace Prisma {
     vat: 'vat',
     address: 'address',
     country: 'country',
-    website: 'website'
+    website: 'website',
+    estimateNotice: 'estimateNotice'
   };
 
   export type CompanyOrderByRelevanceFieldEnum = (typeof CompanyOrderByRelevanceFieldEnum)[keyof typeof CompanyOrderByRelevanceFieldEnum]
@@ -11243,6 +11256,7 @@ export namespace Prisma {
     address?: StringNullableFilter<"Company"> | string | null
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
+    estimateNotice?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -11259,6 +11273,7 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    estimateNotice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -11279,6 +11294,7 @@ export namespace Prisma {
     address?: StringNullableFilter<"Company"> | string | null
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
+    estimateNotice?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -11295,6 +11311,7 @@ export namespace Prisma {
     address?: SortOrderInput | SortOrder
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
+    estimateNotice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -11315,6 +11332,7 @@ export namespace Prisma {
     address?: StringNullableWithAggregatesFilter<"Company"> | string | null
     country?: StringNullableWithAggregatesFilter<"Company"> | string | null
     website?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    estimateNotice?: StringNullableWithAggregatesFilter<"Company"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -11998,6 +12016,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -12014,6 +12033,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -12030,6 +12050,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -12046,6 +12067,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12062,6 +12084,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12076,6 +12099,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12090,6 +12114,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12916,6 +12941,7 @@ export namespace Prisma {
     address?: SortOrder
     country?: SortOrder
     website?: SortOrder
+    estimateNotice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12930,6 +12956,7 @@ export namespace Prisma {
     address?: SortOrder
     country?: SortOrder
     website?: SortOrder
+    estimateNotice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12944,6 +12971,7 @@ export namespace Prisma {
     address?: SortOrder
     country?: SortOrder
     website?: SortOrder
+    estimateNotice?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14812,6 +14840,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -14827,6 +14856,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -15028,6 +15058,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -15043,6 +15074,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15208,6 +15240,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -15223,6 +15256,7 @@ export namespace Prisma {
     address?: string | null
     country?: string | null
     website?: string | null
+    estimateNotice?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -15365,6 +15399,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -15380,6 +15415,7 @@ export namespace Prisma {
     address?: NullableStringFieldUpdateOperationsInput | string | null
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
