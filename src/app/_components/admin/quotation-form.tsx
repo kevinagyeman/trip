@@ -8,6 +8,7 @@ import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -144,12 +145,20 @@ export function QuotationForm({
 			</div>
 
 			{/* Additional info */}
-			<CustomTextArea
-				labelText={t("additionalInfoCustomer")}
-				placeholder={t("additionalInfoPlaceholder")}
-				rows={4}
-				textAreaProps={{ ...register("additionalInfo") }}
-			/>
+			<div className="space-y-1">
+				<CustomTextArea
+					labelText={t("additionalInfoCustomer")}
+					placeholder={t("additionalInfoPlaceholder")}
+					rows={4}
+					textAreaProps={{ ...register("additionalInfo") }}
+				/>
+				<Link
+					href="/admin/settings"
+					className="text-xs text-muted-foreground hover:underline"
+				>
+					{t("editPrefilledMessage")}
+				</Link>
+			</div>
 
 			{/* Internal notes */}
 			<CustomTextArea

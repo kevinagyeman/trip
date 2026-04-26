@@ -435,7 +435,8 @@
     "actions": "Azioni",
     "name": "Nome",
     "estimateNotice": "Invia avviso preventivo",
-    "quickReplies": "Risposte rapide"
+    "quickReplies": "Risposte rapide",
+    "editPrefilledMessage": "Modifica il messaggio precompilato"
   },
   "notFound": {
     "heading": "Pagina Non Trovata",

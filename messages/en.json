@@ -435,7 +435,8 @@
     "actions": "Actions",
     "name": "Name",
     "estimateNotice": "Send estimate notice",
-    "quickReplies": "Quick replies"
+    "quickReplies": "Quick replies",
+    "editPrefilledMessage": "Edit the prefilled message"
   },
   "notFound": {
     "heading": "Page Not Found",

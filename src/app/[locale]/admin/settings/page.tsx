@@ -35,10 +35,7 @@ export default async function AdminSettingsPage({
 		session.user.companyId
 			? db.company.findUnique({
 					where: { id: session.user.companyId },
-					select: {
-						slug: true,
-						estimateNotice: true,
-					},
+					select: { slug: true, estimateNotice: true },
 				})
 			: null,
 	]);
@@ -68,10 +65,7 @@ export default async function AdminSettingsPage({
 							<CardTitle>{t("estimateNoticeTitle")}</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<EstimateNoticeForm
-								currentEn={company.estimateNoticeEn ?? ""}
-								currentIt={company.estimateNoticeIt ?? ""}
-							/>
+							<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
 						</CardContent>
 					</Card>
 				)}
