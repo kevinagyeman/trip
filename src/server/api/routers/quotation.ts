@@ -175,6 +175,7 @@ export const quotationRouter = createTRPCRouter({
 				orderNumber: tripRequest.orderNumber,
 				token: tripRequest.token,
 				language: tripRequest.language,
+				companyId: tripRequest.companyId,
 			});
 
 			return quotation;
@@ -241,6 +242,7 @@ export const quotationRouter = createTRPCRouter({
 				orderNumber: quotation.tripRequest.orderNumber,
 				token: quotation.tripRequest.token,
 				language: quotation.tripRequest.language,
+				companyId: quotation.tripRequest.companyId,
 			});
 
 			return updated;

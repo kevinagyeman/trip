@@ -1,5 +1,10 @@
 import { GenericEmail } from "@/emails/generic-email";
-import { APP_URL, resolveAdminUsers, sendEmail } from "@/server/email";
+import {
+	APP_URL,
+	resolveAdminUsers,
+	resolveCompanyName,
+	sendEmail,
+} from "@/server/email";
 import { createElement } from "react";
 
 function order(orderNumber: number) {
@@ -21,17 +26,18 @@ type CustomerTarget = TripRequestBase & {
 	customerEmail: string;
 	token: string;
 	language?: string | null;
+	companyId?: string | null;
 };
 
 // ─── Translations ──────────────────────────────────────────────────────────────
 
 const ADMIN_TRANSLATIONS = {
 	en: {
-		subject: (o: string, name: string) => `New activity on ${o} — ${name}`,
+		subject: (o: string, name: string) => `New activity on ${o} | ${name}`,
 		button: "View Request",
 	},
 	it: {
-		subject: (o: string, name: string) => `Nuova attività su ${o} — ${name}`,
+		subject: (o: string, name: string) => `Nuova attività su ${o} | ${name}`,
 		button: "Visualizza",
 	},
 } as const;
@@ -176,11 +182,12 @@ export const sendQuotationRejectedToAdmins = notifyAdminsGeneric;
 
 export async function sendRequestReceivedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
 	const c = tr(t.language).requestReceived;
 	await sendEmail({
 		to: t.customerEmail,
-		subject: c.subject(o, name),
+		subject: c.subject(o, companyName),
 		react: createElement(GenericEmail, {
 			data: {
 				preview: c.preview,
@@ -195,11 +202,12 @@ export async function sendRequestReceivedToCustomer(t: CustomerTarget) {
 
 export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
 	const c = tr(t.language).tripConfirmed;
 	await sendEmail({
 		to: t.customerEmail,
-		subject: c.subject(o, name),
+		subject: c.subject(o, companyName),
 		react: createElement(GenericEmail, {
 			data: {
 				preview: c.preview,
@@ -238,11 +246,12 @@ export const sendCustomerMessageToAdmins = notifyAdminsGeneric;
 
 export async function sendQuotationToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
 	const c = tr(t.language).quotationReady;
 	await sendEmail({
 		to: t.customerEmail,
-		subject: c.subject(o, name),
+		subject: c.subject(o, companyName),
 		react: createElement(GenericEmail, {
 			data: {
 				preview: c.preview,

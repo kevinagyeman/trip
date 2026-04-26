@@ -39,6 +39,17 @@ export async function resolveAdminUsers(
 	return ADMIN_EMAIL ? [{ email: ADMIN_EMAIL, preferredLanguage: "en" }] : [];
 }
 
+export async function resolveCompanyName(
+	companyId: string | null | undefined,
+): Promise<string | null> {
+	if (!companyId) return null;
+	const company = await db.company.findUnique({
+		where: { id: companyId },
+		select: { name: true },
+	});
+	return company?.name ?? null;
+}
+
 export async function sendEmail({
 	to,
 	subject,

@@ -106,6 +106,11 @@ const DEPARTURE_REQUEST_MESSAGES: Record<string, string> = {
 	it: "Ciao, potresti fornirci la data di partenza, l'orario e il numero di volo (se applicabile)? Abbiamo bisogno di questi dettagli per confermare la tua prenotazione.",
 };
 
+const ESTIMATE_DISCLAIMER_MESSAGES: Record<string, string> = {
+	en: "Please note that this is an estimate based on the information provided. The final price may vary depending on the departure time — night or early morning transfers may incur a surcharge. We will confirm the exact price once we have your full travel details.",
+	it: "Ti informiamo che questo è un preventivo indicativo basato sulle informazioni fornite. Il prezzo finale potrebbe variare in base all'orario di partenza — i trasferimenti notturni o nelle prime ore del mattino potrebbero prevedere un supplemento. Confermeremo il prezzo esatto non appena avremo tutti i dettagli del tuo viaggio.",
+};
+
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
@@ -583,18 +588,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												<Button onClick={() => setConfirmOpen(true)}>
 													{t("confirmTrip")}
 												</Button>
-												<Button
-													variant="outline"
-													onClick={() => {
-														setPrefillMessage(
-															DEPARTURE_REQUEST_MESSAGES[request.language] ??
-																DEPARTURE_REQUEST_MESSAGES.en!,
-														);
-														setPrefillTrigger((n) => n + 1);
-													}}
-												>
-													{t("requestDetails")}
-												</Button>
 											</div>
 										)}
 
@@ -655,6 +648,37 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						prefillMessage={prefillMessage}
 						prefillTrigger={prefillTrigger}
 					/>
+					<div className="mt-3 flex flex-wrap gap-2 border-t pt-3">
+						<p className="w-full text-xs text-muted-foreground">
+							{t("quickReplies")}
+						</p>
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={() => {
+								setPrefillMessage(
+									DEPARTURE_REQUEST_MESSAGES[request.language] ??
+										DEPARTURE_REQUEST_MESSAGES.en!,
+								);
+								setPrefillTrigger((n) => n + 1);
+							}}
+						>
+							{t("requestDetails")}
+						</Button>
+						<Button
+							size="sm"
+							variant="outline"
+							onClick={() => {
+								setPrefillMessage(
+									ESTIMATE_DISCLAIMER_MESSAGES[request.language] ??
+										ESTIMATE_DISCLAIMER_MESSAGES.en!,
+								);
+								setPrefillTrigger((n) => n + 1);
+							}}
+						>
+							{t("estimateNotice")}
+						</Button>
+					</div>
 				</CardContent>
 			</Card>
 		</div>

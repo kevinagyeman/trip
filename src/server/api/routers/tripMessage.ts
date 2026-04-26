@@ -121,6 +121,7 @@ export const tripMessageRouter = createTRPCRouter({
 				firstName: request.firstName,
 				lastName: request.lastName,
 				orderNumber: request.orderNumber,
+				companyId: request.companyId,
 			});
 
 			return message;

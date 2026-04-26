@@ -82,6 +82,7 @@ export const tripRequestRouter = createTRPCRouter({
 					orderNumber: tripRequest.orderNumber,
 					token: tripRequest.token,
 					language: tripRequest.language,
+					companyId: tripRequest.companyId,
 				}),
 			]);
 
@@ -535,6 +536,7 @@ export const tripRequestRouter = createTRPCRouter({
 				orderNumber: tripRequest.orderNumber,
 				token: tripRequest.token,
 				language: tripRequest.language,
+				companyId: tripRequest.companyId,
 			});
 
 			return updated;

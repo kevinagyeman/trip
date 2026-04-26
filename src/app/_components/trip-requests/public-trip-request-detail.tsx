@@ -330,6 +330,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			</div>
 
 			{/* Quotations */}
+			{request.quotations.length === 0 && (
+				<AlertBanner
+					variant="info"
+					title={t("quotationPendingTitle")}
+					description={t("quotationPendingDesc")}
+				/>
+			)}
 			{request.quotations.length > 0 && (
 				<div className="space-y-4">
 					<h2 className="text-xl font-bold">{t("quotations")}</h2>
