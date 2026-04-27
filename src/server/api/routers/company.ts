@@ -84,7 +84,15 @@ export const companyRouter = createTRPCRouter({
 				});
 			}
 
-			return ctx.db.company.create({ data: input });
+			return ctx.db.company.create({
+				data: {
+					...input,
+					estimateNotice: JSON.stringify({
+						en: "Please note that this is an estimate based on the information provided. The final price may vary depending on the departure time — night or early morning transfers may incur a surcharge.",
+						it: "Ti informiamo che questo è un preventivo indicativo. Il prezzo finale potrebbe variare in base all'orario di partenza — i trasferimenti notturni o nelle prime ore del mattino potrebbero prevedere un supplemento.",
+					}),
+				},
+			});
 		}),
 
 	// SUPER_ADMIN: Update a company
