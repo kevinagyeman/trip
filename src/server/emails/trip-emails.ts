@@ -66,7 +66,7 @@ function adminTr(language: string | null | undefined) {
 
 function makeAdminNotifier(
 	subjectFn: (
-		tr: (typeof ADMIN_TRANSLATIONS)["en"],
+		tr: (typeof ADMIN_TRANSLATIONS)[keyof typeof ADMIN_TRANSLATIONS],
 		o: string,
 		name: string,
 	) => string,
