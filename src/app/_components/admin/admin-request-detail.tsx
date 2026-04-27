@@ -29,7 +29,7 @@ import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
@@ -158,6 +158,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [prefillMessage, setPrefillMessage] = useState("");
 	const [prefillTrigger, setPrefillTrigger] = useState(0);
+	const chatRef = useRef<HTMLDivElement>(null);
 
 	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
 		onSuccess: async () => {
@@ -597,6 +598,27 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												</DialogHeader>
 												<DialogFooter className="gap-2">
 													<Button
+														variant="ghost"
+														onClick={() => {
+															setConfirmOpen(false);
+															setPrefillMessage(
+																DEPARTURE_REQUEST_MESSAGES[request.language] ??
+																	DEPARTURE_REQUEST_MESSAGES.en!,
+															);
+															setPrefillTrigger((n) => n + 1);
+															setTimeout(
+																() =>
+																	chatRef.current?.scrollIntoView({
+																		behavior: "smooth",
+																		block: "start",
+																	}),
+																100,
+															);
+														}}
+													>
+														{t("requestDetails")}
+													</Button>
+													<Button
 														variant="outline"
 														onClick={() => setConfirmOpen(false)}
 													>
@@ -626,7 +648,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												const n = JSON.parse(
 													request.company?.estimateNotice ?? "{}",
 												) as Record<string, string>;
-												return n[request.language] ?? n["en"] ?? "";
+												return n[request.language] ?? n.en ?? "";
 											} catch {
 												return "";
 											}
@@ -645,7 +667,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			})()}
 
 			{/* Message Thread */}
-			<Card>
+			<Card ref={chatRef}>
 				<CardContent>
 					<TripMessageThread
 						mode="admin"
