@@ -102,8 +102,8 @@ import {
 } from "@/lib/trip-utils";
 
 const DEPARTURE_REQUEST_MESSAGES: Record<string, string> = {
-	en: "Hi, could you please provide your departure date, time, and flight number (if applicable)? We need these details to confirm your booking.",
-	it: "Ciao, potresti fornirci la data di partenza, l'orario e il numero di volo (se applicabile)? Abbiamo bisogno di questi dettagli per confermare la tua prenotazione.",
+	en: "Hi, could you please provide your departure date, time, and flight number (if applicable)? We need these details to confirm your booking. Use the form above to send us the information.",
+	it: "Ciao, potresti fornirci la data di partenza, l'orario e il numero di volo (se applicabile)? Abbiamo bisogno di questi dettagli per confermare la tua prenotazione. Usa il form sopra per inviare le informazioni.",
 };
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
@@ -254,27 +254,27 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										{(route.departureDate ??
 											route.departureTime ??
 											route.flightNumber) && (
-											<div className="mt-2 flex flex-wrap gap-1.5">
-												{(route.departureDate ?? route.departureTime) && (
-													<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-														{route.departureDate &&
-															format(
-																new Date(route.departureDate),
-																"d MMM yyyy",
-															)}
-														{route.departureDate &&
-															route.departureTime &&
-															" · "}
-														{route.departureTime}
-													</span>
-												)}
-												{route.flightNumber && (
-													<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-														{route.flightNumber}
-													</span>
-												)}
-											</div>
-										)}
+												<div className="mt-2 flex flex-wrap gap-1.5">
+													{(route.departureDate ?? route.departureTime) && (
+														<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+															{route.departureDate &&
+																format(
+																	new Date(route.departureDate),
+																	"d MMM yyyy",
+																)}
+															{route.departureDate &&
+																route.departureTime &&
+																" · "}
+															{route.departureTime}
+														</span>
+													)}
+													{route.flightNumber && (
+														<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
+															{route.flightNumber}
+														</span>
+													)}
+												</div>
+											)}
 									</div>
 									<div className="border-t border-dashed p-3">
 										<p className="mb-2 text-xs font-medium text-muted-foreground">
@@ -603,7 +603,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 															setConfirmOpen(false);
 															setPrefillMessage(
 																DEPARTURE_REQUEST_MESSAGES[request.language] ??
-																	DEPARTURE_REQUEST_MESSAGES.en!,
+																DEPARTURE_REQUEST_MESSAGES.en!,
 															);
 															setPrefillTrigger((n) => n + 1);
 															setTimeout(
@@ -685,7 +685,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							onClick={() => {
 								setPrefillMessage(
 									DEPARTURE_REQUEST_MESSAGES[request.language] ??
-										DEPARTURE_REQUEST_MESSAGES.en!,
+									DEPARTURE_REQUEST_MESSAGES.en!,
 								);
 								setPrefillTrigger((n) => n + 1);
 							}}
