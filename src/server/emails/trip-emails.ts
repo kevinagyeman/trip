@@ -33,11 +33,28 @@ type CustomerTarget = TripRequestBase & {
 
 const ADMIN_TRANSLATIONS = {
 	en: {
-		subject: (o: string, name: string) => `New activity on ${o} | ${name}`,
+		newRequest: (o: string, name: string) =>
+			`New transfer request ${o} | ${name}`,
+		newMessage: (o: string, name: string) => `New message on ${o} | ${name}`,
+		departureUpdated: (o: string, name: string) =>
+			`Customer updated departure details — ${o} | ${name}`,
+		quotationAccepted: (o: string, name: string) =>
+			`Quotation accepted — ${o} | ${name}`,
+		quotationRejected: (o: string, name: string) =>
+			`Quotation rejected — ${o} | ${name}`,
 		button: "View Request",
 	},
 	it: {
-		subject: (o: string, name: string) => `Nuova attività su ${o} | ${name}`,
+		newRequest: (o: string, name: string) =>
+			`Nuova richiesta di trasferimento ${o} | ${name}`,
+		newMessage: (o: string, name: string) =>
+			`Nuovo messaggio su ${o} | ${name}`,
+		departureUpdated: (o: string, name: string) =>
+			`Il cliente ha aggiornato i dati di partenza — ${o} | ${name}`,
+		quotationAccepted: (o: string, name: string) =>
+			`Preventivo accettato — ${o} | ${name}`,
+		quotationRejected: (o: string, name: string) =>
+			`Preventivo rifiutato — ${o} | ${name}`,
 		button: "Visualizza",
 	},
 } as const;
@@ -45,6 +62,31 @@ const ADMIN_TRANSLATIONS = {
 function adminTr(language: string | null | undefined) {
 	const lang = (language ?? "en") as keyof typeof ADMIN_TRANSLATIONS;
 	return ADMIN_TRANSLATIONS[lang] ?? ADMIN_TRANSLATIONS.en;
+}
+
+function makeAdminNotifier(
+	subjectFn: (
+		tr: (typeof ADMIN_TRANSLATIONS)["en"],
+		o: string,
+		name: string,
+	) => string,
+) {
+	return async (t: AdminTarget) => {
+		const o = order(t.orderNumber);
+		const name = `${t.firstName} ${t.lastName}`;
+		await notifyAdmins(
+			t.companyId,
+			(lang) => {
+				const c = adminTr(lang);
+				const subject = subjectFn(c, o, name);
+				return {
+					subject,
+					data: { preview: subject, title: subject, buttonLabel: c.button },
+				};
+			},
+			`${APP_URL}/admin/requests/${t.id}`,
+		);
+	};
 }
 
 const TRANSLATIONS = {
@@ -156,29 +198,20 @@ async function notifyAdmins(
 	);
 }
 
-// ─── Admin notifications (generic) ────────────────────────────────────────────
+// ─── Admin notifications ───────────────────────────────────────────────────────
 
-async function notifyAdminsGeneric(t: AdminTarget) {
-	const o = order(t.orderNumber);
-	const name = `${t.firstName} ${t.lastName}`;
-	await notifyAdmins(
-		t.companyId,
-		(lang) => {
-			const c = adminTr(lang);
-			const subject = c.subject(o, name);
-			return {
-				subject,
-				data: { preview: subject, title: subject, buttonLabel: c.button },
-			};
-		},
-		`${APP_URL}/admin/requests/${t.id}`,
-	);
-}
-
-export const sendNewTripRequestToAdmins = notifyAdminsGeneric;
-export const sendPickupDetailsToAdmins = notifyAdminsGeneric;
-export const sendQuotationAcceptedToAdmins = notifyAdminsGeneric;
-export const sendQuotationRejectedToAdmins = notifyAdminsGeneric;
+export const sendNewTripRequestToAdmins = makeAdminNotifier((c, o, name) =>
+	c.newRequest(o, name),
+);
+export const sendDepartureDetailsUpdatedToAdmins = makeAdminNotifier(
+	(c, o, name) => c.departureUpdated(o, name),
+);
+export const sendQuotationAcceptedToAdmins = makeAdminNotifier((c, o, name) =>
+	c.quotationAccepted(o, name),
+);
+export const sendQuotationRejectedToAdmins = makeAdminNotifier((c, o, name) =>
+	c.quotationRejected(o, name),
+);
 
 export async function sendRequestReceivedToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
@@ -240,7 +273,9 @@ export async function sendAdminMessageToCustomer(t: CustomerTarget) {
 	});
 }
 
-export const sendCustomerMessageToAdmins = notifyAdminsGeneric;
+export const sendCustomerMessageToAdmins = makeAdminNotifier((c, o, name) =>
+	c.newMessage(o, name),
+);
 
 // ─── Quotation ────────────────────────────────────────────────────────────────
 

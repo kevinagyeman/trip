@@ -5,8 +5,8 @@ import {
 	publicProcedure,
 } from "@/server/api/trpc";
 import {
+	sendDepartureDetailsUpdatedToAdmins,
 	sendNewTripRequestToAdmins,
-	sendPickupDetailsToAdmins,
 	sendRequestReceivedToCustomer,
 	sendTripConfirmedToCustomer,
 } from "@/server/emails/trip-emails";
@@ -397,7 +397,13 @@ export const tripRequestRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
-				select: { id: true },
+				select: {
+					id: true,
+					companyId: true,
+					orderNumber: true,
+					firstName: true,
+					lastName: true,
+				},
 			});
 
 			if (!tripRequest) {
@@ -408,68 +414,13 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { token: input.token },
 				data: { routes: JSON.stringify(input.routes) },
 			});
-		}),
 
-	// PUBLIC: Customer saves pickup date/time/flight by token
-	updatePickupDetails: publicProcedure
-		.input(
-			z.object({
-				token: z.string(),
-				pickupDate: z.string().min(1),
-				pickupTime: z.string().min(1),
-				flightNumber: z.string().optional(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { token: input.token },
-				select: {
-					id: true,
-					companyId: true,
-					orderNumber: true,
-					firstName: true,
-					lastName: true,
-					status: true,
-					language: true,
-				},
-			});
-
-			if (!tripRequest) {
-				throw new TRPCError({ code: "NOT_FOUND" });
-			}
-
-			if (
-				["CONFIRMED", "COMPLETED", "CANCELLED"].includes(tripRequest.status)
-			) {
-				throw new TRPCError({
-					code: "FORBIDDEN",
-					message: "Trip cannot be modified in its current status",
-				});
-			}
-
-			const pickupDate = new Date(input.pickupDate);
-			if (Number.isNaN(pickupDate.getTime())) {
-				throw new TRPCError({
-					code: "BAD_REQUEST",
-					message: "Invalid pickup date",
-				});
-			}
-
-			await ctx.db.tripRequest.update({
-				where: { token: input.token },
-				data: {
-					pickupDate,
-					pickupTime: input.pickupTime,
-					flightNumber: input.flightNumber ?? null,
-				},
-			});
-
-			await sendPickupDetailsToAdmins({
+			void sendDepartureDetailsUpdatedToAdmins({
 				id: tripRequest.id,
 				companyId: tripRequest.companyId,
+				orderNumber: tripRequest.orderNumber,
 				firstName: tripRequest.firstName,
 				lastName: tripRequest.lastName,
-				orderNumber: tripRequest.orderNumber,
 			});
 		}),
 

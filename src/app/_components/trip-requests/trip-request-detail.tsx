@@ -179,41 +179,6 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							)}
 						</div>
 					</div>
-
-					{/* Pickup Details (only when confirmed) */}
-					{request.status === "CONFIRMED" && request.pickupDate && (
-						<div className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-							<h3 className="mb-3 text-lg font-semibold">
-								{t("pickupDetails")}
-							</h3>
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<p className="text-sm text-muted-foreground">
-										{t("pickupDate")}
-									</p>
-									<p className="font-medium">
-										{format(new Date(request.pickupDate), "PPP")}
-									</p>
-								</div>
-								{request.pickupTime && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("pickupTime")}
-										</p>
-										<p className="font-medium">{request.pickupTime}</p>
-									</div>
-								)}
-								{request.flightNumber && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("flightNumber")}
-										</p>
-										<p className="font-medium">{request.flightNumber}</p>
-									</div>
-								)}
-							</div>
-						</div>
-					)}
 				</CardContent>
 			</Card>
 

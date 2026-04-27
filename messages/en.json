@@ -292,6 +292,7 @@
     "routeFlightNumberPlaceholder": "e.g. FR1234",
     "routeDepartureDetails": "Departure details",
     "saveRouteDetails": "Save details",
+    "adminNotified": "The admin has been notified.",
     "saving": "Saving...",
     "savePickupDetails": "Save Pickup Details",
     "pickupDetailsDesc": "Your quotation has been accepted. Please provide your pickup date and time — the operator will confirm your trip shortly after.",

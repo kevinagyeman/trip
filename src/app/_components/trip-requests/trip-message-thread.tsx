@@ -14,8 +14,8 @@ type Props =
 	| {
 			mode: "customer";
 			token: string;
-			prefillMessage?: never;
-			prefillTrigger?: never;
+			prefillMessage?: string;
+			prefillTrigger?: number;
 	  }
 	| {
 			mode: "admin";

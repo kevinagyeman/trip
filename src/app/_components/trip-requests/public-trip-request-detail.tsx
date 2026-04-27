@@ -55,6 +55,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		}
 	}, [request?.id]);
 
+	const [notified, setNotified] = useState(false);
+
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
@@ -70,6 +72,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
+			setNotified(true);
 		},
 	});
 
@@ -214,30 +217,37 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 											/>
 										</div>
 									</div>
-									<Button
-										className="mt-2"
-										size="sm"
-										variant="outline"
-										disabled={updateRoutes.isPending}
-										onClick={() =>
-											updateRoutes.mutate({
-												token,
-												routes: routes.map((r, j) => ({
-													...r,
-													departureDate:
-														routeDepartures[j]?.departureDate || undefined,
-													departureTime:
-														routeDepartures[j]?.departureTime || undefined,
-													flightNumber:
-														routeDepartures[j]?.flightNumber || undefined,
-												})),
-											})
-										}
-									>
-										{updateRoutes.isPending
-											? t("saving")
-											: t("saveRouteDetails")}
-									</Button>
+									<div className="mt-2 flex items-center gap-3">
+										<Button
+											size="sm"
+											variant="outline"
+											disabled={updateRoutes.isPending}
+											onClick={() => {
+												setNotified(false);
+												updateRoutes.mutate({
+													token,
+													routes: routes.map((r, j) => ({
+														...r,
+														departureDate:
+															routeDepartures[j]?.departureDate || undefined,
+														departureTime:
+															routeDepartures[j]?.departureTime || undefined,
+														flightNumber:
+															routeDepartures[j]?.flightNumber || undefined,
+													})),
+												});
+											}}
+										>
+											{updateRoutes.isPending
+												? t("saving")
+												: t("saveRouteDetails")}
+										</Button>
+										{notified && (
+											<p className="text-xs text-muted-foreground">
+												{t("adminNotified")}
+											</p>
+										)}
+									</div>
 								</div>
 							)}
 						</div>
