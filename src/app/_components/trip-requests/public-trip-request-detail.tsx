@@ -55,6 +55,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		}
 	}, [request?.id]);
 
+	const markAsViewed = api.tripRequest.markAsViewed.useMutation();
+	useEffect(() => {
+		markAsViewed.mutate({ token });
+	}, [token]);
+
 	const [notified, setNotified] = useState(false);
 
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({

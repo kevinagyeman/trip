@@ -378,6 +378,25 @@ export const tripRequestRouter = createTRPCRouter({
 			return { ...tripRequest, fromEmail: process.env.RESEND_FROM_EMAIL ?? "" };
 		}),
 
+	// PUBLIC: Mark trip as viewed by customer
+	markAsViewed: publicProcedure
+		.input(z.object({ token: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const trip = await ctx.db.tripRequest.findUnique({
+				where: { token: input.token },
+				select: { status: true, confirmationViewedAt: true },
+			});
+			await ctx.db.tripRequest.updateMany({
+				where: { token: input.token },
+				data: {
+					lastViewedAt: new Date(),
+					...(trip?.status === "CONFIRMED" && !trip.confirmationViewedAt
+						? { confirmationViewedAt: new Date() }
+						: {}),
+				},
+			});
+		}),
+
 	// PUBLIC: Update route details (departure date/time/flight) by token
 	updateRoutes: publicProcedure
 		.input(
@@ -480,7 +499,7 @@ export const tripRequestRouter = createTRPCRouter({
 
 			const updated = await ctx.db.tripRequest.update({
 				where: { id: input.id },
-				data: { status: "CONFIRMED" },
+				data: { status: "CONFIRMED", confirmedAt: new Date() },
 			});
 
 			await sendTripConfirmedToCustomer({

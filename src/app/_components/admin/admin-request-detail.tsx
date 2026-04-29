@@ -5,7 +5,7 @@ import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Dialog,
 	DialogContent,
@@ -525,8 +525,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				const isRejected = quotation?.status === "REJECTED";
 				return (
 					<div className="space-y-4">
-						<h2 className="text-xl font-bold">{t("quotation")}</h2>
 						<Card>
+							<CardHeader>
+								<CardTitle>{t("quotation")}</CardTitle>
+							</CardHeader>
 							<CardContent className="space-y-4">
 								{isAccepted ? (
 									<>
@@ -549,6 +551,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											<p className="text-sm text-muted-foreground">
 												{t("respondedDate", {
 													date: format(new Date(quotation!.respondedAt), "PPP"),
+													time: format(
+														new Date(quotation!.respondedAt),
+														"HH:mm",
+													),
 												})}
 											</p>
 										)}
@@ -572,13 +578,46 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												</p>
 											</div>
 										)}
+										{/* Last viewed */}
+										{request.lastViewedAt && (
+											<p className="text-sm text-muted-foreground">
+												{t("lastViewedAt", {
+													date: format(new Date(request.lastViewedAt), "PPP"),
+													time: format(new Date(request.lastViewedAt), "HH:mm"),
+												})}
+											</p>
+										)}
+
 										{/* Confirmed banner or action buttons */}
 										{request.status === "CONFIRMED" ? (
-											<AlertBanner
-												variant="success"
-												title={t("tripConfirmedTitle")}
-												description={t("tripConfirmedDesc")}
-											/>
+											<div className="space-y-2">
+												<AlertBanner
+													variant="success"
+													title={t("tripConfirmedTitle")}
+													description={t("tripConfirmedDesc")}
+												/>
+												{request.confirmationViewedAt ? (
+													<AlertBanner
+														variant="success"
+														title={t("confirmationSeenTitle")}
+														description={t("confirmationSeenDesc", {
+															date: format(
+																new Date(request.confirmationViewedAt),
+																"PPP",
+															),
+															time: format(
+																new Date(request.confirmationViewedAt),
+																"HH:mm",
+															),
+														})}
+													/>
+												) : (
+													<AlertBanner
+														variant="info"
+														title={t("confirmationNotSeenTitle")}
+													/>
+												)}
+											</div>
 										) : (
 											<div className="flex flex-wrap items-start gap-3 border-t pt-4">
 												<Button onClick={() => setConfirmOpen(true)}>
@@ -598,7 +637,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												</DialogHeader>
 												<DialogFooter className="gap-2">
 													<Button
-														variant="ghost"
+														variant="outline"
 														onClick={() => {
 															setConfirmOpen(false);
 															setPrefillMessage(
@@ -692,6 +731,67 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						>
 							{t("requestDetails")}
 						</Button>
+					</div>
+				</CardContent>
+			</Card>
+			{/* Events */}
+			<Card>
+				<CardHeader>
+					<CardTitle>{t("events")}</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<div className="space-y-3">
+						{(
+							[
+								{ label: t("eventRequestCreated"), date: request.createdAt },
+								...request.quotations
+									.slice()
+									.reverse()
+									.flatMap((q) => [
+										q.notifiedAt
+											? { label: t("eventQuotationSent"), date: q.notifiedAt }
+											: null,
+										q.respondedAt
+											? {
+													label:
+														q.status === "ACCEPTED"
+															? t("eventQuotationAccepted")
+															: t("eventQuotationRejected"),
+													date: q.respondedAt,
+												}
+											: null,
+									]),
+								request.confirmedAt
+									? {
+											label: t("eventConfirmationSent"),
+											date: request.confirmedAt,
+										}
+									: null,
+								request.confirmationViewedAt
+									? {
+											label: t("eventCustomerSawConfirmation"),
+											date: request.confirmationViewedAt,
+										}
+									: null,
+							] as ({ label: string; date: Date } | null)[]
+						)
+							.filter((e): e is { label: string; date: Date } => e !== null)
+							.sort(
+								(a, b) =>
+									new Date(a.date).getTime() - new Date(b.date).getTime(),
+							)
+							.map((event, i) => (
+								<div key={i} className="flex items-start gap-3">
+									<span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-muted-foreground/40" />
+									<div>
+										<p className="text-sm font-medium">{event.label}</p>
+										<p className="text-xs text-muted-foreground">
+											{format(new Date(event.date), "PPP")} {t("at")}{" "}
+											{format(new Date(event.date), "HH:mm")}
+										</p>
+									</div>
+								</div>
+							))}
 					</div>
 				</CardContent>
 			</Card>

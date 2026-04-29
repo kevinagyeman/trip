@@ -156,6 +156,10 @@ model TripRequest {
   pickupTime   String?
   flightNumber String?
 
+  lastViewedAt         DateTime?
+  confirmedAt          DateTime?
+  confirmationViewedAt DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
