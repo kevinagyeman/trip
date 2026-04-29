@@ -58,6 +58,9 @@ export async function Navigation() {
 									<Link href="/admin/stats">
 										<Button variant="ghost">{t("adminStats")}</Button>
 									</Link>
+									<Link href="/admin/guide">
+										<Button variant="ghost">{t("adminGuide")}</Button>
+									</Link>
 								</>
 							)}
 							{isSuperAdmin && (
@@ -97,6 +100,7 @@ export async function Navigation() {
 							myTripsLabel={t("myTrips")}
 							adminLabel={t("adminDashboard")}
 							adminStatsLabel={t("adminStats")}
+							adminGuideLabel={t("adminGuide")}
 							superAdminLabel={t("superAdminDashboard")}
 						/>
 					</div>
