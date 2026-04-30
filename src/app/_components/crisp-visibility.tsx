@@ -10,8 +10,9 @@ export function CrispVisibility() {
 
 	useEffect(() => {
 		const shouldHide = HIDDEN_PATHS.some((p) => pathname.includes(p));
-		if (typeof window !== "undefined" && window.$crisp) {
-			window.$crisp.push(["do", shouldHide ? "chat:hide" : "chat:show"]);
+		const crisp = (window as unknown as { $crisp?: unknown[] }).$crisp;
+		if (crisp) {
+			crisp.push(["do", shouldHide ? "chat:hide" : "chat:show"]);
 		}
 	}, [pathname]);
 
