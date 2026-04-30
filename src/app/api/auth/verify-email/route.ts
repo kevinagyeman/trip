@@ -49,11 +49,18 @@ export async function GET(request: Request) {
 			return NextResponse.json({ error: "User not found" }, { status: 404 });
 		}
 
-		// Update user's email verification status
+		// Update user's email verification status and activate their company
 		await db.user.update({
 			where: { id: user.id },
 			data: { emailVerified: new Date() },
 		});
+
+		if (user.companyId) {
+			await db.company.update({
+				where: { id: user.companyId },
+				data: { isActive: true },
+			});
+		}
 
 		// Delete the used verification token
 		await db.verificationToken.delete({

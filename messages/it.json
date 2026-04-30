@@ -604,7 +604,7 @@
     "accountSection": "Account Amministratore",
     "companyName": "Nome Azienda",
     "companyNamePlaceholder": "La Mia Azienda di Trasporti",
-    "slug": "Identificatore URL (slug)",
+    "slug": "Identificatore URL (slug) (senza spazi)",
     "slugPlaceholder": "la-mia-azienda",
     "slugHint": "Sarà l'URL della tua pagina prenotazioni: dantrip.com/book/tuo-slug",
     "vat": "Partita IVA",
@@ -632,9 +632,9 @@
     "verificationSent": "Un link di verifica è stato inviato a",
     "checkInbox": "Clicca il link nell'email per verificare il tuo indirizzo. Una volta verificato, il tuo account verrà revisionato e attivato a breve.",
     "backToSignIn": "Torna all'accesso",
-    "pendingTitle": "In attesa di approvazione",
-    "pendingSubtitle": "La tua email è stata verificata",
-    "pendingDesc": "La tua registrazione aziendale è in fase di revisione. Ti invieremo un'email non appena il tuo account sarà attivato.",
-    "pendingContact": "Di solito richiede meno di 24 ore."
+    "pendingTitle": "Controlla la tua casella email!",
+    "pendingSubtitle": "Ti abbiamo inviato un'email di verifica",
+    "pendingDesc": "Clicca il link nell'email per verificare il tuo indirizzo e attivare il tuo account. Se non la trovi, controlla la cartella spam o posta indesiderata.",
+    "pendingContact": "Il link scade dopo 24 ore."
   }
 }

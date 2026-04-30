@@ -56,7 +56,7 @@ export async function POST(request: Request) {
 
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// Create company (active immediately)
+		// Create company (inactive until email verified)
 		const company = await db.company.create({
 			data: {
 				name: companyName,
@@ -65,7 +65,11 @@ export async function POST(request: Request) {
 				address,
 				country,
 				website: website || null,
-				isActive: true,
+				isActive: false,
+				estimateNotice: JSON.stringify({
+					en: "Please note that this is an estimate based on the information provided. The final price may vary depending on the departure time — night or early morning transfers may incur a surcharge.",
+					it: "Ti informiamo che questo è un preventivo indicativo. Il prezzo finale potrebbe variare in base all'orario di partenza — i trasferimenti notturni o nelle prime ore del mattino potrebbero prevedere un supplemento.",
+				}),
 			},
 		});
 

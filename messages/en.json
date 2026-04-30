@@ -604,7 +604,7 @@
     "accountSection": "Admin Account",
     "companyName": "Company Name",
     "companyNamePlaceholder": "My Transport Company",
-    "slug": "URL Identifier (slug)",
+    "slug": "URL Identifier (slug) (no spaces)",
     "slugPlaceholder": "my-transport-company",
     "slugHint": "This will be your booking page URL: dantrip.com/book/your-slug",
     "vat": "VAT Number",
@@ -632,9 +632,9 @@
     "verificationSent": "A verification link has been sent to",
     "checkInbox": "Click the link in the email to verify your address. Once verified, your account will be reviewed and activated shortly.",
     "backToSignIn": "Back to Sign In",
-    "pendingTitle": "Waiting for approval",
-    "pendingSubtitle": "Your email has been verified",
-    "pendingDesc": "Your company registration is under review. We'll notify you by email as soon as your account is activated.",
-    "pendingContact": "This usually takes less than 24 hours."
+    "pendingTitle": "Check your inbox!",
+    "pendingSubtitle": "We sent you a verification email",
+    "pendingDesc": "Click the link in the email to verify your address and activate your account. If you don't see it, check your spam or junk folder.",
+    "pendingContact": "The link expires in 24 hours."
   }
 }

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
@@ -17,9 +18,8 @@ import { COUNTRIES } from "@/lib/countries";
 export function RegisterCompanyForm() {
 	const t = useTranslations("registerCompany");
 	const locale = useLocale();
+	const router = useRouter();
 	const [serverError, setServerError] = useState("");
-	const [success, setSuccess] = useState(false);
-	const [registeredEmail, setRegisteredEmail] = useState("");
 
 	const {
 		register,
@@ -41,41 +41,12 @@ export function RegisterCompanyForm() {
 			if (!response.ok) {
 				setServerError(data.error || t("error"));
 			} else {
-				setRegisteredEmail(values.email);
-				setSuccess(true);
+				router.push("/register-company/pending");
 			}
 		} catch {
 			setServerError(t("unexpectedError"));
 		}
 	};
-
-	if (success) {
-		return (
-			<div className="space-y-4">
-				<div>
-					<h1 className="text-2xl font-bold text-green-600">
-						{t("successTitle")}
-					</h1>
-					<p className="mt-1 text-sm text-muted-foreground">
-						{t("successSubtitle")}
-					</p>
-				</div>
-				<div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950/30">
-					<p className="text-sm text-green-800 dark:text-green-200">
-						{t("verificationSent")} <strong>{registeredEmail}</strong>
-					</p>
-					<p className="mt-2 text-sm text-green-800 dark:text-green-200">
-						{t("checkInbox")}
-					</p>
-				</div>
-				<Link href="/auth/signin">
-					<Button variant="outline" className="w-full">
-						{t("backToSignIn")}
-					</Button>
-				</Link>
-			</div>
-		);
-	}
 
 	return (
 		<div className="space-y-6">

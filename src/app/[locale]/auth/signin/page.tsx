@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { getSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -15,8 +15,7 @@ import { useForm } from "react-hook-form";
 function SignInForm() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const rawCallback = searchParams.get("callbackUrl") ?? "/dashboard";
-	const callbackUrl = rawCallback.startsWith("/") ? rawCallback : "/dashboard";
+	const rawCallback = searchParams.get("callbackUrl");
 	const verified = searchParams.get("verified") === "true";
 	const registered = searchParams.get("registered") === "true";
 	const t = useTranslations("auth");
@@ -46,7 +45,17 @@ function SignInForm() {
 						: t("invalidCredentials"),
 				);
 			} else if (result?.ok) {
-				router.push(callbackUrl);
+				if (rawCallback?.startsWith("/")) {
+					router.push(rawCallback);
+				} else {
+					const session = await getSession();
+					const role = session?.user?.role;
+					const dest =
+						role === "ADMIN" || role === "SUPER_ADMIN"
+							? "/admin"
+							: "/dashboard";
+					router.push(dest);
+				}
 				router.refresh();
 			}
 		} catch {
