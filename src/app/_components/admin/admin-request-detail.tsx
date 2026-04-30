@@ -26,7 +26,7 @@ import {
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus } from "lucide-react";
+import { CalendarPlus, Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -157,6 +157,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	const [confirmOpen, setConfirmOpen] = useState(false);
 	const [prefillMessage, setPrefillMessage] = useState("");
+	const [copiedLink, setCopiedLink] = useState(false);
 	const [prefillTrigger, setPrefillTrigger] = useState(0);
 	const chatRef = useRef<HTMLDivElement>(null);
 
@@ -235,6 +236,37 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 					</div>
 				</div>
+				{/* Customer link */}
+				<div className="mt-4 flex items-center gap-3 rounded-lg border border-dashed p-3">
+					<div className="flex-1 min-w-0">
+						<p className="text-xs font-medium">{t("customerLinkLabel")}</p>
+						<p className="text-xs text-muted-foreground">
+							{t("customerLinkWarning")}
+						</p>
+					</div>
+					<Button
+						size="sm"
+						variant="outline"
+						className="shrink-0"
+						onClick={async () => {
+							await navigator.clipboard.writeText(
+								`${window.location.origin}/request/${request.token}`,
+							);
+							setCopiedLink(true);
+							setTimeout(() => setCopiedLink(false), 2000);
+						}}
+					>
+						{copiedLink ? (
+							<Check className="h-4 w-4 text-green-500" />
+						) : (
+							<Copy className="h-4 w-4" />
+						)}
+						<span className="ml-1.5">
+							{copiedLink ? t("copied") : t("copyCustomerLink")}
+						</span>
+					</Button>
+				</div>
+
 				<div className="mt-6 space-y-6">
 					{/* Routes */}
 					<div>
