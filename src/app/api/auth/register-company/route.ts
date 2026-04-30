@@ -97,6 +97,26 @@ export async function POST(request: Request) {
 			},
 		});
 
+		// Notify super admin of new company registration
+		const superAdmin = await db.user.findFirst({
+			where: { role: "SUPER_ADMIN" },
+			select: { email: true },
+		});
+		if (superAdmin?.email) {
+			void sendEmail({
+				to: superAdmin.email,
+				subject: "New company registered",
+				react: createElement(GenericEmail, {
+					href: `${APP_URL}/super-admin`,
+					data: {
+						preview: "New company registered",
+						title: "New company registered",
+						buttonLabel: "View Dashboard",
+					},
+				}),
+			});
+		}
+
 		// Send verification email
 		const verifyUrl = `${APP_URL}/api/auth/verify-email?token=${token}`;
 		await sendEmail({
