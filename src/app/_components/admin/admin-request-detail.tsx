@@ -26,7 +26,7 @@ import {
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy } from "lucide-react";
+import { CalendarPlus, Check, Copy, Plane } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -283,6 +283,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											<span className="text-muted-foreground">→</span>
 											<span>{route.destination}</span>
 										</div>
+										{route.type === "airport" && (
+											<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+												<Plane className="h-3 w-3" />
+												{t("transferTypeAirport")}
+											</span>
+										)}
 										{(route.departureDate ??
 											route.departureTime ??
 											route.flightNumber) && (

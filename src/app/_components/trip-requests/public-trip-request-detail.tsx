@@ -2,6 +2,7 @@
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
+import { Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -144,6 +145,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									<span className="text-muted-foreground">→</span>
 									<span>{route.destination}</span>
 								</div>
+								{route.type === "airport" && (
+									<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+										<Plane className="h-3 w-3" />
+										{t("transferTypeAirport")}
+									</span>
+								)}
 								{(route.departureDate ??
 									route.departureTime ??
 									route.flightNumber) && (
@@ -205,22 +212,25 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 												}
 											/>
 										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("routeFlightNumber")}
-											</Label>
-											<Input
-												placeholder={t("routeFlightNumberPlaceholder")}
-												value={routeDepartures[i]?.flightNumber ?? ""}
-												onChange={(e) =>
-													setRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.flightNumber = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
+										{route.type === "airport" && (
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{t("routeFlightNumber")}
+												</Label>
+												<Input
+													placeholder={t("routeFlightNumberPlaceholder")}
+													value={routeDepartures[i]?.flightNumber ?? ""}
+													onChange={(e) =>
+														setRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.flightNumber = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+										)}
 									</div>
 									<div className="mt-2 flex items-center gap-3">
 										<Button

@@ -217,6 +217,9 @@
     "specialRequests": "Richieste Speciali (Opzionale)",
     "specialRequestsPlaceholder": "Eventuali richieste speciali o informazioni aggiuntive...",
     "flightDetailsNote": "* I dettagli del ritiro (data, ora, numero di volo) potranno essere aggiunti in seguito dopo aver ricevuto e accettato un preventivo.",
+    "transferType": "Tipo di trasferimento",
+    "transferTypeStandard": "Standard",
+    "transferTypeAirport": "Aeroporto",
     "routeDepartureDate": "Data di Partenza",
     "routeDepartureTime": "Orario di Partenza",
     "routeFlightNumber": "Numero di Volo",
@@ -343,7 +346,8 @@
     "statusCompleted": "Completato",
     "statusCancelled": "Annullato",
     "quotationPendingTitle": "Stiamo esaminando la tua richiesta",
-    "quotationPendingDesc": "La tua richiesta è stata ricevuta. Stiamo esaminando i dettagli e ti avviseremo via email non appena il preventivo sarà pronto."
+    "quotationPendingDesc": "La tua richiesta è stata ricevuta. Stiamo esaminando i dettagli e ti avviseremo via email non appena il preventivo sarà pronto.",
+    "transferTypeAirport": "Aeroporto"
   },
   "messages": {
     "title": "Messaggi",
@@ -495,7 +499,8 @@
     "name": "Nome",
     "estimateNotice": "Invia avviso preventivo",
     "quickReplies": "Risposte rapide",
-    "editPrefilledMessage": "Modifica il messaggio precompilato"
+    "editPrefilledMessage": "Modifica il messaggio precompilato",
+    "transferTypeAirport": "Aeroporto"
   },
   "notFound": {
     "heading": "Pagina Non Trovata",

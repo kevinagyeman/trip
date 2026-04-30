@@ -217,6 +217,9 @@
     "specialRequests": "Special Requests (Optional)",
     "specialRequestsPlaceholder": "Any special requests or additional information...",
     "flightDetailsNote": "* Pickup details (date, time, flight number) can be added later after you receive and accept a quotation.",
+    "transferType": "Transfer type",
+    "transferTypeStandard": "Standard",
+    "transferTypeAirport": "Airport",
     "routeDepartureDate": "Departure Date",
     "routeDepartureTime": "Departure Time",
     "routeFlightNumber": "Flight Number",
@@ -343,7 +346,8 @@
     "statusCompleted": "Completed",
     "statusCancelled": "Cancelled",
     "quotationPendingTitle": "We're reviewing your request",
-    "quotationPendingDesc": "Your request has been received. We're reviewing the details and will notify you by email as soon as your quotation is ready."
+    "quotationPendingDesc": "Your request has been received. We're reviewing the details and will notify you by email as soon as your quotation is ready.",
+    "transferTypeAirport": "Airport"
   },
   "messages": {
     "title": "Messages",
@@ -495,7 +499,8 @@
     "name": "Name",
     "estimateNotice": "Send estimate notice",
     "quickReplies": "Quick replies",
-    "editPrefilledMessage": "Edit the prefilled message"
+    "editPrefilledMessage": "Edit the prefilled message",
+    "transferTypeAirport": "Airport"
   },
   "notFound": {
     "heading": "Page Not Found",

@@ -24,7 +24,7 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Copy, Minus, Plus, X } from "lucide-react";
+import { Copy, Minus, Plane, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -49,7 +49,7 @@ export function CreateTripRequestForm({
 	} = useForm<CreateTripRequestFormValues>({
 		resolver: zodResolver(createTripRequestSchema),
 		defaultValues: {
-			routes: [{ pickup: "", destination: "" }],
+			routes: [{ pickup: "", destination: "", type: "standard" as const }],
 			language: "en",
 			email: "",
 			phoneCountryCode: "+39",
@@ -122,6 +122,7 @@ export function CreateTripRequestForm({
 		appendRoute({
 			pickup: current.pickup,
 			destination: current.destination,
+			type: current.type,
 			departureDate: current.departureDate,
 			departureTime: current.departureTime,
 			flightNumber: current.flightNumber,
@@ -186,8 +187,44 @@ export function CreateTripRequestForm({
 							/>
 						</div>
 
-						{/* Optional departure details */}
-						<div className="grid grid-cols-1 gap-3 sm:grid-cols-3 pt-6">
+						{/* Transfer type toggle */}
+						<div className="pt-4 space-y-2">
+							<p className="text-xs font-medium text-muted-foreground">
+								{t("transferType")}
+							</p>
+							<div className="flex gap-2">
+								<Button
+									type="button"
+									size="sm"
+									variant={
+										watch(`routes.${index}.type`) !== "airport"
+											? "default"
+											: "outline"
+									}
+									onClick={() => setValue(`routes.${index}.type`, "standard")}
+								>
+									{t("transferTypeStandard")}
+								</Button>
+								<Button
+									type="button"
+									size="sm"
+									variant={
+										watch(`routes.${index}.type`) === "airport"
+											? "default"
+											: "outline"
+									}
+									onClick={() => setValue(`routes.${index}.type`, "airport")}
+								>
+									<Plane className="mr-1.5 h-3.5 w-3.5" />
+									{t("transferTypeAirport")}
+								</Button>
+							</div>
+						</div>
+
+						{/* Departure details */}
+						<div
+							className={`grid grid-cols-1 gap-3 pt-4 ${watch(`routes.${index}.type`) === "airport" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+						>
 							<CustomInput
 								labelText={t("routeDepartureDate")}
 								inputProps={{
@@ -195,7 +232,6 @@ export function CreateTripRequestForm({
 									type: "date",
 								}}
 							/>
-
 							<CustomInput
 								labelText={t("routeDepartureTime")}
 								inputProps={{
@@ -203,11 +239,13 @@ export function CreateTripRequestForm({
 									type: "time",
 								}}
 							/>
-							<CustomInput
-								labelText={t("routeFlightNumber")}
-								placeholder={t("routeFlightNumberPlaceholder")}
-								inputProps={{ ...register(`routes.${index}.flightNumber`) }}
-							/>
+							{watch(`routes.${index}.type`) === "airport" && (
+								<CustomInput
+									labelText={t("routeFlightNumber")}
+									placeholder={t("routeFlightNumberPlaceholder")}
+									inputProps={{ ...register(`routes.${index}.flightNumber`) }}
+								/>
+							)}
 						</div>
 					</div>
 				))}

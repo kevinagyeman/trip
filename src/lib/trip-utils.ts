@@ -1,6 +1,9 @@
+export type RouteType = "airport" | "standard";
+
 export type Route = {
 	pickup: string;
 	destination: string;
+	type?: RouteType;
 	departureDate?: string;
 	departureTime?: string;
 	flightNumber?: string;
