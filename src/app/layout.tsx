@@ -8,9 +8,45 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
-	title: "dantrip.com",
-	description: "Request trips and manage quotations",
-	icons: [{ rel: "icon", url: "/favicon.ico" }],
+	title: "dantrip.com – Transfers, simplified.",
+	description:
+		"The best way to give your customers a seamless transfer experience. Handle requests, send quotes, and confirm bookings — all in one place.",
+	metadataBase: new URL("https://dantrip.com"),
+	icons: [
+		{ rel: "icon", url: "/favicon.ico" },
+		{
+			rel: "icon",
+			url: "/favicon-16x16.png",
+			sizes: "16x16",
+			type: "image/png",
+		},
+		{
+			rel: "icon",
+			url: "/favicon-32x32.png",
+			sizes: "32x32",
+			type: "image/png",
+		},
+		{ rel: "apple-touch-icon", url: "/apple-touch-icon.png" },
+	],
+	manifest: "/site.webmanifest",
+	openGraph: {
+		title: "dantrip.com – Transfers, simplified.",
+		description:
+			"The best way to give your customers a seamless transfer experience. Handle requests, send quotes, and confirm bookings — all in one place.",
+		url: "https://dantrip.com",
+		siteName: "dantrip.com",
+		images: [
+			{ url: "/og-image.png", width: 1200, height: 630, alt: "dantrip.com" },
+		],
+		type: "website",
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: "dantrip.com – Transfers, simplified.",
+		description:
+			"The best way to give your customers a seamless transfer experience. Handle requests, send quotes, and confirm bookings — all in one place.",
+		images: ["/og-image.png"],
+	},
 };
 
 const geist = Geist({
