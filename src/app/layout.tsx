@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import Script from "next/script";
 
+import { CrispVisibility } from "@/app/_components/crisp-visibility";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TRPCReactProvider } from "@/trpc/react";
 
@@ -76,6 +77,9 @@ export default function RootLayout({
 					src="https://embeds.iubenda.com/widgets/0512a527-10f7-42e5-bf61-c41481af9bb2.js"
 					strategy="afterInteractive"
 				/>
+				<Script id="crisp-chat" strategy="afterInteractive">
+					{`window.$crisp=[];window.CRISP_WEBSITE_ID="3652728f-ac3a-4979-8826-2011b92175fd";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();`}
+				</Script>
 			</head>
 			<body>
 				<TRPCReactProvider>
@@ -85,6 +89,7 @@ export default function RootLayout({
 						enableSystem
 						disableTransitionOnChange
 					>
+						<CrispVisibility />
 						{children}
 					</ThemeProvider>
 				</TRPCReactProvider>
