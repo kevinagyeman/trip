@@ -115,7 +115,7 @@ export function QuotationForm({
 					title={t("quotationStatusRejected")}
 					description={
 						quotation?.respondedAt
-							? format(new Date(quotation.respondedAt), "PPP")
+							? format(new Date(quotation.respondedAt), "d MMM yyyy")
 							: undefined
 					}
 				/>
@@ -206,7 +206,7 @@ export function QuotationForm({
 				{quotation?.notifiedAt && (
 					<p className="text-sm text-muted-foreground">
 						{t("notifiedDate", {
-							date: format(new Date(quotation.notifiedAt), "PPP"),
+							date: format(new Date(quotation.notifiedAt), "d MMM yyyy"),
 							time: format(new Date(quotation.notifiedAt), "HH:mm"),
 						})}
 					</p>

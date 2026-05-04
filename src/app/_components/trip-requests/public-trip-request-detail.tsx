@@ -459,7 +459,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						<span>
 							<span className="text-muted-foreground">{t("created")}: </span>
 							<span className="font-medium">
-								{format(new Date(request.createdAt), "PPP")}
+								{format(new Date(request.createdAt), "d MMM yyyy")}
 							</span>
 						</span>
 						{request.additionalInfo && (
@@ -516,7 +516,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								{quotation.notifiedAt && (
 									<p className="text-sm text-muted-foreground">
 										{t("notifiedDate", {
-											date: format(new Date(quotation.notifiedAt), "PPP"),
+											date: format(
+												new Date(quotation.notifiedAt),
+												"d MMM yyyy",
+											),
 											time: format(new Date(quotation.notifiedAt), "HH:mm"),
 										})}
 									</p>

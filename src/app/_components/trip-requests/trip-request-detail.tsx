@@ -166,7 +166,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							<span>
 								<span className="text-muted-foreground">{t("created")}: </span>
 								<span className="font-medium">
-									{format(new Date(request.createdAt), "PPP")}
+									{format(new Date(request.createdAt), "d MMM yyyy")}
 								</span>
 							</span>
 							{request.additionalInfo && (
@@ -226,7 +226,10 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 								{quotation.notifiedAt && (
 									<p className="text-sm text-muted-foreground">
 										{t("notifiedDate", {
-											date: format(new Date(quotation.notifiedAt), "PPP"),
+											date: format(
+												new Date(quotation.notifiedAt),
+												"d MMM yyyy",
+											),
 										})}
 									</p>
 								)}

@@ -2,10 +2,9 @@
 
 import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Dialog,
@@ -27,7 +26,7 @@ import {
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy, MessageCircle, Plane } from "lucide-react";
+import { CalendarPlus, Check, Copy, MessageCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -156,21 +155,26 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			},
 		});
 
-	if (isLoading) return <div>{t("loading")}</div>;
-	if (!request) return <div>{t("notFound")}</div>;
+	const [whatsappHref, setWhatsappHref] = useState("");
 
-	const routes: Route[] = parseRoutes(request.routes);
-
-	const whatsappHref = (() => {
-		const link = `${typeof window !== "undefined" ? window.location.origin : ""}/request/${request.token}`;
+	useEffect(() => {
+		if (!request) return;
+		const link = `${window.location.origin}/request/${request.token}`;
 		const orderNum = String(request.orderNumber).padStart(6, "0");
 		const company = request.company.name;
 		const msg =
 			request.language === "it"
 				? `Siamo ${company} e la stiamo contattando riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta, può visualizzarla qui:\n${link}`
 				: `We are ${company} and we are writing to you about your transfer request #${orderNum}.\nWe have updated your request, you can view it here:\n${link}`;
-		return `https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
-	})();
+		setWhatsappHref(
+			`https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`,
+		);
+	}, [request]);
+
+	if (isLoading) return <div>{t("loading")}</div>;
+	if (!request) return <div>{t("notFound")}</div>;
+
+	const routes: Route[] = parseRoutes(request.routes);
 
 	// Derived status helpers
 	const quotation = request.quotations[0];
@@ -195,29 +199,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			<Button variant="outline" size="sm" onClick={() => router.back()}>
 				{t("backToDashboard")}
 			</Button>
-
-			{/* Confirmed banners — always at top */}
-			{request.status === "CONFIRMED" && (
-				<div className="space-y-2">
-					<AlertBanner
-						variant="success"
-						title={t("tripConfirmedTitle")}
-						description={t("tripConfirmedDesc")}
-					/>
-					{request.confirmationViewedAt ? (
-						<AlertBanner
-							variant="success"
-							title={t("confirmationSeenTitle")}
-							description={t("confirmationSeenDesc", {
-								date: format(new Date(request.confirmationViewedAt), "PPP"),
-								time: format(new Date(request.confirmationViewedAt), "HH:mm"),
-							})}
-						/>
-					) : (
-						<AlertBanner variant="info" title={t("confirmationNotSeenTitle")} />
-					)}
-				</div>
-			)}
 
 			{/* Header card */}
 			<Card>
@@ -661,7 +642,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												{t("notifiedDate", {
 													date: format(
 														new Date(request.pickupInfoNotifiedAt),
-														"PPP",
+														"d MMM yyyy",
 													),
 													time: format(
 														new Date(request.pickupInfoNotifiedAt),
@@ -721,7 +702,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						<span>
 							<span className="text-muted-foreground">{t("created")}: </span>
 							<span className="font-medium">
-								{format(new Date(request.createdAt), "PPP, HH:mm")}
+								{format(new Date(request.createdAt), "d MMM yyyy, HH:mm")}
 							</span>
 						</span>
 					</div>
@@ -820,7 +801,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							{quotation!.respondedAt && (
 								<p className="text-sm text-muted-foreground">
 									{t("respondedDate", {
-										date: format(new Date(quotation!.respondedAt), "PPP"),
+										date: format(
+											new Date(quotation!.respondedAt),
+											"d MMM yyyy",
+										),
 										time: format(new Date(quotation!.respondedAt), "HH:mm"),
 									})}
 								</p>
@@ -848,7 +832,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							{request.lastViewedAt && (
 								<p className="text-sm text-muted-foreground">
 									{t("lastViewedAt", {
-										date: format(new Date(request.lastViewedAt), "PPP"),
+										date: format(new Date(request.lastViewedAt), "d MMM yyyy"),
 										time: format(new Date(request.lastViewedAt), "HH:mm"),
 									})}
 								</p>
@@ -870,7 +854,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												{t("notifiedDate", {
 													date: format(
 														new Date(request.departureDetailsRequestedAt),
-														"PPP",
+														"d MMM yyyy",
 													),
 													time: format(
 														new Date(request.departureDetailsRequestedAt),
@@ -983,7 +967,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<div>
 									<p className="text-sm font-medium">{event.label}</p>
 									<p className="text-xs text-muted-foreground">
-										{format(new Date(event.date), "PPP")} {t("at")}{" "}
+										{format(new Date(event.date), "d MMM yyyy")} {t("at")}{" "}
 										{format(new Date(event.date), "HH:mm")}
 									</p>
 								</div>
