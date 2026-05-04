@@ -5,6 +5,7 @@ import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
 	Dialog,
@@ -248,9 +249,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								</Select>
 							)}
 							{pendingStatus && pendingStatus !== request.status && (
-								<Button
+								<LoadingButton
 									size="sm"
-									disabled={updateStatus.isPending}
+									isLoading={updateStatus.isPending}
 									onClick={() => {
 										updateStatus.mutate(
 											{ id: requestId, status: pendingStatus },
@@ -258,8 +259,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										);
 									}}
 								>
-									{updateStatus.isPending ? t("saving") : t("saveStatus")}
-								</Button>
+									{t("saveStatus")}
+								</LoadingButton>
 							)}
 						</div>
 					</div>
@@ -422,10 +423,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</div>
 									</div>
 									<div className="mt-2 flex flex-wrap items-center gap-2">
-										<Button
+										<LoadingButton
 											size="sm"
 											variant="outline"
-											disabled={updateRoutesByAdmin.isPending}
+											isLoading={updateRoutesByAdmin.isPending}
 											onClick={() =>
 												updateRoutesByAdmin.mutate({
 													id: requestId,
@@ -444,10 +445,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												})
 											}
 										>
-											{updateRoutesByAdmin.isPending
-												? t("saving")
-												: t("saveRouteDetails")}
-										</Button>
+											{t("saveRouteDetails")}
+										</LoadingButton>
 										{route.departureDate && (
 											<Button
 												size="sm"
@@ -582,10 +581,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												/>
 											</div>
 										</div>
-										<Button
+										<LoadingButton
 											className="mt-2"
 											size="sm"
-											disabled={updateRoutesByAdmin.isPending}
+											isLoading={updateRoutesByAdmin.isPending}
 											onClick={() =>
 												updateRoutesByAdmin.mutate({
 													id: requestId,
@@ -617,10 +616,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												})
 											}
 										>
-											{updateRoutesByAdmin.isPending
-												? t("saving")
-												: t("saveAndNotifyCustomer")}
-										</Button>
+											{t("saveAndNotifyCustomer")}
+										</LoadingButton>
 										{request.pickupInfoNotifiedAt && (
 											<p className="text-xs text-muted-foreground">
 												{t("notifiedDate", {
@@ -821,15 +818,15 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							{request.status !== "CONFIRMED" && (
 								<div className="flex flex-wrap items-start gap-3 border-t pt-4">
 									<div className="flex flex-col gap-1">
-										<Button
+										<LoadingButton
 											variant="outline"
-											disabled={requestDepartureDetails.isPending}
+											isLoading={requestDepartureDetails.isPending}
 											onClick={() =>
 												requestDepartureDetails.mutate({ id: requestId })
 											}
 										>
 											{t("requestDetails")}
-										</Button>
+										</LoadingButton>
 										{request.departureDetailsRequestedAt && (
 											<p className="text-xs text-muted-foreground">
 												{t("notifiedDate", {
@@ -865,14 +862,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										>
 											{t("confirmModalCancel")}
 										</Button>
-										<Button
-											disabled={confirmTrip.isPending}
+										<LoadingButton
+											isLoading={confirmTrip.isPending}
 											onClick={() => confirmTrip.mutate({ id: requestId })}
 										>
-											{confirmTrip.isPending
-												? t("confirming")
-												: t("confirmModalConfirm")}
-										</Button>
+											{t("confirmModalConfirm")}
+										</LoadingButton>
 									</DialogFooter>
 								</DialogContent>
 							</Dialog>

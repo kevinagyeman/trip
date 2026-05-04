@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { api } from "@/trpc/react";
 import { ITALIAN_AIRPORTS, formatAirport } from "@/lib/airports";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
@@ -53,17 +53,13 @@ export function AirportsForm({
 					);
 				})}
 			</div>
-			<Button
+			<LoadingButton
 				onClick={() => updateAirports.mutate({ airports: selected })}
-				disabled={updateAirports.isPending}
+				isLoading={updateAirports.isPending}
 				size="sm"
 			>
-				{updateAirports.isPending
-					? t("saving")
-					: saved
-						? t("airportsSaved")
-						: t("saveAirports")}
-			</Button>
+				{saved ? t("airportsSaved") : t("saveAirports")}
+			</LoadingButton>
 			{updateAirports.error && (
 				<p className="text-sm text-destructive">
 					{updateAirports.error.message}

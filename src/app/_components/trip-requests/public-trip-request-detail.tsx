@@ -3,6 +3,7 @@
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -354,10 +355,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										)}
 									</div>
 									<div className="mt-2 flex items-center gap-3">
-										<Button
+										<LoadingButton
 											size="sm"
 											variant="outline"
-											disabled={updateRoutes.isPending}
+											isLoading={updateRoutes.isPending}
 											onClick={() => {
 												setNotified(false);
 												updateRoutes.mutate({
@@ -374,10 +375,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 												});
 											}}
 										>
-											{updateRoutes.isPending
-												? t("saving")
-												: t("saveRouteDetails")}
-										</Button>
+											{t("saveRouteDetails")}
+										</LoadingButton>
 										{notified && (
 											<p className="text-xs text-muted-foreground">
 												{t("adminNotified")}

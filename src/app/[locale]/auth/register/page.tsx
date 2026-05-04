@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Card,
 	CardContent,
@@ -169,9 +169,13 @@ function RegisterForm() {
 							</div>
 						)}
 
-						<Button type="submit" className="w-full" disabled={isSubmitting}>
-							{isSubmitting ? t("registering") : t("createAccount")}
-						</Button>
+						<LoadingButton
+							type="submit"
+							className="w-full"
+							isLoading={isSubmitting}
+						>
+							{t("createAccount")}
+						</LoadingButton>
 
 						<div className="text-center text-sm">
 							<span className="text-muted-foreground">

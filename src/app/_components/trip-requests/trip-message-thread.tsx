@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import { enUS, it as itLocale } from "date-fns/locale";
@@ -161,13 +161,14 @@ export function TripMessageThread(props: Props) {
 						}
 					}}
 				/>
-				<Button
+				<LoadingButton
 					onClick={handleSend}
-					disabled={isPending || !body.trim()}
+					isLoading={isPending}
+					disabled={!body.trim()}
 					className="self-end"
 				>
-					{isPending ? t("sending") : t("send")}
-				</Button>
+					{t("send")}
+				</LoadingButton>
 			</div>
 		</div>
 	);

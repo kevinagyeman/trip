@@ -23,8 +23,7 @@ export function LoadingButton({
 			className={cn(className)}
 			{...props}
 		>
-			{isLoading && <Loader2 className="animate-spin" />}
-			{children}
+			{isLoading ? <Loader2 className="animate-spin" /> : children}
 		</Button>
 	);
 }
