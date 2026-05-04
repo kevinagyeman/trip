@@ -82,6 +82,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	);
 
 	// Route departures state (admin editable)
+	const [adminRoutePlaces, setAdminRoutePlaces] = useState<
+		Array<{ pickup: string; destination: string }>
+	>([]);
+
 	const [adminRouteDepartures, setAdminRouteDepartures] = useState<
 		Array<{
 			departureDate: string;
@@ -96,6 +100,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	useEffect(() => {
 		if (request) {
 			const parsed = parseRoutes(request.routes);
+			setAdminRoutePlaces(
+				parsed.map((r) => ({
+					pickup: r.pickup,
+					destination: r.destination,
+				})),
+			);
 			setAdminRouteDepartures(
 				parsed.map((r) => ({
 					departureDate: r.departureDate ?? "",
@@ -313,7 +323,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							<div key={i} className="rounded-lg border text-sm">
 								{/* Route header */}
 								<div className="flex items-start justify-between gap-3 p-3">
-									<div className="space-y-1">
+									<div className="w-full space-y-2">
 										<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 											{route.type === "airport_in"
 												? t("sectionArrival")
@@ -322,10 +332,32 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													? t("sectionDeparture")
 													: t("routeN", { n: i + 1 })}
 										</p>
-										<div className="flex flex-wrap items-center gap-2 font-semibold">
-											<span>{route.pickup}</span>
+										<div className="flex flex-wrap items-center gap-2">
+											<Input
+												className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+												value={adminRoutePlaces[i]?.pickup ?? route.pickup}
+												onChange={(e) =>
+													setAdminRoutePlaces((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.pickup = e.target.value;
+														return next;
+													})
+												}
+											/>
 											<span className="text-muted-foreground">→</span>
-											<span>{route.destination}</span>
+											<Input
+												className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+												value={
+													adminRoutePlaces[i]?.destination ?? route.destination
+												}
+												onChange={(e) =>
+													setAdminRoutePlaces((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.destination = e.target.value;
+														return next;
+													})
+												}
+											/>
 										</div>
 									</div>
 								</div>
@@ -432,6 +464,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													id: requestId,
 													routes: routes.map((r, j) => ({
 														...r,
+														pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+														destination:
+															adminRoutePlaces[j]?.destination ?? r.destination,
 														departureDate:
 															adminRouteDepartures[j]?.departureDate ||
 															undefined,
@@ -591,6 +626,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													notify: true,
 													routes: routes.map((r, j) => ({
 														...r,
+														pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+														destination:
+															adminRoutePlaces[j]?.destination ?? r.destination,
 														departureDate:
 															adminRouteDepartures[j]?.departureDate ||
 															undefined,
