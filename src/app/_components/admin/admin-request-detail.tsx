@@ -26,7 +26,7 @@ import {
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy, Plane } from "lucide-react";
+import { CalendarPlus, Check, Copy, MessageCircle, Plane } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -149,6 +149,16 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes: Route[] = parseRoutes(request.routes);
+
+	const whatsappHref = (() => {
+		const link = `${typeof window !== "undefined" ? window.location.origin : ""}/request/${request.token}`;
+		const orderNum = String(request.orderNumber).padStart(6, "0");
+		const msg =
+			request.language === "it"
+				? `Ciao ${request.firstName}, la contatto riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta:\n${link}`
+				: `Hi ${request.firstName}, I'm contacting you regarding your transfer request #${orderNum}.\nWe have updated your request:\n${link}`;
+		return `https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
+	})();
 
 	// Derived status helpers
 	const quotation = request.quotations[0];
@@ -651,9 +661,20 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								{request.user?.email ?? request.customerEmail}
 							</span>
 						</span>
-						<span>
+						<span className="flex items-center gap-2">
 							<span className="text-muted-foreground">{t("phone")}: </span>
 							<span className="font-medium">{request.phone}</span>
+							{request.phone && (
+								<a
+									href={whatsappHref}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
+								>
+									<MessageCircle className="h-3 w-3" />
+									WhatsApp
+								</a>
+							)}
 						</span>
 						<span>
 							<span className="text-muted-foreground">{t("language")}: </span>
@@ -873,9 +894,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Messages */}
 			<Card>
-				<CardHeader className="pb-3">
-					<CardTitle className="text-base">{t("messages")}</CardTitle>
-				</CardHeader>
 				<CardContent className="pt-0">
 					<TripMessageThread mode="admin" requestId={requestId} />
 				</CardContent>
