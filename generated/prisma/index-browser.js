@@ -132,6 +132,7 @@ exports.Prisma.CompanyScalarFieldEnum = {
   country: 'country',
   website: 'website',
   estimateNotice: 'estimateNotice',
+  airports: 'airports',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -210,6 +211,8 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   lastViewedAt: 'lastViewedAt',
   confirmedAt: 'confirmedAt',
   confirmationViewedAt: 'confirmationViewedAt',
+  departureDetailsRequestedAt: 'departureDetailsRequestedAt',
+  pickupInfoNotifiedAt: 'pickupInfoNotifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
@@ -261,7 +264,8 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   address: 'address',
   country: 'country',
   website: 'website',
-  estimateNotice: 'estimateNotice'
+  estimateNotice: 'estimateNotice',
+  airports: 'airports'
 };
 
 exports.Prisma.AccountOrderByRelevanceFieldEnum = {

@@ -91,6 +91,16 @@ function makeAdminNotifier(
 
 const TRANSLATIONS = {
 	en: {
+		departureDetailsRequest: {
+			subject: (o: string, name: string) =>
+				`${o} - Please provide your departure details | ${name}`,
+			preview: "We need your departure details",
+			title: (firstName: string) =>
+				`Dear ${firstName}, please provide your departure details.`,
+			subtitle:
+				"To prepare your transfer, we need your departure date, time, and flight number (if applicable). Open your request to fill in the details.",
+			button: "Add Departure Details",
+		},
 		requestReceived: {
 			subject: (o: string, name: string) => `${o} - Request received | ${name}`,
 			preview: "View your request",
@@ -124,8 +134,28 @@ const TRANSLATIONS = {
 			subtitle: "Log in to your request to read it and reply.",
 			button: "View Request",
 		},
+		pickupInfoReady: {
+			subject: (o: string, name: string) =>
+				`${o} - Pickup details ready | ${name}`,
+			preview: "Your pickup details are ready",
+			title: (firstName: string) =>
+				`Dear ${firstName}, your pickup details are ready!`,
+			subtitle:
+				"The operator has provided the pickup information for your transfer. Open your request to see the full details.",
+			button: "View Details",
+		},
 	},
 	it: {
+		departureDetailsRequest: {
+			subject: (o: string, name: string) =>
+				`${o} - Inserisci i dettagli di partenza | ${name}`,
+			preview: "Abbiamo bisogno dei tuoi dettagli di partenza",
+			title: (firstName: string) =>
+				`Gentile ${firstName}, inserisci i dettagli di partenza.`,
+			subtitle:
+				"Per preparare il tuo trasferimento, abbiamo bisogno della data, dell'orario di partenza e del numero di volo (se applicabile). Apri la tua richiesta per inserire i dettagli.",
+			button: "Inserisci Dettagli",
+		},
 		requestReceived: {
 			subject: (o: string, name: string) =>
 				`${o} - Richiesta ricevuta | ${name}`,
@@ -161,6 +191,16 @@ const TRANSLATIONS = {
 				`Gentile ${firstName}, l'operatore ti ha inviato un nuovo messaggio.`,
 			subtitle: "Accedi alla tua richiesta per leggerlo e rispondere.",
 			button: "Visualizza Richiesta",
+		},
+		pickupInfoReady: {
+			subject: (o: string, name: string) =>
+				`${o} - Dettagli ritiro pronti | ${name}`,
+			preview: "I dettagli del ritiro sono pronti",
+			title: (firstName: string) =>
+				`Gentile ${firstName}, i dettagli del ritiro sono pronti!`,
+			subtitle:
+				"L'operatore ha fornito le informazioni di ritiro per il tuo trasferimento. Apri la tua richiesta per vedere tutti i dettagli.",
+			button: "Visualizza Dettagli",
 		},
 	},
 } as const;
@@ -253,6 +293,26 @@ export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 	});
 }
 
+export async function sendPickupInfoToCustomer(t: CustomerTarget) {
+	const o = order(t.orderNumber);
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
+	const c = tr(t.language).pickupInfoReady;
+	await sendEmail({
+		to: t.customerEmail,
+		subject: c.subject(o, companyName),
+		react: createElement(GenericEmail, {
+			data: {
+				preview: c.preview,
+				title: c.title(t.firstName),
+				subtitle: c.subtitle,
+				buttonLabel: c.button,
+			},
+			href: `${APP_URL}/request/${t.token}`,
+		}),
+	});
+}
+
 // ─── Messages ─────────────────────────────────────────────────────────────────
 
 export async function sendAdminMessageToCustomer(t: CustomerTarget) {
@@ -291,6 +351,26 @@ export async function sendQuotationToCustomer(t: CustomerTarget) {
 			data: {
 				preview: c.preview,
 				title: c.title(t.firstName, o),
+				subtitle: c.subtitle,
+				buttonLabel: c.button,
+			},
+			href: `${APP_URL}/request/${t.token}`,
+		}),
+	});
+}
+
+export async function sendDepartureDetailsRequestToCustomer(t: CustomerTarget) {
+	const o = order(t.orderNumber);
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
+	const c = tr(t.language).departureDetailsRequest;
+	await sendEmail({
+		to: t.customerEmail,
+		subject: c.subject(o, companyName),
+		react: createElement(GenericEmail, {
+			data: {
+				preview: c.preview,
+				title: c.title(t.firstName),
 				subtitle: c.subtitle,
 				buttonLabel: c.button,
 			},

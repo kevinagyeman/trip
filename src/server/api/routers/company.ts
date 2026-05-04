@@ -2,6 +2,7 @@ import {
 	createTRPCRouter,
 	superAdminProcedure,
 	publicProcedure,
+	adminProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -47,6 +48,7 @@ export const companyRouter = createTRPCRouter({
 					name: true,
 					slug: true,
 					logoUrl: true,
+					airports: true,
 				},
 			});
 
@@ -133,6 +135,18 @@ export const companyRouter = createTRPCRouter({
 			return ctx.db.user.update({
 				where: { id: input.userId },
 				data: { companyId: null, role: "USER" },
+			});
+		}),
+
+	// ADMIN: Update company airports
+	updateAirports: adminProcedure
+		.input(z.object({ airports: z.array(z.string()) }))
+		.mutation(async ({ ctx, input }) => {
+			const { companyId } = ctx.session.user;
+			if (!companyId) throw new Error("No company");
+			return ctx.db.company.update({
+				where: { id: companyId },
+				data: { airports: JSON.stringify(input.airports) },
 			});
 		}),
 });

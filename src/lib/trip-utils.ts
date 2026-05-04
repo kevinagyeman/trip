@@ -1,4 +1,13 @@
-export type RouteType = "airport" | "standard";
+// "airport" is the legacy value — treated as "airport_out"
+export type RouteType = "airport_out" | "airport_in" | "standard" | "airport";
+
+export type PickupInfo = {
+	meetingPoint?: string;
+	beThereAtDate?: string;
+	beThereAtTime?: string;
+	driverName?: string;
+	driverPhone?: string;
+};
 
 export type Route = {
 	pickup: string;
@@ -7,6 +16,7 @@ export type Route = {
 	departureDate?: string;
 	departureTime?: string;
 	flightNumber?: string;
+	pickupInfo?: PickupInfo;
 };
 
 export const STATUS_COLORS: Record<string, string> = {

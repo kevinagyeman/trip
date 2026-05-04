@@ -115,14 +115,6 @@ export function AllTripRequests() {
 											>
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
-											{request.confirmationViewedAt && (
-												<Badge
-													variant="ghost"
-													className="px-1.5 py-0 text-xs text-muted-foreground"
-												>
-													{t("confirmationSeen")}
-												</Badge>
-											)}
 										</div>
 										<p className="truncate text-sm font-semibold mt-3">
 											{request.firstName} {request.lastName}

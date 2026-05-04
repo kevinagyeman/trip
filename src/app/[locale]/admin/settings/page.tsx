@@ -9,6 +9,8 @@ import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
 import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
+import { AirportsForm } from "@/app/_components/admin/airports-form";
+import { parseAirports } from "@/lib/airports";
 
 export default async function AdminSettingsPage({
 	params,
@@ -35,7 +37,7 @@ export default async function AdminSettingsPage({
 		session.user.companyId
 			? db.company.findUnique({
 					where: { id: session.user.companyId },
-					select: { slug: true, estimateNotice: true },
+					select: { slug: true, estimateNotice: true, airports: true },
 				})
 			: null,
 	]);
@@ -59,6 +61,16 @@ export default async function AdminSettingsPage({
 						/>
 					</CardContent>
 				</Card>
+				{company && (
+					<Card>
+						<CardHeader>
+							<CardTitle>{t("airportsTitle")}</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<AirportsForm currentAirports={parseAirports(company.airports)} />
+						</CardContent>
+					</Card>
+				)}
 				{company && (
 					<Card>
 						<CardHeader>

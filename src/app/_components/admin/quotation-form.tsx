@@ -207,6 +207,7 @@ export function QuotationForm({
 					<p className="text-sm text-muted-foreground">
 						{t("notifiedDate", {
 							date: format(new Date(quotation.notifiedAt), "PPP"),
+							time: format(new Date(quotation.notifiedAt), "HH:mm"),
 						})}
 					</p>
 				)}

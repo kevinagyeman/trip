@@ -24,16 +24,18 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Copy, Minus, Plane, Plus, X } from "lucide-react";
+import { Minus, Plane, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm({
 	companySlug,
+	airports = [],
 }: {
 	companySlug: string;
+	airports?: string[];
 }) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
@@ -49,7 +51,7 @@ export function CreateTripRequestForm({
 	} = useForm<CreateTripRequestFormValues>({
 		resolver: zodResolver(createTripRequestSchema),
 		defaultValues: {
-			routes: [{ pickup: "", destination: "", type: "standard" as const }],
+			routes: [{ pickup: "", destination: "" }],
 			language: "en",
 			email: "",
 			phoneCountryCode: "+39",
@@ -66,10 +68,33 @@ export function CreateTripRequestForm({
 		fields: routeFields,
 		append: appendRoute,
 		remove: removeRoute,
+		replace: replaceRoutes,
 	} = useFieldArray({ control, name: "routes" });
 
 	const { fields: childrenAgeFields, replace: replaceChildrenAges } =
 		useFieldArray({ control, name: "childrenAges" });
+
+	const [serviceType, setServiceType] = useState<
+		"standard" | "airport_in" | "airport_out" | "airport_both" | null
+	>(null);
+
+	const handleServiceTypeChange = (
+		type: "standard" | "airport_in" | "airport_out" | "airport_both",
+	) => {
+		setServiceType(type);
+		if (type === "standard") {
+			replaceRoutes([{ pickup: "", destination: "", type: "standard" }]);
+		} else if (type === "airport_in") {
+			replaceRoutes([{ pickup: "", destination: "", type: "airport_in" }]);
+		} else if (type === "airport_out") {
+			replaceRoutes([{ pickup: "", destination: "", type: "airport_out" }]);
+		} else {
+			replaceRoutes([
+				{ pickup: "", destination: "", type: "airport_in" },
+				{ pickup: "", destination: "", type: "airport_out" },
+			]);
+		}
+	};
 
 	const areThereChildren = watch("areThereChildren");
 	const numberOfChildren = watch("numberOfChildren");
@@ -117,18 +142,6 @@ export function CreateTripRequestForm({
 		});
 	};
 
-	const duplicateRoute = (index: number) => {
-		const current = getValues(`routes.${index}`);
-		appendRoute({
-			pickup: current.pickup,
-			destination: current.destination,
-			type: current.type,
-			departureDate: current.departureDate,
-			departureTime: current.departureTime,
-			flightNumber: current.flightNumber,
-		});
-	};
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 			{/* Route boxes */}
@@ -137,128 +150,236 @@ export function CreateTripRequestForm({
 
 				<TripRequestAlert />
 
-				{routeFields.map((field, index) => (
-					<div key={field.id} className="space-y-3 rounded-lg border p-4">
-						{/* Route header */}
-						<div className="flex items-center justify-between">
-							<h4 className="font-medium text-sm text-muted-foreground">
-								{t("routeN", { n: index + 1 })}
-							</h4>
-							<div className="flex gap-1">
-								<Button
-									type="button"
-									variant="outline"
-									size="sm"
-									onClick={() => duplicateRoute(index)}
-								>
-									<Copy className="mr-1 h-3 w-3" />
-									{t("duplicateRoute")}
-								</Button>
-								{routeFields.length > 1 && (
-									<Button
-										type="button"
-										variant="ghost"
-										size="icon"
-										onClick={() => removeRoute(index)}
-									>
-										<X className="h-4 w-4" />
-									</Button>
-								)}
-							</div>
-						</div>
-
-						{/* Pickup */}
-						<div className="space-y-2">
-							<CustomInput
-								labelText={t("pickup")}
-								placeholder={t("pickupPlaceholder")}
-								error={errors.routes?.[index]?.pickup?.message}
-								inputProps={{ ...register(`routes.${index}.pickup`) }}
-							/>
-						</div>
-
-						{/* Destination */}
-						<div className="space-y-2 pt-6">
-							<CustomInput
-								labelText={t("destination")}
-								placeholder={t("destinationPlaceholder")}
-								error={errors.routes?.[index]?.destination?.message}
-								inputProps={{ ...register(`routes.${index}.destination`) }}
-							/>
-						</div>
-
-						{/* Transfer type toggle */}
-						<div className="pt-4 space-y-2">
-							<p className="text-xs font-medium text-muted-foreground">
-								{t("transferType")}
-							</p>
-							<div className="flex gap-2">
-								<Button
-									type="button"
-									size="sm"
-									variant={
-										watch(`routes.${index}.type`) !== "airport"
-											? "default"
-											: "outline"
-									}
-									onClick={() => setValue(`routes.${index}.type`, "standard")}
-								>
-									{t("transferTypeStandard")}
-								</Button>
-								<Button
-									type="button"
-									size="sm"
-									variant={
-										watch(`routes.${index}.type`) === "airport"
-											? "default"
-											: "outline"
-									}
-									onClick={() => setValue(`routes.${index}.type`, "airport")}
-								>
-									<Plane className="mr-1.5 h-3.5 w-3.5" />
-									{t("transferTypeAirport")}
-								</Button>
-							</div>
-						</div>
-
-						{/* Departure details */}
-						<div
-							className={`grid grid-cols-1 gap-3 pt-4 ${watch(`routes.${index}.type`) === "airport" ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+				{/* Service type — top-level selector */}
+				<div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+					{(
+						[
+							{
+								value: "standard",
+								emoji: "🚗",
+								label: t("transferTypeStandard"),
+							},
+							{
+								value: "airport_in",
+								emoji: "🛬",
+								label: t("transferTypeAirportIn"),
+							},
+							{
+								value: "airport_out",
+								emoji: null,
+								label: t("transferTypeAirportOut"),
+								icon: true,
+							},
+							{
+								value: "airport_both",
+								emoji: "✈🛬",
+								label: t("transferTypeAirportBoth"),
+							},
+						] as const
+					).map((opt) => (
+						<button
+							key={opt.value}
+							type="button"
+							onClick={() => handleServiceTypeChange(opt.value)}
+							className={`flex flex-col items-center gap-1.5 rounded-lg border-2 p-3 text-sm font-medium transition-colors ${
+								serviceType === opt.value
+									? "border-primary bg-primary/5 text-primary"
+									: "border-border text-muted-foreground hover:border-primary/50"
+							}`}
 						>
-							<CustomInput
-								labelText={t("routeDepartureDate")}
-								inputProps={{
-									...register(`routes.${index}.departureDate`),
-									type: "date",
-								}}
-							/>
-							<CustomInput
-								labelText={t("routeDepartureTime")}
-								inputProps={{
-									...register(`routes.${index}.departureTime`),
-									type: "time",
-								}}
-							/>
-							{watch(`routes.${index}.type`) === "airport" && (
-								<CustomInput
-									labelText={t("routeFlightNumber")}
-									placeholder={t("routeFlightNumberPlaceholder")}
-									inputProps={{ ...register(`routes.${index}.flightNumber`) }}
-								/>
+							{"icon" in opt && opt.icon ? (
+								<Plane className="h-5 w-5" />
+							) : (
+								<span className="text-xl">{opt.emoji}</span>
 							)}
-						</div>
-					</div>
-				))}
+							{opt.label}
+						</button>
+					))}
+				</div>
 
-				<Button
-					type="button"
-					variant="outline"
-					className="w-full"
-					onClick={() => appendRoute({ pickup: "", destination: "" })}
-				>
-					<Plus className="mr-2 h-4 w-4" />
-					{t("addRoute")}
-				</Button>
+				{/* Route cards — shown after service type is selected */}
+				{serviceType &&
+					routeFields.map((field, index) => {
+						const routeType = watch(`routes.${index}.type`);
+						const isAirportIn = routeType === "airport_in";
+						const isAirportOut = routeType === "airport_out";
+						const isAirport = isAirportIn || isAirportOut;
+						const isStandard = routeType === "standard";
+						return (
+							<div key={field.id} className="space-y-3 rounded-lg border p-4">
+								{/* Route header */}
+								<div className="flex items-center justify-between">
+									<h4 className="font-semibold flex items-center gap-1.5">
+										{isAirportIn && (
+											<>
+												<span>🛬</span>
+												{t("sectionArrival")}
+											</>
+										)}
+										{isAirportOut && (
+											<>
+												<Plane className="h-4 w-4" />
+												{t("sectionDeparture")}
+											</>
+										)}
+										{isStandard && t("routeN", { n: index + 1 })}
+									</h4>
+									{isStandard && routeFields.length > 1 && (
+										<Button
+											type="button"
+											variant="ghost"
+											size="icon"
+											onClick={() => removeRoute(index)}
+										>
+											<X className="h-4 w-4" />
+										</Button>
+									)}
+								</div>
+
+								{/* Pickup */}
+								<div className="space-y-2">
+									{isAirportIn ? (
+										<>
+											<Label>{t("fromAirport")}</Label>
+											<Controller
+												name={`routes.${index}.pickup`}
+												control={control}
+												render={({ field: f }) => (
+													<Select value={f.value} onValueChange={f.onChange}>
+														<SelectTrigger>
+															<SelectValue
+																placeholder={t("airportSelectPlaceholder")}
+															/>
+														</SelectTrigger>
+														<SelectContent>
+															{airports.map((a) => (
+																<SelectItem key={a} value={a}>
+																	{a}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
+												)}
+											/>
+											{errors.routes?.[index]?.pickup && (
+												<small className="text-xs text-destructive">
+													{errors.routes[index].pickup.message}
+												</small>
+											)}
+										</>
+									) : (
+										<CustomInput
+											labelText={isAirportOut ? t("fromPickup") : t("pickup")}
+											placeholder={t("pickupPlaceholder")}
+											error={errors.routes?.[index]?.pickup?.message}
+											inputProps={{ ...register(`routes.${index}.pickup`) }}
+										/>
+									)}
+								</div>
+
+								{/* Destination */}
+								<div className="space-y-2 pt-4">
+									{isAirportOut ? (
+										<>
+											<Label>{t("toAirport")}</Label>
+											<Controller
+												name={`routes.${index}.destination`}
+												control={control}
+												render={({ field: f }) => (
+													<Select value={f.value} onValueChange={f.onChange}>
+														<SelectTrigger>
+															<SelectValue
+																placeholder={t("airportSelectPlaceholder")}
+															/>
+														</SelectTrigger>
+														<SelectContent>
+															{airports.map((a) => (
+																<SelectItem key={a} value={a}>
+																	{a}
+																</SelectItem>
+															))}
+														</SelectContent>
+													</Select>
+												)}
+											/>
+											{errors.routes?.[index]?.destination && (
+												<small className="text-xs text-destructive">
+													{errors.routes[index].destination.message}
+												</small>
+											)}
+										</>
+									) : (
+										<CustomInput
+											labelText={
+												isAirportIn ? t("toDestination") : t("destination")
+											}
+											placeholder={t("destinationPlaceholder")}
+											error={errors.routes?.[index]?.destination?.message}
+											inputProps={{
+												...register(`routes.${index}.destination`),
+											}}
+										/>
+									)}
+								</div>
+
+								{/* Date / time / flight */}
+								<div
+									className={`grid grid-cols-1 gap-3 pt-4 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+								>
+									<CustomInput
+										labelText={t(
+											isAirportOut
+												? "routeFlightDate"
+												: isAirportIn
+													? "routeLandingDate"
+													: "routeArrivalDate",
+										)}
+										inputProps={{
+											...register(`routes.${index}.departureDate`),
+											type: "date",
+										}}
+									/>
+									<CustomInput
+										labelText={t(
+											isAirportOut
+												? "routeFlightTime"
+												: isAirportIn
+													? "routeLandingTime"
+													: "routeArrivalTime",
+										)}
+										inputProps={{
+											...register(`routes.${index}.departureTime`),
+											type: "time",
+										}}
+									/>
+									{isAirport && (
+										<CustomInput
+											labelText={t("routeFlightNumber")}
+											placeholder={t("routeFlightNumberPlaceholder")}
+											inputProps={{
+												...register(`routes.${index}.flightNumber`),
+											}}
+										/>
+									)}
+								</div>
+							</div>
+						);
+					})}
+
+				{/* Add route — only for standard */}
+				{serviceType === "standard" && (
+					<Button
+						type="button"
+						variant="outline"
+						className="w-full"
+						onClick={() =>
+							appendRoute({ pickup: "", destination: "", type: "standard" })
+						}
+					>
+						<Plus className="mr-2 h-4 w-4" />
+						{t("addRoute")}
+					</Button>
+				)}
 
 				{errors.routes?.root?.message && (
 					<p className="text-sm text-destructive">

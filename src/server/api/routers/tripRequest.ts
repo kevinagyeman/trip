@@ -5,8 +5,10 @@ import {
 	publicProcedure,
 } from "@/server/api/trpc";
 import {
+	sendDepartureDetailsRequestToCustomer,
 	sendDepartureDetailsUpdatedToAdmins,
 	sendNewTripRequestToAdmins,
+	sendPickupInfoToCustomer,
 	sendRequestReceivedToCustomer,
 	sendTripConfirmedToCustomer,
 } from "@/server/emails/trip-emails";
@@ -14,13 +16,22 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { TripRequestStatus } from "../../../../generated/prisma";
 
+const pickupInfoSchema = z.object({
+	meetingPoint: z.string().optional(),
+	beThereAtDate: z.string().optional(),
+	beThereAtTime: z.string().optional(),
+	driverName: z.string().optional(),
+	driverPhone: z.string().optional(),
+});
+
 const routeSchema = z.object({
 	pickup: z.string().min(1),
 	destination: z.string().min(1),
-	type: z.enum(["airport", "standard"]).optional(),
+	type: z.enum(["airport_out", "airport_in", "standard", "airport"]).optional(),
 	departureDate: z.string().optional(),
 	departureTime: z.string().optional(),
 	flightNumber: z.string().optional(),
+	pickupInfo: pickupInfoSchema.optional(),
 });
 
 export const tripRequestRouter = createTRPCRouter({
@@ -410,6 +421,7 @@ export const tripRequestRouter = createTRPCRouter({
 						departureDate: z.string().optional(),
 						departureTime: z.string().optional(),
 						flightNumber: z.string().optional(),
+						pickupInfo: pickupInfoSchema.optional(),
 					}),
 				),
 			}),
@@ -456,14 +468,25 @@ export const tripRequestRouter = createTRPCRouter({
 						departureDate: z.string().optional(),
 						departureTime: z.string().optional(),
 						flightNumber: z.string().optional(),
+						pickupInfo: pickupInfoSchema.optional(),
 					}),
 				),
+				notify: z.boolean().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
-				select: { id: true, companyId: true },
+				select: {
+					id: true,
+					companyId: true,
+					customerEmail: true,
+					firstName: true,
+					lastName: true,
+					orderNumber: true,
+					token: true,
+					language: true,
+				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
 			const { companyId } = ctx.session.user;
@@ -473,7 +496,61 @@ export const tripRequestRouter = createTRPCRouter({
 
 			await ctx.db.tripRequest.update({
 				where: { id: input.id },
-				data: { routes: JSON.stringify(input.routes) },
+				data: {
+					routes: JSON.stringify(input.routes),
+					...(input.notify ? { pickupInfoNotifiedAt: new Date() } : {}),
+				},
+			});
+
+			if (input.notify) {
+				void sendPickupInfoToCustomer({
+					customerEmail: tripRequest.customerEmail,
+					firstName: tripRequest.firstName,
+					lastName: tripRequest.lastName,
+					orderNumber: tripRequest.orderNumber,
+					token: tripRequest.token,
+					language: tripRequest.language,
+					companyId: tripRequest.companyId,
+				});
+			}
+		}),
+
+	// ADMIN: Request departure details from customer
+	requestDepartureDetails: adminProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id: input.id },
+				select: {
+					id: true,
+					companyId: true,
+					customerEmail: true,
+					firstName: true,
+					lastName: true,
+					orderNumber: true,
+					token: true,
+					language: true,
+				},
+			});
+			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
+
+			await ctx.db.tripRequest.update({
+				where: { id: input.id },
+				data: { departureDetailsRequestedAt: new Date() },
+			});
+
+			await sendDepartureDetailsRequestToCustomer({
+				customerEmail: tripRequest.customerEmail,
+				firstName: tripRequest.firstName,
+				lastName: tripRequest.lastName,
+				orderNumber: tripRequest.orderNumber,
+				token: tripRequest.token,
+				language: tripRequest.language,
+				companyId: tripRequest.companyId,
 			});
 		}),
 

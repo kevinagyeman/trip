@@ -2,7 +2,6 @@
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Badge } from "@/components/ui/badge";
-import { Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -21,6 +20,7 @@ import {
 	QUOTATION_STATUS_COLORS,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
+import { Clock, MapPin, Phone, Plane, User } from "lucide-react";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
@@ -91,6 +91,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		request.status,
 	);
 
+	const hasRejectedQuotation = request.quotations.some(
+		(q) => q.status === "REJECTED",
+	);
+
 	return (
 		<div className="space-y-6">
 			{/* Trip confirmed banner */}
@@ -99,6 +103,24 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					variant="success"
 					title={t("tripConfirmedTitle")}
 					description={t("tripConfirmedDesc")}
+				/>
+			)}
+
+			{/* No quotation yet */}
+			{request.quotations.length === 0 && (
+				<AlertBanner
+					variant="info"
+					title={t("quotationPendingTitle")}
+					description={t("quotationPendingDesc")}
+				/>
+			)}
+
+			{/* Quotation rejected */}
+			{hasRejectedQuotation && (
+				<AlertBanner
+					variant="error"
+					title={t("quotationRejected")}
+					description={t("quotationRejectedDesc")}
 				/>
 			)}
 
@@ -145,12 +167,14 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									<span className="text-muted-foreground">→</span>
 									<span>{route.destination}</span>
 								</div>
-								{route.type === "airport" && (
-									<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-										<Plane className="h-3 w-3" />
-										{t("transferTypeAirport")}
-									</span>
-								)}
+								{route.type === "airport_out" ||
+									route.type === "airport_in" ||
+									(route.type === "airport" && (
+										<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+											<Plane className="h-3 w-3" />
+											{t("transferTypeAirport")}
+										</span>
+									))}
 								{(route.departureDate ??
 									route.departureTime ??
 									route.flightNumber) && (
@@ -172,15 +196,105 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								)}
 							</div>
 
+							{/* Pickup info card — shown when admin has filled it */}
+							{route.pickupInfo &&
+								(route.pickupInfo.meetingPoint ??
+									route.pickupInfo.beThereAtDate ??
+									route.pickupInfo.driverName) && (
+									<div className="border-t bg-emerald-50 p-3 dark:bg-emerald-900/20">
+										<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+											{t("pickupInfoTitle")}
+										</p>
+										<div className="space-y-1.5 text-sm">
+											{route.pickupInfo.meetingPoint && (
+												<div className="flex items-start gap-2">
+													<MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+													<div>
+														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+															{t("pickupInfoMeetingPoint")}
+														</p>
+														<span className="font-medium">
+															{route.pickupInfo.meetingPoint}
+														</span>
+													</div>
+												</div>
+											)}
+											{(route.pickupInfo.beThereAtDate ??
+												route.pickupInfo.beThereAtTime) && (
+												<div className="flex items-start gap-2">
+													<Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+													<div>
+														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+															{t("pickupInfoBeThereAt")}
+														</p>
+														<span className="font-medium">
+															{route.pickupInfo.beThereAtDate &&
+																format(
+																	new Date(route.pickupInfo.beThereAtDate),
+																	"d MMM yyyy",
+																)}
+															{route.pickupInfo.beThereAtDate &&
+																route.pickupInfo.beThereAtTime &&
+																" · "}
+															{route.pickupInfo.beThereAtTime}
+														</span>
+													</div>
+												</div>
+											)}
+											{route.pickupInfo.driverName && (
+												<div className="flex items-start gap-2">
+													<User className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+													<div>
+														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+															{t("pickupInfoDriverName")}
+														</p>
+														<span className="font-medium">
+															{route.pickupInfo.driverName}
+														</span>
+													</div>
+												</div>
+											)}
+											{route.pickupInfo.driverPhone && (
+												<div className="flex items-start gap-2">
+													<Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+													<div>
+														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+															{t("pickupInfoDriverPhone")}
+														</p>
+														<a
+															href={`tel:${route.pickupInfo.driverPhone}`}
+															className="font-medium text-emerald-700 underline dark:text-emerald-400"
+														>
+															{route.pickupInfo.driverPhone}
+														</a>
+													</div>
+												</div>
+											)}
+										</div>
+									</div>
+								)}
+
 							{canEdit && (
 								<div className="border-t border-dashed p-3">
 									<p className="mb-2 text-xs font-medium text-muted-foreground">
 										{t("routeDepartureDetails")}
 									</p>
-									<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+									<div
+										className={
+											"grid grid-cols-1 gap-2 " +
+											(route.type === "standard" || !route.type
+												? "sm:grid-cols-2"
+												: "sm:grid-cols-3")
+										}
+									>
 										<div className="space-y-1">
 											<Label className="text-xs">
-												{t("routeDepartureDate")}
+												{route.type === "airport_out" ||
+												route.type === "airport"
+													? t("routeFlightDate")
+													: route.type === "airport_in"
+														? t("routeLandingDate")
+														: t("routeDepartureDate")}
 											</Label>
 											<Input
 												type="date"
@@ -197,7 +311,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										</div>
 										<div className="space-y-1">
 											<Label className="text-xs">
-												{t("routeDepartureTime")}
+												{route.type === "airport_out" ||
+												route.type === "airport"
+													? t("routeFlightTime")
+													: route.type === "airport_in"
+														? t("routeLandingTime")
+														: t("routeDepartureTime")}
 											</Label>
 											<Input
 												type="time"
@@ -212,7 +331,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 												}
 											/>
 										</div>
-										{route.type === "airport" && (
+										{(route.type === "airport_out" ||
+											route.type === "airport_in" ||
+											route.type === "airport") && (
 											<div className="space-y-1">
 												<Label className="text-xs">
 													{t("routeFlightNumber")}
@@ -355,13 +476,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			</div>
 
 			{/* Quotations */}
-			{request.quotations.length === 0 && (
-				<AlertBanner
-					variant="info"
-					title={t("quotationPendingTitle")}
-					description={t("quotationPendingDesc")}
-				/>
-			)}
 			{request.quotations.length > 0 && (
 				<div className="space-y-4">
 					<h2 className="text-xl font-bold">{t("quotations")}</h2>
@@ -404,6 +518,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									<p className="text-sm text-muted-foreground">
 										{t("notifiedDate", {
 											date: format(new Date(quotation.notifiedAt), "PPP"),
+											time: format(new Date(quotation.notifiedAt), "HH:mm"),
 										})}
 									</p>
 								)}
@@ -431,13 +546,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 											{t("rejectQuotation")}
 										</Button>
 									</div>
-								)}
-								{quotation.status === "REJECTED" && (
-									<AlertBanner
-										variant="error"
-										title={t("quotationRejected")}
-										description={t("quotationRejectedDesc")}
-									/>
 								)}
 							</CardContent>
 						</Card>

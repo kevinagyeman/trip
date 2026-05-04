@@ -1735,6 +1735,7 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    airports: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1750,6 +1751,7 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    airports: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1765,6 +1767,7 @@ export namespace Prisma {
     country: number
     website: number
     estimateNotice: number
+    airports: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1782,6 +1785,7 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    airports?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1797,6 +1801,7 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    airports?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1812,6 +1817,7 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    airports?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1900,6 +1906,7 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    airports: string | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -1932,6 +1939,7 @@ export namespace Prisma {
     country?: boolean
     website?: boolean
     estimateNotice?: boolean
+    airports?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -1952,11 +1960,12 @@ export namespace Prisma {
     country?: boolean
     website?: boolean
     estimateNotice?: boolean
+    airports?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "airports" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -1980,6 +1989,7 @@ export namespace Prisma {
       country: string | null
       website: string | null
       estimateNotice: string | null
+      airports: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2363,6 +2373,7 @@ export namespace Prisma {
     readonly country: FieldRef<"Company", 'String'>
     readonly website: FieldRef<"Company", 'String'>
     readonly estimateNotice: FieldRef<"Company", 'String'>
+    readonly airports: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -7656,6 +7667,8 @@ export namespace Prisma {
     lastViewedAt: Date | null
     confirmedAt: Date | null
     confirmationViewedAt: Date | null
+    departureDetailsRequestedAt: Date | null
+    pickupInfoNotifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7686,6 +7699,8 @@ export namespace Prisma {
     lastViewedAt: Date | null
     confirmedAt: Date | null
     confirmationViewedAt: Date | null
+    departureDetailsRequestedAt: Date | null
+    pickupInfoNotifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
     userId: string | null
@@ -7716,6 +7731,8 @@ export namespace Prisma {
     lastViewedAt: number
     confirmedAt: number
     confirmationViewedAt: number
+    departureDetailsRequestedAt: number
+    pickupInfoNotifiedAt: number
     createdAt: number
     updatedAt: number
     userId: number
@@ -7762,6 +7779,8 @@ export namespace Prisma {
     lastViewedAt?: true
     confirmedAt?: true
     confirmationViewedAt?: true
+    departureDetailsRequestedAt?: true
+    pickupInfoNotifiedAt?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7792,6 +7811,8 @@ export namespace Prisma {
     lastViewedAt?: true
     confirmedAt?: true
     confirmationViewedAt?: true
+    departureDetailsRequestedAt?: true
+    pickupInfoNotifiedAt?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7822,6 +7843,8 @@ export namespace Prisma {
     lastViewedAt?: true
     confirmedAt?: true
     confirmationViewedAt?: true
+    departureDetailsRequestedAt?: true
+    pickupInfoNotifiedAt?: true
     createdAt?: true
     updatedAt?: true
     userId?: true
@@ -7939,6 +7962,8 @@ export namespace Prisma {
     lastViewedAt: Date | null
     confirmedAt: Date | null
     confirmationViewedAt: Date | null
+    departureDetailsRequestedAt: Date | null
+    pickupInfoNotifiedAt: Date | null
     createdAt: Date
     updatedAt: Date
     userId: string | null
@@ -7988,6 +8013,8 @@ export namespace Prisma {
     lastViewedAt?: boolean
     confirmedAt?: boolean
     confirmationViewedAt?: boolean
+    departureDetailsRequestedAt?: boolean
+    pickupInfoNotifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
@@ -8025,13 +8052,15 @@ export namespace Prisma {
     lastViewedAt?: boolean
     confirmedAt?: boolean
     confirmationViewedAt?: boolean
+    departureDetailsRequestedAt?: boolean
+    pickupInfoNotifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     userId?: boolean
     companyId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "lastViewedAt" | "confirmedAt" | "confirmationViewedAt" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "lastViewedAt" | "confirmedAt" | "confirmationViewedAt" | "departureDetailsRequestedAt" | "pickupInfoNotifiedAt" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -8072,6 +8101,8 @@ export namespace Prisma {
       lastViewedAt: Date | null
       confirmedAt: Date | null
       confirmationViewedAt: Date | null
+      departureDetailsRequestedAt: Date | null
+      pickupInfoNotifiedAt: Date | null
       createdAt: Date
       updatedAt: Date
       userId: string | null
@@ -8472,6 +8503,8 @@ export namespace Prisma {
     readonly lastViewedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly confirmedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly confirmationViewedAt: FieldRef<"TripRequest", 'DateTime'>
+    readonly departureDetailsRequestedAt: FieldRef<"TripRequest", 'DateTime'>
+    readonly pickupInfoNotifiedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly createdAt: FieldRef<"TripRequest", 'DateTime'>
     readonly updatedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly userId: FieldRef<"TripRequest", 'String'>
@@ -10935,6 +10968,7 @@ export namespace Prisma {
     country: 'country',
     website: 'website',
     estimateNotice: 'estimateNotice',
+    airports: 'airports',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11031,6 +11065,8 @@ export namespace Prisma {
     lastViewedAt: 'lastViewedAt',
     confirmedAt: 'confirmedAt',
     confirmationViewedAt: 'confirmationViewedAt',
+    departureDetailsRequestedAt: 'departureDetailsRequestedAt',
+    pickupInfoNotifiedAt: 'pickupInfoNotifiedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     userId: 'userId',
@@ -11097,7 +11133,8 @@ export namespace Prisma {
     address: 'address',
     country: 'country',
     website: 'website',
-    estimateNotice: 'estimateNotice'
+    estimateNotice: 'estimateNotice',
+    airports: 'airports'
   };
 
   export type CompanyOrderByRelevanceFieldEnum = (typeof CompanyOrderByRelevanceFieldEnum)[keyof typeof CompanyOrderByRelevanceFieldEnum]
@@ -11293,6 +11330,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    airports?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -11310,6 +11348,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    airports?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -11331,6 +11370,7 @@ export namespace Prisma {
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    airports?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -11348,6 +11388,7 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    airports?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -11369,6 +11410,7 @@ export namespace Prisma {
     country?: StringNullableWithAggregatesFilter<"Company"> | string | null
     website?: StringNullableWithAggregatesFilter<"Company"> | string | null
     estimateNotice?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    airports?: StringNullableWithAggregatesFilter<"Company"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -11740,6 +11782,8 @@ export namespace Prisma {
     lastViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmationViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureDetailsRequestedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    pickupInfoNotifiedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -11774,6 +11818,8 @@ export namespace Prisma {
     lastViewedAt?: SortOrderInput | SortOrder
     confirmedAt?: SortOrderInput | SortOrder
     confirmationViewedAt?: SortOrderInput | SortOrder
+    departureDetailsRequestedAt?: SortOrderInput | SortOrder
+    pickupInfoNotifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -11812,6 +11858,8 @@ export namespace Prisma {
     lastViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmationViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureDetailsRequestedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    pickupInfoNotifiedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -11846,6 +11894,8 @@ export namespace Prisma {
     lastViewedAt?: SortOrderInput | SortOrder
     confirmedAt?: SortOrderInput | SortOrder
     confirmationViewedAt?: SortOrderInput | SortOrder
+    departureDetailsRequestedAt?: SortOrderInput | SortOrder
+    pickupInfoNotifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
@@ -11884,6 +11934,8 @@ export namespace Prisma {
     lastViewedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     confirmedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     confirmationViewedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
+    departureDetailsRequestedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
+    pickupInfoNotifiedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
@@ -12068,6 +12120,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -12085,6 +12138,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -12102,6 +12156,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -12119,6 +12174,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -12136,6 +12192,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12151,6 +12208,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12166,6 +12224,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12557,6 +12616,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -12589,6 +12650,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -12620,6 +12683,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -12652,6 +12717,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12684,6 +12751,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -12713,6 +12782,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12741,6 +12812,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13014,6 +13087,7 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    airports?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13029,6 +13103,7 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    airports?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13044,6 +13119,7 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    airports?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13483,6 +13559,8 @@ export namespace Prisma {
     lastViewedAt?: SortOrder
     confirmedAt?: SortOrder
     confirmationViewedAt?: SortOrder
+    departureDetailsRequestedAt?: SortOrder
+    pickupInfoNotifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13520,6 +13598,8 @@ export namespace Prisma {
     lastViewedAt?: SortOrder
     confirmedAt?: SortOrder
     confirmationViewedAt?: SortOrder
+    departureDetailsRequestedAt?: SortOrder
+    pickupInfoNotifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -13550,6 +13630,8 @@ export namespace Prisma {
     lastViewedAt?: SortOrder
     confirmedAt?: SortOrder
     confirmationViewedAt?: SortOrder
+    departureDetailsRequestedAt?: SortOrder
+    pickupInfoNotifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrder
@@ -14631,6 +14713,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -14662,6 +14746,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -14754,6 +14840,8 @@ export namespace Prisma {
     lastViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     confirmationViewedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    departureDetailsRequestedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
+    pickupInfoNotifiedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
@@ -14931,6 +15019,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -14947,6 +15036,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -15043,6 +15133,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     company: CompanyCreateNestedOneWithoutTripRequestsInput
@@ -15074,6 +15166,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
@@ -15155,6 +15249,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -15171,6 +15266,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15337,6 +15433,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -15353,6 +15450,7 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    airports?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -15496,6 +15594,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -15512,6 +15611,7 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    airports?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -15585,6 +15685,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -15616,6 +15718,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -15662,6 +15766,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -15693,6 +15799,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15724,6 +15832,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
@@ -15755,6 +15865,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -15838,6 +15950,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -15869,6 +15983,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15955,6 +16071,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
@@ -16027,6 +16145,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
@@ -16058,6 +16178,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16089,6 +16211,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16139,6 +16263,8 @@ export namespace Prisma {
     lastViewedAt?: Date | string | null
     confirmedAt?: Date | string | null
     confirmationViewedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     companyId: string
@@ -16246,6 +16372,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
@@ -16277,6 +16405,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string
@@ -16308,6 +16438,8 @@ export namespace Prisma {
     lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     confirmationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     companyId?: StringFieldUpdateOperationsInput | string

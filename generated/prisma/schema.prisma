@@ -50,6 +50,7 @@ model Company {
   country        String?
   website        String?
   estimateNotice String?  @db.Text
+  airports       String?  @db.Text
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -156,9 +157,11 @@ model TripRequest {
   pickupTime   String?
   flightNumber String?
 
-  lastViewedAt         DateTime?
-  confirmedAt          DateTime?
-  confirmationViewedAt DateTime?
+  lastViewedAt                DateTime?
+  confirmedAt                 DateTime?
+  confirmationViewedAt        DateTime?
+  departureDetailsRequestedAt DateTime?
+  pickupInfoNotifiedAt        DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
