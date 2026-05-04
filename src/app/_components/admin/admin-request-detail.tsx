@@ -153,10 +153,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const whatsappHref = (() => {
 		const link = `${typeof window !== "undefined" ? window.location.origin : ""}/request/${request.token}`;
 		const orderNum = String(request.orderNumber).padStart(6, "0");
+		const company = request.company.name;
 		const msg =
 			request.language === "it"
-				? `Ciao ${request.firstName}, la contatto riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta:\n${link}`
-				: `Hi ${request.firstName}, I'm contacting you regarding your transfer request #${orderNum}.\nWe have updated your request:\n${link}`;
+				? `Siamo ${company} e la stiamo contattando riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta, può visualizzarla qui:\n${link}`
+				: `We are ${company} and we are writing to you about your transfer request #${orderNum}.\nWe have updated your request, you can view it here:\n${link}`;
 		return `https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`;
 	})();
 

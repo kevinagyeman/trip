@@ -288,7 +288,7 @@ export const tripRequestRouter = createTRPCRouter({
 					user: { select: { id: true, name: true, email: true, image: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
 					company: {
-						select: { estimateNotice: true },
+						select: { estimateNotice: true, name: true },
 					},
 				},
 			});
