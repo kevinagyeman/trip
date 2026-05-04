@@ -101,6 +101,14 @@ export function CreateTripRequestForm({
 	const numberOfAdults = watch("numberOfAdults");
 
 	useEffect(() => {
+		if (!areThereChildren) {
+			setValue("numberOfChildren", 0);
+			setValue("numberOfChildSeats", 0);
+			replaceChildrenAges([]);
+		}
+	}, [areThereChildren, setValue, replaceChildrenAges]);
+
+	useEffect(() => {
 		const count = Number(numberOfChildren) || 0;
 		const current = getValues("childrenAges") ?? [];
 		replaceChildrenAges(
