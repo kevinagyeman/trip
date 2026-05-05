@@ -1,6 +1,5 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
 import { db } from "@/server/db";
-import { parseAirports } from "@/lib/airports";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -13,7 +12,7 @@ export default async function BookingPortalPage({
 
 	const company = await db.company.findUnique({
 		where: { slug, isActive: true },
-		select: { name: true, slug: true, logoUrl: true, airports: true },
+		select: { name: true, slug: true, logoUrl: true },
 	});
 
 	if (!company) {
@@ -37,10 +36,7 @@ export default async function BookingPortalPage({
 				</div>
 
 				<div>
-					<CreateTripRequestForm
-						companySlug={slug}
-						airports={parseAirports(company.airports)}
-					/>
+					<CreateTripRequestForm companySlug={slug} />
 				</div>
 			</div>
 		</div>

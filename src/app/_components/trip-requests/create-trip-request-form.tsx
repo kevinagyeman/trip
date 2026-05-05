@@ -24,18 +24,16 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Minus, Plane, Plus, X } from "lucide-react";
+import { Minus, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 
 export function CreateTripRequestForm({
 	companySlug,
-	airports = [],
 }: {
 	companySlug: string;
-	airports?: string[];
 }) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
@@ -68,33 +66,10 @@ export function CreateTripRequestForm({
 		fields: routeFields,
 		append: appendRoute,
 		remove: removeRoute,
-		replace: replaceRoutes,
 	} = useFieldArray({ control, name: "routes" });
 
 	const { fields: childrenAgeFields, replace: replaceChildrenAges } =
 		useFieldArray({ control, name: "childrenAges" });
-
-	const [serviceType, setServiceType] = useState<
-		"standard" | "airport_in" | "airport_out" | "airport_both" | null
-	>(null);
-
-	const handleServiceTypeChange = (
-		type: "standard" | "airport_in" | "airport_out" | "airport_both",
-	) => {
-		setServiceType(type);
-		if (type === "standard") {
-			replaceRoutes([{ pickup: "", destination: "", type: "standard" }]);
-		} else if (type === "airport_in") {
-			replaceRoutes([{ pickup: "", destination: "", type: "airport_in" }]);
-		} else if (type === "airport_out") {
-			replaceRoutes([{ pickup: "", destination: "", type: "airport_out" }]);
-		} else {
-			replaceRoutes([
-				{ pickup: "", destination: "", type: "airport_in" },
-				{ pickup: "", destination: "", type: "airport_out" },
-			]);
-		}
-	};
 
 	const areThereChildren = watch("areThereChildren");
 	const numberOfChildren = watch("numberOfChildren");
@@ -152,215 +127,163 @@ export function CreateTripRequestForm({
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-			{/* Route boxes */}
+			{/* Routes */}
 			<div className="space-y-3">
 				<h3 className="text-lg font-semibold">{t("routes")}</h3>
-
 				<TripRequestAlert />
 
-				{/* Service type — top-level selector */}
-				<div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-					{(
-						[
-							{
-								value: "standard",
-								emoji: "🚗",
-								label: t("transferTypeStandard"),
-							},
-							{
-								value: "airport_in",
-								emoji: "🛬",
-								label: t("transferTypeAirportIn"),
-							},
-							{
-								value: "airport_out",
-								emoji: null,
-								label: t("transferTypeAirportOut"),
-								icon: true,
-							},
-							{
-								value: "airport_both",
-								emoji: "✈🛬",
-								label: t("transferTypeAirportBoth"),
-							},
-						] as const
-					).map((opt) => (
-						<button
-							key={opt.value}
-							type="button"
-							onClick={() => handleServiceTypeChange(opt.value)}
-							className={`flex flex-col items-center gap-1.5 rounded-lg border-2 p-3 text-sm font-medium transition-colors ${
-								serviceType === opt.value
-									? "border-primary bg-primary/5 text-primary"
-									: "border-border text-muted-foreground hover:border-primary/50"
-							}`}
-						>
-							{"icon" in opt && opt.icon ? (
-								<Plane className="h-5 w-5" />
-							) : (
-								<span className="text-xl">{opt.emoji}</span>
-							)}
-							{opt.label}
-						</button>
-					))}
-				</div>
+				{routeFields.map((field, index) => {
+					const routeType = watch(`routes.${index}.type`);
+					const answered = routeType !== undefined;
+					const isAirportIn = routeType === "airport_in";
+					const isAirportOut = routeType === "airport_out";
+					const hasAirport = isAirportIn || isAirportOut;
 
-				{/* Route cards — shown after service type is selected */}
-				{serviceType &&
-					routeFields.map((field, index) => {
-						const routeType = watch(`routes.${index}.type`);
-						const isAirportIn = routeType === "airport_in";
-						const isAirportOut = routeType === "airport_out";
-						const isAirport = isAirportIn || isAirportOut;
-						const isStandard = routeType === "standard";
-						return (
-							<div key={field.id} className="space-y-3 rounded-lg border p-4">
-								{/* Route header */}
-								<div className="flex items-center justify-between">
-									<h4 className="font-semibold flex items-center gap-1.5">
-										{isAirportIn && (
-											<>
-												<span>🛬</span>
-												{t("sectionArrival")}
-											</>
-										)}
-										{isAirportOut && (
-											<>
-												<Plane className="h-4 w-4" />
-												{t("sectionDeparture")}
-											</>
-										)}
-										{isStandard && t("routeN", { n: index + 1 })}
-									</h4>
-									{isStandard && routeFields.length > 1 && (
-										<Button
+					return (
+						<div key={field.id} className="space-y-4 rounded-lg border p-4">
+							{/* Header */}
+							<div className="flex items-center justify-between">
+								<h4 className="font-semibold">
+									{t("routeN", { n: index + 1 })}
+								</h4>
+								{routeFields.length > 1 && (
+									<Button
+										type="button"
+										variant="ghost"
+										size="icon"
+										onClick={() => removeRoute(index)}
+									>
+										<X className="h-4 w-4" />
+									</Button>
+								)}
+							</div>
+
+							{/* Airport Yes/No */}
+							<div className="space-y-2">
+								<p className="text-sm font-medium">{t("airportInvolved")}</p>
+								<div className="flex gap-2">
+									{(
+										[
+											{ isAirport: false, label: t("airportNo") },
+											{ isAirport: true, label: t("airportYes") },
+										] as const
+									).map((opt) => {
+										const isSelected = opt.isAirport
+											? hasAirport
+											: routeType === "standard";
+										return (
+											<button
+												key={String(opt.isAirport)}
+												type="button"
+												onClick={() => {
+													if (opt.isAirport) {
+														setValue(`routes.${index}.type`, "airport_in");
+													} else {
+														setValue(`routes.${index}.type`, "standard");
+														setValue(`routes.${index}.flightNumber`, "");
+													}
+												}}
+												className={`rounded-lg border-2 px-4 py-1.5 text-sm font-medium transition-colors ${
+													isSelected
+														? "border-primary bg-primary/5 text-primary"
+														: "border-border text-muted-foreground hover:border-primary/50"
+												}`}
+											>
+												{opt.label}
+											</button>
+										);
+									})}
+								</div>
+							</div>
+
+							{/* Airport direction + flight number */}
+							{hasAirport && (
+								<div className="flex gap-2">
+									{(
+										[
+											{
+												value: "airport_in",
+												emoji: "🛬",
+												label: t("flightArrival"),
+											},
+											{
+												value: "airport_out",
+												emoji: "🛫",
+												label: t("flightDeparture"),
+											},
+										] as const
+									).map((opt) => (
+										<button
+											key={opt.value}
 											type="button"
-											variant="ghost"
-											size="icon"
-											onClick={() => removeRoute(index)}
-										>
-											<X className="h-4 w-4" />
-										</Button>
-									)}
-								</div>
-
-								{/* Pickup */}
-								<div className="space-y-2">
-									{isAirportIn ? (
-										<>
-											<Label>{t("fromAirport")}</Label>
-											<Controller
-												name={`routes.${index}.pickup`}
-												control={control}
-												render={({ field: f }) => (
-													<Select value={f.value} onValueChange={f.onChange}>
-														<SelectTrigger>
-															<SelectValue
-																placeholder={t("airportSelectPlaceholder")}
-															/>
-														</SelectTrigger>
-														<SelectContent>
-															{airports.map((a) => (
-																<SelectItem key={a} value={a}>
-																	{a}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-												)}
-											/>
-											{errors.routes?.[index]?.pickup && (
-												<small className="text-xs text-destructive">
-													{errors.routes[index].pickup.message}
-												</small>
-											)}
-										</>
-									) : (
-										<CustomInput
-											labelText={isAirportOut ? t("fromPickup") : t("pickup")}
-											placeholder={t("pickupPlaceholder")}
-											error={errors.routes?.[index]?.pickup?.message}
-											inputProps={{ ...register(`routes.${index}.pickup`) }}
-										/>
-									)}
-								</div>
-
-								{/* Destination */}
-								<div className="space-y-2 pt-4">
-									{isAirportOut ? (
-										<>
-											<Label>{t("toAirport")}</Label>
-											<Controller
-												name={`routes.${index}.destination`}
-												control={control}
-												render={({ field: f }) => (
-													<Select value={f.value} onValueChange={f.onChange}>
-														<SelectTrigger>
-															<SelectValue
-																placeholder={t("airportSelectPlaceholder")}
-															/>
-														</SelectTrigger>
-														<SelectContent>
-															{airports.map((a) => (
-																<SelectItem key={a} value={a}>
-																	{a}
-																</SelectItem>
-															))}
-														</SelectContent>
-													</Select>
-												)}
-											/>
-											{errors.routes?.[index]?.destination && (
-												<small className="text-xs text-destructive">
-													{errors.routes[index].destination.message}
-												</small>
-											)}
-										</>
-									) : (
-										<CustomInput
-											labelText={
-												isAirportIn ? t("toDestination") : t("destination")
+											onClick={() =>
+												setValue(`routes.${index}.type`, opt.value)
 											}
-											placeholder={t("destinationPlaceholder")}
-											error={errors.routes?.[index]?.destination?.message}
+											className={`flex items-center gap-1.5 rounded-lg border-2 px-3 py-1.5 text-sm font-medium transition-colors ${
+												routeType === opt.value
+													? "border-primary bg-primary/5 text-primary"
+													: "border-border text-muted-foreground hover:border-primary/50"
+											}`}
+										>
+											<span>{opt.emoji}</span>
+											{opt.label}
+										</button>
+									))}
+								</div>
+							)}
+
+							{/* From / To / Date / Time / Flight number — only after Yes or No is selected */}
+							{answered && (
+								<>
+									<CustomInput
+										labelText={isAirportIn ? t("airport") : t("pickup")}
+										placeholder={
+											isAirportIn
+												? t("airportPlaceholder")
+												: t("pickupPlaceholder")
+										}
+										error={errors.routes?.[index]?.pickup?.message}
+										inputProps={{ ...register(`routes.${index}.pickup`) }}
+									/>
+									<CustomInput
+										labelText={isAirportOut ? t("airport") : t("destination")}
+										placeholder={
+											isAirportOut
+												? t("airportPlaceholder")
+												: t("destinationPlaceholder")
+										}
+										error={errors.routes?.[index]?.destination?.message}
+										inputProps={{ ...register(`routes.${index}.destination`) }}
+									/>
+									<div className="grid grid-cols-2 gap-3">
+										<CustomInput
+											labelText={t(
+												isAirportIn
+													? "routeLandingDate"
+													: isAirportOut
+														? "routeFlightDate"
+														: "routeArrivalDate",
+											)}
 											inputProps={{
-												...register(`routes.${index}.destination`),
+												...register(`routes.${index}.departureDate`),
+												type: "date",
 											}}
 										/>
-									)}
-								</div>
-
-								{/* Date / time / flight */}
-								<div
-									className={`grid grid-cols-1 gap-3 pt-4 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
-								>
-									<CustomInput
-										labelText={t(
-											isAirportOut
-												? "routeFlightDate"
-												: isAirportIn
-													? "routeLandingDate"
-													: "routeArrivalDate",
-										)}
-										inputProps={{
-											...register(`routes.${index}.departureDate`),
-											type: "date",
-										}}
-									/>
-									<CustomInput
-										labelText={t(
-											isAirportOut
-												? "routeFlightTime"
-												: isAirportIn
+										<CustomInput
+											labelText={t(
+												isAirportIn
 													? "routeLandingTime"
-													: "routeArrivalTime",
-										)}
-										inputProps={{
-											...register(`routes.${index}.departureTime`),
-											type: "time",
-										}}
-									/>
-									{isAirport && (
+													: isAirportOut
+														? "routeFlightTime"
+														: "routeArrivalTime",
+											)}
+											inputProps={{
+												...register(`routes.${index}.departureTime`),
+												type: "time",
+											}}
+										/>
+									</div>
+									{hasAirport && (
 										<CustomInput
 											labelText={t("routeFlightNumber")}
 											placeholder={t("routeFlightNumberPlaceholder")}
@@ -369,25 +292,21 @@ export function CreateTripRequestForm({
 											}}
 										/>
 									)}
-								</div>
-							</div>
-						);
-					})}
+								</>
+							)}
+						</div>
+					);
+				})}
 
-				{/* Add route — only for standard */}
-				{serviceType === "standard" && (
-					<Button
-						type="button"
-						variant="outline"
-						className="w-full"
-						onClick={() =>
-							appendRoute({ pickup: "", destination: "", type: "standard" })
-						}
-					>
-						<Plus className="mr-2 h-4 w-4" />
-						{t("addRoute")}
-					</Button>
-				)}
+				<Button
+					type="button"
+					variant="outline"
+					className="w-full"
+					onClick={() => appendRoute({ pickup: "", destination: "" })}
+				>
+					<Plus className="mr-2 h-4 w-4" />
+					{t("addRoute")}
+				</Button>
 
 				{errors.routes?.root?.message && (
 					<p className="text-sm text-destructive">
@@ -399,7 +318,6 @@ export function CreateTripRequestForm({
 			{/* Contact Details */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">{t("contactDetails")}</h3>
-
 				<div className="grid grid-cols-2 gap-4">
 					<CustomInput
 						labelText={t("firstName")}
@@ -414,7 +332,6 @@ export function CreateTripRequestForm({
 						inputProps={{ ...register("lastName") }}
 					/>
 				</div>
-
 				<CustomInput
 					labelText={t("email")}
 					placeholder={t("emailPlaceholder")}
@@ -422,7 +339,6 @@ export function CreateTripRequestForm({
 					error={errors.email?.message}
 					inputProps={{ ...register("email") }}
 				/>
-
 				<div>
 					<Label className="mb-2">{t("phoneNumber")}</Label>
 					<div className="flex gap-2">
@@ -475,7 +391,6 @@ export function CreateTripRequestForm({
 			{/* Passengers */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">{t("passengers")}</h3>
-
 				<div className="space-y-1">
 					<Label className="text-sm font-medium">{t("numberOfAdults")}</Label>
 					<div className="flex items-center gap-2">
@@ -658,7 +573,6 @@ export function CreateTripRequestForm({
 			{/* Preferences */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">{t("preferences")}</h3>
-
 				<Controller
 					name="language"
 					control={control}
@@ -671,7 +585,6 @@ export function CreateTripRequestForm({
 						/>
 					)}
 				/>
-
 				<CustomTextArea
 					labelText={t("specialRequests")}
 					placeholder={t("specialRequestsPlaceholder")}
