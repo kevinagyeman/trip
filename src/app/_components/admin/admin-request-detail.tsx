@@ -26,7 +26,7 @@ import {
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy, MessageCircle } from "lucide-react";
+import { CalendarPlus, Check, Copy, MessageCircle, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -214,6 +214,33 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							<p className="text-sm text-muted-foreground">
 								{request.user?.email ?? request.customerEmail}
 							</p>
+							{request.phone && (
+								<div className="flex flex-wrap items-center gap-2">
+									<span className="text-sm text-muted-foreground">
+										{request.phone}
+									</span>
+									<a
+										href={whatsappHref}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
+									>
+										<MessageCircle className="h-3 w-3" />
+										WhatsApp
+									</a>
+									<a
+										href={`tel:${request.phone}`}
+										className="inline-flex items-center gap-1 rounded bg-blue-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-blue-700"
+									>
+										<Phone className="h-3 w-3" />
+										{t("call")}
+									</a>
+								</div>
+							)}
+							<p className="text-sm text-muted-foreground">
+								{t("language")}:{" "}
+								{LANGUAGE_LABELS[request.language] ?? request.language}
+							</p>
 						</div>
 						<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
 							<Badge className={STATUS_COLORS[request.status]}>
@@ -384,6 +411,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 														: t("routeDepartureDate")}
 											</Label>
 											<Input
+												className="h-7 text-xs"
 												type="date"
 												value={adminRouteDepartures[i]?.departureDate ?? ""}
 												onChange={(e) =>
@@ -406,6 +434,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 														: t("routeDepartureTime")}
 											</Label>
 											<Input
+												className="h-7 text-xs"
 												type="time"
 												value={adminRouteDepartures[i]?.departureTime ?? ""}
 												onChange={(e) =>
@@ -423,6 +452,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												{t("routeFlightNumber")}
 											</Label>
 											<Input
+												className="h-7 text-xs"
 												placeholder={t("routeFlightNumberPlaceholder")}
 												value={adminRouteDepartures[i]?.flightNumber ?? ""}
 												onChange={(e) =>
@@ -517,6 +547,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													{t("pickupInfoMeetingPoint")}
 												</Label>
 												<Input
+													className="h-7 text-xs"
 													placeholder={t("pickupInfoMeetingPointPlaceholder")}
 													value={adminPickupInfos[i]?.meetingPoint ?? ""}
 													onChange={(e) =>
@@ -534,6 +565,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													{t("pickupInfoBeThereAtDate")}
 												</Label>
 												<Input
+													className="h-7 text-xs"
 													type="date"
 													value={adminPickupInfos[i]?.beThereAtDate ?? ""}
 													onChange={(e) =>
@@ -551,6 +583,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													{t("pickupInfoBeThereAtTime")}
 												</Label>
 												<Input
+													className="h-7 text-xs"
 													type="time"
 													value={adminPickupInfos[i]?.beThereAtTime ?? ""}
 													onChange={(e) =>
@@ -568,6 +601,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													{t("pickupInfoDriverName")}
 												</Label>
 												<Input
+													className="h-7 text-xs"
 													placeholder={t("pickupInfoDriverNamePlaceholder")}
 													value={adminPickupInfos[i]?.driverName ?? ""}
 													onChange={(e) =>
@@ -584,6 +618,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													{t("pickupInfoDriverPhone")}
 												</Label>
 												<Input
+													className="h-7 text-xs"
 													placeholder={t("pickupInfoDriverPhonePlaceholder")}
 													value={adminPickupInfos[i]?.driverPhone ?? ""}
 													onChange={(e) =>
@@ -597,46 +632,88 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												/>
 											</div>
 										</div>
-										<LoadingButton
-											className="mt-2"
-											size="sm"
-											isLoading={updateRoutesByAdmin.isPending}
-											onClick={() =>
-												updateRoutesByAdmin.mutate({
-													id: requestId,
-													notify: true,
-													routes: routes.map((r, j) => ({
-														...r,
-														pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-														destination:
-															adminRoutePlaces[j]?.destination ?? r.destination,
-														departureDate:
-															adminRouteDepartures[j]?.departureDate ||
-															undefined,
-														departureTime:
-															adminRouteDepartures[j]?.departureTime ||
-															undefined,
-														flightNumber:
-															adminRouteDepartures[j]?.flightNumber ||
-															undefined,
-														pickupInfo: {
-															meetingPoint:
-																adminPickupInfos[j]?.meetingPoint || undefined,
-															beThereAtDate:
-																adminPickupInfos[j]?.beThereAtDate || undefined,
-															beThereAtTime:
-																adminPickupInfos[j]?.beThereAtTime || undefined,
-															driverName:
-																adminPickupInfos[j]?.driverName || undefined,
-															driverPhone:
-																adminPickupInfos[j]?.driverPhone || undefined,
-														},
-													})),
-												})
-											}
-										>
-											{t("saveAndNotifyCustomer")}
-										</LoadingButton>
+										<div className="mt-2 mb-3 flex flex-wrap gap-2">
+											<LoadingButton
+												size="sm"
+												isLoading={updateRoutesByAdmin.isPending}
+												onClick={() =>
+													updateRoutesByAdmin.mutate({
+														id: requestId,
+														notify: true,
+														routes: routes.map((r, j) => ({
+															...r,
+															pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+															destination:
+																adminRoutePlaces[j]?.destination ??
+																r.destination,
+															departureDate:
+																adminRouteDepartures[j]?.departureDate ||
+																undefined,
+															departureTime:
+																adminRouteDepartures[j]?.departureTime ||
+																undefined,
+															flightNumber:
+																adminRouteDepartures[j]?.flightNumber ||
+																undefined,
+															pickupInfo: {
+																meetingPoint:
+																	adminPickupInfos[j]?.meetingPoint ||
+																	undefined,
+																beThereAtDate:
+																	adminPickupInfos[j]?.beThereAtDate ||
+																	undefined,
+																beThereAtTime:
+																	adminPickupInfos[j]?.beThereAtTime ||
+																	undefined,
+																driverName:
+																	adminPickupInfos[j]?.driverName || undefined,
+																driverPhone:
+																	adminPickupInfos[j]?.driverPhone || undefined,
+															},
+														})),
+													})
+												}
+											>
+												{t("saveAndNotifyCustomer")}
+											</LoadingButton>
+											<Button
+												size="sm"
+												variant="outline"
+												type="button"
+												onClick={() => {
+													const dateStr =
+														adminPickupInfos[i]?.beThereAtDate ?? "";
+													const date = dateStr ? new Date(dateStr) : new Date();
+													const timeStr =
+														adminPickupInfos[i]?.beThereAtTime ?? "00:00";
+													const [h, m] = timeStr.split(":").map(Number);
+													const end = new Date(date);
+													end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+													const summary = `${t("routeN", { n: i + 1 })}: ${adminRoutePlaces[i]?.pickup ?? route.pickup} → ${adminRoutePlaces[i]?.destination ?? route.destination}`;
+													const desc = [
+														adminPickupInfos[i]?.driverName &&
+															`${t("pickupInfoDriverName")}: ${adminPickupInfos[i]!.driverName}`,
+														adminPickupInfos[i]?.driverPhone &&
+															`${t("pickupInfoDriverPhone")}: ${adminPickupInfos[i]!.driverPhone}`,
+													]
+														.filter(Boolean)
+														.join("\n");
+													window.open(
+														googleCalendarUrl({
+															summary,
+															description: desc,
+															location: adminPickupInfos[i]?.meetingPoint ?? "",
+															start: toICSDateTime(date, timeStr),
+															end: toICSDateTime(end),
+														}),
+														"_blank",
+													);
+												}}
+											>
+												<CalendarPlus className="mr-1 h-3 w-3" />
+												{t("googleCalendar")}
+											</Button>
+										</div>
 										{request.pickupInfoNotifiedAt && (
 											<p className="text-xs text-muted-foreground">
 												{t("notifiedDate", {
@@ -659,98 +736,49 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				</CardContent>
 			</Card>
 
-			{/* Customer details */}
+			{/* Passengers */}
 			<Card>
 				<CardHeader className="pb-3">
-					<CardTitle className="text-base">{t("contactDetails")}</CardTitle>
+					<CardTitle className="text-base">{t("passengers")}</CardTitle>
 				</CardHeader>
-				<CardContent className="space-y-3 pt-0 text-sm">
-					<div className="flex flex-wrap gap-x-6 gap-y-1">
-						<span>
-							<span className="text-muted-foreground">{t("name")}: </span>
-							<span className="font-medium">
-								{request.firstName} {request.lastName}
+				<CardContent className="space-y-1.5 pt-0 text-sm">
+					{request.numberOfAdults > 0 && (
+						<p>
+							<span className="text-muted-foreground">{t("adults")}: </span>
+							<span className="font-medium">{request.numberOfAdults}</span>
+						</p>
+					)}
+					{request.areThereChildren && request.numberOfChildren !== null && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("numberOfChildren")}:{" "}
 							</span>
-						</span>
-						<span>
-							<span className="text-muted-foreground">{t("email")}: </span>
-							<span className="font-medium">
-								{request.user?.email ?? request.customerEmail}
+							<span className="font-medium">{request.numberOfChildren}</span>
+						</p>
+					)}
+					{request.areThereChildren && request.ageOfChildren && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("agesOfChildren")}:{" "}
 							</span>
-						</span>
-						<span className="flex items-center gap-2">
-							<span className="text-muted-foreground">{t("phone")}: </span>
-							<span className="font-medium">{request.phone}</span>
-							{request.phone && (
-								<a
-									href={whatsappHref}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
-								>
-									<MessageCircle className="h-3 w-3" />
-									WhatsApp
-								</a>
-							)}
-						</span>
-						<span>
-							<span className="text-muted-foreground">{t("language")}: </span>
-							<span className="font-medium">
-								{LANGUAGE_LABELS[request.language] ?? request.language}
+							<span className="font-medium">{request.ageOfChildren}</span>
+						</p>
+					)}
+					{request.areThereChildren && request.numberOfChildSeats !== null && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("childSeatsNeeded")}:{" "}
 							</span>
-						</span>
-						<span>
-							<span className="text-muted-foreground">{t("created")}: </span>
-							<span className="font-medium">
-								{format(new Date(request.createdAt), "d MMM yyyy, HH:mm")}
-							</span>
-						</span>
-					</div>
-					{(request.numberOfAdults > 0 || request.areThereChildren) && (
-						<div className="flex flex-wrap gap-x-6 gap-y-1 border-t pt-3">
-							<span>
-								<span className="text-muted-foreground">{t("adults")}: </span>
-								<span className="font-medium">{request.numberOfAdults}</span>
-							</span>
-							{request.areThereChildren &&
-								request.numberOfChildren !== null && (
-									<span>
-										<span className="text-muted-foreground">
-											{t("numberOfChildren")}:{" "}
-										</span>
-										<span className="font-medium">
-											{request.numberOfChildren}
-										</span>
-									</span>
-								)}
-							{request.areThereChildren && request.ageOfChildren && (
-								<span>
-									<span className="text-muted-foreground">
-										{t("agesOfChildren")}:{" "}
-									</span>
-									<span className="font-medium">{request.ageOfChildren}</span>
-								</span>
-							)}
-							{request.areThereChildren &&
-								request.numberOfChildSeats !== null && (
-									<span>
-										<span className="text-muted-foreground">
-											{t("childSeatsNeeded")}:{" "}
-										</span>
-										<span className="font-medium">
-											{request.numberOfChildSeats}
-										</span>
-									</span>
-								)}
-						</div>
+							<span className="font-medium">{request.numberOfChildSeats}</span>
+						</p>
 					)}
 					{request.additionalInfo && (
-						<div className="border-t pt-3">
+						<p>
 							<span className="text-muted-foreground">
 								{t("additionalInformation")}:{" "}
 							</span>
 							<span className="font-medium">{request.additionalInfo}</span>
-						</div>
+						</p>
 					)}
 				</CardContent>
 			</Card>
@@ -798,17 +826,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									)}
 								</div>
 							</div>
-							{quotation!.respondedAt && (
-								<p className="text-sm text-muted-foreground">
-									{t("respondedDate", {
-										date: format(
-											new Date(quotation!.respondedAt),
-											"d MMM yyyy",
-										),
-										time: format(new Date(quotation!.respondedAt), "HH:mm"),
-									})}
-								</p>
-							)}
 							{quotation!.quotationAdditionalInfo && (
 								<div>
 									<p className="text-sm font-medium text-muted-foreground">
@@ -828,14 +845,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										{quotation!.internalNotes}
 									</p>
 								</div>
-							)}
-							{request.lastViewedAt && (
-								<p className="text-sm text-muted-foreground">
-									{t("lastViewedAt", {
-										date: format(new Date(request.lastViewedAt), "d MMM yyyy"),
-										time: format(new Date(request.lastViewedAt), "HH:mm"),
-									})}
-								</p>
 							)}
 							{request.status !== "CONFIRMED" && (
 								<div className="flex flex-wrap items-start gap-3 border-t pt-4">
@@ -925,13 +934,21 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				<CardContent className="space-y-3 pt-0">
 					{(
 						[
-							{ label: t("eventRequestCreated"), date: request.createdAt },
+							{
+								label: t("eventRequestCreated"),
+								date: request.createdAt,
+								actor: "customer" as const,
+							},
 							...request.quotations
 								.slice()
 								.reverse()
 								.flatMap((q) => [
 									q.notifiedAt
-										? { label: t("eventQuotationSent"), date: q.notifiedAt }
+										? {
+												label: t("eventQuotationSent"),
+												date: q.notifiedAt,
+												actor: "admin" as const,
+											}
 										: null,
 									q.respondedAt
 										? {
@@ -940,6 +957,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 														? t("eventQuotationAccepted")
 														: t("eventQuotationRejected"),
 												date: q.respondedAt,
+												actor: "customer" as const,
 											}
 										: null,
 								]),
@@ -947,17 +965,31 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								? {
 										label: t("eventConfirmationSent"),
 										date: request.confirmedAt,
+										actor: "admin" as const,
 									}
 								: null,
 							request.confirmationViewedAt
 								? {
 										label: t("eventCustomerSawConfirmation"),
 										date: request.confirmationViewedAt,
+										actor: "customer" as const,
 									}
 								: null,
-						] as ({ label: string; date: Date } | null)[]
+						] as ({
+							label: string;
+							date: Date;
+							actor: "admin" | "customer";
+						} | null)[]
 					)
-						.filter((e): e is { label: string; date: Date } => e !== null)
+						.filter(
+							(
+								e,
+							): e is {
+								label: string;
+								date: Date;
+								actor: "admin" | "customer";
+							} => e !== null,
+						)
 						.sort(
 							(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
 						)
@@ -965,7 +997,17 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							<div key={i} className="flex items-start gap-3">
 								<span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-muted-foreground/40" />
 								<div>
-									<p className="text-sm font-medium">{event.label}</p>
+									<p className="text-sm font-medium">
+										<span
+											className={`mr-1.5 text-xs font-normal ${event.actor === "admin" ? "text-blue-500" : "text-muted-foreground"}`}
+										>
+											{event.actor === "admin"
+												? t("actorAdmin")
+												: t("actorCustomer")}
+											:
+										</span>
+										{event.label}
+									</p>
 									<p className="text-xs text-muted-foreground">
 										{format(new Date(event.date), "d MMM yyyy")} {t("at")}{" "}
 										{format(new Date(event.date), "HH:mm")}

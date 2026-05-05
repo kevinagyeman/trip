@@ -264,6 +264,7 @@ export function CreateTripRequestForm({
 														? "routeFlightDate"
 														: "routeArrivalDate",
 											)}
+											error={errors.routes?.[index]?.departureDate?.message}
 											inputProps={{
 												...register(`routes.${index}.departureDate`),
 												type: "date",
@@ -277,6 +278,7 @@ export function CreateTripRequestForm({
 														? "routeFlightTime"
 														: "routeArrivalTime",
 											)}
+											error={errors.routes?.[index]?.departureTime?.message}
 											inputProps={{
 												...register(`routes.${index}.departureTime`),
 												type: "time",
