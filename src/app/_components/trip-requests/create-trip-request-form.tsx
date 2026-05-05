@@ -255,7 +255,7 @@ export function CreateTripRequestForm({
 										error={errors.routes?.[index]?.destination?.message}
 										inputProps={{ ...register(`routes.${index}.destination`) }}
 									/>
-									<div className="grid grid-cols-2 gap-3">
+									<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 										<CustomInput
 											labelText={t(
 												isAirportIn
@@ -320,7 +320,7 @@ export function CreateTripRequestForm({
 			{/* Contact Details */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">{t("contactDetails")}</h3>
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<CustomInput
 						labelText={t("firstName")}
 						placeholder={t("firstNamePlaceholder")}
