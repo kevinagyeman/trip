@@ -285,6 +285,9 @@ export function CreateTripRequestForm({
 											}}
 										/>
 									</div>
+									<p className="text-xs text-muted-foreground">
+										{t("pickupTimeNote")}
+									</p>
 									{hasAirport && (
 										<CustomInput
 											labelText={t("routeFlightNumber")}

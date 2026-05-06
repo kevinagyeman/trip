@@ -185,6 +185,7 @@
     "destination": "Destination *",
     "destinationPlaceholder": "Hotel name, campsite, station, address...",
     "addRoute": "Add Route",
+    "pickupTimeNote": "Based on the time you provide, we will calculate your pickup time. After confirming your transfer, we will let you know exactly when we will come to pick you up.",
     "duplicateRoute": "Duplicate",
     "contactDetails": "Contact Details",
     "passengers": "Passengers",
