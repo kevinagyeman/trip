@@ -15,6 +15,7 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -119,6 +120,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					beThereAtTime: r.pickupInfo?.beThereAtTime ?? "",
 					driverName: r.pickupInfo?.driverName ?? "",
 					driverPhone: r.pickupInfo?.driverPhone ?? "",
+					additionalInfo: r.pickupInfo?.additionalInfo ?? "",
 				})),
 			);
 		}
@@ -154,6 +156,8 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
 			},
 		});
+
+	const { data: drivers = [] } = api.driver.getAll.useQuery();
 
 	const [whatsappHref, setWhatsappHref] = useState("");
 
@@ -541,6 +545,45 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												{t("pickupInfoTitle")}
 											</p>
 										</div>
+
+										{/* Driver quick-select */}
+										{drivers.length > 0 && (
+											<div className="mb-3 space-y-1">
+												<Label className="text-xs">
+													{t("pickupInfoSelectDriver")}
+												</Label>
+												<Select
+													onValueChange={(driverId) => {
+														const d = drivers.find((dr) => dr.id === driverId);
+														if (!d) return;
+														setAdminPickupInfos((prev) => {
+															const next = [...prev];
+															if (next[i]) {
+																next[i]!.driverName = `${d.name} ${d.surname}`;
+																next[i]!.driverPhone = d.phone;
+															}
+															return next;
+														});
+													}}
+												>
+													<SelectTrigger className="h-7 text-xs">
+														<SelectValue
+															placeholder={t(
+																"pickupInfoSelectDriverPlaceholder",
+															)}
+														/>
+													</SelectTrigger>
+													<SelectContent>
+														{drivers.map((d) => (
+															<SelectItem key={d.id} value={d.id}>
+																{d.name} {d.surname}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+											</div>
+										)}
+
 										<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
 											<div className="space-y-1 sm:col-span-2">
 												<Label className="text-xs">
@@ -631,6 +674,25 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													}
 												/>
 											</div>
+											<div className="space-y-1 sm:col-span-2">
+												<Label className="text-xs">
+													{t("pickupInfoAdditionalInfo")}
+												</Label>
+												<Textarea
+													className="text-xs"
+													rows={3}
+													placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
+													value={adminPickupInfos[i]?.additionalInfo ?? ""}
+													onChange={(e) =>
+														setAdminPickupInfos((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.additionalInfo = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
 										</div>
 										<div className="mt-2 mb-3 flex flex-wrap gap-2">
 											<LoadingButton
@@ -669,6 +731,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 																	adminPickupInfos[j]?.driverName || undefined,
 																driverPhone:
 																	adminPickupInfos[j]?.driverPhone || undefined,
+
+																additionalInfo:
+																	adminPickupInfos[j]?.additionalInfo ||
+																	undefined,
 															},
 														})),
 													})

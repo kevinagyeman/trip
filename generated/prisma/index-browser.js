@@ -132,7 +132,17 @@ exports.Prisma.CompanyScalarFieldEnum = {
   country: 'country',
   website: 'website',
   estimateNotice: 'estimateNotice',
-  airports: 'airports',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DriverScalarFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  name: 'name',
+  surname: 'surname',
+  phone: 'phone',
+  email: 'email',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -264,8 +274,16 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   address: 'address',
   country: 'country',
   website: 'website',
-  estimateNotice: 'estimateNotice',
-  airports: 'airports'
+  estimateNotice: 'estimateNotice'
+};
+
+exports.Prisma.DriverOrderByRelevanceFieldEnum = {
+  id: 'id',
+  companyId: 'companyId',
+  name: 'name',
+  surname: 'surname',
+  phone: 'phone',
+  email: 'email'
 };
 
 exports.Prisma.AccountOrderByRelevanceFieldEnum = {
@@ -370,6 +388,7 @@ exports.QuotationStatus = exports.$Enums.QuotationStatus = {
 
 exports.Prisma.ModelName = {
   Company: 'Company',
+  Driver: 'Driver',
   Account: 'Account',
   Session: 'Session',
   User: 'User',

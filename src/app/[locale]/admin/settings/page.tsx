@@ -9,8 +9,7 @@ import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
 import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
-import { AirportsForm } from "@/app/_components/admin/airports-form";
-import { parseAirports } from "@/lib/airports";
+import { DriversManager } from "@/app/_components/admin/drivers-manager";
 
 export default async function AdminSettingsPage({
 	params,
@@ -37,7 +36,7 @@ export default async function AdminSettingsPage({
 		session.user.companyId
 			? db.company.findUnique({
 					where: { id: session.user.companyId },
-					select: { slug: true, estimateNotice: true, airports: true },
+					select: { slug: true, estimateNotice: true },
 				})
 			: null,
 	]);
@@ -52,6 +51,11 @@ export default async function AdminSettingsPage({
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}
 				<Card>
+					<CardContent className="pt-6">
+						<DriversManager />
+					</CardContent>
+				</Card>
+				<Card>
 					<CardHeader>
 						<CardTitle>{t("languageTitle")}</CardTitle>
 					</CardHeader>
@@ -61,16 +65,6 @@ export default async function AdminSettingsPage({
 						/>
 					</CardContent>
 				</Card>
-				{company && (
-					<Card>
-						<CardHeader>
-							<CardTitle>{t("airportsTitle")}</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<AirportsForm currentAirports={parseAirports(company.airports)} />
-						</CardContent>
-					</Card>
-				)}
 				{company && (
 					<Card>
 						<CardHeader>

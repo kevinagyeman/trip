@@ -7,6 +7,7 @@ export type PickupInfo = {
 	beThereAtTime?: string;
 	driverName?: string;
 	driverPhone?: string;
+	additionalInfo?: string;
 };
 
 export type Route = {

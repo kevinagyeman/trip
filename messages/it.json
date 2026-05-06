@@ -6,6 +6,7 @@
     "superAdminDashboard": "Pannello di controllo",
     "adminStats": "Statistiche",
     "adminGuide": "Guida",
+    "adminDrivers": "Autisti",
     "signOut": "Esci"
   },
   "guide": {
@@ -375,7 +376,8 @@
     "pickupInfoDriverName": "Nome autista",
     "pickupInfoDriverNamePlaceholder": "es. Marco Rossi",
     "pickupInfoDriverPhone": "Telefono autista",
-    "pickupInfoDriverPhonePlaceholder": "es. +39 333 123 4567"
+    "pickupInfoDriverPhonePlaceholder": "es. +39 333 123 4567",
+    "pickupInfoAdditionalInfo": "Informazioni aggiuntive"
   },
   "messages": {
     "title": "Messaggi",
@@ -553,6 +555,13 @@
     "pickupInfoDriverNamePlaceholder": "es. Marco Rossi",
     "pickupInfoDriverPhone": "Telefono autista",
     "pickupInfoDriverPhonePlaceholder": "es. +39 333 123 4567",
+    "pickupInfoDriverEmail": "Email autista",
+    "pickupInfoDriverEmailPlaceholder": "es. autista@esempio.com",
+
+    "pickupInfoAdditionalInfo": "Informazioni aggiuntive",
+    "pickupInfoAdditionalInfoPlaceholder": "Note per il cliente...",
+    "pickupInfoSelectDriver": "Seleziona autista",
+    "pickupInfoSelectDriverPlaceholder": "Scegli tra i tuoi autisti...",
     "savePickupInfo": "Salva dettagli ritiro",
     "saveAndNotifyCustomer": "Salva e Notifica Cliente",
     "chipDepartureSet": "Partenza impostata",

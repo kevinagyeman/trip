@@ -21,7 +21,7 @@ import {
 	QUOTATION_STATUS_COLORS,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
-import { Clock, MapPin, Phone, Plane, User } from "lucide-react";
+import { Clock, Info, MapPin, Phone, Plane, User } from "lucide-react";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
@@ -268,6 +268,19 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 														>
 															{route.pickupInfo.driverPhone}
 														</a>
+													</div>
+												</div>
+											)}
+											{route.pickupInfo.additionalInfo && (
+												<div className="flex items-start gap-2">
+													<Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
+													<div>
+														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
+															{t("pickupInfoAdditionalInfo")}
+														</p>
+														<p className="whitespace-pre-wrap font-medium">
+															{route.pickupInfo.additionalInfo}
+														</p>
 													</div>
 												</div>
 											)}

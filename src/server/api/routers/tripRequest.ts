@@ -22,6 +22,7 @@ const pickupInfoSchema = z.object({
 	beThereAtTime: z.string().optional(),
 	driverName: z.string().optional(),
 	driverPhone: z.string().optional(),
+	additionalInfo: z.string().optional(),
 });
 
 const routeSchema = z.object({

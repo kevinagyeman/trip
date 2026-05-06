@@ -15,6 +15,7 @@ interface MobileMenuProps {
 	adminLabel: string;
 	adminStatsLabel: string;
 	adminGuideLabel: string;
+
 	superAdminLabel: string;
 }
 
