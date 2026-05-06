@@ -377,7 +377,8 @@
     "pickupInfoDriverNamePlaceholder": "es. Marco Rossi",
     "pickupInfoDriverPhone": "Telefono autista",
     "pickupInfoDriverPhonePlaceholder": "es. +39 333 123 4567",
-    "pickupInfoAdditionalInfo": "Informazioni aggiuntive"
+    "pickupInfoAdditionalInfo": "Informazioni aggiuntive",
+    "googleCalendar": "Aggiungi a Google Calendar"
   },
   "messages": {
     "title": "Messaggi",

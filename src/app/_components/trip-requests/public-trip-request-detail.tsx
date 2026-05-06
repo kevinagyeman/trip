@@ -21,7 +21,42 @@ import {
 	QUOTATION_STATUS_COLORS,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
-import { Clock, Info, MapPin, Phone, Plane, User } from "lucide-react";
+import {
+	CalendarPlus,
+	Clock,
+	Info,
+	MapPin,
+	Phone,
+	Plane,
+	User,
+} from "lucide-react";
+
+function toICSDateTime(date: Date, timeStr?: string | null): string {
+	const d = new Date(date);
+	if (timeStr) {
+		const [h, m] = timeStr.split(":").map(Number);
+		d.setHours(h ?? 0, m ?? 0, 0, 0);
+	}
+	const pad = (n: number) => String(n).padStart(2, "0");
+	return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+}
+
+function googleCalendarUrl(params: {
+	summary: string;
+	description: string;
+	location: string;
+	start: string;
+	end: string;
+}): string {
+	const p = new URLSearchParams({
+		action: "TEMPLATE",
+		text: params.summary,
+		details: params.description,
+		location: params.location,
+		dates: `${params.start}/${params.end}`,
+	});
+	return `https://calendar.google.com/calendar/render?${p.toString()}`;
+}
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
@@ -285,6 +320,50 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 												</div>
 											)}
 										</div>
+										{route.pickupInfo.beThereAtDate && (
+											<div className="mt-3">
+												<Button
+													size="sm"
+													variant="outline"
+													className="border-emerald-600/30 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/20"
+													onClick={() => {
+														const date = new Date(
+															route.pickupInfo!.beThereAtDate!,
+														);
+														const timeStr =
+															route.pickupInfo!.beThereAtTime ?? "00:00";
+														const [h, m] = timeStr.split(":").map(Number);
+														const end = new Date(date);
+														end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+														const summary = `${route.pickup} → ${route.destination}`;
+														const desc = [
+															route.pickupInfo!.driverName &&
+																`Driver: ${route.pickupInfo!.driverName}`,
+															route.pickupInfo!.driverPhone &&
+																`Phone: ${route.pickupInfo!.driverPhone}`,
+															route.pickupInfo!.additionalInfo,
+														]
+															.filter(Boolean)
+															.join("\n");
+														window.open(
+															googleCalendarUrl({
+																summary,
+																description: desc,
+																location:
+																	route.pickupInfo!.meetingPoint ??
+																	route.pickup,
+																start: toICSDateTime(date, timeStr),
+																end: toICSDateTime(end),
+															}),
+															"_blank",
+														);
+													}}
+												>
+													<CalendarPlus className="mr-1.5 h-3.5 w-3.5" />
+													{t("googleCalendar")}
+												</Button>
+											</div>
+										)}
 									</div>
 								)}
 

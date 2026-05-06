@@ -377,7 +377,8 @@
     "pickupInfoDriverNamePlaceholder": "e.g. Marco Rossi",
     "pickupInfoDriverPhone": "Driver phone",
     "pickupInfoDriverPhonePlaceholder": "e.g. +39 333 123 4567",
-    "pickupInfoAdditionalInfo": "Additional info"
+    "pickupInfoAdditionalInfo": "Additional info",
+    "googleCalendar": "Add to Google Calendar"
   },
   "messages": {
     "title": "Messages",
