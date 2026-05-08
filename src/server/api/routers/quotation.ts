@@ -48,7 +48,6 @@ export const quotationRouter = createTRPCRouter({
 				isPriceEachWay: z.boolean().default(false),
 				areCarSeatsIncluded: z.boolean().default(false),
 				quotationAdditionalInfo: z.string().optional(),
-				internalNotes: z.string().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -100,7 +99,6 @@ export const quotationRouter = createTRPCRouter({
 				isPriceEachWay: z.boolean().default(false),
 				areCarSeatsIncluded: z.boolean().default(false),
 				quotationAdditionalInfo: z.string().optional(),
-				internalNotes: z.string().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

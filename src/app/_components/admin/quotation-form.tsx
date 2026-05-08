@@ -21,7 +21,6 @@ const quotationSchema = z.object({
 	isPriceEachWay: z.boolean(),
 	areCarSeatsIncluded: z.boolean(),
 	additionalInfo: z.string().optional(),
-	internalNotes: z.string().optional(),
 });
 
 type QuotationFormValues = z.infer<typeof quotationSchema>;
@@ -31,7 +30,6 @@ type QuotationData = {
 	isPriceEachWay: boolean;
 	areCarSeatsIncluded: boolean;
 	quotationAdditionalInfo: string | null;
-	internalNotes: string | null;
 	notifiedAt: Date | null;
 	status: string;
 	respondedAt: Date | null;
@@ -66,7 +64,6 @@ export function QuotationForm({
 			isPriceEachWay: false,
 			areCarSeatsIncluded: false,
 			additionalInfo: estimateNotice ?? "",
-			internalNotes: "",
 		},
 	});
 
@@ -80,7 +77,6 @@ export function QuotationForm({
 				isPriceEachWay: quotation.isPriceEachWay,
 				areCarSeatsIncluded: quotation.areCarSeatsIncluded,
 				additionalInfo: quotation.quotationAdditionalInfo ?? "",
-				internalNotes: quotation.internalNotes ?? "",
 			});
 		}
 	}, [
@@ -88,7 +84,6 @@ export function QuotationForm({
 		quotation?.isPriceEachWay,
 		quotation?.areCarSeatsIncluded,
 		quotation?.quotationAdditionalInfo,
-		quotation?.internalNotes,
 	]);
 
 	const saveQuotation = api.quotation.save.useMutation({ onSuccess });
@@ -102,7 +97,6 @@ export function QuotationForm({
 			isPriceEachWay: values.isPriceEachWay,
 			areCarSeatsIncluded: values.areCarSeatsIncluded,
 			quotationAdditionalInfo: values.additionalInfo || undefined,
-			internalNotes: values.internalNotes || undefined,
 		};
 	}
 
@@ -160,18 +154,11 @@ export function QuotationForm({
 				</Link>
 			</div>
 
-			{/* Internal notes */}
-			<CustomTextArea
-				labelText={t("internalNotes")}
-				placeholder={t("internalNotesPlaceholder")}
-				rows={2}
-				textAreaProps={{ ...register("internalNotes") }}
-			/>
-
 			{/* Actions */}
 			<div className="flex flex-wrap items-center gap-3">
 				<LoadingButton
 					type="button"
+					size="sm"
 					isLoading={saveAndSend.isPending}
 					onClick={handleSubmit((values) =>
 						saveAndSend.mutate(buildMutationInput(values)),
@@ -182,6 +169,7 @@ export function QuotationForm({
 
 				<LoadingButton
 					type="button"
+					size="sm"
 					variant="outline"
 					isLoading={saveQuotation.isPending}
 					onClick={handleSubmit((values) =>

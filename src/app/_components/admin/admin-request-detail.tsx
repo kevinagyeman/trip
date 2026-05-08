@@ -15,7 +15,6 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -24,6 +23,8 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
@@ -66,6 +67,46 @@ import {
 	parseRoutes,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
+
+function InternalNotesCard({
+	requestId,
+	initialNotes,
+}: {
+	requestId: string;
+	initialNotes: string;
+}) {
+	const t = useTranslations("adminDetail");
+	const utils = api.useUtils();
+	const [notes, setNotes] = useState(initialNotes);
+	const update = api.tripRequest.updateInternalNotes.useMutation({
+		onSuccess: () =>
+			utils.tripRequest.getByIdAdmin.invalidate({ id: requestId }),
+	});
+
+	return (
+		<Card>
+			<CardHeader className="pb-3">
+				<CardTitle className="text-base">{t("internalNotes")}</CardTitle>
+			</CardHeader>
+			<CardContent className="space-y-2 pt-0">
+				<Textarea
+					rows={3}
+					placeholder={t("internalNotesPlaceholder")}
+					value={notes}
+					onChange={(e) => setNotes(e.target.value)}
+				/>
+				<LoadingButton
+					size="sm"
+					variant="outline"
+					isLoading={update.isPending}
+					onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
+				>
+					{t("saveNotes")}
+				</LoadingButton>
+			</CardContent>
+		</Card>
+	);
+}
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -325,7 +366,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				<CardHeader className="pb-3">
 					<CardTitle className="text-base">{t("routes")}</CardTitle>
 				</CardHeader>
-				<CardContent className="space-y-3 pt-0">
+				<CardContent className="space-y-16 pt-0">
 					{routes.map((route, i) => {
 						const hasDepInfo = !!(route.departureDate ?? route.departureTime);
 						const hasPickupInfo = !!(
@@ -337,12 +378,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<div className="flex items-start justify-between gap-3 p-3">
 									<div className="w-full space-y-2">
 										<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-											{route.type === "airport_in"
-												? t("sectionArrival")
-												: route.type === "airport_out" ||
-														route.type === "airport"
-													? t("sectionDeparture")
-													: t("routeN", { n: i + 1 })}
+											{t("routeN", { n: i + 1 })}
 										</p>
 										<div className="flex flex-wrap items-center gap-2">
 											<Input
@@ -374,36 +410,90 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									</div>
 								</div>
 
-								{/* Current departure info pills */}
-								{(route.departureDate ??
-									route.departureTime ??
-									route.flightNumber) && (
-									<div className="flex flex-wrap gap-1.5 border-t px-3 pb-2 pt-2">
-										{(route.departureDate ?? route.departureTime) && (
-											<span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-												{route.departureDate &&
-													format(new Date(route.departureDate), "d MMM yyyy")}
-												{route.departureDate && route.departureTime && " · "}
-												{route.departureTime}
-											</span>
-										)}
-										{route.flightNumber && (
-											<span className="inline-flex items-center rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-												{route.flightNumber}
-											</span>
-										)}
-									</div>
-								)}
-
 								{/* Departure details form */}
-								<div className="border-t border-dashed p-3">
-									<p className="mb-2 text-xs font-medium text-muted-foreground">
-										{route.type === "airport_in"
-											? t("routeLandingDetails")
-											: route.type === "airport_out" || route.type === "airport"
-												? t("routeFlightDetails")
-												: t("routeDepartureDetails")}
-									</p>
+								<CollapsibleSection
+									editLabel={t("edit")}
+									title={
+										(route.departureDate ??
+										route.departureTime ??
+										route.flightNumber) ? (
+											<span className="flex flex-wrap items-center gap-2">
+												<span className="text-muted-foreground">
+													{route.type === "airport_in"
+														? t("departureScheduledLanding")
+														: route.type === "airport_out" ||
+																route.type === "airport"
+															? t("departureScheduledTakeoff")
+															: t("departureScheduledArrival")}
+												</span>
+												{route.departureDate && (
+													<span className="font-medium text-foreground">
+														{format(
+															new Date(route.departureDate),
+															"d MMM yyyy",
+														)}
+													</span>
+												)}
+												{route.departureTime && (
+													<span className="font-medium text-foreground">
+														{route.departureTime}
+													</span>
+												)}
+												{route.flightNumber && (
+													<span className="font-medium text-foreground">
+														{route.flightNumber}
+													</span>
+												)}
+												{route.departureDate && (
+													<Button
+														size="sm"
+														variant="ghost"
+														className="h-5 px-1.5 text-xs"
+														onClick={(e) => {
+															e.stopPropagation();
+															const [hRaw, mRaw] = (
+																route.departureTime ?? "00:00"
+															)
+																.split(":")
+																.map(Number);
+															const endH = ((hRaw ?? 0) + 1) % 24;
+															window.open(
+																googleCalendarUrl({
+																	summary: `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`,
+																	description: route.flightNumber
+																		? `${t("routeFlightNumber")}: ${route.flightNumber}`
+																		: "",
+																	location: route.pickup,
+																	start: toICSDateTime(
+																		new Date(route.departureDate!),
+																		route.departureTime,
+																	),
+																	end: toICSDateTime(
+																		new Date(route.departureDate!),
+																		`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
+																	),
+																}),
+																"_blank",
+															);
+														}}
+													>
+														<CalendarPlus className="mr-1 h-3 w-3" />
+														{t("googleCalendar")}
+													</Button>
+												)}
+											</span>
+										) : (
+											<span>
+												{route.type === "airport_in"
+													? t("routeLandingDetails")
+													: route.type === "airport_out" ||
+															route.type === "airport"
+														? t("routeFlightDetails")
+														: t("routeDepartureDetails")}
+											</span>
+										)
+									}
+								>
 									<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
 										<div className="space-y-1">
 											<Label className="text-xs">
@@ -497,55 +587,81 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										>
 											{t("saveRouteDetails")}
 										</LoadingButton>
-										{route.departureDate && (
-											<Button
-												size="sm"
-												variant="ghost"
-												onClick={() => {
-													const [hRaw, mRaw] = (route.departureTime ?? "00:00")
-														.split(":")
-														.map(Number);
-													const endH = ((hRaw ?? 0) + 1) % 24;
-													const start = toICSDateTime(
-														new Date(route.departureDate!),
-														route.departureTime,
-													);
-													const end = toICSDateTime(
-														new Date(route.departureDate!),
-														`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
-													);
-													const summary = `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`;
-													const desc = route.flightNumber
-														? `${t("routeFlightNumber")}: ${route.flightNumber}`
-														: "";
-													window.open(
-														googleCalendarUrl({
-															summary,
-															description: desc,
-															location: route.pickup,
-															start,
-															end,
-														}),
-														"_blank",
-													);
-												}}
-											>
-												<CalendarPlus className="mr-1 h-3 w-3" />
-												{t("googleCalendar")}
-											</Button>
-										)}
 									</div>
-								</div>
+								</CollapsibleSection>
 
 								{/* Pickup info — only when CONFIRMED */}
 								{request.status === "CONFIRMED" && (
-									<div className="border-t border-dashed p-3">
-										<div className="mb-2 flex items-center justify-between">
-											<p className="text-xs font-medium text-muted-foreground">
-												{t("pickupInfoTitle")}
-											</p>
-										</div>
-
+									<CollapsibleSection
+										editLabel={t("edit")}
+										title={
+											route.pickupInfo?.driverName ? (
+												<span className="flex flex-wrap items-center gap-2">
+													<span className="text-muted-foreground">
+														{t("pickupScheduled")}
+													</span>
+													{route.pickupInfo.beThereAtDate && (
+														<span className="font-medium text-foreground">
+															{format(
+																new Date(route.pickupInfo.beThereAtDate),
+																"d MMM yyyy",
+															)}
+														</span>
+													)}
+													{route.pickupInfo.beThereAtTime && (
+														<span className="font-medium text-foreground">
+															{route.pickupInfo.beThereAtTime}
+														</span>
+													)}
+													<span className="font-medium text-foreground">
+														{route.pickupInfo.driverName}
+													</span>
+													{route.pickupInfo.beThereAtDate && (
+														<Button
+															size="sm"
+															variant="ghost"
+															className="h-5 px-1.5 text-xs"
+															onClick={(e) => {
+																e.stopPropagation();
+																const date = new Date(
+																	route.pickupInfo!.beThereAtDate!,
+																);
+																const timeStr =
+																	route.pickupInfo!.beThereAtTime ?? "00:00";
+																const [h, m] = timeStr.split(":").map(Number);
+																const end = new Date(date);
+																end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+																window.open(
+																	googleCalendarUrl({
+																		summary: `${route.pickup} → ${route.destination}`,
+																		description: [
+																			route.pickupInfo!.driverName &&
+																				`${t("pickupInfoDriverName")}: ${route.pickupInfo!.driverName}`,
+																			route.pickupInfo!.driverPhone &&
+																				`${t("pickupInfoDriverPhone")}: ${route.pickupInfo!.driverPhone}`,
+																		]
+																			.filter(Boolean)
+																			.join("\n"),
+																		location:
+																			route.pickupInfo!.meetingPoint ??
+																			route.pickup,
+																		start: toICSDateTime(date, timeStr),
+																		end: toICSDateTime(end),
+																	}),
+																	"_blank",
+																);
+															}}
+														>
+															<CalendarPlus className="mr-1 h-3 w-3" />
+															{t("googleCalendar")}
+														</Button>
+													)}
+												</span>
+											) : (
+												<span>{t("pickupInfoTitleEdit")}</span>
+											)
+										}
+									>
 										{/* Driver quick-select */}
 										{drivers.length > 0 && (
 											<div className="mb-3 space-y-1">
@@ -742,43 +858,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											>
 												{t("saveAndNotifyCustomer")}
 											</LoadingButton>
-											<Button
-												size="sm"
-												variant="outline"
-												type="button"
-												onClick={() => {
-													const dateStr =
-														adminPickupInfos[i]?.beThereAtDate ?? "";
-													const date = dateStr ? new Date(dateStr) : new Date();
-													const timeStr =
-														adminPickupInfos[i]?.beThereAtTime ?? "00:00";
-													const [h, m] = timeStr.split(":").map(Number);
-													const end = new Date(date);
-													end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-													const summary = `${t("routeN", { n: i + 1 })}: ${adminRoutePlaces[i]?.pickup ?? route.pickup} → ${adminRoutePlaces[i]?.destination ?? route.destination}`;
-													const desc = [
-														adminPickupInfos[i]?.driverName &&
-															`${t("pickupInfoDriverName")}: ${adminPickupInfos[i]!.driverName}`,
-														adminPickupInfos[i]?.driverPhone &&
-															`${t("pickupInfoDriverPhone")}: ${adminPickupInfos[i]!.driverPhone}`,
-													]
-														.filter(Boolean)
-														.join("\n");
-													window.open(
-														googleCalendarUrl({
-															summary,
-															description: desc,
-															location: adminPickupInfos[i]?.meetingPoint ?? "",
-															start: toICSDateTime(date, timeStr),
-															end: toICSDateTime(end),
-														}),
-														"_blank",
-													);
-												}}
-											>
-												<CalendarPlus className="mr-1 h-3 w-3" />
-												{t("googleCalendar")}
-											</Button>
 										</div>
 										{request.pickupInfoNotifiedAt && (
 											<p className="text-xs text-muted-foreground">
@@ -794,7 +873,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												})}
 											</p>
 										)}
-									</div>
+									</CollapsibleSection>
 								)}
 							</div>
 						);
@@ -902,20 +981,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									</p>
 								</div>
 							)}
-							{quotation!.internalNotes && (
-								<div>
-									<p className="text-sm font-medium text-muted-foreground">
-										{t("internalNotes")}
-									</p>
-									<p className="mt-1 whitespace-pre-wrap text-sm">
-										{quotation!.internalNotes}
-									</p>
-								</div>
-							)}
 							{request.status !== "CONFIRMED" && (
-								<div className="flex flex-wrap items-start gap-3 border-t pt-4">
+								<div className="flex flex-wrap items-start gap-3">
 									<div className="flex flex-col gap-1">
 										<LoadingButton
+											size="sm"
 											variant="outline"
 											isLoading={requestDepartureDetails.isPending}
 											onClick={() =>
@@ -939,7 +1009,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 											</p>
 										)}
 									</div>
-									<Button onClick={() => setConfirmOpen(true)}>
+									<Button size="sm" onClick={() => setConfirmOpen(true)}>
 										{t("confirmTrip")}
 									</Button>
 								</div>
@@ -984,6 +1054,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 					)}
 				</CardContent>
 			</Card>
+
+			{/* Internal Notes */}
+			<InternalNotesCard
+				requestId={requestId}
+				initialNotes={request.internalNotes ?? ""}
+			/>
 
 			{/* Messages */}
 			<Card>

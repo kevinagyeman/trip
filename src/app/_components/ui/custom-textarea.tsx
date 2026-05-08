@@ -26,7 +26,7 @@ function CustomTextArea({
 				placeholder={placeholder}
 				rows={rows}
 				{...textAreaProps}
-				className="min-h-60"
+				// className="min-h-60"
 			/>
 			{hint && <small className="text-xs text-muted-foreground">{hint}</small>}
 			{error && <small className="text-xs text-orange-800">{error}</small>}

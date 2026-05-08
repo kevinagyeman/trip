@@ -458,6 +458,15 @@ export const tripRequestRouter = createTRPCRouter({
 		}),
 
 	// ADMIN: Update route departure details by request id
+	updateInternalNotes: adminProcedure
+		.input(z.object({ id: z.string(), internalNotes: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			return ctx.db.tripRequest.update({
+				where: { id: input.id },
+				data: { internalNotes: input.internalNotes || null },
+			});
+		}),
+
 	updateRoutesByAdmin: adminProcedure
 		.input(
 			z.object({

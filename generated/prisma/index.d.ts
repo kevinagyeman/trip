@@ -8731,6 +8731,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    internalNotes: string | null
     privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
@@ -8763,6 +8764,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    internalNotes: string | null
     privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
@@ -8795,6 +8797,7 @@ export namespace Prisma {
     ageOfChildren: number
     numberOfChildSeats: number
     additionalInfo: number
+    internalNotes: number
     privacyAcceptedAt: number
     pickupDate: number
     pickupTime: number
@@ -8843,6 +8846,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    internalNotes?: true
     privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
@@ -8875,6 +8879,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    internalNotes?: true
     privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
@@ -8907,6 +8912,7 @@ export namespace Prisma {
     ageOfChildren?: true
     numberOfChildSeats?: true
     additionalInfo?: true
+    internalNotes?: true
     privacyAcceptedAt?: true
     pickupDate?: true
     pickupTime?: true
@@ -9026,6 +9032,7 @@ export namespace Prisma {
     ageOfChildren: string | null
     numberOfChildSeats: number | null
     additionalInfo: string | null
+    internalNotes: string | null
     privacyAcceptedAt: Date | null
     pickupDate: Date | null
     pickupTime: string | null
@@ -9077,6 +9084,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    internalNotes?: boolean
     privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
@@ -9116,6 +9124,7 @@ export namespace Prisma {
     ageOfChildren?: boolean
     numberOfChildSeats?: boolean
     additionalInfo?: boolean
+    internalNotes?: boolean
     privacyAcceptedAt?: boolean
     pickupDate?: boolean
     pickupTime?: boolean
@@ -9131,7 +9140,7 @@ export namespace Prisma {
     companyId?: boolean
   }
 
-  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "lastViewedAt" | "confirmedAt" | "confirmationViewedAt" | "departureDetailsRequestedAt" | "pickupInfoNotifiedAt" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
+  export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "routes" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "internalNotes" | "privacyAcceptedAt" | "pickupDate" | "pickupTime" | "flightNumber" | "lastViewedAt" | "confirmedAt" | "confirmationViewedAt" | "departureDetailsRequestedAt" | "pickupInfoNotifiedAt" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
     company?: boolean | CompanyDefaultArgs<ExtArgs>
@@ -9165,6 +9174,7 @@ export namespace Prisma {
       ageOfChildren: string | null
       numberOfChildSeats: number | null
       additionalInfo: string | null
+      internalNotes: string | null
       privacyAcceptedAt: Date | null
       pickupDate: Date | null
       pickupTime: string | null
@@ -9567,6 +9577,7 @@ export namespace Prisma {
     readonly ageOfChildren: FieldRef<"TripRequest", 'String'>
     readonly numberOfChildSeats: FieldRef<"TripRequest", 'Int'>
     readonly additionalInfo: FieldRef<"TripRequest", 'String'>
+    readonly internalNotes: FieldRef<"TripRequest", 'String'>
     readonly privacyAcceptedAt: FieldRef<"TripRequest", 'DateTime'>
     readonly pickupDate: FieldRef<"TripRequest", 'DateTime'>
     readonly pickupTime: FieldRef<"TripRequest", 'String'>
@@ -10976,7 +10987,6 @@ export namespace Prisma {
     areCarSeatsIncluded: boolean | null
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
-    internalNotes: string | null
     notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
@@ -10993,7 +11003,6 @@ export namespace Prisma {
     areCarSeatsIncluded: boolean | null
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
-    internalNotes: string | null
     notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
@@ -11010,7 +11019,6 @@ export namespace Prisma {
     areCarSeatsIncluded: number
     quotationAdditionalInfo: number
     status: number
-    internalNotes: number
     notifiedAt: number
     respondedAt: number
     createdAt: number
@@ -11037,7 +11045,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: true
     quotationAdditionalInfo?: true
     status?: true
-    internalNotes?: true
     notifiedAt?: true
     respondedAt?: true
     createdAt?: true
@@ -11054,7 +11061,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: true
     quotationAdditionalInfo?: true
     status?: true
-    internalNotes?: true
     notifiedAt?: true
     respondedAt?: true
     createdAt?: true
@@ -11071,7 +11077,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: true
     quotationAdditionalInfo?: true
     status?: true
-    internalNotes?: true
     notifiedAt?: true
     respondedAt?: true
     createdAt?: true
@@ -11175,7 +11180,6 @@ export namespace Prisma {
     areCarSeatsIncluded: boolean
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus
-    internalNotes: string | null
     notifiedAt: Date | null
     respondedAt: Date | null
     createdAt: Date
@@ -11211,7 +11215,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: boolean
     status?: boolean
-    internalNotes?: boolean
     notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
@@ -11232,7 +11235,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: boolean
     status?: boolean
-    internalNotes?: boolean
     notifiedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
@@ -11241,7 +11243,7 @@ export namespace Prisma {
     createdById?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "internalNotes" | "notifiedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "notifiedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -11261,7 +11263,6 @@ export namespace Prisma {
       areCarSeatsIncluded: boolean
       quotationAdditionalInfo: string | null
       status: $Enums.QuotationStatus
-      internalNotes: string | null
       notifiedAt: Date | null
       respondedAt: Date | null
       createdAt: Date
@@ -11646,7 +11647,6 @@ export namespace Prisma {
     readonly areCarSeatsIncluded: FieldRef<"Quotation", 'Boolean'>
     readonly quotationAdditionalInfo: FieldRef<"Quotation", 'String'>
     readonly status: FieldRef<"Quotation", 'QuotationStatus'>
-    readonly internalNotes: FieldRef<"Quotation", 'String'>
     readonly notifiedAt: FieldRef<"Quotation", 'DateTime'>
     readonly respondedAt: FieldRef<"Quotation", 'DateTime'>
     readonly createdAt: FieldRef<"Quotation", 'DateTime'>
@@ -12142,6 +12142,7 @@ export namespace Prisma {
     ageOfChildren: 'ageOfChildren',
     numberOfChildSeats: 'numberOfChildSeats',
     additionalInfo: 'additionalInfo',
+    internalNotes: 'internalNotes',
     privacyAcceptedAt: 'privacyAcceptedAt',
     pickupDate: 'pickupDate',
     pickupTime: 'pickupTime',
@@ -12180,7 +12181,6 @@ export namespace Prisma {
     areCarSeatsIncluded: 'areCarSeatsIncluded',
     quotationAdditionalInfo: 'quotationAdditionalInfo',
     status: 'status',
-    internalNotes: 'internalNotes',
     notifiedAt: 'notifiedAt',
     respondedAt: 'respondedAt',
     createdAt: 'createdAt',
@@ -12302,6 +12302,7 @@ export namespace Prisma {
     phone: 'phone',
     ageOfChildren: 'ageOfChildren',
     additionalInfo: 'additionalInfo',
+    internalNotes: 'internalNotes',
     pickupTime: 'pickupTime',
     flightNumber: 'flightNumber',
     userId: 'userId',
@@ -12325,7 +12326,6 @@ export namespace Prisma {
     id: 'id',
     currency: 'currency',
     quotationAdditionalInfo: 'quotationAdditionalInfo',
-    internalNotes: 'internalNotes',
     tripRequestId: 'tripRequestId',
     createdById: 'createdById'
   };
@@ -12939,6 +12939,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    internalNotes?: StringNullableFilter<"TripRequest"> | string | null
     privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
@@ -12975,6 +12976,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrderInput | SortOrder
     numberOfChildSeats?: SortOrderInput | SortOrder
     additionalInfo?: SortOrderInput | SortOrder
+    internalNotes?: SortOrderInput | SortOrder
     privacyAcceptedAt?: SortOrderInput | SortOrder
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
@@ -13015,6 +13017,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    internalNotes?: StringNullableFilter<"TripRequest"> | string | null
     privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
@@ -13051,6 +13054,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrderInput | SortOrder
     numberOfChildSeats?: SortOrderInput | SortOrder
     additionalInfo?: SortOrderInput | SortOrder
+    internalNotes?: SortOrderInput | SortOrder
     privacyAcceptedAt?: SortOrderInput | SortOrder
     pickupDate?: SortOrderInput | SortOrder
     pickupTime?: SortOrderInput | SortOrder
@@ -13091,6 +13095,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableWithAggregatesFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
+    internalNotes?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
     privacyAcceptedAt?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableWithAggregatesFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
@@ -13178,7 +13183,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
-    internalNotes?: StringNullableFilter<"Quotation"> | string | null
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -13197,7 +13201,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: SortOrder
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
-    internalNotes?: SortOrderInput | SortOrder
     notifiedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13220,7 +13223,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
-    internalNotes?: StringNullableFilter<"Quotation"> | string | null
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -13239,7 +13241,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: SortOrder
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
-    internalNotes?: SortOrderInput | SortOrder
     notifiedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -13264,7 +13265,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolWithAggregatesFilter<"Quotation"> | boolean
     quotationAdditionalInfo?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
-    internalNotes?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     notifiedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
@@ -13846,6 +13846,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -13880,6 +13881,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -13913,6 +13915,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13947,6 +13950,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -13981,6 +13985,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -14012,6 +14017,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14042,6 +14048,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14127,7 +14134,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -14144,7 +14150,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -14161,7 +14166,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14178,7 +14182,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14195,7 +14198,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -14212,7 +14214,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14227,7 +14228,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14835,6 +14835,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    internalNotes?: SortOrder
     privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
@@ -14874,6 +14875,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    internalNotes?: SortOrder
     privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
@@ -14906,6 +14908,7 @@ export namespace Prisma {
     ageOfChildren?: SortOrder
     numberOfChildSeats?: SortOrder
     additionalInfo?: SortOrder
+    internalNotes?: SortOrder
     privacyAcceptedAt?: SortOrder
     pickupDate?: SortOrder
     pickupTime?: SortOrder
@@ -15041,7 +15044,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: SortOrder
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
-    internalNotes?: SortOrder
     notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
@@ -15062,7 +15064,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: SortOrder
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
-    internalNotes?: SortOrder
     notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
@@ -15079,7 +15080,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: SortOrder
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
-    internalNotes?: SortOrder
     notifiedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
@@ -16045,6 +16045,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -16078,6 +16079,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -16202,6 +16204,7 @@ export namespace Prisma {
     ageOfChildren?: StringNullableFilter<"TripRequest"> | string | null
     numberOfChildSeats?: IntNullableFilter<"TripRequest"> | number | null
     additionalInfo?: StringNullableFilter<"TripRequest"> | string | null
+    internalNotes?: StringNullableFilter<"TripRequest"> | string | null
     privacyAcceptedAt?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupDate?: DateTimeNullableFilter<"TripRequest"> | Date | string | null
     pickupTime?: StringNullableFilter<"TripRequest"> | string | null
@@ -16609,6 +16612,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -16642,6 +16646,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -16676,7 +16681,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -16692,7 +16696,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -16859,7 +16862,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
-    internalNotes?: StringNullableFilter<"Quotation"> | string | null
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -16952,7 +16954,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -16968,7 +16969,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -17161,6 +17161,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17194,6 +17195,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17242,6 +17244,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17275,6 +17278,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17308,6 +17312,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17341,6 +17346,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17426,6 +17432,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17459,6 +17466,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17547,6 +17555,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17631,6 +17640,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17664,6 +17674,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17697,6 +17708,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17779,6 +17791,7 @@ export namespace Prisma {
     ageOfChildren?: string | null
     numberOfChildSeats?: number | null
     additionalInfo?: string | null
+    internalNotes?: string | null
     privacyAcceptedAt?: Date | string | null
     pickupDate?: Date | string | null
     pickupTime?: string | null
@@ -17801,7 +17814,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -17888,6 +17900,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17921,6 +17934,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17954,6 +17968,7 @@ export namespace Prisma {
     ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pickupTime?: NullableStringFieldUpdateOperationsInput | string | null
@@ -17976,7 +17991,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17992,7 +18006,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18008,7 +18021,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18024,7 +18036,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: boolean
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
-    internalNotes?: string | null
     notifiedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
@@ -18048,7 +18059,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18064,7 +18074,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18080,7 +18089,6 @@ export namespace Prisma {
     areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
-    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

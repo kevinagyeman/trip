@@ -162,6 +162,7 @@ model TripRequest {
   ageOfChildren      String? @db.Text
   numberOfChildSeats Int?
   additionalInfo     String? @db.Text
+  internalNotes      String? @db.Text
 
   // Privacy consent
   privacyAcceptedAt DateTime?
@@ -216,7 +217,6 @@ model Quotation {
   areCarSeatsIncluded     Boolean         @default(false)
   quotationAdditionalInfo String?         @db.Text
   status                  QuotationStatus @default(PENDING)
-  internalNotes           String?         @db.Text
   notifiedAt              DateTime?
   respondedAt             DateTime?
   createdAt               DateTime        @default(now())

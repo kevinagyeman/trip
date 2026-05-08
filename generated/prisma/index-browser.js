@@ -214,6 +214,7 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   ageOfChildren: 'ageOfChildren',
   numberOfChildSeats: 'numberOfChildSeats',
   additionalInfo: 'additionalInfo',
+  internalNotes: 'internalNotes',
   privacyAcceptedAt: 'privacyAcceptedAt',
   pickupDate: 'pickupDate',
   pickupTime: 'pickupTime',
@@ -246,7 +247,6 @@ exports.Prisma.QuotationScalarFieldEnum = {
   areCarSeatsIncluded: 'areCarSeatsIncluded',
   quotationAdditionalInfo: 'quotationAdditionalInfo',
   status: 'status',
-  internalNotes: 'internalNotes',
   notifiedAt: 'notifiedAt',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
@@ -338,6 +338,7 @@ exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
   phone: 'phone',
   ageOfChildren: 'ageOfChildren',
   additionalInfo: 'additionalInfo',
+  internalNotes: 'internalNotes',
   pickupTime: 'pickupTime',
   flightNumber: 'flightNumber',
   userId: 'userId',
@@ -355,7 +356,6 @@ exports.Prisma.QuotationOrderByRelevanceFieldEnum = {
   id: 'id',
   currency: 'currency',
   quotationAdditionalInfo: 'quotationAdditionalInfo',
-  internalNotes: 'internalNotes',
   tripRequestId: 'tripRequestId',
   createdById: 'createdById'
 };

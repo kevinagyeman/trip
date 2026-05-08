@@ -583,24 +583,22 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 												{t("priceEachWay")}
 											</p>
 										)}
+										{quotation.areCarSeatsIncluded && (
+											<p className="text-sm text-muted-foreground">
+												{t("carSeatsIncluded")}
+											</p>
+										)}
 									</div>
 									<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
 										{quotation.status}
 									</Badge>
 								</div>
-								{quotation.areCarSeatsIncluded && (
-									<div className="rounded-lg bg-muted p-3">
-										<p className="text-sm font-medium">
-											{t("carSeatsIncluded")}
-										</p>
-									</div>
-								)}
 								{quotation.quotationAdditionalInfo && (
 									<div>
 										<p className="text-sm text-muted-foreground">
 											{t("additionalInfoLabel")}
 										</p>
-										<p className="mt-1 whitespace-pre-wrap">
+										<p className="mt-1 whitespace-pre-wrap text-sm">
 											{quotation.quotationAdditionalInfo}
 										</p>
 									</div>

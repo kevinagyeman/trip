@@ -50,11 +50,13 @@ export default async function AdminSettingsPage({
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}
-				<Card>
-					<CardContent className="pt-6">
-						<DriversManager />
-					</CardContent>
-				</Card>
+				{session.user.role !== "SUPER_ADMIN" && (
+					<Card>
+						<CardContent className="pt-6">
+							<DriversManager />
+						</CardContent>
+					</Card>
+				)}
 				<Card>
 					<CardHeader>
 						<CardTitle>{t("languageTitle")}</CardTitle>
