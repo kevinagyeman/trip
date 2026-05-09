@@ -22,16 +22,17 @@ async function main() {
 			language: "en",
 			numberOfAdults: 2,
 			areThereChildren: false,
-			routes: JSON.stringify([
+			createdAt: new Date("2026-04-18T09:12:00Z"),
+			routes: [
 				{
 					pickup: "JFK International Airport, New York",
 					destination: "The Plaza Hotel, 5th Avenue, New York",
-					departureDate: "2026-05-10",
-					departureTime: "14:30",
+					scheduledDate: "2026-05-10",
+					scheduledTime: "14:30",
 					flightNumber: "AA101",
+					type: "airport_in" as const,
 				},
-			]),
-			createdAt: new Date("2026-04-18T09:12:00Z"),
+			],
 		},
 		{
 			status: "QUOTED" as const,
@@ -42,16 +43,17 @@ async function main() {
 			language: "it",
 			numberOfAdults: 3,
 			areThereChildren: false,
-			routes: JSON.stringify([
+			createdAt: new Date("2026-04-15T10:00:00Z"),
+			routes: [
 				{
 					pickup: "Milan Malpensa Airport (MXP)",
 					destination: "Hotel de la Ville, Milan",
-					departureDate: "2026-05-08",
-					departureTime: "11:00",
+					scheduledDate: "2026-05-08",
+					scheduledTime: "11:00",
 					flightNumber: "AZ612",
+					type: "airport_in" as const,
 				},
-			]),
-			createdAt: new Date("2026-04-15T10:00:00Z"),
+			],
 			quotation: {
 				price: 180,
 				isPriceEachWay: false,
@@ -71,16 +73,17 @@ async function main() {
 			numberOfChildren: 1,
 			ageOfChildren: "4",
 			numberOfChildSeats: 1,
-			routes: JSON.stringify([
+			createdAt: new Date("2026-04-10T11:00:00Z"),
+			routes: [
 				{
 					pickup: "Heathrow Airport Terminal 5, London",
 					destination: "The Savoy Hotel, Strand, London",
-					departureDate: "2026-05-01",
-					departureTime: "08:15",
+					scheduledDate: "2026-05-01",
+					scheduledTime: "08:15",
 					flightNumber: "BA456",
+					type: "airport_in" as const,
 				},
-			]),
-			createdAt: new Date("2026-04-10T11:00:00Z"),
+			],
 			quotation: {
 				price: 145,
 				isPriceEachWay: false,
@@ -97,16 +100,17 @@ async function main() {
 			language: "it",
 			numberOfAdults: 4,
 			areThereChildren: false,
-			routes: JSON.stringify([
+			createdAt: new Date("2026-04-05T08:00:00Z"),
+			routes: [
 				{
 					pickup: "Rome Fiumicino Airport (FCO)",
 					destination: "Hotel Hassler, Trinità dei Monti, Rome",
-					departureDate: "2026-04-28",
-					departureTime: "10:30",
+					scheduledDate: "2026-04-28",
+					scheduledTime: "10:30",
 					flightNumber: "AZ1234",
+					type: "airport_in" as const,
 				},
-			]),
-			createdAt: new Date("2026-04-05T08:00:00Z"),
+			],
 			quotation: {
 				price: 220,
 				isPriceEachWay: false,
@@ -123,15 +127,16 @@ async function main() {
 			language: "en",
 			numberOfAdults: 2,
 			areThereChildren: false,
-			routes: JSON.stringify([
+			createdAt: new Date("2026-03-28T12:00:00Z"),
+			routes: [
 				{
 					pickup: "Nice Côte d'Azur Airport (NCE)",
 					destination: "Monte-Carlo, Place du Casino, Monaco",
-					departureDate: "2026-04-02",
-					departureTime: "19:45",
+					scheduledDate: "2026-04-02",
+					scheduledTime: "19:45",
+					type: "standard" as const,
 				},
-			]),
-			createdAt: new Date("2026-03-28T12:00:00Z"),
+			],
 			quotation: {
 				price: 95,
 				isPriceEachWay: true,
@@ -141,7 +146,7 @@ async function main() {
 	];
 
 	for (const req of trips) {
-		const { quotation, ...tripData } = req as typeof req & {
+		const { quotation, routes, ...tripData } = req as typeof req & {
 			quotation?: {
 				price: number;
 				isPriceEachWay: boolean;
@@ -155,6 +160,9 @@ async function main() {
 				...tripData,
 				companyId: COMPANY_ID,
 				privacyAcceptedAt: new Date(),
+				routes: {
+					create: routes.map((r, i) => ({ ...r, position: i })),
+				},
 			},
 		});
 
