@@ -39,6 +39,13 @@ enum MessageSenderType {
   ADMIN
 }
 
+enum RouteType {
+  airport_in
+  airport_out
+  standard
+  airport
+}
+
 model Company {
   id             String   @id @default(cuid())
   name           String
@@ -187,11 +194,42 @@ model TripRequest {
   company    Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   quotations Quotation[]
   messages   TripMessage[]
+  routesList Route[]
 
   @@index([userId])
   @@index([companyId])
   @@index([status])
   @@index([createdAt])
+}
+
+model Route {
+  id       String    @id @default(cuid())
+  position Int
+  type     RouteType @default(standard)
+
+  pickup      String
+  destination String
+
+  // Filled by customer after accepting quotation
+  scheduledDate String?
+  scheduledTime String?
+  flightNumber  String?
+
+  // Filled by admin after confirming (was nested pickupInfo JSON)
+  meetingPoint   String?
+  beThereAtDate  String?
+  beThereAtTime  String?
+  driverName     String?
+  driverPhone    String?
+  additionalInfo String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tripRequestId String
+  tripRequest   TripRequest @relation(fields: [tripRequestId], references: [id], onDelete: Cascade)
+
+  @@index([tripRequestId])
 }
 
 model TripMessage {

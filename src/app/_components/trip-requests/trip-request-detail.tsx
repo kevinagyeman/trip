@@ -11,11 +11,9 @@ import { useTranslations } from "next-intl";
 
 import {
 	buildStatusLabels,
-	parseRoutes,
 	STATUS_COLORS,
 	QUOTATION_STATUS_COLORS,
 } from "@/lib/trip-utils";
-import type { Route } from "@/lib/trip-utils";
 
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -41,7 +39,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = parseRoutes(request.routes);
+	const routes = request.routesList;
 
 	return (
 		<div className="space-y-6">

@@ -11,11 +11,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	buildStatusLabels,
-	parseRoutes,
-	STATUS_COLORS,
-} from "@/lib/trip-utils";
+import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
@@ -123,25 +119,12 @@ export function AllTripRequests() {
 											</span>
 										</p>
 										<div className="mt-1.5 space-y-0.5">
-											{parseRoutes(request.routes).map((route, i) => (
+											{request.routesList.map((route, i) => (
 												<p
 													key={i}
 													className="truncate text-xs text-muted-foreground"
 												>
 													{route.pickup} → {route.destination}
-													{(route.departureTime ?? route.departureDate) && (
-														<span className="ml-1.5 inline-flex items-center gap-1 rounded bg-muted px-1 py-0 text-xs">
-															{route.departureDate &&
-																format(
-																	new Date(route.departureDate),
-																	"d MMM yyyy",
-																)}
-															{route.departureTime &&
-																route.departureDate &&
-																" · "}
-															{route.departureTime}
-														</span>
-													)}
 												</p>
 											))}
 										</div>

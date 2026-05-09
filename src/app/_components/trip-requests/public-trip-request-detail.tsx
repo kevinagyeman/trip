@@ -1,35 +1,26 @@
 "use client";
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { LoadingButton } from "@/app/_components/ui/loading-button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
+import { CalendarPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { TripMessageThread } from "./trip-message-thread";
 
-import type { Route } from "@/lib/trip-utils";
 import {
 	buildStatusLabels,
-	parseRoutes,
 	QUOTATION_STATUS_COLORS,
 	STATUS_COLORS,
 } from "@/lib/trip-utils";
-import {
-	CalendarPlus,
-	Clock,
-	Info,
-	MapPin,
-	Phone,
-	Plane,
-	User,
-} from "lucide-react";
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
@@ -67,25 +58,22 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		data: request,
 		isLoading,
 		isError,
-	} = api.tripRequest.getByToken.useQuery({
-		token,
-	});
+	} = api.tripRequest.getByToken.useQuery({ token });
 
 	const [routeDepartures, setRouteDepartures] = useState<
 		Array<{
-			departureDate: string;
-			departureTime: string;
+			scheduledDate: string;
+			scheduledTime: string;
 			flightNumber: string;
 		}>
 	>([]);
 
 	useEffect(() => {
 		if (request) {
-			const parsed = parseRoutes(request.routes);
 			setRouteDepartures(
-				parsed.map((r) => ({
-					departureDate: r.departureDate ?? "",
-					departureTime: r.departureTime ?? "",
+				request.routesList.map((r) => ({
+					scheduledDate: r.scheduledDate ?? "",
+					scheduledTime: r.scheduledTime ?? "",
 					flightNumber: r.flightNumber ?? "",
 				})),
 			);
@@ -122,18 +110,16 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = parseRoutes(request.routes);
+	const routes = request.routesList;
 	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
 		request.status,
 	);
-
 	const hasRejectedQuotation = request.quotations.some(
 		(q) => q.status === "REJECTED",
 	);
 
 	return (
 		<div className="space-y-6">
-			{/* Trip confirmed banner */}
 			{request.status === "CONFIRMED" && (
 				<AlertBanner
 					variant="success"
@@ -141,8 +127,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					description={t("tripConfirmedDesc")}
 				/>
 			)}
-
-			{/* No quotation yet */}
 			{request.quotations.length === 0 && (
 				<AlertBanner
 					variant="info"
@@ -150,8 +134,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					description={t("quotationPendingDesc")}
 				/>
 			)}
-
-			{/* Quotation rejected */}
 			{hasRejectedQuotation && (
 				<AlertBanner
 					variant="error"
@@ -159,199 +141,98 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					description={t("quotationRejectedDesc")}
 				/>
 			)}
-
-			{/* Persistent email notification notice */}
 			<AlertBanner
 				variant="info"
 				description={t("emailNotice", { email: request.fromEmail })}
 			/>
 
 			{/* Header */}
-			<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-				<div className="space-y-1">
-					<p className="text-xs font-medium text-muted-foreground">
-						#{String(request.orderNumber).padStart(7, "0")}
-					</p>
-					<h2 className="text-2xl font-bold">
-						{request.firstName} {request.lastName}
-					</h2>
+			<SectionCard>
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
 					<div className="space-y-0.5">
+						<p className="text-xs font-medium text-muted-foreground">
+							#{String(request.orderNumber).padStart(7, "0")}
+						</p>
+						<h2 className="text-2xl font-bold">
+							{request.firstName} {request.lastName}
+						</h2>
 						{routes.map((route, i) => (
 							<p key={i} className="text-sm text-muted-foreground">
 								{route.pickup} → {route.destination}
 							</p>
 						))}
 					</div>
+					<Badge className={STATUS_COLORS[request.status]}>
+						{statusLabels[request.status] ?? request.status}
+					</Badge>
 				</div>
-				<Badge className={STATUS_COLORS[request.status]}>
-					{statusLabels[request.status] ?? request.status}
-				</Badge>
-			</div>
+			</SectionCard>
 
 			{/* Routes */}
-			<div>
-				<h3 className="mb-3 text-lg font-semibold">{t("routes")}</h3>
-				<div className="space-y-2">
-					{routes.map((route, i) => (
-						<div key={i} className="rounded-lg border-2 text-sm">
-							<div className="p-3">
+			<SectionCard title={t("routes")} contentClassName="space-y-4 pt-0">
+				{routes.map((route, i) => {
+					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
+					const depLabel =
+						route.type === "airport_out" || route.type === "airport"
+							? t("departureScheduledTakeoff")
+							: route.type === "airport_in"
+								? t("departureScheduledLanding")
+								: t("departureScheduledArrival");
+
+					return (
+						<div key={i} className="overflow-hidden rounded-lg border text-sm">
+							<div className="px-3 py-3">
 								<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 									{t("routeN", { n: i + 1 })}
 								</p>
-								<div className="flex items-center gap-2 text-base font-semibold">
+
+								<div className="flex items-center gap-2 font-semibold">
 									<span>{route.pickup}</span>
 									<span className="text-muted-foreground">→</span>
 									<span>{route.destination}</span>
 								</div>
-								{route.type === "airport_out" ||
-									route.type === "airport_in" ||
-									(route.type === "airport" && (
-										<span className="inline-flex items-center gap-1 rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
-											<Plane className="h-3 w-3" />
-											{t("transferTypeAirport")}
-										</span>
-									))}
-								{(route.departureDate ??
-									route.departureTime ??
-									route.flightNumber) && (
-									<div className="mt-2 flex flex-wrap gap-1.5">
-										{(route.departureDate ?? route.departureTime) && (
-											<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-												{route.departureDate &&
-													format(new Date(route.departureDate), "d MMM yyyy")}
-												{route.departureDate && route.departureTime && " · "}
-												{route.departureTime}
-											</span>
-										)}
-										{route.flightNumber && (
-											<span className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-												{route.flightNumber}
-											</span>
-										)}
-									</div>
-								)}
 							</div>
 
-							{/* Pickup info card — shown when admin has filled it */}
-							{route.pickupInfo &&
-								(route.pickupInfo.meetingPoint ??
-									route.pickupInfo.beThereAtDate ??
-									route.pickupInfo.driverName) && (
-									<div className="border-t bg-emerald-50 p-3 dark:bg-emerald-900/20">
-										<p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-											{t("pickupInfoTitle")}
-										</p>
-										<div className="space-y-1.5 text-sm">
-											{route.pickupInfo.meetingPoint && (
-												<div className="flex items-start gap-2">
-													<MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-													<div>
-														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-															{t("pickupInfoMeetingPoint")}
-														</p>
-														<span className="font-medium">
-															{route.pickupInfo.meetingPoint}
-														</span>
-													</div>
-												</div>
+							{/* Departure details */}
+							<CollapsibleSection
+								title={
+									hasDepInfo ? (
+										<span className="flex flex-wrap items-center gap-2">
+											<span className="text-muted-foreground">{depLabel}</span>
+											{route.scheduledDate && (
+												<span className="font-medium text-foreground">
+													{format(new Date(route.scheduledDate), "d MMM yyyy")}
+												</span>
 											)}
-											{(route.pickupInfo.beThereAtDate ??
-												route.pickupInfo.beThereAtTime) && (
-												<div className="flex items-start gap-2">
-													<Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-													<div>
-														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-															{t("pickupInfoBeThereAt")}
-														</p>
-														<span className="font-medium">
-															{route.pickupInfo.beThereAtDate &&
-																format(
-																	new Date(route.pickupInfo.beThereAtDate),
-																	"d MMM yyyy",
-																)}
-															{route.pickupInfo.beThereAtDate &&
-																route.pickupInfo.beThereAtTime &&
-																" · "}
-															{route.pickupInfo.beThereAtTime}
-														</span>
-													</div>
-												</div>
+											{route.scheduledTime && (
+												<span className="font-medium text-foreground">
+													{route.scheduledTime}
+												</span>
 											)}
-											{route.pickupInfo.driverName && (
-												<div className="flex items-start gap-2">
-													<User className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-													<div>
-														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-															{t("pickupInfoDriverName")}
-														</p>
-														<span className="font-medium">
-															{route.pickupInfo.driverName}
-														</span>
-													</div>
-												</div>
+											{route.flightNumber && (
+												<span className="text-muted-foreground">
+													· {route.flightNumber}
+												</span>
 											)}
-											{route.pickupInfo.driverPhone && (
-												<div className="flex items-start gap-2">
-													<Phone className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-													<div>
-														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-															{t("pickupInfoDriverPhone")}
-														</p>
-														<a
-															href={`tel:${route.pickupInfo.driverPhone}`}
-															className="font-medium text-emerald-700 underline dark:text-emerald-400"
-														>
-															{route.pickupInfo.driverPhone}
-														</a>
-													</div>
-												</div>
-											)}
-											{route.pickupInfo.additionalInfo && (
-												<div className="flex items-start gap-2">
-													<Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />
-													<div>
-														<p className="text-xs text-emerald-600/70 dark:text-emerald-500/70">
-															{t("pickupInfoAdditionalInfo")}
-														</p>
-														<p className="whitespace-pre-wrap font-medium">
-															{route.pickupInfo.additionalInfo}
-														</p>
-													</div>
-												</div>
-											)}
-										</div>
-										{route.pickupInfo.beThereAtDate && (
-											<div className="mt-3">
+											{route.scheduledDate && (
 												<Button
 													size="sm"
-													variant="outline"
-													className="border-emerald-600/30 text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-900/20"
-													onClick={() => {
-														const date = new Date(
-															route.pickupInfo!.beThereAtDate!,
-														);
-														const timeStr =
-															route.pickupInfo!.beThereAtTime ?? "00:00";
+													variant="ghost"
+													className="h-6 px-2 text-xs"
+													onClick={(e) => {
+														e.stopPropagation();
+														const date = new Date(route.scheduledDate!);
+														const timeStr = route.scheduledTime ?? "00:00";
 														const [h, m] = timeStr.split(":").map(Number);
 														const end = new Date(date);
 														end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-														const summary = `${route.pickup} → ${route.destination}`;
-														const desc = [
-															route.pickupInfo!.driverName &&
-																`Driver: ${route.pickupInfo!.driverName}`,
-															route.pickupInfo!.driverPhone &&
-																`Phone: ${route.pickupInfo!.driverPhone}`,
-															route.pickupInfo!.additionalInfo,
-														]
-															.filter(Boolean)
-															.join("\n");
 														window.open(
 															googleCalendarUrl({
-																summary,
-																description: desc,
-																location:
-																	route.pickupInfo!.meetingPoint ??
-																	route.pickup,
+																summary: `${route.pickup} → ${route.destination}`,
+																description: route.flightNumber
+																	? `Flight: ${route.flightNumber}`
+																	: "",
+																location: route.pickup,
 																start: toICSDateTime(date, timeStr),
 																end: toICSDateTime(end),
 															}),
@@ -359,298 +240,437 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 														);
 													}}
 												>
-													<CalendarPlus className="mr-1.5 h-3.5 w-3.5" />
+													<CalendarPlus className="mr-1 h-3 w-3" />
 													{t("googleCalendar")}
 												</Button>
-											</div>
-										)}
-									</div>
-								)}
-
-							{canEdit && (
-								<div className="border-t border-dashed p-3">
-									<p className="mb-2 text-xs font-medium text-muted-foreground">
-										{t("routeDepartureDetails")}
-									</p>
-									<div
-										className={
-											"grid grid-cols-1 gap-2 " +
-											(route.type === "standard" || !route.type
-												? "sm:grid-cols-2"
-												: "sm:grid-cols-3")
-										}
-									>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{route.type === "airport_out" ||
-												route.type === "airport"
-													? t("routeFlightDate")
-													: route.type === "airport_in"
-														? t("routeLandingDate")
-														: t("routeDepartureDate")}
-											</Label>
-											<Input
-												type="date"
-												value={routeDepartures[i]?.departureDate ?? ""}
-												onChange={(e) =>
-													setRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i])
-															next[i]!.departureDate = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{route.type === "airport_out" ||
-												route.type === "airport"
-													? t("routeFlightTime")
-													: route.type === "airport_in"
-														? t("routeLandingTime")
-														: t("routeDepartureTime")}
-											</Label>
-											<Input
-												type="time"
-												value={routeDepartures[i]?.departureTime ?? ""}
-												onChange={(e) =>
-													setRouteDepartures((prev) => {
-														const next = [...prev];
-														if (next[i])
-															next[i]!.departureTime = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										{(route.type === "airport_out" ||
-											route.type === "airport_in" ||
-											route.type === "airport") && (
+											)}
+										</span>
+									) : (
+										<span className="flex flex-wrap items-center gap-2">
+											<span className="text-muted-foreground">{depLabel}</span>
+											<span className="text-muted-foreground">—</span>
+										</span>
+									)
+								}
+								editLabel={canEdit ? t("edit") : undefined}
+							>
+								{canEdit ? (
+									<div className="space-y-3 pt-2">
+										<div
+											className={
+												"grid grid-cols-1 gap-2 " +
+												(route.type === "standard" || !route.type
+													? "sm:grid-cols-2"
+													: "sm:grid-cols-3")
+											}
+										>
 											<div className="space-y-1">
 												<Label className="text-xs">
-													{t("routeFlightNumber")}
+													{route.type === "airport_out" ||
+													route.type === "airport"
+														? t("routeFlightDate")
+														: route.type === "airport_in"
+															? t("routeLandingDate")
+															: t("routeArrivalDate")}
 												</Label>
 												<Input
-													placeholder={t("routeFlightNumberPlaceholder")}
-													value={routeDepartures[i]?.flightNumber ?? ""}
+													type="date"
+													value={routeDepartures[i]?.scheduledDate ?? ""}
 													onChange={(e) =>
 														setRouteDepartures((prev) => {
 															const next = [...prev];
 															if (next[i])
-																next[i]!.flightNumber = e.target.value;
+																next[i]!.scheduledDate = e.target.value;
 															return next;
 														})
 													}
 												/>
 											</div>
-										)}
+											<div className="space-y-1">
+												<Label className="text-xs">
+													{route.type === "airport_out" ||
+													route.type === "airport"
+														? t("routeFlightTime")
+														: route.type === "airport_in"
+															? t("routeLandingTime")
+															: t("routeArrivalTime")}
+												</Label>
+												<Input
+													type="time"
+													value={routeDepartures[i]?.scheduledTime ?? ""}
+													onChange={(e) =>
+														setRouteDepartures((prev) => {
+															const next = [...prev];
+															if (next[i])
+																next[i]!.scheduledTime = e.target.value;
+															return next;
+														})
+													}
+												/>
+											</div>
+											{(route.type === "airport_out" ||
+												route.type === "airport_in" ||
+												route.type === "airport") && (
+												<div className="space-y-1">
+													<Label className="text-xs">
+														{t("routeFlightNumber")}
+													</Label>
+													<Input
+														placeholder={t("routeFlightNumberPlaceholder")}
+														value={routeDepartures[i]?.flightNumber ?? ""}
+														onChange={(e) =>
+															setRouteDepartures((prev) => {
+																const next = [...prev];
+																if (next[i])
+																	next[i]!.flightNumber = e.target.value;
+																return next;
+															})
+														}
+													/>
+												</div>
+											)}
+										</div>
+										<div className="flex items-center gap-3">
+											<LoadingButton
+												size="sm"
+												variant="outline"
+												isLoading={updateRoutes.isPending}
+												onClick={() => {
+													setNotified(false);
+													updateRoutes.mutate({
+														token,
+														routes: routes.map((_, j) => ({
+															scheduledDate:
+																routeDepartures[j]?.scheduledDate || undefined,
+															scheduledTime:
+																routeDepartures[j]?.scheduledTime || undefined,
+															flightNumber:
+																routeDepartures[j]?.flightNumber || undefined,
+														})),
+													});
+												}}
+											>
+												{t("saveRouteDetails")}
+											</LoadingButton>
+											{notified && (
+												<p className="text-xs text-muted-foreground">
+													{t("adminNotified")}
+												</p>
+											)}
+										</div>
 									</div>
-									<div className="mt-2 flex items-center gap-3">
-										<LoadingButton
-											size="sm"
-											variant="outline"
-											isLoading={updateRoutes.isPending}
-											onClick={() => {
-												setNotified(false);
-												updateRoutes.mutate({
-													token,
-													routes: routes.map((r, j) => ({
-														...r,
-														departureDate:
-															routeDepartures[j]?.departureDate || undefined,
-														departureTime:
-															routeDepartures[j]?.departureTime || undefined,
-														flightNumber:
-															routeDepartures[j]?.flightNumber || undefined,
-													})),
-												});
-											}}
-										>
-											{t("saveRouteDetails")}
-										</LoadingButton>
-										{notified && (
-											<p className="text-xs text-muted-foreground">
-												{t("adminNotified")}
+								) : (
+									hasDepInfo && (
+										<div className="space-y-1.5 pt-2 text-xs">
+											{route.scheduledDate && (
+												<p>
+													<span className="text-muted-foreground">
+														{depLabel}{" "}
+													</span>
+													<span className="font-medium">
+														{format(
+															new Date(route.scheduledDate),
+															"d MMM yyyy",
+														)}
+														{route.scheduledTime && ` · ${route.scheduledTime}`}
+													</span>
+												</p>
+											)}
+											{route.flightNumber && (
+												<p>
+													<span className="text-muted-foreground">
+														{t("routeFlightNumber")}:{" "}
+													</span>
+													<span className="font-medium">
+														{route.flightNumber}
+													</span>
+												</p>
+											)}
+										</div>
+									)
+								)}
+							</CollapsibleSection>
+
+							{/* Pickup info */}
+							{(route.meetingPoint ??
+								route.beThereAtDate ??
+								route.driverName) && (
+								<CollapsibleSection
+									title={
+										route.driverName ? (
+											<span className="flex flex-wrap items-center gap-2">
+												<span className="text-muted-foreground">
+													{t("pickupScheduled")}
+												</span>
+												{route.beThereAtDate && (
+													<span className="font-medium text-foreground">
+														{format(
+															new Date(route.beThereAtDate),
+															"d MMM yyyy",
+														)}
+													</span>
+												)}
+												{route.beThereAtTime && (
+													<span className="font-medium text-foreground">
+														{route.beThereAtTime}
+													</span>
+												)}
+												<span className="font-medium text-foreground">
+													{route.driverName}
+												</span>
+												{route.beThereAtDate && (
+													<Button
+														size="sm"
+														variant="ghost"
+														className="h-6 px-2 text-xs"
+														onClick={(e) => {
+															e.stopPropagation();
+															const date = new Date(route.beThereAtDate!);
+															const timeStr = route.beThereAtTime ?? "00:00";
+															const [h, m] = timeStr.split(":").map(Number);
+															const end = new Date(date);
+															end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+															const summary = `${route.pickup} → ${route.destination}`;
+															const desc = [
+																route.driverName &&
+																	`Driver: ${route.driverName}`,
+																route.driverPhone &&
+																	`Phone: ${route.driverPhone}`,
+																route.additionalInfo,
+															]
+																.filter(Boolean)
+																.join("\n");
+															window.open(
+																googleCalendarUrl({
+																	summary,
+																	description: desc,
+																	location: route.meetingPoint ?? route.pickup,
+																	start: toICSDateTime(date, timeStr),
+																	end: toICSDateTime(end),
+																}),
+																"_blank",
+															);
+														}}
+													>
+														<CalendarPlus className="mr-1 h-3 w-3" />
+														{t("googleCalendar")}
+													</Button>
+												)}
+											</span>
+										) : (
+											<span className="flex flex-wrap items-center gap-2">
+												<span className="text-muted-foreground">
+													{t("pickupScheduled")}
+												</span>
+												<span className="text-muted-foreground">—</span>
+											</span>
+										)
+									}
+								>
+									<div className="space-y-1.5 pt-2 text-xs">
+										{route.meetingPoint && (
+											<p>
+												<span className="text-muted-foreground">
+													{t("pickupInfoMeetingPoint")}:{" "}
+												</span>
+												<span className="font-medium">
+													{route.meetingPoint}
+												</span>
+											</p>
+										)}
+										{(route.beThereAtDate ?? route.beThereAtTime) && (
+											<p>
+												<span className="text-muted-foreground">
+													{t("pickupInfoBeThereAt")}:{" "}
+												</span>
+												<span className="font-medium">
+													{route.beThereAtDate &&
+														format(new Date(route.beThereAtDate), "d MMM yyyy")}
+													{route.beThereAtDate && route.beThereAtTime && " · "}
+													{route.beThereAtTime}
+												</span>
+											</p>
+										)}
+										{route.driverName && (
+											<p>
+												<span className="text-muted-foreground">
+													{t("pickupInfoDriverName")}:{" "}
+												</span>
+												<span className="font-medium">{route.driverName}</span>
+											</p>
+										)}
+										{route.driverPhone && (
+											<p>
+												<span className="text-muted-foreground">
+													{t("pickupInfoDriverPhone")}:{" "}
+												</span>
+												<a
+													href={`tel:${route.driverPhone}`}
+													className="font-medium underline"
+												>
+													{route.driverPhone}
+												</a>
+											</p>
+										)}
+										{route.additionalInfo && (
+											<p>
+												<span className="text-muted-foreground">
+													{t("pickupInfoAdditionalInfo")}:{" "}
+												</span>
+												<span className="font-medium">
+													{route.additionalInfo}
+												</span>
 											</p>
 										)}
 									</div>
-								</div>
+								</CollapsibleSection>
 							)}
 						</div>
-					))}
-				</div>
-			</div>
+					);
+				})}
+			</SectionCard>
 
-			{/* Contact / Passengers / Preferences */}
-			<div className="rounded-lg border-2 text-sm divide-y">
-				<div className="space-y-1 p-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("contactDetails")}
+			{/* Contact */}
+			<SectionCard
+				title={t("contactDetails")}
+				contentClassName="space-y-1.5 pt-0 text-sm"
+			>
+				<p>
+					<span className="text-muted-foreground">{t("email")}: </span>
+					<span className="font-medium">{request.customerEmail}</span>
+				</p>
+				<p>
+					<span className="text-muted-foreground">{t("phone")}: </span>
+					<span className="font-medium">{request.phone}</span>
+				</p>
+			</SectionCard>
+
+			{/* Passengers */}
+			<SectionCard
+				title={t("passengers")}
+				contentClassName="space-y-1.5 pt-0 text-sm"
+			>
+				<p>
+					<span className="text-muted-foreground">{t("adults")}: </span>
+					<span className="font-medium">{request.numberOfAdults}</span>
+				</p>
+				{request.areThereChildren && request.numberOfChildren !== null && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("numberOfChildren")}:{" "}
+						</span>
+						<span className="font-medium">{request.numberOfChildren}</span>
 					</p>
-					<div className="flex flex-wrap gap-x-6 gap-y-1">
-						<span>
-							<span className="text-muted-foreground">{t("email")}: </span>
-							<span className="font-medium">{request.customerEmail}</span>
+				)}
+				{request.areThereChildren && request.ageOfChildren && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("agesOfChildren")}:{" "}
 						</span>
-						<span>
-							<span className="text-muted-foreground">{t("phone")}: </span>
-							<span className="font-medium">{request.phone}</span>
-						</span>
-					</div>
-				</div>
-				<div className="space-y-1 p-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("passengers")}
+						<span className="font-medium">{request.ageOfChildren}</span>
 					</p>
-					<div className="flex flex-wrap gap-x-6 gap-y-1">
-						<span>
-							<span className="text-muted-foreground">{t("adults")}: </span>
-							<span className="font-medium">{request.numberOfAdults}</span>
+				)}
+				{request.areThereChildren && request.numberOfChildSeats !== null && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("childSeatsNeeded")}:{" "}
 						</span>
-						{request.areThereChildren && request.numberOfChildren !== null && (
-							<span>
-								<span className="text-muted-foreground">
-									{t("numberOfChildren")}:{" "}
-								</span>
-								<span className="font-medium">{request.numberOfChildren}</span>
-							</span>
-						)}
-						{request.areThereChildren && request.ageOfChildren && (
-							<span>
-								<span className="text-muted-foreground">
-									{t("agesOfChildren")}:{" "}
-								</span>
-								<span className="font-medium">{request.ageOfChildren}</span>
-							</span>
-						)}
-						{request.areThereChildren &&
-							request.numberOfChildSeats !== null && (
-								<span>
-									<span className="text-muted-foreground">
-										{t("childSeatsNeeded")}:{" "}
-									</span>
-									<span className="font-medium">
-										{request.numberOfChildSeats}
-									</span>
-								</span>
-							)}
-					</div>
-				</div>
-				<div className="space-y-1 p-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("preferences")}
+						<span className="font-medium">{request.numberOfChildSeats}</span>
 					</p>
-					<div className="flex flex-wrap gap-x-6 gap-y-1">
-						<span>
-							<span className="text-muted-foreground">{t("language")}: </span>
-							<span className="font-medium">
-								{LANGUAGE_LABELS[request.language] ?? request.language}
-							</span>
+				)}
+				{request.additionalInfo && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("additionalInformation")}:{" "}
 						</span>
-						<span>
-							<span className="text-muted-foreground">{t("created")}: </span>
-							<span className="font-medium">
-								{format(new Date(request.createdAt), "d MMM yyyy")}
-							</span>
-						</span>
-						{request.additionalInfo && (
-							<span>
-								<span className="text-muted-foreground">
-									{t("additionalInformation")}:{" "}
-								</span>
-								<span className="font-medium">{request.additionalInfo}</span>
-							</span>
-						)}
-					</div>
-				</div>
-			</div>
+						<span className="font-medium">{request.additionalInfo}</span>
+					</p>
+				)}
+				<p>
+					<span className="text-muted-foreground">{t("language")}: </span>
+					<span className="font-medium">
+						{LANGUAGE_LABELS[request.language] ?? request.language}
+					</span>
+				</p>
+			</SectionCard>
 
 			{/* Quotations */}
-			{request.quotations.length > 0 && (
-				<div className="space-y-4">
-					<h2 className="text-xl font-bold">{t("quotations")}</h2>
-					{request.quotations.map((quotation) => (
-						<Card key={quotation.id}>
-							<CardContent className="space-y-4">
-								<div className="flex items-start justify-between">
-									<div>
-										<p className="text-2xl font-bold">
-											{quotation.currency} {quotation.price.toString()}
-										</p>
-										{quotation.isPriceEachWay && (
-											<p className="text-sm text-muted-foreground">
-												{t("priceEachWay")}
-											</p>
-										)}
-										{quotation.areCarSeatsIncluded && (
-											<p className="text-sm text-muted-foreground">
-												{t("carSeatsIncluded")}
-											</p>
-										)}
-									</div>
-									<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
-										{quotation.status}
-									</Badge>
-								</div>
-								{quotation.quotationAdditionalInfo && (
-									<div>
-										<p className="text-sm text-muted-foreground">
-											{t("additionalInfoLabel")}
-										</p>
-										<p className="mt-1 whitespace-pre-wrap text-sm">
-											{quotation.quotationAdditionalInfo}
-										</p>
-									</div>
-								)}
-								{quotation.notifiedAt && (
-									<p className="text-sm text-muted-foreground">
-										{t("notifiedDate", {
-											date: format(
-												new Date(quotation.notifiedAt),
-												"d MMM yyyy",
-											),
-											time: format(new Date(quotation.notifiedAt), "HH:mm"),
-										})}
-									</p>
-								)}
-								{quotation.status === "PENDING" && quotation.notifiedAt && (
-									<div className="flex gap-2">
-										<Button
-											onClick={() =>
-												acceptQuotation.mutate({ id: quotation.id, token })
-											}
-											disabled={
-												acceptQuotation.isPending || rejectQuotation.isPending
-											}
-										>
-											{t("acceptQuotation")}
-										</Button>
-										<Button
-											variant="outline"
-											onClick={() =>
-												rejectQuotation.mutate({ id: quotation.id, token })
-											}
-											disabled={
-												acceptQuotation.isPending || rejectQuotation.isPending
-											}
-										>
-											{t("rejectQuotation")}
-										</Button>
-									</div>
-								)}
-							</CardContent>
-						</Card>
-					))}
-				</div>
-			)}
+			{request.quotations.map((quotation) => (
+				<SectionCard
+					key={quotation.id}
+					title={t("quotations")}
+					headerAction={
+						<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
+							{quotation.status}
+						</Badge>
+					}
+					contentClassName="space-y-4 pt-0"
+				>
+					<div>
+						<p className="text-2xl font-bold">
+							{quotation.currency} {quotation.price.toString()}
+						</p>
+						{quotation.isPriceEachWay && (
+							<p className="text-sm text-muted-foreground">
+								{t("priceEachWay")}
+							</p>
+						)}
+						{quotation.areCarSeatsIncluded && (
+							<p className="text-sm text-muted-foreground">
+								{t("carSeatsIncluded")}
+							</p>
+						)}
+					</div>
+					{quotation.quotationAdditionalInfo && (
+						<div>
+							<p className="text-sm text-muted-foreground">
+								{t("additionalInfoLabel")}
+							</p>
+							<p className="mt-1 whitespace-pre-wrap text-sm">
+								{quotation.quotationAdditionalInfo}
+							</p>
+						</div>
+					)}
+					{quotation.notifiedAt && (
+						<p className="text-sm text-muted-foreground">
+							{t("notifiedDate", {
+								date: format(new Date(quotation.notifiedAt), "d MMM yyyy"),
+								time: format(new Date(quotation.notifiedAt), "HH:mm"),
+							})}
+						</p>
+					)}
+					{quotation.status === "PENDING" && quotation.notifiedAt && (
+						<div className="flex gap-2">
+							<Button
+								onClick={() =>
+									acceptQuotation.mutate({ id: quotation.id, token })
+								}
+								disabled={
+									acceptQuotation.isPending || rejectQuotation.isPending
+								}
+							>
+								{t("acceptQuotation")}
+							</Button>
+							<Button
+								variant="outline"
+								onClick={() =>
+									rejectQuotation.mutate({ id: quotation.id, token })
+								}
+								disabled={
+									acceptQuotation.isPending || rejectQuotation.isPending
+								}
+							>
+								{t("rejectQuotation")}
+							</Button>
+						</div>
+					)}
+				</SectionCard>
+			))}
 
-			{/* Message Thread */}
-			<Card>
-				<CardContent>
-					<TripMessageThread mode="customer" token={token} />
-				</CardContent>
-			</Card>
+			{/* Messages */}
+			<SectionCard contentClassName="pt-0">
+				<TripMessageThread mode="customer" token={token} />
+			</SectionCard>
 		</div>
 	);
 }

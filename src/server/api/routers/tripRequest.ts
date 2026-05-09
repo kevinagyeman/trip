@@ -16,15 +16,6 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { TripRequestStatus } from "../../../../generated/prisma";
 
-const pickupInfoSchema = z.object({
-	meetingPoint: z.string().optional(),
-	beThereAtDate: z.string().optional(),
-	beThereAtTime: z.string().optional(),
-	driverName: z.string().optional(),
-	driverPhone: z.string().optional(),
-	additionalInfo: z.string().optional(),
-});
-
 const routeSchema = z.object({
 	pickup: z.string().min(1),
 	destination: z.string().min(1),
@@ -32,7 +23,6 @@ const routeSchema = z.object({
 	departureDate: z.string().optional(),
 	departureTime: z.string().optional(),
 	flightNumber: z.string().optional(),
-	pickupInfo: pickupInfoSchema.optional(),
 });
 
 export const tripRequestRouter = createTRPCRouter({
@@ -77,6 +67,17 @@ export const tripRequestRouter = createTRPCRouter({
 					companyId: company.id,
 					status: TripRequestStatus.PENDING,
 					privacyAcceptedAt: new Date(),
+					routesList: {
+						create: routes.map((r, i) => ({
+							position: i,
+							type: r.type ?? "standard",
+							pickup: r.pickup,
+							destination: r.destination,
+							scheduledDate: r.departureDate ?? null,
+							scheduledTime: r.departureTime ?? null,
+							flightNumber: r.flightNumber ?? null,
+						})),
+					},
 				},
 			});
 
@@ -130,9 +131,8 @@ export const tripRequestRouter = createTRPCRouter({
 				cursor: cursor ? { id: cursor } : undefined,
 				orderBy: { createdAt: "desc" },
 				include: {
-					quotations: {
-						orderBy: { createdAt: "desc" },
-					},
+					quotations: { orderBy: { createdAt: "desc" } },
+					routesList: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -152,9 +152,8 @@ export const tripRequestRouter = createTRPCRouter({
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
 				include: {
-					quotations: {
-						orderBy: { createdAt: "desc" },
-					},
+					quotations: { orderBy: { createdAt: "desc" } },
+					routesList: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -259,6 +258,7 @@ export const tripRequestRouter = createTRPCRouter({
 					user: { select: { id: true, name: true, email: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
 					messages: { orderBy: { createdAt: "desc" }, take: 1 },
+					routesList: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -288,9 +288,8 @@ export const tripRequestRouter = createTRPCRouter({
 				include: {
 					user: { select: { id: true, name: true, email: true, image: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
-					company: {
-						select: { estimateNotice: true, name: true },
-					},
+					company: { select: { estimateNotice: true, name: true } },
+					routesList: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -378,9 +377,8 @@ export const tripRequestRouter = createTRPCRouter({
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
 				include: {
-					quotations: {
-						orderBy: { createdAt: "desc" },
-					},
+					quotations: { orderBy: { createdAt: "desc" } },
+					routesList: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -410,19 +408,16 @@ export const tripRequestRouter = createTRPCRouter({
 			});
 		}),
 
-	// PUBLIC: Update route details (departure date/time/flight) by token
+	// PUBLIC: Update scheduled date/time/flight by token
 	updateRoutes: publicProcedure
 		.input(
 			z.object({
 				token: z.string(),
 				routes: z.array(
 					z.object({
-						pickup: z.string(),
-						destination: z.string(),
-						departureDate: z.string().optional(),
-						departureTime: z.string().optional(),
+						scheduledDate: z.string().optional(),
+						scheduledTime: z.string().optional(),
 						flightNumber: z.string().optional(),
-						pickupInfo: pickupInfoSchema.optional(),
 					}),
 				),
 			}),
@@ -443,10 +438,18 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			await ctx.db.tripRequest.update({
-				where: { token: input.token },
-				data: { routes: JSON.stringify(input.routes) },
-			});
+			await Promise.all(
+				input.routes.map((r, i) =>
+					ctx.db.route.updateMany({
+						where: { tripRequestId: tripRequest.id, position: i },
+						data: {
+							scheduledDate: r.scheduledDate || null,
+							scheduledTime: r.scheduledTime || null,
+							flightNumber: r.flightNumber || null,
+						},
+					}),
+				),
+			);
 
 			void sendDepartureDetailsUpdatedToAdmins({
 				id: tripRequest.id,
@@ -475,10 +478,18 @@ export const tripRequestRouter = createTRPCRouter({
 					z.object({
 						pickup: z.string(),
 						destination: z.string(),
-						departureDate: z.string().optional(),
-						departureTime: z.string().optional(),
+						type: z
+							.enum(["airport_out", "airport_in", "standard", "airport"])
+							.optional(),
+						scheduledDate: z.string().optional(),
+						scheduledTime: z.string().optional(),
 						flightNumber: z.string().optional(),
-						pickupInfo: pickupInfoSchema.optional(),
+						meetingPoint: z.string().optional(),
+						beThereAtDate: z.string().optional(),
+						beThereAtTime: z.string().optional(),
+						driverName: z.string().optional(),
+						driverPhone: z.string().optional(),
+						additionalInfo: z.string().optional(),
 					}),
 				),
 				notify: z.boolean().optional(),
@@ -504,13 +515,35 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
-			await ctx.db.tripRequest.update({
-				where: { id: input.id },
-				data: {
-					routes: JSON.stringify(input.routes),
-					...(input.notify ? { pickupInfoNotifiedAt: new Date() } : {}),
-				},
-			});
+			await Promise.all([
+				...input.routes.map((r, i) =>
+					ctx.db.route.updateMany({
+						where: { tripRequestId: input.id, position: i },
+						data: {
+							pickup: r.pickup,
+							destination: r.destination,
+							type: r.type ?? "standard",
+							scheduledDate: r.scheduledDate || null,
+							scheduledTime: r.scheduledTime || null,
+							flightNumber: r.flightNumber || null,
+							meetingPoint: r.meetingPoint || null,
+							beThereAtDate: r.beThereAtDate || null,
+							beThereAtTime: r.beThereAtTime || null,
+							driverName: r.driverName || null,
+							driverPhone: r.driverPhone || null,
+							additionalInfo: r.additionalInfo || null,
+						},
+					}),
+				),
+				...(input.notify
+					? [
+							ctx.db.tripRequest.update({
+								where: { id: input.id },
+								data: { pickupInfoNotifiedAt: new Date() },
+							}),
+						]
+					: []),
+			]);
 
 			if (input.notify) {
 				void sendPickupInfoToCustomer({

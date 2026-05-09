@@ -230,6 +230,26 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   companyId: 'companyId'
 };
 
+exports.Prisma.RouteScalarFieldEnum = {
+  id: 'id',
+  position: 'position',
+  type: 'type',
+  pickup: 'pickup',
+  destination: 'destination',
+  scheduledDate: 'scheduledDate',
+  scheduledTime: 'scheduledTime',
+  flightNumber: 'flightNumber',
+  meetingPoint: 'meetingPoint',
+  beThereAtDate: 'beThereAtDate',
+  beThereAtTime: 'beThereAtTime',
+  driverName: 'driverName',
+  driverPhone: 'driverPhone',
+  additionalInfo: 'additionalInfo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  tripRequestId: 'tripRequestId'
+};
+
 exports.Prisma.TripMessageScalarFieldEnum = {
   id: 'id',
   body: 'body',
@@ -345,6 +365,22 @@ exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
   companyId: 'companyId'
 };
 
+exports.Prisma.RouteOrderByRelevanceFieldEnum = {
+  id: 'id',
+  pickup: 'pickup',
+  destination: 'destination',
+  scheduledDate: 'scheduledDate',
+  scheduledTime: 'scheduledTime',
+  flightNumber: 'flightNumber',
+  meetingPoint: 'meetingPoint',
+  beThereAtDate: 'beThereAtDate',
+  beThereAtTime: 'beThereAtTime',
+  driverName: 'driverName',
+  driverPhone: 'driverPhone',
+  additionalInfo: 'additionalInfo',
+  tripRequestId: 'tripRequestId'
+};
+
 exports.Prisma.TripMessageOrderByRelevanceFieldEnum = {
   id: 'id',
   body: 'body',
@@ -375,6 +411,13 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
   CANCELLED: 'CANCELLED'
 };
 
+exports.RouteType = exports.$Enums.RouteType = {
+  airport_in: 'airport_in',
+  airport_out: 'airport_out',
+  standard: 'standard',
+  airport: 'airport'
+};
+
 exports.MessageSenderType = exports.$Enums.MessageSenderType = {
   CUSTOMER: 'CUSTOMER',
   ADMIN: 'ADMIN'
@@ -395,6 +438,7 @@ exports.Prisma.ModelName = {
   VerificationToken: 'VerificationToken',
   PasswordResetToken: 'PasswordResetToken',
   TripRequest: 'TripRequest',
+  Route: 'Route',
   TripMessage: 'TripMessage',
   Quotation: 'Quotation'
 };

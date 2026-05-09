@@ -4,11 +4,7 @@ import { api } from "@/trpc/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	buildStatusLabels,
-	parseRoutes,
-	STATUS_COLORS,
-} from "@/lib/trip-utils";
+import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
@@ -45,14 +41,14 @@ export function MyTripRequests() {
 								<CardTitle>
 									{request.firstName} {request.lastName}
 								</CardTitle>
-								{parseRoutes(request.routes).map((route, i) => (
+								{request.routesList.map((route, i) => (
 									<p key={i} className="text-xs text-muted-foreground">
 										{route.pickup} → {route.destination}
-										{(route.departureTime ?? route.departureDate) && (
+										{(route.scheduledTime ?? route.scheduledDate) && (
 											<span className="ml-2">
-												{route.departureTime}
-												{route.departureDate &&
-													` · ${format(new Date(route.departureDate), "dd/MM")}`}
+												{route.scheduledTime}
+												{route.scheduledDate &&
+													` · ${format(new Date(route.scheduledDate), "dd/MM")}`}
 											</span>
 										)}
 									</p>

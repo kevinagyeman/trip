@@ -1,25 +1,3 @@
-// "airport" is the legacy value — treated as "airport_out"
-export type RouteType = "airport_out" | "airport_in" | "standard" | "airport";
-
-export type PickupInfo = {
-	meetingPoint?: string;
-	beThereAtDate?: string;
-	beThereAtTime?: string;
-	driverName?: string;
-	driverPhone?: string;
-	additionalInfo?: string;
-};
-
-export type Route = {
-	pickup: string;
-	destination: string;
-	type?: RouteType;
-	departureDate?: string;
-	departureTime?: string;
-	flightNumber?: string;
-	pickupInfo?: PickupInfo;
-};
-
 export const STATUS_COLORS: Record<string, string> = {
 	PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
 	QUOTED: "bg-blue-100 text-blue-800 border-blue-200",
@@ -35,15 +13,6 @@ export const QUOTATION_STATUS_COLORS: Record<string, string> = {
 	ACCEPTED: "bg-green-500",
 	REJECTED: "bg-red-500",
 };
-
-export function parseRoutes(json: string): Route[] {
-	try {
-		const parsed = JSON.parse(json);
-		return Array.isArray(parsed) ? parsed : [];
-	} catch {
-		return [];
-	}
-}
 
 // Accepts any t() function that covers the status keys — works with all namespaces
 // that define statusPending, statusQuoted, etc.

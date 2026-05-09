@@ -5,7 +5,7 @@ import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import {
 	Dialog,
 	DialogContent,
@@ -61,12 +61,7 @@ function googleCalendarUrl(params: {
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
-import type { PickupInfo, Route } from "@/lib/trip-utils";
-import {
-	buildStatusLabels,
-	parseRoutes,
-	STATUS_COLORS,
-} from "@/lib/trip-utils";
+import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 
 function InternalNotesCard({
 	requestId,
@@ -84,27 +79,22 @@ function InternalNotesCard({
 	});
 
 	return (
-		<Card>
-			<CardHeader className="pb-3">
-				<CardTitle className="text-base">{t("internalNotes")}</CardTitle>
-			</CardHeader>
-			<CardContent className="space-y-2 pt-0">
-				<Textarea
-					rows={3}
-					placeholder={t("internalNotesPlaceholder")}
-					value={notes}
-					onChange={(e) => setNotes(e.target.value)}
-				/>
-				<LoadingButton
-					size="sm"
-					variant="outline"
-					isLoading={update.isPending}
-					onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
-				>
-					{t("saveNotes")}
-				</LoadingButton>
-			</CardContent>
-		</Card>
+		<SectionCard title={t("internalNotes")} contentClassName="space-y-2 pt-0">
+			<Textarea
+				rows={3}
+				placeholder={t("internalNotesPlaceholder")}
+				value={notes}
+				onChange={(e) => setNotes(e.target.value)}
+			/>
+			<LoadingButton
+				size="sm"
+				variant="outline"
+				isLoading={update.isPending}
+				onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
+			>
+				{t("saveNotes")}
+			</LoadingButton>
+		</SectionCard>
 	);
 }
 
@@ -129,39 +119,46 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	const [adminRouteDepartures, setAdminRouteDepartures] = useState<
 		Array<{
-			departureDate: string;
-			departureTime: string;
+			scheduledDate: string;
+			scheduledTime: string;
 			flightNumber: string;
 		}>
 	>([]);
 
-	// Pickup info state (admin fills after CONFIRMED)
-	const [adminPickupInfos, setAdminPickupInfos] = useState<PickupInfo[]>([]);
+	const [adminPickupInfos, setAdminPickupInfos] = useState<
+		Array<{
+			meetingPoint: string;
+			beThereAtDate: string;
+			beThereAtTime: string;
+			driverName: string;
+			driverPhone: string;
+			additionalInfo: string;
+		}>
+	>([]);
 
 	useEffect(() => {
 		if (request) {
-			const parsed = parseRoutes(request.routes);
 			setAdminRoutePlaces(
-				parsed.map((r) => ({
+				request.routesList.map((r) => ({
 					pickup: r.pickup,
 					destination: r.destination,
 				})),
 			);
 			setAdminRouteDepartures(
-				parsed.map((r) => ({
-					departureDate: r.departureDate ?? "",
-					departureTime: r.departureTime ?? "",
+				request.routesList.map((r) => ({
+					scheduledDate: r.scheduledDate ?? "",
+					scheduledTime: r.scheduledTime ?? "",
 					flightNumber: r.flightNumber ?? "",
 				})),
 			);
 			setAdminPickupInfos(
-				parsed.map((r) => ({
-					meetingPoint: r.pickupInfo?.meetingPoint ?? "",
-					beThereAtDate: r.pickupInfo?.beThereAtDate ?? "",
-					beThereAtTime: r.pickupInfo?.beThereAtTime ?? "",
-					driverName: r.pickupInfo?.driverName ?? "",
-					driverPhone: r.pickupInfo?.driverPhone ?? "",
-					additionalInfo: r.pickupInfo?.additionalInfo ?? "",
+				request.routesList.map((r) => ({
+					meetingPoint: r.meetingPoint ?? "",
+					beThereAtDate: r.beThereAtDate ?? "",
+					beThereAtTime: r.beThereAtTime ?? "",
+					driverName: r.driverName ?? "",
+					driverPhone: r.driverPhone ?? "",
+					additionalInfo: r.additionalInfo ?? "",
 				})),
 			);
 		}
@@ -219,7 +216,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes: Route[] = parseRoutes(request.routes);
+	const routes = request.routesList;
 
 	// Derived status helpers
 	const quotation = request.quotations[0];
@@ -246,232 +243,385 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			</Button>
 
 			{/* Header card */}
-			<Card>
-				<CardContent className="pt-4">
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-						<div className="space-y-0.5">
-							<p className="text-xs font-medium text-muted-foreground">
-								#{String(request.orderNumber).padStart(7, "0")}
-							</p>
-							<h2 className="text-2xl font-bold">
-								{request.firstName} {request.lastName}
-							</h2>
-							<p className="text-sm text-muted-foreground">
-								{request.user?.email ?? request.customerEmail}
-							</p>
-							{request.phone && (
-								<div className="flex flex-wrap items-center gap-2">
-									<span className="text-sm text-muted-foreground">
-										{request.phone}
-									</span>
-									<a
-										href={whatsappHref}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
-									>
-										<MessageCircle className="h-3 w-3" />
-										WhatsApp
-									</a>
-									<a
-										href={`tel:${request.phone}`}
-										className="inline-flex items-center gap-1 rounded bg-blue-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-blue-700"
-									>
-										<Phone className="h-3 w-3" />
-										{t("call")}
-									</a>
-								</div>
-							)}
-							<p className="text-sm text-muted-foreground">
-								{t("language")}:{" "}
-								{LANGUAGE_LABELS[request.language] ?? request.language}
-							</p>
-						</div>
-						<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
-							<Badge className={STATUS_COLORS[request.status]}>
-								{statusLabels[request.status] ?? request.status}
-							</Badge>
-							{!["COMPLETED", "CANCELLED"].includes(request.status) && (
-								<Select
-									value={pendingStatus ?? ""}
-									onValueChange={(value) =>
-										setPendingStatus(value as TripRequestStatus)
-									}
+			<SectionCard>
+				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+					<div className="space-y-0.5">
+						<p className="text-xs font-medium text-muted-foreground">
+							#{String(request.orderNumber).padStart(7, "0")}
+						</p>
+						<h2 className="text-2xl font-bold">
+							{request.firstName} {request.lastName}
+						</h2>
+						<p className="text-sm text-muted-foreground">
+							{request.user?.email ?? request.customerEmail}
+						</p>
+						{request.phone && (
+							<div className="flex flex-wrap items-center gap-2">
+								<span className="text-sm text-muted-foreground">
+									{request.phone}
+								</span>
+								<a
+									href={whatsappHref}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
 								>
-									<SelectTrigger className="w-[140px]">
-										<SelectValue placeholder={t("markAs")} />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="COMPLETED">
-											{t("statusCompleted")}
-										</SelectItem>
-										<SelectItem value="CANCELLED">
-											{t("statusCancelled")}
-										</SelectItem>
-									</SelectContent>
-								</Select>
-							)}
-							{pendingStatus && pendingStatus !== request.status && (
-								<LoadingButton
-									size="sm"
-									isLoading={updateStatus.isPending}
-									onClick={() => {
-										updateStatus.mutate(
-											{ id: requestId, status: pendingStatus },
-											{ onSuccess: () => setPendingStatus(null) },
-										);
-									}}
+									<MessageCircle className="h-3 w-3" />
+									WhatsApp
+								</a>
+								<a
+									href={`tel:${request.phone}`}
+									className="inline-flex items-center gap-1 rounded bg-blue-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-blue-700"
 								>
-									{t("saveStatus")}
-								</LoadingButton>
-							)}
-						</div>
+									<Phone className="h-3 w-3" />
+									{t("call")}
+								</a>
+							</div>
+						)}
+						<p className="text-sm text-muted-foreground">
+							{t("language")}:{" "}
+							{LANGUAGE_LABELS[request.language] ?? request.language}
+						</p>
 					</div>
+					<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
+						<Badge className={STATUS_COLORS[request.status]}>
+							{statusLabels[request.status] ?? request.status}
+						</Badge>
+						{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+							<Select
+								value={pendingStatus ?? ""}
+								onValueChange={(value) =>
+									setPendingStatus(value as TripRequestStatus)
+								}
+							>
+								<SelectTrigger className="w-[140px]">
+									<SelectValue placeholder={t("markAs")} />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectItem value="COMPLETED">
+										{t("statusCompleted")}
+									</SelectItem>
+									<SelectItem value="CANCELLED">
+										{t("statusCancelled")}
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						)}
+						{pendingStatus && pendingStatus !== request.status && (
+							<LoadingButton
+								size="sm"
+								isLoading={updateStatus.isPending}
+								onClick={() => {
+									updateStatus.mutate(
+										{ id: requestId, status: pendingStatus },
+										{ onSuccess: () => setPendingStatus(null) },
+									);
+								}}
+							>
+								{t("saveStatus")}
+							</LoadingButton>
+						)}
+					</div>
+				</div>
 
-					{/* Customer link */}
-					<div className="mt-4 flex items-center gap-3 rounded-lg border border-dashed p-3">
-						<div className="min-w-0 flex-1">
-							<p className="text-xs font-medium">{t("customerLinkLabel")}</p>
-							<p className="text-xs text-muted-foreground">
-								{t("customerLinkWarning")}
-							</p>
-						</div>
-						<Button
-							size="sm"
-							variant="outline"
-							className="shrink-0"
-							onClick={async () => {
-								await navigator.clipboard.writeText(
-									`${window.location.origin}/request/${request.token}`,
-								);
-								setCopiedLink(true);
-								setTimeout(() => setCopiedLink(false), 2000);
-							}}
-						>
-							{copiedLink ? (
-								<Check className="h-4 w-4 text-green-500" />
-							) : (
-								<Copy className="h-4 w-4" />
-							)}
-							<span className="ml-1.5">
-								{copiedLink ? t("copied") : t("copyCustomerLink")}
-							</span>
-						</Button>
+				{/* Customer link */}
+				<div className="mt-4 flex items-center gap-3 rounded-lg border border-dashed p-3">
+					<div className="min-w-0 flex-1">
+						<p className="text-xs font-medium">{t("customerLinkLabel")}</p>
+						<p className="text-xs text-muted-foreground">
+							{t("customerLinkWarning")}
+						</p>
 					</div>
-				</CardContent>
-			</Card>
+					<Button
+						size="sm"
+						variant="outline"
+						className="shrink-0"
+						onClick={async () => {
+							await navigator.clipboard.writeText(
+								`${window.location.origin}/request/${request.token}`,
+							);
+							setCopiedLink(true);
+							setTimeout(() => setCopiedLink(false), 2000);
+						}}
+					>
+						{copiedLink ? (
+							<Check className="h-4 w-4 text-green-500" />
+						) : (
+							<Copy className="h-4 w-4" />
+						)}
+						<span className="ml-1.5">
+							{copiedLink ? t("copied") : t("copyCustomerLink")}
+						</span>
+					</Button>
+				</div>
+			</SectionCard>
 
 			{/* Routes */}
-			<Card>
-				<CardHeader className="pb-3">
-					<CardTitle className="text-base">{t("routes")}</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-16 pt-0">
-					{routes.map((route, i) => {
-						const hasDepInfo = !!(route.departureDate ?? route.departureTime);
-						const hasPickupInfo = !!(
-							route.pickupInfo?.meetingPoint ?? route.pickupInfo?.driverName
-						);
-						return (
-							<div key={i} className="rounded-lg border text-sm">
-								{/* Route header */}
-								<div className="flex items-start justify-between gap-3 p-3">
-									<div className="w-full space-y-2">
-										<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-											{t("routeN", { n: i + 1 })}
-										</p>
-										<div className="flex flex-wrap items-center gap-2">
-											<Input
-												className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
-												value={adminRoutePlaces[i]?.pickup ?? route.pickup}
-												onChange={(e) =>
-													setAdminRoutePlaces((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.pickup = e.target.value;
-														return next;
-													})
-												}
-											/>
-											<span className="text-muted-foreground">→</span>
-											<Input
-												className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
-												value={
-													adminRoutePlaces[i]?.destination ?? route.destination
-												}
-												onChange={(e) =>
-													setAdminRoutePlaces((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.destination = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
+			<SectionCard title={t("routes")} contentClassName="space-y-16 pt-0">
+				{routes.map((route, i) => {
+					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
+					const hasPickupInfo = !!(route.meetingPoint ?? route.driverName);
+					return (
+						<div key={i} className="rounded-lg border text-sm">
+							{/* Route header */}
+							<div className="flex items-start justify-between gap-3 p-3">
+								<div className="w-full space-y-2">
+									<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+										{t("routeN", { n: i + 1 })}
+									</p>
+									<div className="flex flex-wrap items-center gap-2">
+										<Input
+											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+											value={adminRoutePlaces[i]?.pickup ?? route.pickup}
+											onChange={(e) =>
+												setAdminRoutePlaces((prev) => {
+													const next = [...prev];
+													if (next[i]) next[i]!.pickup = e.target.value;
+													return next;
+												})
+											}
+										/>
+										<span className="text-muted-foreground">→</span>
+										<Input
+											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+											value={
+												adminRoutePlaces[i]?.destination ?? route.destination
+											}
+											onChange={(e) =>
+												setAdminRoutePlaces((prev) => {
+													const next = [...prev];
+													if (next[i]) next[i]!.destination = e.target.value;
+													return next;
+												})
+											}
+										/>
 									</div>
 								</div>
+							</div>
 
-								{/* Departure details form */}
+							{/* Departure details form */}
+							<CollapsibleSection
+								editLabel={t("edit")}
+								title={
+									(route.scheduledDate ??
+									route.scheduledTime ??
+									route.flightNumber) ? (
+										<span className="flex flex-wrap items-center gap-2">
+											<span className="text-muted-foreground">
+												{route.type === "airport_in"
+													? t("departureScheduledLanding")
+													: route.type === "airport_out" ||
+															route.type === "airport"
+														? t("departureScheduledTakeoff")
+														: t("departureScheduledArrival")}
+											</span>
+											{route.scheduledDate && (
+												<span className="font-medium text-foreground">
+													{format(new Date(route.scheduledDate), "d MMM yyyy")}
+												</span>
+											)}
+											{route.scheduledTime && (
+												<span className="font-medium text-foreground">
+													{route.scheduledTime}
+												</span>
+											)}
+											{route.flightNumber && (
+												<span className="font-medium text-foreground">
+													{route.flightNumber}
+												</span>
+											)}
+											{route.scheduledDate && (
+												<Button
+													size="sm"
+													variant="ghost"
+													className="h-5 px-1.5 text-xs"
+													onClick={(e) => {
+														e.stopPropagation();
+														const [hRaw, mRaw] = (
+															route.scheduledTime ?? "00:00"
+														)
+															.split(":")
+															.map(Number);
+														const endH = ((hRaw ?? 0) + 1) % 24;
+														window.open(
+															googleCalendarUrl({
+																summary: `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`,
+																description: route.flightNumber
+																	? `${t("routeFlightNumber")}: ${route.flightNumber}`
+																	: "",
+																location: route.pickup,
+																start: toICSDateTime(
+																	new Date(route.scheduledDate!),
+																	route.scheduledTime,
+																),
+																end: toICSDateTime(
+																	new Date(route.scheduledDate!),
+																	`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
+																),
+															}),
+															"_blank",
+														);
+													}}
+												>
+													<CalendarPlus className="mr-1 h-3 w-3" />
+													{t("googleCalendar")}
+												</Button>
+											)}
+										</span>
+									) : (
+										<span className="flex flex-wrap items-center gap-2">
+											<span className="text-muted-foreground">
+												{route.type === "airport_in"
+													? t("departureScheduledLanding")
+													: route.type === "airport_out" ||
+															route.type === "airport"
+														? t("departureScheduledTakeoff")
+														: t("departureScheduledArrival")}
+											</span>
+											<span className="text-muted-foreground">—</span>
+										</span>
+									)
+								}
+							>
+								<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+									<div className="space-y-1">
+										<Label className="text-xs">
+											{route.type === "airport_out" || route.type === "airport"
+												? t("routeFlightDate")
+												: route.type === "airport_in"
+													? t("routeLandingDate")
+													: t("routeArrivalDate")}
+										</Label>
+										<Input
+											className="h-7 text-xs"
+											type="date"
+											value={adminRouteDepartures[i]?.scheduledDate ?? ""}
+											onChange={(e) =>
+												setAdminRouteDepartures((prev) => {
+													const next = [...prev];
+													if (next[i]) next[i]!.scheduledDate = e.target.value;
+													return next;
+												})
+											}
+										/>
+									</div>
+									<div className="space-y-1">
+										<Label className="text-xs">
+											{route.type === "airport_out" || route.type === "airport"
+												? t("routeFlightTime")
+												: route.type === "airport_in"
+													? t("routeLandingTime")
+													: t("routeArrivalTime")}
+										</Label>
+										<Input
+											className="h-7 text-xs"
+											type="time"
+											value={adminRouteDepartures[i]?.scheduledTime ?? ""}
+											onChange={(e) =>
+												setAdminRouteDepartures((prev) => {
+													const next = [...prev];
+													if (next[i]) next[i]!.scheduledTime = e.target.value;
+													return next;
+												})
+											}
+										/>
+									</div>
+									<div className="space-y-1">
+										<Label className="text-xs">{t("routeFlightNumber")}</Label>
+										<Input
+											className="h-7 text-xs"
+											placeholder={t("routeFlightNumberPlaceholder")}
+											value={adminRouteDepartures[i]?.flightNumber ?? ""}
+											onChange={(e) =>
+												setAdminRouteDepartures((prev) => {
+													const next = [...prev];
+													if (next[i]) next[i]!.flightNumber = e.target.value;
+													return next;
+												})
+											}
+										/>
+									</div>
+								</div>
+								<div className="mt-2 flex flex-wrap items-center gap-2">
+									<LoadingButton
+										size="sm"
+										variant="outline"
+										isLoading={updateRoutesByAdmin.isPending}
+										onClick={() =>
+											updateRoutesByAdmin.mutate({
+												id: requestId,
+												routes: routes.map((r, j) => ({
+													pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+													destination:
+														adminRoutePlaces[j]?.destination ?? r.destination,
+													type: r.type ?? undefined,
+													scheduledDate:
+														adminRouteDepartures[j]?.scheduledDate || undefined,
+													scheduledTime:
+														adminRouteDepartures[j]?.scheduledTime || undefined,
+													flightNumber:
+														adminRouteDepartures[j]?.flightNumber || undefined,
+												})),
+											})
+										}
+									>
+										{t("saveRouteDetails")}
+									</LoadingButton>
+								</div>
+							</CollapsibleSection>
+
+							{/* Pickup info — only when CONFIRMED */}
+							{request.status === "CONFIRMED" && (
 								<CollapsibleSection
 									editLabel={t("edit")}
 									title={
-										(route.departureDate ??
-										route.departureTime ??
-										route.flightNumber) ? (
+										route.driverName ? (
 											<span className="flex flex-wrap items-center gap-2">
 												<span className="text-muted-foreground">
-													{route.type === "airport_in"
-														? t("departureScheduledLanding")
-														: route.type === "airport_out" ||
-																route.type === "airport"
-															? t("departureScheduledTakeoff")
-															: t("departureScheduledArrival")}
+													{t("pickupScheduled")}
 												</span>
-												{route.departureDate && (
+												{route.beThereAtDate && (
 													<span className="font-medium text-foreground">
 														{format(
-															new Date(route.departureDate),
+															new Date(route.beThereAtDate),
 															"d MMM yyyy",
 														)}
 													</span>
 												)}
-												{route.departureTime && (
+												{route.beThereAtTime && (
 													<span className="font-medium text-foreground">
-														{route.departureTime}
+														{route.beThereAtTime}
 													</span>
 												)}
-												{route.flightNumber && (
-													<span className="font-medium text-foreground">
-														{route.flightNumber}
-													</span>
-												)}
-												{route.departureDate && (
+												<span className="font-medium text-foreground">
+													{route.driverName}
+												</span>
+												{route.beThereAtDate && (
 													<Button
 														size="sm"
 														variant="ghost"
 														className="h-5 px-1.5 text-xs"
 														onClick={(e) => {
 															e.stopPropagation();
-															const [hRaw, mRaw] = (
-																route.departureTime ?? "00:00"
-															)
-																.split(":")
-																.map(Number);
-															const endH = ((hRaw ?? 0) + 1) % 24;
+															const date = new Date(route.beThereAtDate!);
+															const timeStr = route.beThereAtTime ?? "00:00";
+															const [h, m] = timeStr.split(":").map(Number);
+															const end = new Date(date);
+															end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
 															window.open(
 																googleCalendarUrl({
-																	summary: `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`,
-																	description: route.flightNumber
-																		? `${t("routeFlightNumber")}: ${route.flightNumber}`
-																		: "",
-																	location: route.pickup,
-																	start: toICSDateTime(
-																		new Date(route.departureDate!),
-																		route.departureTime,
-																	),
-																	end: toICSDateTime(
-																		new Date(route.departureDate!),
-																		`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
-																	),
+																	summary: `${route.pickup} → ${route.destination}`,
+																	description: [
+																		route.driverName &&
+																			`${t("pickupInfoDriverName")}: ${route.driverName}`,
+																		route.driverPhone &&
+																			`${t("pickupInfoDriverPhone")}: ${route.driverPhone}`,
+																	]
+																		.filter(Boolean)
+																		.join("\n"),
+																	location: route.meetingPoint ?? route.pickup,
+																	start: toICSDateTime(date, timeStr),
+																	end: toICSDateTime(end),
 																}),
 																"_blank",
 															);
@@ -483,36 +633,82 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												)}
 											</span>
 										) : (
-											<span>
-												{route.type === "airport_in"
-													? t("routeLandingDetails")
-													: route.type === "airport_out" ||
-															route.type === "airport"
-														? t("routeFlightDetails")
-														: t("routeDepartureDetails")}
+											<span className="flex flex-wrap items-center gap-2">
+												<span className="text-muted-foreground">
+													{t("pickupScheduled")}
+												</span>
+												<span className="text-muted-foreground">—</span>
 											</span>
 										)
 									}
 								>
-									<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+									{/* Driver quick-select */}
+									{drivers.length > 0 && (
+										<div className="mb-3 space-y-1">
+											<Label className="text-xs">
+												{t("pickupInfoSelectDriver")}
+											</Label>
+											<Select
+												onValueChange={(driverId) => {
+													const d = drivers.find((dr) => dr.id === driverId);
+													if (!d) return;
+													setAdminPickupInfos((prev) => {
+														const next = [...prev];
+														if (next[i]) {
+															next[i]!.driverName = `${d.name} ${d.surname}`;
+															next[i]!.driverPhone = d.phone;
+														}
+														return next;
+													});
+												}}
+											>
+												<SelectTrigger className="h-7 text-xs">
+													<SelectValue
+														placeholder={t("pickupInfoSelectDriverPlaceholder")}
+													/>
+												</SelectTrigger>
+												<SelectContent>
+													{drivers.map((d) => (
+														<SelectItem key={d.id} value={d.id}>
+															{d.name} {d.surname}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+										</div>
+									)}
+
+									<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+										<div className="space-y-1 sm:col-span-2">
+											<Label className="text-xs">
+												{t("pickupInfoMeetingPoint")}
+											</Label>
+											<Input
+												className="h-7 text-xs"
+												placeholder={t("pickupInfoMeetingPointPlaceholder")}
+												value={adminPickupInfos[i]?.meetingPoint ?? ""}
+												onChange={(e) =>
+													setAdminPickupInfos((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.meetingPoint = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
 										<div className="space-y-1">
 											<Label className="text-xs">
-												{route.type === "airport_out" ||
-												route.type === "airport"
-													? t("routeFlightDate")
-													: route.type === "airport_in"
-														? t("routeLandingDate")
-														: t("routeDepartureDate")}
+												{t("pickupInfoBeThereAtDate")}
 											</Label>
 											<Input
 												className="h-7 text-xs"
 												type="date"
-												value={adminRouteDepartures[i]?.departureDate ?? ""}
+												value={adminPickupInfos[i]?.beThereAtDate ?? ""}
 												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
+													setAdminPickupInfos((prev) => {
 														const next = [...prev];
 														if (next[i])
-															next[i]!.departureDate = e.target.value;
+															next[i]!.beThereAtDate = e.target.value;
 														return next;
 													})
 												}
@@ -520,22 +716,17 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</div>
 										<div className="space-y-1">
 											<Label className="text-xs">
-												{route.type === "airport_out" ||
-												route.type === "airport"
-													? t("routeFlightTime")
-													: route.type === "airport_in"
-														? t("routeLandingTime")
-														: t("routeDepartureTime")}
+												{t("pickupInfoBeThereAtTime")}
 											</Label>
 											<Input
 												className="h-7 text-xs"
 												type="time"
-												value={adminRouteDepartures[i]?.departureTime ?? ""}
+												value={adminPickupInfos[i]?.beThereAtTime ?? ""}
 												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
+													setAdminPickupInfos((prev) => {
 														const next = [...prev];
 														if (next[i])
-															next[i]!.departureTime = e.target.value;
+															next[i]!.beThereAtTime = e.target.value;
 														return next;
 													})
 												}
@@ -543,517 +734,287 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										</div>
 										<div className="space-y-1">
 											<Label className="text-xs">
-												{t("routeFlightNumber")}
+												{t("pickupInfoDriverName")}
 											</Label>
 											<Input
 												className="h-7 text-xs"
-												placeholder={t("routeFlightNumberPlaceholder")}
-												value={adminRouteDepartures[i]?.flightNumber ?? ""}
+												placeholder={t("pickupInfoDriverNamePlaceholder")}
+												value={adminPickupInfos[i]?.driverName ?? ""}
 												onChange={(e) =>
-													setAdminRouteDepartures((prev) => {
+													setAdminPickupInfos((prev) => {
 														const next = [...prev];
-														if (next[i]) next[i]!.flightNumber = e.target.value;
+														if (next[i]) next[i]!.driverName = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
+										<div className="space-y-1">
+											<Label className="text-xs">
+												{t("pickupInfoDriverPhone")}
+											</Label>
+											<Input
+												className="h-7 text-xs"
+												placeholder={t("pickupInfoDriverPhonePlaceholder")}
+												value={adminPickupInfos[i]?.driverPhone ?? ""}
+												onChange={(e) =>
+													setAdminPickupInfos((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.driverPhone = e.target.value;
+														return next;
+													})
+												}
+											/>
+										</div>
+										<div className="space-y-1 sm:col-span-2">
+											<Label className="text-xs">
+												{t("pickupInfoAdditionalInfo")}
+											</Label>
+											<Textarea
+												className="text-xs"
+												rows={3}
+												placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
+												value={adminPickupInfos[i]?.additionalInfo ?? ""}
+												onChange={(e) =>
+													setAdminPickupInfos((prev) => {
+														const next = [...prev];
+														if (next[i])
+															next[i]!.additionalInfo = e.target.value;
 														return next;
 													})
 												}
 											/>
 										</div>
 									</div>
-									<div className="mt-2 flex flex-wrap items-center gap-2">
+									<div className="mt-2 mb-3 flex flex-wrap gap-2">
 										<LoadingButton
 											size="sm"
-											variant="outline"
 											isLoading={updateRoutesByAdmin.isPending}
 											onClick={() =>
 												updateRoutesByAdmin.mutate({
 													id: requestId,
+													notify: true,
 													routes: routes.map((r, j) => ({
-														...r,
 														pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
 														destination:
 															adminRoutePlaces[j]?.destination ?? r.destination,
-														departureDate:
-															adminRouteDepartures[j]?.departureDate ||
+														type: r.type ?? undefined,
+														scheduledDate:
+															adminRouteDepartures[j]?.scheduledDate ||
 															undefined,
-														departureTime:
-															adminRouteDepartures[j]?.departureTime ||
+														scheduledTime:
+															adminRouteDepartures[j]?.scheduledTime ||
 															undefined,
 														flightNumber:
 															adminRouteDepartures[j]?.flightNumber ||
 															undefined,
+														meetingPoint:
+															adminPickupInfos[j]?.meetingPoint || undefined,
+														beThereAtDate:
+															adminPickupInfos[j]?.beThereAtDate || undefined,
+														beThereAtTime:
+															adminPickupInfos[j]?.beThereAtTime || undefined,
+														driverName:
+															adminPickupInfos[j]?.driverName || undefined,
+														driverPhone:
+															adminPickupInfos[j]?.driverPhone || undefined,
+														additionalInfo:
+															adminPickupInfos[j]?.additionalInfo || undefined,
 													})),
 												})
 											}
 										>
-											{t("saveRouteDetails")}
+											{t("saveAndNotifyCustomer")}
 										</LoadingButton>
 									</div>
+									{request.pickupInfoNotifiedAt && (
+										<p className="text-xs text-muted-foreground">
+											{t("notifiedDate", {
+												date: format(
+													new Date(request.pickupInfoNotifiedAt),
+													"d MMM yyyy",
+												),
+												time: format(
+													new Date(request.pickupInfoNotifiedAt),
+													"HH:mm",
+												),
+											})}
+										</p>
+									)}
 								</CollapsibleSection>
-
-								{/* Pickup info — only when CONFIRMED */}
-								{request.status === "CONFIRMED" && (
-									<CollapsibleSection
-										editLabel={t("edit")}
-										title={
-											route.pickupInfo?.driverName ? (
-												<span className="flex flex-wrap items-center gap-2">
-													<span className="text-muted-foreground">
-														{t("pickupScheduled")}
-													</span>
-													{route.pickupInfo.beThereAtDate && (
-														<span className="font-medium text-foreground">
-															{format(
-																new Date(route.pickupInfo.beThereAtDate),
-																"d MMM yyyy",
-															)}
-														</span>
-													)}
-													{route.pickupInfo.beThereAtTime && (
-														<span className="font-medium text-foreground">
-															{route.pickupInfo.beThereAtTime}
-														</span>
-													)}
-													<span className="font-medium text-foreground">
-														{route.pickupInfo.driverName}
-													</span>
-													{route.pickupInfo.beThereAtDate && (
-														<Button
-															size="sm"
-															variant="ghost"
-															className="h-5 px-1.5 text-xs"
-															onClick={(e) => {
-																e.stopPropagation();
-																const date = new Date(
-																	route.pickupInfo!.beThereAtDate!,
-																);
-																const timeStr =
-																	route.pickupInfo!.beThereAtTime ?? "00:00";
-																const [h, m] = timeStr.split(":").map(Number);
-																const end = new Date(date);
-																end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-																window.open(
-																	googleCalendarUrl({
-																		summary: `${route.pickup} → ${route.destination}`,
-																		description: [
-																			route.pickupInfo!.driverName &&
-																				`${t("pickupInfoDriverName")}: ${route.pickupInfo!.driverName}`,
-																			route.pickupInfo!.driverPhone &&
-																				`${t("pickupInfoDriverPhone")}: ${route.pickupInfo!.driverPhone}`,
-																		]
-																			.filter(Boolean)
-																			.join("\n"),
-																		location:
-																			route.pickupInfo!.meetingPoint ??
-																			route.pickup,
-																		start: toICSDateTime(date, timeStr),
-																		end: toICSDateTime(end),
-																	}),
-																	"_blank",
-																);
-															}}
-														>
-															<CalendarPlus className="mr-1 h-3 w-3" />
-															{t("googleCalendar")}
-														</Button>
-													)}
-												</span>
-											) : (
-												<span>{t("pickupInfoTitleEdit")}</span>
-											)
-										}
-									>
-										{/* Driver quick-select */}
-										{drivers.length > 0 && (
-											<div className="mb-3 space-y-1">
-												<Label className="text-xs">
-													{t("pickupInfoSelectDriver")}
-												</Label>
-												<Select
-													onValueChange={(driverId) => {
-														const d = drivers.find((dr) => dr.id === driverId);
-														if (!d) return;
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i]) {
-																next[i]!.driverName = `${d.name} ${d.surname}`;
-																next[i]!.driverPhone = d.phone;
-															}
-															return next;
-														});
-													}}
-												>
-													<SelectTrigger className="h-7 text-xs">
-														<SelectValue
-															placeholder={t(
-																"pickupInfoSelectDriverPlaceholder",
-															)}
-														/>
-													</SelectTrigger>
-													<SelectContent>
-														{drivers.map((d) => (
-															<SelectItem key={d.id} value={d.id}>
-																{d.name} {d.surname}
-															</SelectItem>
-														))}
-													</SelectContent>
-												</Select>
-											</div>
-										)}
-
-										<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-											<div className="space-y-1 sm:col-span-2">
-												<Label className="text-xs">
-													{t("pickupInfoMeetingPoint")}
-												</Label>
-												<Input
-													className="h-7 text-xs"
-													placeholder={t("pickupInfoMeetingPointPlaceholder")}
-													value={adminPickupInfos[i]?.meetingPoint ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.meetingPoint = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("pickupInfoBeThereAtDate")}
-												</Label>
-												<Input
-													className="h-7 text-xs"
-													type="date"
-													value={adminPickupInfos[i]?.beThereAtDate ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.beThereAtDate = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("pickupInfoBeThereAtTime")}
-												</Label>
-												<Input
-													className="h-7 text-xs"
-													type="time"
-													value={adminPickupInfos[i]?.beThereAtTime ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.beThereAtTime = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("pickupInfoDriverName")}
-												</Label>
-												<Input
-													className="h-7 text-xs"
-													placeholder={t("pickupInfoDriverNamePlaceholder")}
-													value={adminPickupInfos[i]?.driverName ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i]) next[i]!.driverName = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-											<div className="space-y-1">
-												<Label className="text-xs">
-													{t("pickupInfoDriverPhone")}
-												</Label>
-												<Input
-													className="h-7 text-xs"
-													placeholder={t("pickupInfoDriverPhonePlaceholder")}
-													value={adminPickupInfos[i]?.driverPhone ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.driverPhone = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-											<div className="space-y-1 sm:col-span-2">
-												<Label className="text-xs">
-													{t("pickupInfoAdditionalInfo")}
-												</Label>
-												<Textarea
-													className="text-xs"
-													rows={3}
-													placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
-													value={adminPickupInfos[i]?.additionalInfo ?? ""}
-													onChange={(e) =>
-														setAdminPickupInfos((prev) => {
-															const next = [...prev];
-															if (next[i])
-																next[i]!.additionalInfo = e.target.value;
-															return next;
-														})
-													}
-												/>
-											</div>
-										</div>
-										<div className="mt-2 mb-3 flex flex-wrap gap-2">
-											<LoadingButton
-												size="sm"
-												isLoading={updateRoutesByAdmin.isPending}
-												onClick={() =>
-													updateRoutesByAdmin.mutate({
-														id: requestId,
-														notify: true,
-														routes: routes.map((r, j) => ({
-															...r,
-															pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-															destination:
-																adminRoutePlaces[j]?.destination ??
-																r.destination,
-															departureDate:
-																adminRouteDepartures[j]?.departureDate ||
-																undefined,
-															departureTime:
-																adminRouteDepartures[j]?.departureTime ||
-																undefined,
-															flightNumber:
-																adminRouteDepartures[j]?.flightNumber ||
-																undefined,
-															pickupInfo: {
-																meetingPoint:
-																	adminPickupInfos[j]?.meetingPoint ||
-																	undefined,
-																beThereAtDate:
-																	adminPickupInfos[j]?.beThereAtDate ||
-																	undefined,
-																beThereAtTime:
-																	adminPickupInfos[j]?.beThereAtTime ||
-																	undefined,
-																driverName:
-																	adminPickupInfos[j]?.driverName || undefined,
-																driverPhone:
-																	adminPickupInfos[j]?.driverPhone || undefined,
-
-																additionalInfo:
-																	adminPickupInfos[j]?.additionalInfo ||
-																	undefined,
-															},
-														})),
-													})
-												}
-											>
-												{t("saveAndNotifyCustomer")}
-											</LoadingButton>
-										</div>
-										{request.pickupInfoNotifiedAt && (
-											<p className="text-xs text-muted-foreground">
-												{t("notifiedDate", {
-													date: format(
-														new Date(request.pickupInfoNotifiedAt),
-														"d MMM yyyy",
-													),
-													time: format(
-														new Date(request.pickupInfoNotifiedAt),
-														"HH:mm",
-													),
-												})}
-											</p>
-										)}
-									</CollapsibleSection>
-								)}
-							</div>
-						);
-					})}
-				</CardContent>
-			</Card>
+							)}
+						</div>
+					);
+				})}
+			</SectionCard>
 
 			{/* Passengers */}
-			<Card>
-				<CardHeader className="pb-3">
-					<CardTitle className="text-base">{t("passengers")}</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-1.5 pt-0 text-sm">
-					{request.numberOfAdults > 0 && (
-						<p>
-							<span className="text-muted-foreground">{t("adults")}: </span>
-							<span className="font-medium">{request.numberOfAdults}</span>
-						</p>
-					)}
-					{request.areThereChildren && request.numberOfChildren !== null && (
-						<p>
-							<span className="text-muted-foreground">
-								{t("numberOfChildren")}:{" "}
-							</span>
-							<span className="font-medium">{request.numberOfChildren}</span>
-						</p>
-					)}
-					{request.areThereChildren && request.ageOfChildren && (
-						<p>
-							<span className="text-muted-foreground">
-								{t("agesOfChildren")}:{" "}
-							</span>
-							<span className="font-medium">{request.ageOfChildren}</span>
-						</p>
-					)}
-					{request.areThereChildren && request.numberOfChildSeats !== null && (
-						<p>
-							<span className="text-muted-foreground">
-								{t("childSeatsNeeded")}:{" "}
-							</span>
-							<span className="font-medium">{request.numberOfChildSeats}</span>
-						</p>
-					)}
-					{request.additionalInfo && (
-						<p>
-							<span className="text-muted-foreground">
-								{t("additionalInformation")}:{" "}
-							</span>
-							<span className="font-medium">{request.additionalInfo}</span>
-						</p>
-					)}
-				</CardContent>
-			</Card>
+			<SectionCard
+				title={t("passengers")}
+				contentClassName="space-y-1.5 pt-0 text-sm"
+			>
+				{request.numberOfAdults > 0 && (
+					<p>
+						<span className="text-muted-foreground">{t("adults")}: </span>
+						<span className="font-medium">{request.numberOfAdults}</span>
+					</p>
+				)}
+				{request.areThereChildren && request.numberOfChildren !== null && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("numberOfChildren")}:{" "}
+						</span>
+						<span className="font-medium">{request.numberOfChildren}</span>
+					</p>
+				)}
+				{request.areThereChildren && request.ageOfChildren && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("agesOfChildren")}:{" "}
+						</span>
+						<span className="font-medium">{request.ageOfChildren}</span>
+					</p>
+				)}
+				{request.areThereChildren && request.numberOfChildSeats !== null && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("childSeatsNeeded")}:{" "}
+						</span>
+						<span className="font-medium">{request.numberOfChildSeats}</span>
+					</p>
+				)}
+				{request.additionalInfo && (
+					<p>
+						<span className="text-muted-foreground">
+							{t("additionalInformation")}:{" "}
+						</span>
+						<span className="font-medium">{request.additionalInfo}</span>
+					</p>
+				)}
+			</SectionCard>
 
 			{/* Quotation */}
-			<Card>
-				<CardHeader className="pb-3">
-					<div className="flex items-center justify-between">
-						<CardTitle className="text-base">{t("quotation")}</CardTitle>
-						{quotation && (
-							<Badge
-								className={
-									isQuotationAccepted
-										? "bg-green-500"
-										: isQuotationRejected
-											? "bg-red-500"
-											: isQuotationSent
-												? "bg-blue-500"
-												: "bg-muted text-muted-foreground"
-								}
-							>
-								{isQuotationAccepted
-									? t("statusAccepted")
+			<SectionCard
+				title={t("quotation")}
+				headerAction={
+					quotation ? (
+						<Badge
+							className={
+								isQuotationAccepted
+									? "bg-green-500"
 									: isQuotationRejected
-										? t("statusRejected")
+										? "bg-red-500"
 										: isQuotationSent
-											? t("quotationSentLabel")
-											: t("quotationDraftLabel")}
-							</Badge>
-						)}
-					</div>
-				</CardHeader>
-				<CardContent className="space-y-4 pt-0">
-					{isQuotationAccepted ? (
-						<>
-							<div className="flex items-start justify-between">
-								<div>
-									<p className="text-2xl font-bold">
-										{quotation!.currency} {quotation!.price.toString()}
+											? "bg-blue-500"
+											: "bg-muted text-muted-foreground"
+							}
+						>
+							{isQuotationAccepted
+								? t("statusAccepted")
+								: isQuotationRejected
+									? t("statusRejected")
+									: isQuotationSent
+										? t("quotationSentLabel")
+										: t("quotationDraftLabel")}
+						</Badge>
+					) : undefined
+				}
+				contentClassName="space-y-4 pt-0"
+			>
+				{isQuotationAccepted ? (
+					<>
+						<div className="flex items-start justify-between">
+							<div>
+								<p className="text-2xl font-bold">
+									{quotation!.currency} {quotation!.price.toString()}
+								</p>
+								{quotation!.isPriceEachWay && (
+									<p className="text-sm text-muted-foreground">
+										{t("priceEachWay")}
 									</p>
-									{quotation!.isPriceEachWay && (
-										<p className="text-sm text-muted-foreground">
-											{t("priceEachWay")}
+								)}
+							</div>
+						</div>
+						{quotation!.quotationAdditionalInfo && (
+							<div>
+								<p className="text-sm font-medium text-muted-foreground">
+									{t("additionalInfoCustomer")}
+								</p>
+								<p className="mt-1 whitespace-pre-wrap text-sm">
+									{quotation!.quotationAdditionalInfo}
+								</p>
+							</div>
+						)}
+						{request.status !== "CONFIRMED" && (
+							<div className="flex flex-wrap items-start gap-3">
+								<div className="flex flex-col gap-1">
+									<LoadingButton
+										size="sm"
+										variant="outline"
+										isLoading={requestDepartureDetails.isPending}
+										onClick={() =>
+											requestDepartureDetails.mutate({ id: requestId })
+										}
+									>
+										{t("requestDetails")}
+									</LoadingButton>
+									{request.departureDetailsRequestedAt && (
+										<p className="text-xs text-muted-foreground">
+											{t("notifiedDate", {
+												date: format(
+													new Date(request.departureDetailsRequestedAt),
+													"d MMM yyyy",
+												),
+												time: format(
+													new Date(request.departureDetailsRequestedAt),
+													"HH:mm",
+												),
+											})}
 										</p>
 									)}
 								</div>
+								<Button size="sm" onClick={() => setConfirmOpen(true)}>
+									{t("confirmTrip")}
+								</Button>
 							</div>
-							{quotation!.quotationAdditionalInfo && (
-								<div>
-									<p className="text-sm font-medium text-muted-foreground">
-										{t("additionalInfoCustomer")}
-									</p>
-									<p className="mt-1 whitespace-pre-wrap text-sm">
-										{quotation!.quotationAdditionalInfo}
-									</p>
-								</div>
-							)}
-							{request.status !== "CONFIRMED" && (
-								<div className="flex flex-wrap items-start gap-3">
-									<div className="flex flex-col gap-1">
-										<LoadingButton
-											size="sm"
-											variant="outline"
-											isLoading={requestDepartureDetails.isPending}
-											onClick={() =>
-												requestDepartureDetails.mutate({ id: requestId })
-											}
-										>
-											{t("requestDetails")}
-										</LoadingButton>
-										{request.departureDetailsRequestedAt && (
-											<p className="text-xs text-muted-foreground">
-												{t("notifiedDate", {
-													date: format(
-														new Date(request.departureDetailsRequestedAt),
-														"d MMM yyyy",
-													),
-													time: format(
-														new Date(request.departureDetailsRequestedAt),
-														"HH:mm",
-													),
-												})}
-											</p>
-										)}
-									</div>
-									<Button size="sm" onClick={() => setConfirmOpen(true)}>
-										{t("confirmTrip")}
+						)}
+						<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+							<DialogContent>
+								<DialogHeader>
+									<DialogTitle>{t("confirmModalTitle")}</DialogTitle>
+									<DialogDescription>{t("confirmModalDesc")}</DialogDescription>
+								</DialogHeader>
+								<DialogFooter className="gap-2">
+									<Button
+										variant="outline"
+										onClick={() => setConfirmOpen(false)}
+									>
+										{t("confirmModalCancel")}
 									</Button>
-								</div>
-							)}
-							<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-								<DialogContent>
-									<DialogHeader>
-										<DialogTitle>{t("confirmModalTitle")}</DialogTitle>
-										<DialogDescription>
-											{t("confirmModalDesc")}
-										</DialogDescription>
-									</DialogHeader>
-									<DialogFooter className="gap-2">
-										<Button
-											variant="outline"
-											onClick={() => setConfirmOpen(false)}
-										>
-											{t("confirmModalCancel")}
-										</Button>
-										<LoadingButton
-											isLoading={confirmTrip.isPending}
-											onClick={() => confirmTrip.mutate({ id: requestId })}
-										>
-											{t("confirmModalConfirm")}
-										</LoadingButton>
-									</DialogFooter>
-								</DialogContent>
-							</Dialog>
-						</>
-					) : (
-						<QuotationForm
-							requestId={requestId}
-							isRejected={isQuotationRejected}
-							quotation={quotation}
-							estimateNotice={estimateNotice}
-							onSuccess={async () => {
-								await utils.tripRequest.getByIdAdmin.invalidate({
-									id: requestId,
-								});
-							}}
-						/>
-					)}
-				</CardContent>
-			</Card>
+									<LoadingButton
+										isLoading={confirmTrip.isPending}
+										onClick={() => confirmTrip.mutate({ id: requestId })}
+									>
+										{t("confirmModalConfirm")}
+									</LoadingButton>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
+					</>
+				) : (
+					<QuotationForm
+						requestId={requestId}
+						isRejected={isQuotationRejected}
+						quotation={quotation}
+						estimateNotice={estimateNotice}
+						onSuccess={async () => {
+							await utils.tripRequest.getByIdAdmin.invalidate({
+								id: requestId,
+							});
+						}}
+					/>
+				)}
+			</SectionCard>
 
 			{/* Internal Notes */}
 			<InternalNotesCard
@@ -1062,103 +1023,96 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Messages */}
-			<Card>
-				<CardContent className="pt-0">
-					<TripMessageThread mode="admin" requestId={requestId} />
-				</CardContent>
-			</Card>
+			<SectionCard contentClassName="pt-0">
+				<TripMessageThread mode="admin" requestId={requestId} />
+			</SectionCard>
 
 			{/* Events */}
-			<Card>
-				<CardHeader className="pb-3">
-					<CardTitle className="text-base">{t("events")}</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-3 pt-0">
-					{(
-						[
-							{
-								label: t("eventRequestCreated"),
-								date: request.createdAt,
-								actor: "customer" as const,
-							},
-							...request.quotations
-								.slice()
-								.reverse()
-								.flatMap((q) => [
-									q.notifiedAt
-										? {
-												label: t("eventQuotationSent"),
-												date: q.notifiedAt,
-												actor: "admin" as const,
-											}
-										: null,
-									q.respondedAt
-										? {
-												label:
-													q.status === "ACCEPTED"
-														? t("eventQuotationAccepted")
-														: t("eventQuotationRejected"),
-												date: q.respondedAt,
-												actor: "customer" as const,
-											}
-										: null,
-								]),
-							request.confirmedAt
-								? {
-										label: t("eventConfirmationSent"),
-										date: request.confirmedAt,
-										actor: "admin" as const,
-									}
-								: null,
-							request.confirmationViewedAt
-								? {
-										label: t("eventCustomerSawConfirmation"),
-										date: request.confirmationViewedAt,
-										actor: "customer" as const,
-									}
-								: null,
-						] as ({
+			<SectionCard title={t("events")} contentClassName="space-y-3 pt-0">
+				{(
+					[
+						{
+							label: t("eventRequestCreated"),
+							date: request.createdAt,
+							actor: "customer" as const,
+						},
+						...request.quotations
+							.slice()
+							.reverse()
+							.flatMap((q) => [
+								q.notifiedAt
+									? {
+											label: t("eventQuotationSent"),
+											date: q.notifiedAt,
+											actor: "admin" as const,
+										}
+									: null,
+								q.respondedAt
+									? {
+											label:
+												q.status === "ACCEPTED"
+													? t("eventQuotationAccepted")
+													: t("eventQuotationRejected"),
+											date: q.respondedAt,
+											actor: "customer" as const,
+										}
+									: null,
+							]),
+						request.confirmedAt
+							? {
+									label: t("eventConfirmationSent"),
+									date: request.confirmedAt,
+									actor: "admin" as const,
+								}
+							: null,
+						request.confirmationViewedAt
+							? {
+									label: t("eventCustomerSawConfirmation"),
+									date: request.confirmationViewedAt,
+									actor: "customer" as const,
+								}
+							: null,
+					] as ({
+						label: string;
+						date: Date;
+						actor: "admin" | "customer";
+					} | null)[]
+				)
+					.filter(
+						(
+							e,
+						): e is {
 							label: string;
 							date: Date;
 							actor: "admin" | "customer";
-						} | null)[]
+						} => e !== null,
 					)
-						.filter(
-							(
-								e,
-							): e is {
-								label: string;
-								date: Date;
-								actor: "admin" | "customer";
-							} => e !== null,
-						)
-						.sort(
-							(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-						)
-						.map((event, i) => (
-							<div key={i} className="flex items-start gap-3">
-								<span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-muted-foreground/40" />
-								<div>
-									<p className="text-sm font-medium">
-										<span
-											className={`mr-1.5 text-xs font-normal ${event.actor === "admin" ? "text-blue-500" : "text-muted-foreground"}`}
-										>
-											{event.actor === "admin"
-												? t("actorAdmin")
-												: t("actorCustomer")}
-											:
-										</span>
-										{event.label}
-									</p>
-									<p className="text-xs text-muted-foreground">
-										{format(new Date(event.date), "d MMM yyyy")} {t("at")}{" "}
-										{format(new Date(event.date), "HH:mm")}
-									</p>
-								</div>
+					.sort(
+						(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+					)
+					.map((event, i) => (
+						<div key={i} className="flex items-start gap-3">
+							<span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-muted-foreground/40" />
+							<div>
+								<p className="text-sm font-medium">
+									<span
+										className={`mr-1.5 text-xs font-normal ${event.actor === "admin" ? "text-blue-500" : "text-muted-foreground"}`}
+									>
+										{event.actor === "admin"
+											? t("actorAdmin")
+											: t("actorCustomer")}
+										:
+									</span>
+									{event.label}
+								</p>
+								<p className="text-xs text-muted-foreground">
+									{format(new Date(event.date), "d MMM yyyy")} {t("at")}{" "}
+									{format(new Date(event.date), "HH:mm")}
+								</p>
 							</div>
-						))}
-				</CardContent>
-			</Card>
+						</div>
+					))}
+			</SectionCard>
 		</div>
 	);
 }
