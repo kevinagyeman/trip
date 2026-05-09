@@ -2,10 +2,14 @@
 
 import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
+import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
+import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PassengersCard } from "@/app/_components/ui/passengers-card";
+import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { SectionCard } from "@/app/_components/ui/section-card";
 import {
 	Dialog,
 	DialogContent,
@@ -24,11 +28,9 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
-import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy, MessageCircle, Phone } from "lucide-react";
+import { CalendarPlus, Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -61,7 +63,8 @@ function googleCalendarUrl(params: {
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
 }
 
-import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
+import { Card, CardContent } from "@/components/ui/card";
+import { buildStatusLabels } from "@/lib/trip-utils";
 
 function InternalNotesCard({
 	requestId,
@@ -243,50 +246,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			</Button>
 
 			{/* Header card */}
-			<SectionCard>
-				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-					<div className="space-y-0.5">
-						<p className="text-xs font-medium text-muted-foreground">
-							#{String(request.orderNumber).padStart(7, "0")}
-						</p>
-						<h2 className="text-2xl font-bold">
-							{request.firstName} {request.lastName}
-						</h2>
-						<p className="text-sm text-muted-foreground">
-							{request.user?.email ?? request.customerEmail}
-						</p>
-						{request.phone && (
-							<div className="flex flex-wrap items-center gap-2">
-								<span className="text-sm text-muted-foreground">
-									{request.phone}
-								</span>
-								<a
-									href={whatsappHref}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="inline-flex items-center gap-1 rounded bg-green-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-green-700"
-								>
-									<MessageCircle className="h-3 w-3" />
-									WhatsApp
-								</a>
-								<a
-									href={`tel:${request.phone}`}
-									className="inline-flex items-center gap-1 rounded bg-blue-600 px-2 py-0.5 text-xs font-medium text-white hover:bg-blue-700"
-								>
-									<Phone className="h-3 w-3" />
-									{t("call")}
-								</a>
-							</div>
-						)}
-						<p className="text-sm text-muted-foreground">
-							{t("language")}:{" "}
-							{LANGUAGE_LABELS[request.language] ?? request.language}
-						</p>
-					</div>
-					<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
-						<Badge className={STATUS_COLORS[request.status]}>
-							{statusLabels[request.status] ?? request.status}
-						</Badge>
+			<RequestHeaderCard
+				orderNumber={request.orderNumber}
+				firstName={request.firstName}
+				lastName={request.lastName}
+				status={request.status}
+				headerActions={
+					<>
 						{!["COMPLETED", "CANCELLED"].includes(request.status) && (
 							<Select
 								value={pendingStatus ?? ""}
@@ -321,11 +287,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								{t("saveStatus")}
 							</LoadingButton>
 						)}
-					</div>
-				</div>
+					</>
+				}
+			/>
 
-				{/* Customer link */}
-				<div className="mt-4 flex items-center gap-3 rounded-lg border border-dashed p-3">
+			{/* Customer link */}
+			<Card>
+				<CardContent className="flex items-center">
 					<div className="min-w-0 flex-1">
 						<p className="text-xs font-medium">{t("customerLinkLabel")}</p>
 						<p className="text-xs text-muted-foreground">
@@ -333,7 +301,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</p>
 					</div>
 					<Button
-						size="sm"
+						size="icon"
 						variant="outline"
 						className="shrink-0"
 						onClick={async () => {
@@ -345,16 +313,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						}}
 					>
 						{copiedLink ? (
-							<Check className="h-4 w-4 text-green-500" />
+							<Check className="h-4 w-4" />
 						) : (
 							<Copy className="h-4 w-4" />
 						)}
-						<span className="ml-1.5">
-							{copiedLink ? t("copied") : t("copyCustomerLink")}
-						</span>
 					</Button>
-				</div>
-			</SectionCard>
+				</CardContent>
+			</Card>
 
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="space-y-16 pt-0">
@@ -848,50 +813,26 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				})}
 			</SectionCard>
 
+			{/* Contact Details */}
+			<ContactDetailsCard
+				email={request.user?.email ?? request.customerEmail}
+				phone={request.phone}
+				language={request.language}
+				whatsappHref={whatsappHref}
+				firstName={request.firstName}
+				lastName={request.lastName}
+			/>
+
 			{/* Passengers */}
-			<SectionCard
+			<PassengersCard
 				title={t("passengers")}
-				contentClassName="space-y-1.5 pt-0 text-sm"
-			>
-				{request.numberOfAdults > 0 && (
-					<p>
-						<span className="text-muted-foreground">{t("adults")}: </span>
-						<span className="font-medium">{request.numberOfAdults}</span>
-					</p>
-				)}
-				{request.areThereChildren && request.numberOfChildren !== null && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("numberOfChildren")}:{" "}
-						</span>
-						<span className="font-medium">{request.numberOfChildren}</span>
-					</p>
-				)}
-				{request.areThereChildren && request.ageOfChildren && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("agesOfChildren")}:{" "}
-						</span>
-						<span className="font-medium">{request.ageOfChildren}</span>
-					</p>
-				)}
-				{request.areThereChildren && request.numberOfChildSeats !== null && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("childSeatsNeeded")}:{" "}
-						</span>
-						<span className="font-medium">{request.numberOfChildSeats}</span>
-					</p>
-				)}
-				{request.additionalInfo && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("additionalInformation")}:{" "}
-						</span>
-						<span className="font-medium">{request.additionalInfo}</span>
-					</p>
-				)}
-			</SectionCard>
+				numberOfAdults={request.numberOfAdults}
+				areThereChildren={request.areThereChildren}
+				numberOfChildren={request.numberOfChildren}
+				ageOfChildren={request.ageOfChildren}
+				numberOfChildSeats={request.numberOfChildSeats}
+				additionalInfo={request.additionalInfo}
+			/>
 
 			{/* Quotation */}
 			<SectionCard

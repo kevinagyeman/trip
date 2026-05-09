@@ -2,13 +2,15 @@
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
+import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PassengersCard } from "@/app/_components/ui/passengers-card";
+import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LANGUAGE_LABELS } from "@/lib/quick-fill";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
@@ -16,11 +18,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { TripMessageThread } from "./trip-message-thread";
 
-import {
-	buildStatusLabels,
-	QUOTATION_STATUS_COLORS,
-	STATUS_COLORS,
-} from "@/lib/trip-utils";
+import { buildStatusLabels, QUOTATION_STATUS_COLORS } from "@/lib/trip-utils";
 
 function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
@@ -147,26 +145,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			/>
 
 			{/* Header */}
-			<SectionCard>
-				<div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-					<div className="space-y-0.5">
-						<p className="text-xs font-medium text-muted-foreground">
-							#{String(request.orderNumber).padStart(7, "0")}
-						</p>
-						<h2 className="text-2xl font-bold">
-							{request.firstName} {request.lastName}
-						</h2>
-						{routes.map((route, i) => (
-							<p key={i} className="text-sm text-muted-foreground">
-								{route.pickup} → {route.destination}
-							</p>
-						))}
-					</div>
-					<Badge className={STATUS_COLORS[request.status]}>
-						{statusLabels[request.status] ?? request.status}
-					</Badge>
-				</div>
-			</SectionCard>
+			<RequestHeaderCard
+				orderNumber={request.orderNumber}
+				firstName={request.firstName}
+				lastName={request.lastName}
+				status={request.status}
+			/>
 
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="space-y-4 pt-0">
@@ -531,68 +515,23 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			</SectionCard>
 
 			{/* Contact */}
-			<SectionCard
-				title={t("contactDetails")}
-				contentClassName="space-y-1.5 pt-0 text-sm"
-			>
-				<p>
-					<span className="text-muted-foreground">{t("email")}: </span>
-					<span className="font-medium">{request.customerEmail}</span>
-				</p>
-				<p>
-					<span className="text-muted-foreground">{t("phone")}: </span>
-					<span className="font-medium">{request.phone}</span>
-				</p>
-			</SectionCard>
+			<ContactDetailsCard
+				email={request.customerEmail}
+				phone={request.phone}
+				language={request.language}
+				firstName={request.firstName}
+				lastName={request.lastName}
+			/>
 
 			{/* Passengers */}
-			<SectionCard
-				title={t("passengers")}
-				contentClassName="space-y-1.5 pt-0 text-sm"
-			>
-				<p>
-					<span className="text-muted-foreground">{t("adults")}: </span>
-					<span className="font-medium">{request.numberOfAdults}</span>
-				</p>
-				{request.areThereChildren && request.numberOfChildren !== null && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("numberOfChildren")}:{" "}
-						</span>
-						<span className="font-medium">{request.numberOfChildren}</span>
-					</p>
-				)}
-				{request.areThereChildren && request.ageOfChildren && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("agesOfChildren")}:{" "}
-						</span>
-						<span className="font-medium">{request.ageOfChildren}</span>
-					</p>
-				)}
-				{request.areThereChildren && request.numberOfChildSeats !== null && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("childSeatsNeeded")}:{" "}
-						</span>
-						<span className="font-medium">{request.numberOfChildSeats}</span>
-					</p>
-				)}
-				{request.additionalInfo && (
-					<p>
-						<span className="text-muted-foreground">
-							{t("additionalInformation")}:{" "}
-						</span>
-						<span className="font-medium">{request.additionalInfo}</span>
-					</p>
-				)}
-				<p>
-					<span className="text-muted-foreground">{t("language")}: </span>
-					<span className="font-medium">
-						{LANGUAGE_LABELS[request.language] ?? request.language}
-					</span>
-				</p>
-			</SectionCard>
+			<PassengersCard
+				numberOfAdults={request.numberOfAdults}
+				areThereChildren={request.areThereChildren}
+				numberOfChildren={request.numberOfChildren}
+				ageOfChildren={request.ageOfChildren}
+				numberOfChildSeats={request.numberOfChildSeats}
+				additionalInfo={request.additionalInfo}
+			/>
 
 			{/* Quotations */}
 			{request.quotations.map((quotation) => (
