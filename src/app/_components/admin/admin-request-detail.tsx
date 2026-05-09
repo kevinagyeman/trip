@@ -139,20 +139,20 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	useEffect(() => {
 		if (request) {
 			setAdminRoutePlaces(
-				request.routesList.map((r) => ({
+				request.routes.map((r) => ({
 					pickup: r.pickup,
 					destination: r.destination,
 				})),
 			);
 			setAdminRouteDepartures(
-				request.routesList.map((r) => ({
+				request.routes.map((r) => ({
 					scheduledDate: r.scheduledDate ?? "",
 					scheduledTime: r.scheduledTime ?? "",
 					flightNumber: r.flightNumber ?? "",
 				})),
 			);
 			setAdminPickupInfos(
-				request.routesList.map((r) => ({
+				request.routes.map((r) => ({
 					meetingPoint: r.meetingPoint ?? "",
 					beThereAtDate: r.beThereAtDate ?? "",
 					beThereAtTime: r.beThereAtTime ?? "",
@@ -216,7 +216,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (isLoading) return <div>{t("loading")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes = request.routesList;
+	const routes = request.routes;
 
 	// Derived status helpers
 	const quotation = request.quotations[0];

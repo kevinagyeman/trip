@@ -154,9 +154,6 @@ model TripRequest {
   orderNumber Int               @unique @default(autoincrement())
   status      TripRequestStatus @default(PENDING)
 
-  // Route(s) — JSON array of {pickup: string, destination: string}
-  routes String @db.Text
-
   // Travel information
   customerEmail      String
   language           String
@@ -174,11 +171,6 @@ model TripRequest {
   // Privacy consent
   privacyAcceptedAt DateTime?
 
-  // Pickup details — set after quotation accepted
-  pickupDate   DateTime?
-  pickupTime   String?
-  flightNumber String?
-
   lastViewedAt                DateTime?
   confirmedAt                 DateTime?
   confirmationViewedAt        DateTime?
@@ -194,7 +186,7 @@ model TripRequest {
   company    Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   quotations Quotation[]
   messages   TripMessage[]
-  routesList Route[]
+  routes     Route[]
 
   @@index([userId])
   @@index([companyId])

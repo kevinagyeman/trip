@@ -119,7 +119,7 @@ export function AllTripRequests() {
 											</span>
 										</p>
 										<div className="mt-1.5 space-y-0.5">
-											{request.routesList.map((route, i) => (
+											{request.routes.map((route, i) => (
 												<p
 													key={i}
 													className="truncate text-xs text-muted-foreground"

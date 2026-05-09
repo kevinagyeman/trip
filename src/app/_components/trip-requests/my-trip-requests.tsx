@@ -41,7 +41,7 @@ export function MyTripRequests() {
 								<CardTitle>
 									{request.firstName} {request.lastName}
 								</CardTitle>
-								{request.routesList.map((route, i) => (
+								{request.routes.map((route, i) => (
 									<p key={i} className="text-xs text-muted-foreground">
 										{route.pickup} → {route.destination}
 										{(route.scheduledTime ?? route.scheduledDate) && (

@@ -71,7 +71,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	useEffect(() => {
 		if (request) {
 			setRouteDepartures(
-				request.routesList.map((r) => ({
+				request.routes.map((r) => ({
 					scheduledDate: r.scheduledDate ?? "",
 					scheduledTime: r.scheduledTime ?? "",
 					flightNumber: r.flightNumber ?? "",
@@ -110,7 +110,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes = request.routesList;
+	const routes = request.routes;
 	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
 		request.status,
 	);

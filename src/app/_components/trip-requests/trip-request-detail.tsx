@@ -39,7 +39,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
-	const routes = request.routesList;
+	const routes = request.routes;
 
 	return (
 		<div className="space-y-6">

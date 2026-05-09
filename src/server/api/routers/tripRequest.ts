@@ -62,12 +62,11 @@ export const tripRequestRouter = createTRPCRouter({
 			const tripRequest = await ctx.db.tripRequest.create({
 				data: {
 					...rest,
-					routes: JSON.stringify(routes),
 					customerEmail: email,
 					companyId: company.id,
 					status: TripRequestStatus.PENDING,
 					privacyAcceptedAt: new Date(),
-					routesList: {
+					routes: {
 						create: routes.map((r, i) => ({
 							position: i,
 							type: r.type ?? "standard",
@@ -132,7 +131,7 @@ export const tripRequestRouter = createTRPCRouter({
 				orderBy: { createdAt: "desc" },
 				include: {
 					quotations: { orderBy: { createdAt: "desc" } },
-					routesList: { orderBy: { position: "asc" } },
+					routes: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -153,7 +152,7 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { id: input.id },
 				include: {
 					quotations: { orderBy: { createdAt: "desc" } },
-					routesList: { orderBy: { position: "asc" } },
+					routes: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -258,7 +257,7 @@ export const tripRequestRouter = createTRPCRouter({
 					user: { select: { id: true, name: true, email: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
 					messages: { orderBy: { createdAt: "desc" }, take: 1 },
-					routesList: { orderBy: { position: "asc" } },
+					routes: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -289,7 +288,7 @@ export const tripRequestRouter = createTRPCRouter({
 					user: { select: { id: true, name: true, email: true, image: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
 					company: { select: { estimateNotice: true, name: true } },
-					routesList: { orderBy: { position: "asc" } },
+					routes: { orderBy: { position: "asc" } },
 				},
 			});
 
@@ -352,14 +351,13 @@ export const tripRequestRouter = createTRPCRouter({
 			}
 
 			if (input.status === TripRequestStatus.CONFIRMED) {
-				const full = await ctx.db.tripRequest.findUnique({
-					where: { id: input.id },
-					select: { pickupDate: true, pickupTime: true },
+				const missingDeparture = await ctx.db.route.findFirst({
+					where: { tripRequestId: input.id, scheduledDate: null },
 				});
-				if (!full?.pickupDate || !full?.pickupTime) {
+				if (missingDeparture) {
 					throw new TRPCError({
 						code: "BAD_REQUEST",
-						message: "Pickup date and time are required before confirming",
+						message: "All routes must have a scheduled date before confirming",
 					});
 				}
 			}
@@ -378,7 +376,7 @@ export const tripRequestRouter = createTRPCRouter({
 				where: { token: input.token },
 				include: {
 					quotations: { orderBy: { createdAt: "desc" } },
-					routesList: { orderBy: { position: "asc" } },
+					routes: { orderBy: { position: "asc" } },
 				},
 			});
 

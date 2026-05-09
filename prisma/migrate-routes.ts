@@ -33,7 +33,7 @@ type LegacyRoute = {
 async function main() {
 	const requests = await db.tripRequest.findMany({
 		select: { id: true, routes: true },
-		where: { routesList: { none: {} } }, // skip already-migrated
+		where: { routes: { none: {} } }, // skip already-migrated
 	});
 
 	console.log(`Migrating ${requests.length} trip requests…`);

@@ -202,7 +202,6 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   token: 'token',
   orderNumber: 'orderNumber',
   status: 'status',
-  routes: 'routes',
   customerEmail: 'customerEmail',
   language: 'language',
   firstName: 'firstName',
@@ -216,9 +215,6 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   additionalInfo: 'additionalInfo',
   internalNotes: 'internalNotes',
   privacyAcceptedAt: 'privacyAcceptedAt',
-  pickupDate: 'pickupDate',
-  pickupTime: 'pickupTime',
-  flightNumber: 'flightNumber',
   lastViewedAt: 'lastViewedAt',
   confirmedAt: 'confirmedAt',
   confirmationViewedAt: 'confirmationViewedAt',
@@ -350,7 +346,6 @@ exports.Prisma.PasswordResetTokenOrderByRelevanceFieldEnum = {
 exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
   id: 'id',
   token: 'token',
-  routes: 'routes',
   customerEmail: 'customerEmail',
   language: 'language',
   firstName: 'firstName',
@@ -359,8 +354,6 @@ exports.Prisma.TripRequestOrderByRelevanceFieldEnum = {
   ageOfChildren: 'ageOfChildren',
   additionalInfo: 'additionalInfo',
   internalNotes: 'internalNotes',
-  pickupTime: 'pickupTime',
-  flightNumber: 'flightNumber',
   userId: 'userId',
   companyId: 'companyId'
 };
