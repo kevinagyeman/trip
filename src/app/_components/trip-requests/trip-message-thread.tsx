@@ -1,13 +1,14 @@
 "use client";
 
-import { api } from "@/trpc/react";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { enUS, it as itLocale } from "date-fns/locale";
+import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
-import { useRef, useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
 import { MessageSenderType } from "../../../../generated/prisma";
 
 type Props =
@@ -146,14 +147,14 @@ export function TripMessageThread(props: Props) {
 			</div>
 
 			{/* Compose */}
-			<div className="flex gap-2">
+			<div className="flex items-end gap-2">
 				<Textarea
 					ref={textareaRef}
 					value={body}
 					onChange={(e) => setBody(e.target.value)}
 					placeholder={t("placeholder")}
-					rows={2}
-					className="flex-1 resize-none"
+					rows={1}
+					className="flex-1 resize-none min-h-9"
 					onKeyDown={(e) => {
 						if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
 							e.preventDefault();
@@ -165,9 +166,8 @@ export function TripMessageThread(props: Props) {
 					onClick={handleSend}
 					isLoading={isPending}
 					disabled={!body.trim()}
-					className="self-end"
 				>
-					{t("send")}
+					<ArrowRight className="h-4 w-4" />
 				</LoadingButton>
 			</div>
 		</div>
