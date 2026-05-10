@@ -1,12 +1,11 @@
 "use client";
 
-import { TripRequestAlert } from "@/app/_components/trip-requests/alert";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
-import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -24,7 +23,7 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Minus, Plus, X } from "lucide-react";
+import { Minus, PlaneLanding, PlaneTakeoff, Plus, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -130,7 +129,7 @@ export function CreateTripRequestForm({
 			{/* Routes */}
 			<div className="space-y-3">
 				<h3 className="text-lg font-semibold">{t("routes")}</h3>
-				<TripRequestAlert />
+				{/* <TripRequestAlert /> */}
 
 				{routeFields.map((field, index) => {
 					const routeType = watch(`routes.${index}.type`);
@@ -203,12 +202,12 @@ export function CreateTripRequestForm({
 										[
 											{
 												value: "airport_in",
-												emoji: "🛬",
+												icon: PlaneLanding,
 												label: t("flightArrival"),
 											},
 											{
 												value: "airport_out",
-												emoji: "🛫",
+												icon: PlaneTakeoff,
 												label: t("flightDeparture"),
 											},
 										] as const
@@ -225,7 +224,7 @@ export function CreateTripRequestForm({
 													: "border-border text-muted-foreground hover:border-primary/50"
 											}`}
 										>
-											<span>{opt.emoji}</span>
+											<opt.icon className="h-4 w-4" />
 											{opt.label}
 										</button>
 									))}
@@ -578,6 +577,12 @@ export function CreateTripRequestForm({
 			{/* Preferences */}
 			<div className="space-y-4 rounded-lg border p-4">
 				<h3 className="text-lg font-semibold">{t("preferences")}</h3>
+				<CustomTextArea
+					labelText={t("specialRequests")}
+					placeholder={t("specialRequestsPlaceholder")}
+					rows={4}
+					textAreaProps={{ ...register("additionalInfo") }}
+				/>
 				<Controller
 					name="language"
 					control={control}
@@ -589,12 +594,6 @@ export function CreateTripRequestForm({
 							onValueChange={field.onChange}
 						/>
 					)}
-				/>
-				<CustomTextArea
-					labelText={t("specialRequests")}
-					placeholder={t("specialRequestsPlaceholder")}
-					rows={4}
-					textAreaProps={{ ...register("additionalInfo") }}
 				/>
 			</div>
 
