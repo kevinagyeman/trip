@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/app/_components/brand-logo";
 import { LanguageSwitcher } from "@/app/_components/language-switcher";
 import { MobileMenu } from "@/app/_components/mobile-menu";
 import { SignOutButton } from "@/app/_components/sign-out-button";
@@ -17,9 +18,7 @@ export async function Navigation() {
 			<nav className="sticky top-0 z-50 border-b bg-background">
 				<div className="container mx-auto px-4 py-4">
 					<div className="flex items-center justify-between">
-						<Link href="/" className="text-xl font-bold">
-							{t("brand")}
-						</Link>
+						<BrandLogo label={t("brand")} isLoggedIn={false} />
 						<div className="flex items-center gap-3">
 							<LanguageSwitcher />
 							<ThemeToggle />
@@ -41,9 +40,8 @@ export async function Navigation() {
 				<div className="flex items-center justify-between">
 					{/* Brand + desktop nav links */}
 					<div className="flex items-center gap-6">
-						<Link href="/" className="text-xl font-bold">
-							{t("brand")}
-						</Link>
+						<BrandLogo label={t("brand")} isLoggedIn={true} />
+
 						<div className="hidden items-center gap-2 md:flex">
 							{!isSuperAdmin && !isAdmin && (
 								<Link href="/dashboard">
@@ -93,16 +91,18 @@ export async function Navigation() {
 						</div>
 
 						{/* Mobile burger */}
-						<MobileMenu
-							userName={userName}
-							isAdmin={isAdmin}
-							isSuperAdmin={isSuperAdmin}
-							myTripsLabel={t("myTrips")}
-							adminLabel={t("adminDashboard")}
-							adminStatsLabel={t("adminStats")}
-							adminGuideLabel={t("adminGuide")}
-							superAdminLabel={t("superAdminDashboard")}
-						/>
+						{isAdmin && (
+							<MobileMenu
+								userName={userName}
+								isAdmin={isAdmin}
+								isSuperAdmin={isSuperAdmin}
+								myTripsLabel={t("myTrips")}
+								adminLabel={t("adminDashboard")}
+								adminStatsLabel={t("adminStats")}
+								adminGuideLabel={t("adminGuide")}
+								superAdminLabel={t("superAdminDashboard")}
+							/>
+						)}
 					</div>
 				</div>
 			</div>

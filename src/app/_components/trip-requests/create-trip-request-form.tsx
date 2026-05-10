@@ -5,6 +5,7 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -139,13 +140,11 @@ export function CreateTripRequestForm({
 					const hasAirport = isAirportIn || isAirportOut;
 
 					return (
-						<div key={field.id} className="space-y-4 rounded-lg border p-4">
-							{/* Header */}
-							<div className="flex items-center justify-between">
-								<h4 className="font-semibold">
-									{t("routeN", { n: index + 1 })}
-								</h4>
-								{routeFields.length > 1 && (
+						<SectionCard
+							key={field.id}
+							title={t("routeN", { n: index + 1 })}
+							headerAction={
+								routeFields.length > 1 ? (
 									<Button
 										type="button"
 										variant="ghost"
@@ -154,9 +153,10 @@ export function CreateTripRequestForm({
 									>
 										<X className="h-4 w-4" />
 									</Button>
-								)}
-							</div>
-
+								) : undefined
+							}
+							contentClassName="space-y-4 pt-0"
+						>
 							{/* Airport Yes/No */}
 							<div className="space-y-2">
 								<p className="text-sm font-medium">{t("airportInvolved")}</p>
@@ -298,7 +298,7 @@ export function CreateTripRequestForm({
 									)}
 								</>
 							)}
-						</div>
+						</SectionCard>
 					);
 				})}
 
@@ -320,8 +320,10 @@ export function CreateTripRequestForm({
 			</div>
 
 			{/* Contact Details */}
-			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">{t("contactDetails")}</h3>
+			<SectionCard
+				title={t("contactDetails")}
+				contentClassName="space-y-4 pt-0"
+			>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<CustomInput
 						labelText={t("firstName")}
@@ -390,11 +392,10 @@ export function CreateTripRequestForm({
 						</small>
 					)}
 				</div>
-			</div>
+			</SectionCard>
 
 			{/* Passengers */}
-			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">{t("passengers")}</h3>
+			<SectionCard title={t("passengers")} contentClassName="space-y-4 pt-0">
 				<div className="space-y-1">
 					<Label className="text-sm font-medium">{t("numberOfAdults")}</Label>
 					<div className="flex items-center gap-2">
@@ -572,11 +573,10 @@ export function CreateTripRequestForm({
 						</div>
 					</>
 				)}
-			</div>
+			</SectionCard>
 
 			{/* Preferences */}
-			<div className="space-y-4 rounded-lg border p-4">
-				<h3 className="text-lg font-semibold">{t("preferences")}</h3>
+			<SectionCard title={t("preferences")} contentClassName="space-y-4 pt-0">
 				<CustomTextArea
 					labelText={t("specialRequests")}
 					placeholder={t("specialRequestsPlaceholder")}
@@ -595,7 +595,7 @@ export function CreateTripRequestForm({
 						/>
 					)}
 				/>
-			</div>
+			</SectionCard>
 
 			{/* Privacy Policy */}
 			<div className="space-y-1">
