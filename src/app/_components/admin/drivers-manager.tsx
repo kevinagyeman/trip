@@ -136,13 +136,15 @@ export function DriversManager() {
 
 			<div className="space-y-2">
 				{drivers.map((d) => (
-					<SectionCard
+					<div
+						className="border rounded-lg p-4 flex items-center justify-between gap-4"
 						key={d.id}
-						title={`${d.name} ${d.surname}`}
-						contentClassName="pt-0 text-sm text-muted-foreground"
 					>
-						<p>{d.phone}</p>
-						<p>{d.email}</p>
+						<div>
+							<p className="font-semibold">{`${d.name} ${d.surname}`}</p>
+							<p className="text-muted-foreground text-sm">{d.phone}</p>
+							<p className="text-muted-foreground text-sm">{d.email}</p>
+						</div>
 						<div className="mt-2 flex gap-1">
 							<Button size="icon" variant="ghost" onClick={() => openEdit(d)}>
 								<Pencil className="h-4 w-4" />
@@ -156,7 +158,7 @@ export function DriversManager() {
 								<Trash2 className="h-4 w-4" />
 							</Button>
 						</div>
-					</SectionCard>
+					</div>
 				))}
 			</div>
 

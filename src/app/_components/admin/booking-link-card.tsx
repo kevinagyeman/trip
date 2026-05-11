@@ -27,11 +27,10 @@ export function BookingLinkCard({ url }: { url: string }) {
 					className="shrink-0"
 				>
 					{copied ? (
-						<Check className="h-4 w-4 text-green-500" />
+						<Check className="h-4 w-4" />
 					) : (
 						<Copy className="h-4 w-4" />
 					)}
-					<span className="ml-1">{copied ? t("copied") : t("copyLink")}</span>
 				</Button>
 			</div>
 		</SectionCard>
