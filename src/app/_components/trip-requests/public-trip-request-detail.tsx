@@ -537,11 +537,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			{request.quotations.map((quotation) => (
 				<SectionCard
 					key={quotation.id}
-					title={t("quotations")}
-					headerAction={
-						<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
-							{quotation.status}
-						</Badge>
+					title={
+						<div className="flex items-center gap-2">
+							<span>{t("quotations")}</span>
+							<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
+								{quotation.status}
+							</Badge>
+						</div>
 					}
 					contentClassName="space-y-4 pt-0"
 				>

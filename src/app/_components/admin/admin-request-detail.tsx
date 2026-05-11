@@ -836,29 +836,31 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Quotation */}
 			<SectionCard
-				title={t("quotation")}
-				headerAction={
-					quotation ? (
-						<Badge
-							className={
-								isQuotationAccepted
-									? "bg-green-500"
+				title={
+					<div className="flex items-center gap-2">
+						<span>{t("quotation")}</span>
+						{quotation && (
+							<Badge
+								className={
+									isQuotationAccepted
+										? "bg-green-500"
+										: isQuotationRejected
+											? "bg-red-500"
+											: isQuotationSent
+												? "bg-blue-500"
+												: "bg-muted text-muted-foreground"
+								}
+							>
+								{isQuotationAccepted
+									? t("statusAccepted")
 									: isQuotationRejected
-										? "bg-red-500"
+										? t("statusRejected")
 										: isQuotationSent
-											? "bg-blue-500"
-											: "bg-muted text-muted-foreground"
-							}
-						>
-							{isQuotationAccepted
-								? t("statusAccepted")
-								: isQuotationRejected
-									? t("statusRejected")
-									: isQuotationSent
-										? t("quotationSentLabel")
-										: t("quotationDraftLabel")}
-						</Badge>
-					) : undefined
+											? t("quotationSentLabel")
+											: t("quotationDraftLabel")}
+							</Badge>
+						)}
+					</div>
 				}
 				contentClassName="space-y-4 pt-0"
 			>

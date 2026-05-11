@@ -5,7 +5,6 @@ import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
 
 export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 	const t = useTranslations("settings");
@@ -36,7 +35,6 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4 max-w-sm">
-			<AlertBanner variant="info" description={t("emailNotice")} />
 			<p className="text-sm text-muted-foreground">
 				{t("currentEmail")}:{" "}
 				<span className="font-medium text-foreground">{currentEmail}</span>

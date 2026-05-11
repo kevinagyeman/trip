@@ -1,16 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardHeader,
-	CardTitle,
-	CardDescription,
-} from "@/components/ui/card";
 import { Check, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export function BookingLinkCard({ url }: { url: string }) {
 	const t = useTranslations("settings");
@@ -23,29 +17,23 @@ export function BookingLinkCard({ url }: { url: string }) {
 	}
 
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>{t("bookingLinkTitle")}</CardTitle>
-				<CardDescription>{t("bookingLinkDesc")}</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<div className="flex items-center gap-2 rounded-md border bg-muted px-3 py-2">
-					<span className="flex-1 truncate font-mono text-sm">{url}</span>
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={handleCopy}
-						className="shrink-0"
-					>
-						{copied ? (
-							<Check className="h-4 w-4 text-green-500" />
-						) : (
-							<Copy className="h-4 w-4" />
-						)}
-						<span className="ml-1">{copied ? t("copied") : t("copyLink")}</span>
-					</Button>
-				</div>
-			</CardContent>
-		</Card>
+		<SectionCard title={t("bookingLinkTitle")} subtitle={t("bookingLinkDesc")}>
+			<div className="flex items-center gap-2 rounded-md border bg-muted px-3 py-2">
+				<span className="flex-1 truncate font-mono text-sm">{url}</span>
+				<Button
+					variant="ghost"
+					size="sm"
+					onClick={handleCopy}
+					className="shrink-0"
+				>
+					{copied ? (
+						<Check className="h-4 w-4 text-green-500" />
+					) : (
+						<Copy className="h-4 w-4" />
+					)}
+					<span className="ml-1">{copied ? t("copied") : t("copyLink")}</span>
+				</Button>
+			</div>
+		</SectionCard>
 	);
 }

@@ -728,5 +728,21 @@
 		"pendingSubtitle": "We sent you a verification email",
 		"pendingDesc": "Click the link in the email to verify your address and activate your account. If you don't see it, check your spam or junk folder.",
 		"pendingContact": "The link expires in 24 hours."
+	},
+	"drivers": {
+		"title": "Drivers",
+		"addDriver": "Add driver",
+		"loading": "Loading...",
+		"noDrivers": "No drivers yet. Add your first driver to pre-fill pickup info.",
+		"editDriver": "Edit driver",
+		"name": "Name *",
+		"surname": "Surname *",
+		"phone": "Phone *",
+		"email": "Email *",
+		"required": "Required",
+		"cancel": "Cancel",
+		"save": "Save",
+		"add": "Add",
+		"subtitle": "Manage your drivers to pre-fill pickup information."
 	}
 }

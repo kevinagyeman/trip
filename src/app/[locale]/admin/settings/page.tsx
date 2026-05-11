@@ -1,15 +1,15 @@
-import { redirect } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
-import { auth } from "@/server/auth";
-import { db } from "@/server/db";
-import { env } from "@/env";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
+import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
-import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
-import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
+import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
 import { DriversManager } from "@/app/_components/admin/drivers-manager";
+import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
+import { SectionCard } from "@/app/_components/ui/section-card";
+import { env } from "@/env";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 
 export default async function AdminSettingsPage({
 	params,
@@ -50,49 +50,23 @@ export default async function AdminSettingsPage({
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}
-				{session.user.role !== "SUPER_ADMIN" && (
-					<Card>
-						<CardContent className="pt-6">
-							<DriversManager />
-						</CardContent>
-					</Card>
-				)}
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("languageTitle")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<ChangeLanguageForm
-							currentLanguage={dbUser?.preferredLanguage ?? "en"}
-						/>
-					</CardContent>
-				</Card>
+				{session.user.role !== "SUPER_ADMIN" && <DriversManager />}
+				<SectionCard title={t("languageTitle")}>
+					<ChangeLanguageForm
+						currentLanguage={dbUser?.preferredLanguage ?? "en"}
+					/>
+				</SectionCard>
 				{company && (
-					<Card>
-						<CardHeader>
-							<CardTitle>{t("estimateNoticeTitle")}</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
-						</CardContent>
-					</Card>
+					<SectionCard title={t("estimateNoticeTitle")}>
+						<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
+					</SectionCard>
 				)}
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("changeEmailTitle")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<ChangeEmailForm currentEmail={session.user.email ?? ""} />
-					</CardContent>
-				</Card>
-				<Card>
-					<CardHeader>
-						<CardTitle>{t("changePasswordTitle")}</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<ChangePasswordForm />
-					</CardContent>
-				</Card>
+				<SectionCard title={t("changeEmailTitle")} subtitle={t("emailNotice")}>
+					<ChangeEmailForm currentEmail={session.user.email ?? ""} />
+				</SectionCard>
+				<SectionCard title={t("changePasswordTitle")}>
+					<ChangePasswordForm />
+				</SectionCard>
 			</div>
 		</div>
 	);

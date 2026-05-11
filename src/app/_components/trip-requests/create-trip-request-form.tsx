@@ -142,18 +142,20 @@ export function CreateTripRequestForm({
 					return (
 						<SectionCard
 							key={field.id}
-							title={t("routeN", { n: index + 1 })}
-							headerAction={
-								routeFields.length > 1 ? (
-									<Button
-										type="button"
-										variant="ghost"
-										size="icon"
-										onClick={() => removeRoute(index)}
-									>
-										<X className="h-4 w-4" />
-									</Button>
-								) : undefined
+							title={
+								<div className="flex w-full items-center justify-between">
+									<span>{t("routeN", { n: index + 1 })}</span>
+									{routeFields.length > 1 && (
+										<Button
+											type="button"
+											variant="ghost"
+											size="icon"
+											onClick={() => removeRoute(index)}
+										>
+											<X className="h-4 w-4" />
+										</Button>
+									)}
+								</div>
 							}
 							contentClassName="space-y-4 pt-0"
 						>

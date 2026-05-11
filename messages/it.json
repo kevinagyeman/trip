@@ -731,5 +731,21 @@
 		"pendingSubtitle": "Ti abbiamo inviato un'email di verifica",
 		"pendingDesc": "Clicca il link nell'email per verificare il tuo indirizzo e attivare il tuo account. Se non la trovi, controlla la cartella spam o posta indesiderata.",
 		"pendingContact": "Il link scade dopo 24 ore."
+	},
+	"drivers": {
+		"title": "Autisti",
+		"addDriver": "Aggiungi autista",
+		"loading": "Caricamento...",
+		"noDrivers": "Nessun autista ancora. Aggiungi il primo autista per pre-compilare le informazioni di ritiro.",
+		"editDriver": "Modifica autista",
+		"name": "Nome *",
+		"surname": "Cognome *",
+		"phone": "Telefono *",
+		"email": "Email *",
+		"required": "Obbligatorio",
+		"cancel": "Annulla",
+		"save": "Salva",
+		"add": "Aggiungi",
+		"subtitle": "Gestisci i tuoi autisti per pre-compilare le informazioni di ritiro."
 	}
 }

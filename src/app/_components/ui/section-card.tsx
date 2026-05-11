@@ -1,27 +1,35 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 
 export function SectionCard({
 	title,
-	headerAction,
+	subtitle,
 	children,
 	contentClassName,
 }: {
 	title?: React.ReactNode;
-	headerAction?: React.ReactNode;
+	subtitle?: React.ReactNode;
 	children: React.ReactNode;
 	contentClassName?: string;
 }) {
 	return (
 		<Card className="gap-0">
-			{title && (
+			{(title ?? subtitle) && (
 				<CardHeader className="pb-0">
-					<div className="flex items-center justify-between">
-						<CardTitle className="text-base">{title}</CardTitle>
-						{headerAction}
-					</div>
+					{title && <CardTitle className="text-base">{title}</CardTitle>}
+					{subtitle && (
+						<CardDescription className="pb-4">{subtitle}</CardDescription>
+					)}
 				</CardHeader>
 			)}
-			<CardContent className={contentClassName ?? (title ? "pt-0" : "pt-4")}>
+			<CardContent
+				className={contentClassName ?? ((title ?? subtitle) ? "pt-0" : "pt-4")}
+			>
 				{children}
 			</CardContent>
 		</Card>
