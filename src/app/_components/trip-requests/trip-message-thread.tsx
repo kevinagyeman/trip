@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { enUS, it as itLocale } from "date-fns/locale";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MessagesSquare } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { MessageSenderType } from "../../../../generated/prisma";
@@ -104,9 +104,12 @@ export function TripMessageThread(props: Props) {
 			{/* Message list */}
 			<div className="max-h-96 overflow-y-auto space-y-3 rounded-lg border p-4 bg-muted/30">
 				{data.length === 0 ? (
-					<p className="text-center text-sm text-muted-foreground py-8">
-						{t("noMessages")}
-					</p>
+					<div className="flex h-full min-h-28 items-center justify-center">
+						<MessagesSquare
+							className="h-12 w-12       
+  text-muted-foreground"
+						/>
+					</div>
 				) : (
 					data.map((msg) => {
 						const isOwnMessage =
@@ -134,7 +137,6 @@ export function TripMessageThread(props: Props) {
 									<p className="whitespace-pre-wrap">{msg.body}</p>
 								</div>
 								<p className="mt-1 text-xs text-muted-foreground">
-									{isOwnMessage ? t("you") : msg.senderName} ·{" "}
 									{format(new Date(msg.createdAt), "MMM d, HH:mm", {
 										locale: dateFnsLocale,
 									})}
@@ -152,7 +154,6 @@ export function TripMessageThread(props: Props) {
 					ref={textareaRef}
 					value={body}
 					onChange={(e) => setBody(e.target.value)}
-					placeholder={t("placeholder")}
 					rows={1}
 					className="flex-1 resize-none min-h-9"
 					onKeyDown={(e) => {

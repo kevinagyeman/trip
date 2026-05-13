@@ -1,23 +1,16 @@
 "use client";
 
-import { QuotationForm } from "@/app/_components/admin/quotation-form";
-import { TripMessageThread } from "@/app/_components/trip-requests/trip-message-thread";
+import { AdminMessagesCard } from "@/app/_components/admin/admin-messages-card";
+import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card";
+import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
 import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
+import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { SectionCard } from "@/app/_components/ui/section-card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,9 +21,10 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { buildStatusLabels } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus, Check, Copy } from "lucide-react";
+import { CalendarPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -61,44 +55,6 @@ function googleCalendarUrl(params: {
 		dates: `${params.start}/${params.end}`,
 	});
 	return `https://calendar.google.com/calendar/render?${p.toString()}`;
-}
-
-import { Card, CardContent } from "@/components/ui/card";
-import { buildStatusLabels } from "@/lib/trip-utils";
-
-function InternalNotesCard({
-	requestId,
-	initialNotes,
-}: {
-	requestId: string;
-	initialNotes: string;
-}) {
-	const t = useTranslations("adminDetail");
-	const utils = api.useUtils();
-	const [notes, setNotes] = useState(initialNotes);
-	const update = api.tripRequest.updateInternalNotes.useMutation({
-		onSuccess: () =>
-			utils.tripRequest.getByIdAdmin.invalidate({ id: requestId }),
-	});
-
-	return (
-		<SectionCard title={t("internalNotes")} contentClassName="space-y-2 pt-0">
-			<Textarea
-				rows={3}
-				placeholder={t("internalNotesPlaceholder")}
-				value={notes}
-				onChange={(e) => setNotes(e.target.value)}
-			/>
-			<LoadingButton
-				size="sm"
-				variant="outline"
-				isLoading={update.isPending}
-				onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
-			>
-				{t("saveNotes")}
-			</LoadingButton>
-		</SectionCard>
-	);
 }
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
@@ -180,24 +136,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	const [confirmOpen, setConfirmOpen] = useState(false);
-	const [copiedLink, setCopiedLink] = useState(false);
-
-	const confirmTrip = api.tripRequest.confirmByAdmin.useMutation({
-		onSuccess: async () => {
-			setConfirmOpen(false);
-			await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-			await utils.tripRequest.getAllRequests.invalidate();
-		},
-	});
-
-	const requestDepartureDetails =
-		api.tripRequest.requestDepartureDetails.useMutation({
-			onSuccess: async () => {
-				await utils.tripRequest.getByIdAdmin.invalidate({ id: requestId });
-			},
-		});
-
 	const { data: drivers = [] } = api.driver.getAll.useQuery();
 
 	const [whatsappHref, setWhatsappHref] = useState("");
@@ -220,24 +158,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
-
-	// Derived status helpers
-	const quotation = request.quotations[0];
-	const isQuotationAccepted = quotation?.status === "ACCEPTED";
-	const isQuotationRejected = quotation?.status === "REJECTED";
-	const isQuotationSent = !!quotation?.notifiedAt;
-
-	const estimateNotice = (() => {
-		try {
-			const n = JSON.parse(request.company?.estimateNotice ?? "{}") as Record<
-				string,
-				string
-			>;
-			return n[request.language] ?? n.en ?? "";
-		} catch {
-			return "";
-		}
-	})();
 
 	return (
 		<div className="space-y-4">
@@ -283,46 +203,14 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										{ onSuccess: () => setPendingStatus(null) },
 									);
 								}}
-							>
-								{t("saveStatus")}
-							</LoadingButton>
+							/>
 						)}
 					</>
 				}
 			/>
 
-			{/* Customer link */}
-			<Card>
-				<CardContent className="flex items-center">
-					<div className="min-w-0 flex-1">
-						<p className="text-xs font-medium">{t("customerLinkLabel")}</p>
-						<p className="text-xs text-muted-foreground">
-							{t("customerLinkWarning")}
-						</p>
-					</div>
-					<Button
-						size="icon"
-						variant="outline"
-						className="shrink-0"
-						onClick={async () => {
-							await navigator.clipboard.writeText(
-								`${window.location.origin}/request/${request.token}`,
-							);
-							setCopiedLink(true);
-							setTimeout(() => setCopiedLink(false), 2000);
-						}}
-					>
-						{copiedLink ? (
-							<Check className="h-4 w-4" />
-						) : (
-							<Copy className="h-4 w-4" />
-						)}
-					</Button>
-				</CardContent>
-			</Card>
-
 			{/* Routes */}
-			<SectionCard title={t("routes")} contentClassName="space-y-16 pt-0">
+			<SectionCard title={t("routes")} contentClassName="space-y-8 pt-0">
 				{routes.map((route, i) => {
 					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
 					const hasPickupInfo = !!(route.meetingPoint ?? route.driverName);
@@ -835,129 +723,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Quotation */}
-			<SectionCard
-				title={
-					<div className="flex items-center gap-2">
-						<span>{t("quotation")}</span>
-						{quotation && (
-							<Badge
-								className={
-									isQuotationAccepted
-										? "bg-green-500"
-										: isQuotationRejected
-											? "bg-red-500"
-											: isQuotationSent
-												? "bg-blue-500"
-												: "bg-muted text-muted-foreground"
-								}
-							>
-								{isQuotationAccepted
-									? t("statusAccepted")
-									: isQuotationRejected
-										? t("statusRejected")
-										: isQuotationSent
-											? t("quotationSentLabel")
-											: t("quotationDraftLabel")}
-							</Badge>
-						)}
-					</div>
-				}
-				contentClassName="space-y-4 pt-0"
-			>
-				{isQuotationAccepted ? (
-					<>
-						<div className="flex items-start justify-between">
-							<div>
-								<p className="text-2xl font-bold">
-									{quotation!.currency} {quotation!.price.toString()}
-								</p>
-								{quotation!.isPriceEachWay && (
-									<p className="text-sm text-muted-foreground">
-										{t("priceEachWay")}
-									</p>
-								)}
-							</div>
-						</div>
-						{quotation!.quotationAdditionalInfo && (
-							<div>
-								<p className="text-sm font-medium text-muted-foreground">
-									{t("additionalInfoCustomer")}
-								</p>
-								<p className="mt-1 whitespace-pre-wrap text-sm">
-									{quotation!.quotationAdditionalInfo}
-								</p>
-							</div>
-						)}
-						{request.status !== "CONFIRMED" && (
-							<div className="flex flex-wrap items-start gap-3">
-								<div className="flex flex-col gap-1">
-									<LoadingButton
-										size="sm"
-										variant="outline"
-										isLoading={requestDepartureDetails.isPending}
-										onClick={() =>
-											requestDepartureDetails.mutate({ id: requestId })
-										}
-									>
-										{t("requestDetails")}
-									</LoadingButton>
-									{request.departureDetailsRequestedAt && (
-										<p className="text-xs text-muted-foreground">
-											{t("notifiedDate", {
-												date: format(
-													new Date(request.departureDetailsRequestedAt),
-													"d MMM yyyy",
-												),
-												time: format(
-													new Date(request.departureDetailsRequestedAt),
-													"HH:mm",
-												),
-											})}
-										</p>
-									)}
-								</div>
-								<Button size="sm" onClick={() => setConfirmOpen(true)}>
-									{t("confirmTrip")}
-								</Button>
-							</div>
-						)}
-						<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-							<DialogContent>
-								<DialogHeader>
-									<DialogTitle>{t("confirmModalTitle")}</DialogTitle>
-									<DialogDescription>{t("confirmModalDesc")}</DialogDescription>
-								</DialogHeader>
-								<DialogFooter className="gap-2">
-									<Button
-										variant="outline"
-										onClick={() => setConfirmOpen(false)}
-									>
-										{t("confirmModalCancel")}
-									</Button>
-									<LoadingButton
-										isLoading={confirmTrip.isPending}
-										onClick={() => confirmTrip.mutate({ id: requestId })}
-									>
-										{t("confirmModalConfirm")}
-									</LoadingButton>
-								</DialogFooter>
-							</DialogContent>
-						</Dialog>
-					</>
-				) : (
-					<QuotationForm
-						requestId={requestId}
-						isRejected={isQuotationRejected}
-						quotation={quotation}
-						estimateNotice={estimateNotice}
-						onSuccess={async () => {
-							await utils.tripRequest.getByIdAdmin.invalidate({
-								id: requestId,
-							});
-						}}
-					/>
-				)}
-			</SectionCard>
+			<AdminQuotationCard requestId={requestId} />
+
+			{/* Messages */}
+			<AdminMessagesCard requestId={requestId} />
 
 			{/* Internal Notes */}
 			<InternalNotesCard
@@ -965,10 +734,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				initialNotes={request.internalNotes ?? ""}
 			/>
 
-			{/* Messages */}
-			<SectionCard contentClassName="pt-0">
-				<TripMessageThread mode="admin" requestId={requestId} />
-			</SectionCard>
+			{/* Customer link */}
+			<CopyLinkCard
+				url={`${window.location.origin}/request/${request.token}`}
+				title={t("customerLinkLabel")}
+				subtitle={t("customerLinkWarning")}
+			/>
 
 			{/* Events */}
 			<SectionCard title={t("events")} contentClassName="space-y-3 pt-0">

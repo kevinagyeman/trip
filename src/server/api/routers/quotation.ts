@@ -45,6 +45,7 @@ export const quotationRouter = createTRPCRouter({
 			z.object({
 				tripRequestId: z.string(),
 				price: z.number().positive(),
+				currency: z.string().default("EUR"),
 				isPriceEachWay: z.boolean().default(false),
 				areCarSeatsIncluded: z.boolean().default(false),
 				quotationAdditionalInfo: z.string().optional(),
@@ -82,7 +83,6 @@ export const quotationRouter = createTRPCRouter({
 			return ctx.db.quotation.create({
 				data: {
 					...data,
-					currency: "EUR",
 					tripRequestId,
 					status: QuotationStatus.PENDING,
 					createdById: ctx.session.user.id,
@@ -96,6 +96,7 @@ export const quotationRouter = createTRPCRouter({
 			z.object({
 				tripRequestId: z.string(),
 				price: z.number().positive(),
+				currency: z.string().default("EUR"),
 				isPriceEachWay: z.boolean().default(false),
 				areCarSeatsIncluded: z.boolean().default(false),
 				quotationAdditionalInfo: z.string().optional(),
@@ -150,7 +151,6 @@ export const quotationRouter = createTRPCRouter({
 					: await tx.quotation.create({
 							data: {
 								...data,
-								currency: "EUR",
 								tripRequestId,
 								status: QuotationStatus.PENDING,
 								notifiedAt: now,

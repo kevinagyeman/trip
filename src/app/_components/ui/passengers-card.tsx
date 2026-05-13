@@ -24,11 +24,18 @@ export function PassengersCard({
 }: PassengersCardProps) {
 	const t = useTranslations("requestDetail");
 
+	const totalPassengers =
+		numberOfAdults + (areThereChildren ? (numberOfChildren ?? 0) : 0);
+
 	return (
 		<SectionCard
 			title={title ?? t("passengers")}
 			contentClassName="space-y-1.5 pt-0 text-sm"
 		>
+			<p>
+				<span className="text-muted-foreground">{t("totalPassengers")}: </span>
+				<span className="font-medium">{totalPassengers}</span>
+			</p>
 			<p>
 				<span className="text-muted-foreground">{t("adults")}: </span>
 				<span className="font-medium">{numberOfAdults}</span>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
@@ -39,48 +38,31 @@ export function CreateCompanyForm() {
 		<Card>
 			<CardContent className="pt-6">
 				<form onSubmit={handleSubmit} className="space-y-4">
-					<div>
-						<label className="mb-1 block text-sm font-medium">
-							{t("companyName")} *
-						</label>
+					<input
+						name="name"
+						required
+						className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+						placeholder={t("companyName")}
+					/>
+
+					<div className="flex items-center gap-2">
+						<span className="text-muted-foreground">/</span>
 						<input
-							name="name"
+							name="slug"
 							required
-							className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-							placeholder={t("companyNamePlaceholder")}
+							pattern="[a-z0-9-]+"
+							className="w-full rounded-md border bg-background px-3 py-2 text-sm font-mono"
+							placeholder="my-company"
 						/>
 					</div>
+					<p className="text-xs text-muted-foreground">{t("slugHint")}</p>
 
-					<div>
-						<label className="mb-1 block text-sm font-medium">
-							{t("companySlug")} *
-						</label>
-						<div className="flex items-center gap-2">
-							<span className="text-muted-foreground">/</span>
-							<input
-								name="slug"
-								required
-								pattern="[a-z0-9-]+"
-								className="w-full rounded-md border bg-background px-3 py-2 text-sm font-mono"
-								placeholder="my-company"
-							/>
-						</div>
-						<p className="mt-1 text-xs text-muted-foreground">
-							{t("slugHint")}
-						</p>
-					</div>
-
-					<div>
-						<label className="mb-1 block text-sm font-medium">
-							{t("logoUrl")}
-						</label>
-						<input
-							name="logoUrl"
-							type="url"
-							className="w-full rounded-md border bg-background px-3 py-2 text-sm"
-							placeholder="https://..."
-						/>
-					</div>
+					<input
+						name="logoUrl"
+						type="url"
+						className="w-full rounded-md border bg-background px-3 py-2 text-sm"
+						placeholder="https://..."
+					/>
 
 					{error && (
 						<p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
@@ -92,6 +74,7 @@ export function CreateCompanyForm() {
 						type="submit"
 						isLoading={createCompany.isPending}
 						className="w-full"
+						variant="default"
 					>
 						{t("createCompany")}
 					</LoadingButton>

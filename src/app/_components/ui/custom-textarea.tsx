@@ -4,7 +4,7 @@ import type React from "react";
 
 type CustomTextAreaProps = {
 	labelText: string;
-	placeholder: string;
+	placeholder?: string;
 	hint?: string;
 	rows?: number;
 	textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;

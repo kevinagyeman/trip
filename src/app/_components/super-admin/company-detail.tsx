@@ -4,7 +4,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/trpc/react";
-import { FileText, Globe, Users } from "lucide-react";
+import {
+	Building2,
+	ExternalLink,
+	FileText,
+	Globe,
+	Hash,
+	MapPin,
+	Users,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export function CompanyDetail({ id }: { id: string }) {
@@ -30,7 +38,9 @@ export function CompanyDetail({ id }: { id: string }) {
 			<div className="flex items-start justify-between">
 				<div>
 					<h1 className="text-3xl font-bold">{company.name}</h1>
-					<p className="font-mono text-muted-foreground">/{company.slug}</p>
+					<p className="font-mono text-sm text-muted-foreground">
+						/{company.slug}
+					</p>
 				</div>
 				<div className="flex gap-2">
 					<Badge variant={company.isActive ? "default" : "secondary"}>
@@ -53,82 +63,74 @@ export function CompanyDetail({ id }: { id: string }) {
 				<Card>
 					<CardContent className="flex items-center gap-3 pt-6">
 						<Users className="h-8 w-8 text-muted-foreground" />
-						<div>
-							<p className="text-2xl font-bold">{company.users.length}</p>
-							<p className="text-sm text-muted-foreground">{t("users")}</p>
-						</div>
+						<p className="text-2xl font-bold">{company.users.length}</p>
 					</CardContent>
 				</Card>
 				<Card>
 					<CardContent className="flex items-center gap-3 pt-6">
 						<FileText className="h-8 w-8 text-muted-foreground" />
-						<div>
-							<p className="text-2xl font-bold">
-								{company._count.tripRequests}
-							</p>
-							<p className="text-sm text-muted-foreground">{t("requests")}</p>
-						</div>
+						<p className="text-2xl font-bold">{company._count.tripRequests}</p>
 					</CardContent>
 				</Card>
 				<Card>
 					<CardContent className="flex items-center gap-3 pt-6">
 						<Globe className="h-8 w-8 text-muted-foreground" />
-						<div>
-							<p className="text-sm font-mono text-muted-foreground">
-								/{company.slug}
-							</p>
-							<p className="text-sm text-muted-foreground">
-								{t("bookingPortal")}
-							</p>
-						</div>
+						<p className="font-mono text-sm text-muted-foreground">
+							/{company.slug}
+						</p>
 					</CardContent>
 				</Card>
 			</div>
 
 			{/* Company details */}
-			<Card>
-				<CardHeader>
-					<CardTitle className="text-base">{t("companyInfo")}</CardTitle>
-				</CardHeader>
-				<CardContent className="space-y-2 text-sm">
-					{company.vat && (
-						<div className="flex gap-2">
-							<span className="text-muted-foreground">{t("vat")}:</span>
-							<span>{company.vat}</span>
-						</div>
-					)}
-					{company.address && (
-						<div className="flex gap-2">
-							<span className="text-muted-foreground">{t("address")}:</span>
-							<span>{company.address}</span>
-						</div>
-					)}
-					{company.country && (
-						<div className="flex gap-2">
-							<span className="text-muted-foreground">{t("country")}:</span>
-							<span>{company.country}</span>
-						</div>
-					)}
-					{company.website && (
-						<div className="flex gap-2">
-							<span className="text-muted-foreground">{t("website")}:</span>
-							<a
-								href={company.website}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-primary hover:underline"
-							>
-								{company.website}
-							</a>
-						</div>
-					)}
-				</CardContent>
-			</Card>
+			{(company.vat ??
+				company.address ??
+				company.country ??
+				company.website) && (
+				<Card>
+					<CardContent className="space-y-2 pt-4 text-sm">
+						{company.vat && (
+							<div className="flex items-center gap-2">
+								<Hash className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<span>{company.vat}</span>
+							</div>
+						)}
+						{company.address && (
+							<div className="flex items-center gap-2">
+								<MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<span>{company.address}</span>
+							</div>
+						)}
+						{company.country && (
+							<div className="flex items-center gap-2">
+								<Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<span>{company.country}</span>
+							</div>
+						)}
+						{company.website && (
+							<div className="flex items-center gap-2">
+								<ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+								<a
+									href={company.website}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-primary hover:underline"
+								>
+									{company.website}
+								</a>
+							</div>
+						)}
+					</CardContent>
+				</Card>
+			)}
 
 			{/* Users */}
 			<Card>
 				<CardHeader>
-					<CardTitle className="text-base">{t("companyUsers")}</CardTitle>
+					<CardTitle className="flex items-center gap-2 text-base">
+						<Users className="h-4 w-4" />
+						{t("companyUsers")}
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
 					{company.users.length === 0 ? (

@@ -5,19 +5,27 @@ import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { CURRENCIES } from "@/lib/currencies";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const quotationSchema = z.object({
 	price: z.coerce
 		.number({ invalid_type_error: "Price is required" })
 		.positive("Price must be greater than 0"),
+	currency: z.string().default("EUR"),
 	isPriceEachWay: z.boolean(),
 	areCarSeatsIncluded: z.boolean(),
 	additionalInfo: z.string().optional(),
@@ -27,6 +35,7 @@ type QuotationFormValues = z.infer<typeof quotationSchema>;
 
 type QuotationData = {
 	price: { toNumber: () => number } | number;
+	currency: string;
 	isPriceEachWay: boolean;
 	areCarSeatsIncluded: boolean;
 	quotationAdditionalInfo: string | null;
@@ -56,11 +65,13 @@ export function QuotationForm({
 		register,
 		handleSubmit,
 		reset,
+		control,
 		formState: { errors },
 	} = useForm<QuotationFormValues>({
 		resolver: zodResolver(quotationSchema),
 		defaultValues: {
 			price: undefined,
+			currency: "EUR",
 			isPriceEachWay: false,
 			areCarSeatsIncluded: false,
 			additionalInfo: estimateNotice ?? "",
@@ -74,6 +85,7 @@ export function QuotationForm({
 					typeof quotation.price === "object"
 						? quotation.price.toNumber()
 						: quotation.price,
+				currency: quotation.currency ?? "EUR",
 				isPriceEachWay: quotation.isPriceEachWay,
 				areCarSeatsIncluded: quotation.areCarSeatsIncluded,
 				additionalInfo: quotation.quotationAdditionalInfo ?? "",
@@ -81,6 +93,7 @@ export function QuotationForm({
 		}
 	}, [
 		quotation?.price,
+		quotation?.currency,
 		quotation?.isPriceEachWay,
 		quotation?.areCarSeatsIncluded,
 		quotation?.quotationAdditionalInfo,
@@ -94,6 +107,7 @@ export function QuotationForm({
 		return {
 			tripRequestId: requestId,
 			price: values.price,
+			currency: values.currency,
 			isPriceEachWay: values.isPriceEachWay,
 			areCarSeatsIncluded: values.areCarSeatsIncluded,
 			quotationAdditionalInfo: values.additionalInfo || undefined,
@@ -115,14 +129,34 @@ export function QuotationForm({
 				/>
 			)}
 
-			{/* Price */}
-			<div className="w-48">
-				<CustomInput
-					labelText={t("price")}
-					inputType="number"
-					placeholder={t("pricePlaceholder")}
-					inputProps={{ step: "0.01", min: "0", ...register("price") }}
-					error={errors.price?.message}
+			{/* Price + Currency */}
+			<div className="flex items-end gap-2">
+				<div className="w-36">
+					<CustomInput
+						labelText={t("price")}
+						inputType="number"
+						placeholder={t("pricePlaceholder")}
+						inputProps={{ step: "0.01", min: "0", ...register("price") }}
+						error={errors.price?.message}
+					/>
+				</div>
+				<Controller
+					name="currency"
+					control={control}
+					render={({ field }) => (
+						<Select value={field.value} onValueChange={field.onChange}>
+							<SelectTrigger className="w-[110px]">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								{CURRENCIES.map((c) => (
+									<SelectItem key={c.value} value={c.value}>
+										{c.value}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					)}
 				/>
 			</div>
 
@@ -139,26 +173,18 @@ export function QuotationForm({
 			</div>
 
 			{/* Additional info */}
-			<div className="space-y-1">
-				<CustomTextArea
-					labelText={t("additionalInfoCustomer")}
-					placeholder={t("additionalInfoPlaceholder")}
-					rows={4}
-					textAreaProps={{ ...register("additionalInfo") }}
-				/>
-				<Link
-					href="/admin/settings"
-					className="text-xs text-muted-foreground hover:underline"
-				>
-					{t("editPrefilledMessage")}
-				</Link>
-			</div>
+			<CustomTextArea
+				labelText={t("additionalInfoCustomer")}
+				rows={4}
+				textAreaProps={{ ...register("additionalInfo") }}
+			/>
 
 			{/* Actions */}
 			<div className="flex flex-wrap items-center gap-3">
 				<LoadingButton
 					type="button"
 					size="sm"
+					variant={"default"}
 					isLoading={saveAndSend.isPending}
 					onClick={handleSubmit((values) =>
 						saveAndSend.mutate(buildMutationInput(values)),
@@ -169,20 +195,15 @@ export function QuotationForm({
 
 				<LoadingButton
 					type="button"
-					size="sm"
-					variant="outline"
 					isLoading={saveQuotation.isPending}
 					onClick={handleSubmit((values) =>
 						saveQuotation.mutate(buildMutationInput(values)),
 					)}
-				>
-					{t("saveQuotation")}
-				</LoadingButton>
+				></LoadingButton>
 
 				{quotation?.notifiedAt && !isRejected && (
 					<LoadingButton
 						type="button"
-						variant="ghost"
 						size="sm"
 						isLoading={notifyQuotation.isPending}
 						onClick={() => notifyQuotation.mutate({ tripRequestId: requestId })}

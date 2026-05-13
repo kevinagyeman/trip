@@ -153,7 +153,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			/>
 
 			{/* Routes */}
-			<SectionCard title={t("routes")} contentClassName="space-y-4 pt-0">
+			<SectionCard title={t("routes")} contentClassName="space-y-8 pt-0">
 				{routes.map((route, i) => {
 					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
 					const depLabel =
@@ -593,7 +593,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								{t("acceptQuotation")}
 							</Button>
 							<Button
-								variant="outline"
+								variant="secondary"
 								onClick={() =>
 									rejectQuotation.mutate({ id: quotation.id, token })
 								}
