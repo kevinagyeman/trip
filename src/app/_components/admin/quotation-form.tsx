@@ -25,7 +25,7 @@ const quotationSchema = z.object({
 	price: z.coerce
 		.number({ invalid_type_error: "Price is required" })
 		.positive("Price must be greater than 0"),
-	currency: z.string().default("EUR"),
+	currency: z.string(),
 	isPriceEachWay: z.boolean(),
 	areCarSeatsIncluded: z.boolean(),
 	additionalInfo: z.string().optional(),
