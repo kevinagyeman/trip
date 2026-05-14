@@ -630,6 +630,7 @@ export function CreateTripRequestForm({
 				type="submit"
 				isLoading={createRequest.isPending}
 				className="w-full"
+				size={"lg"}
 			>
 				{t("submitRequest")}
 			</LoadingButton>

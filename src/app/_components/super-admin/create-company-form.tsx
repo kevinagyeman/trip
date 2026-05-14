@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
-import { api } from "@/trpc/react";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRouter } from "@/i18n/navigation";
+import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 export function CreateCompanyForm() {
 	const t = useTranslations("superAdmin");
@@ -55,7 +55,6 @@ export function CreateCompanyForm() {
 							placeholder="my-company"
 						/>
 					</div>
-					<p className="text-xs text-muted-foreground">{t("slugHint")}</p>
 
 					<input
 						name="logoUrl"

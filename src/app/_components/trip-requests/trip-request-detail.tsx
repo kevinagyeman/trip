@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Loader2 } from "lucide-react";
 
 import {
 	buildStatusLabels,
@@ -18,6 +19,7 @@ import {
 export function TripRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("requestDetail");
+	const tc = useTranslations("common");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 	const {
@@ -35,7 +37,12 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
-	if (isLoading) return <div>{t("loading")}</div>;
+	if (isLoading)
+		return (
+			<div className="flex justify-center py-8">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			</div>
+		);
 	if (isError) return <div>{t("error")}</div>;
 	if (!request) return <div>{t("notFound")}</div>;
 
@@ -74,7 +81,7 @@ export function TripRequestDetail({ requestId }: { requestId: string }) {
 							{routes.map((route, i) => (
 								<div key={i} className="rounded-lg border p-3 text-sm">
 									<p className="mb-1 text-xs font-medium text-muted-foreground">
-										{t("routeN", { n: i + 1 })}
+										{tc("routeN", { n: i + 1 })}
 									</p>
 									<p>
 										<span className="text-muted-foreground">

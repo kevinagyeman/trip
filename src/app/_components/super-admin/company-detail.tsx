@@ -10,6 +10,7 @@ import {
 	FileText,
 	Globe,
 	Hash,
+	Loader2,
 	MapPin,
 	Users,
 } from "lucide-react";
@@ -25,7 +26,11 @@ export function CompanyDetail({ id }: { id: string }) {
 	});
 
 	if (isLoading) {
-		return <p className="text-muted-foreground">{t("loading")}</p>;
+		return (
+			<div className="flex justify-center py-8">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			</div>
+		);
 	}
 
 	if (!company) {

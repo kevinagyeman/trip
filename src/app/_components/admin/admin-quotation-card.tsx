@@ -120,10 +120,12 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					)}
 					{request.status !== "CONFIRMED" && (
 						<div className="flex flex-wrap items-start gap-3">
+							<Button size="sm" onClick={() => setConfirmOpen(true)}>
+								{t("confirmTrip")}
+							</Button>
 							<div className="flex flex-col gap-1">
 								<LoadingButton
 									size="sm"
-									variant="outline"
 									isLoading={requestDepartureDetails.isPending}
 									onClick={() =>
 										requestDepartureDetails.mutate({ id: requestId })
@@ -146,9 +148,6 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 									</p>
 								)}
 							</div>
-							<Button size="sm" onClick={() => setConfirmOpen(true)}>
-								{t("confirmTrip")}
-							</Button>
 						</div>
 					)}
 					<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>

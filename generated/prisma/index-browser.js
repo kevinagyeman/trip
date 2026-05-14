@@ -217,9 +217,10 @@ exports.Prisma.TripRequestScalarFieldEnum = {
   privacyAcceptedAt: 'privacyAcceptedAt',
   lastViewedAt: 'lastViewedAt',
   confirmedAt: 'confirmedAt',
-  confirmationViewedAt: 'confirmationViewedAt',
   departureDetailsRequestedAt: 'departureDetailsRequestedAt',
   pickupInfoNotifiedAt: 'pickupInfoNotifiedAt',
+  lastCustomerActivityAt: 'lastCustomerActivityAt',
+  adminViewedAt: 'adminViewedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   userId: 'userId',
@@ -407,8 +408,7 @@ exports.TripRequestStatus = exports.$Enums.TripRequestStatus = {
 exports.RouteType = exports.$Enums.RouteType = {
   airport_in: 'airport_in',
   airport_out: 'airport_out',
-  standard: 'standard',
-  airport: 'airport'
+  standard: 'standard'
 };
 
 exports.MessageSenderType = exports.$Enums.MessageSenderType = {

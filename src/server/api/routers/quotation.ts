@@ -284,7 +284,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
-					data: { status: TripRequestStatus.ACCEPTED },
+					data: {
+						status: TripRequestStatus.ACCEPTED,
+						lastCustomerActivityAt: new Date(),
+					},
 				});
 				return result;
 			});
@@ -338,7 +341,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
-					data: { status: TripRequestStatus.ACCEPTED },
+					data: {
+						status: TripRequestStatus.ACCEPTED,
+						lastCustomerActivityAt: new Date(),
+					},
 				});
 				return result;
 			});
@@ -392,7 +398,10 @@ export const quotationRouter = createTRPCRouter({
 				});
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
-					data: { status: TripRequestStatus.PENDING },
+					data: {
+						status: TripRequestStatus.PENDING,
+						lastCustomerActivityAt: new Date(),
+					},
 				});
 				return result;
 			});

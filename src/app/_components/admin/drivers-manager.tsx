@@ -23,7 +23,7 @@ import { COUNTRY_CODES } from "@/lib/phone";
 import { driverSchema, type DriverFormValues } from "@/lib/schemas/driver";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -125,7 +125,9 @@ export function DriversManager() {
 			</Button>
 
 			{isLoading && (
-				<p className="text-sm text-muted-foreground">{t("loading")}</p>
+				<div className="flex justify-center py-4">
+					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+				</div>
 			)}
 
 			{!isLoading && drivers.length === 0 && (

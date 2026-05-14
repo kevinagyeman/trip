@@ -1,6 +1,5 @@
 "use client";
 
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
@@ -116,19 +115,6 @@ export function QuotationForm({
 
 	return (
 		<form className="space-y-4">
-			{/* Rejected banner */}
-			{isRejected && (
-				<AlertBanner
-					variant="error"
-					title={t("quotationStatusRejected")}
-					description={
-						quotation?.respondedAt
-							? format(new Date(quotation.respondedAt), "d MMM yyyy")
-							: undefined
-					}
-				/>
-			)}
-
 			{/* Price + Currency */}
 			<div className="flex items-end gap-2">
 				<div className="w-36">

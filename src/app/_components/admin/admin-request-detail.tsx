@@ -2,13 +2,17 @@
 
 import { AdminMessagesCard } from "@/app/_components/admin/admin-messages-card";
 import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card";
+import { EventsTimeline } from "@/app/_components/admin/events-timeline";
 import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
-import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
+import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
+import { RouteDepartureSection } from "@/app/_components/ui/route-departure-section";
+import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
+import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,42 +24,14 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { buildStatusLabels } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { CalendarPlus } from "lucide-react";
+import { Loader2, MoveRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
-
-function toICSDateTime(date: Date, timeStr?: string | null): string {
-	const d = new Date(date);
-	if (timeStr) {
-		const [h, m] = timeStr.split(":").map(Number);
-		d.setHours(h ?? 0, m ?? 0, 0, 0);
-	}
-	const pad = (n: number) => String(n).padStart(2, "0");
-	return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
-}
-
-function googleCalendarUrl(params: {
-	summary: string;
-	description: string;
-	location: string;
-	start: string;
-	end: string;
-}): string {
-	const p = new URLSearchParams({
-		action: "TEMPLATE",
-		text: params.summary,
-		details: params.description,
-		location: params.location,
-		dates: `${params.start}/${params.end}`,
-	});
-	return `https://calendar.google.com/calendar/render?${p.toString()}`;
-}
 
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
@@ -66,6 +42,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
 		id: requestId,
 	});
+
+	const markAsViewedByAdmin = api.tripRequest.markAsViewedByAdmin.useMutation();
+	useEffect(() => {
+		markAsViewedByAdmin.mutate({ id: requestId });
+	}, [requestId]);
 
 	const [pendingStatus, setPendingStatus] = useState<TripRequestStatus | null>(
 		null,
@@ -154,7 +135,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		);
 	}, [request]);
 
-	if (isLoading) return <div>{t("loading")}</div>;
+	if (isLoading)
+		return (
+			<div className="flex justify-center py-8">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			</div>
+		);
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
@@ -210,18 +196,16 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Routes */}
-			<SectionCard title={t("routes")} contentClassName="space-y-8 pt-0">
+			<SectionCard title={t("routes")} contentClassName="pt-0">
 				{routes.map((route, i) => {
 					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
 					const hasPickupInfo = !!(route.meetingPoint ?? route.driverName);
 					return (
-						<div key={i} className="rounded-lg border text-sm">
+						<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
 							{/* Route header */}
 							<div className="flex items-start justify-between gap-3 p-3">
 								<div className="w-full space-y-2">
-									<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-										{t("routeN", { n: i + 1 })}
-									</p>
+									<RouteTypeLabel routeType={route.type} n={i + 1} />
 									<div className="flex flex-wrap items-center gap-2">
 										<Input
 											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
@@ -234,7 +218,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												})
 											}
 										/>
-										<span className="text-muted-foreground">→</span>
+										<MoveRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
 										<Input
 											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
 											value={
@@ -252,451 +236,105 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								</div>
 							</div>
 
-							{/* Departure details form */}
-							<CollapsibleSection
-								editLabel={t("edit")}
-								title={
-									(route.scheduledDate ??
-									route.scheduledTime ??
-									route.flightNumber) ? (
-										<span className="flex flex-wrap items-center gap-2">
-											<span className="text-muted-foreground">
-												{route.type === "airport_in"
-													? t("departureScheduledLanding")
-													: route.type === "airport_out" ||
-															route.type === "airport"
-														? t("departureScheduledTakeoff")
-														: t("departureScheduledArrival")}
-											</span>
-											{route.scheduledDate && (
-												<span className="font-medium text-foreground">
-													{format(new Date(route.scheduledDate), "d MMM yyyy")}
-												</span>
-											)}
-											{route.scheduledTime && (
-												<span className="font-medium text-foreground">
-													{route.scheduledTime}
-												</span>
-											)}
-											{route.flightNumber && (
-												<span className="font-medium text-foreground">
-													{route.flightNumber}
-												</span>
-											)}
-											{route.scheduledDate && (
-												<Button
-													size="sm"
-													variant="ghost"
-													className="h-5 px-1.5 text-xs"
-													onClick={(e) => {
-														e.stopPropagation();
-														const [hRaw, mRaw] = (
-															route.scheduledTime ?? "00:00"
-														)
-															.split(":")
-															.map(Number);
-														const endH = ((hRaw ?? 0) + 1) % 24;
-														window.open(
-															googleCalendarUrl({
-																summary: `${t("routeN", { n: i + 1 })}: ${route.pickup} → ${route.destination}`,
-																description: route.flightNumber
-																	? `${t("routeFlightNumber")}: ${route.flightNumber}`
-																	: "",
-																location: route.pickup,
-																start: toICSDateTime(
-																	new Date(route.scheduledDate!),
-																	route.scheduledTime,
-																),
-																end: toICSDateTime(
-																	new Date(route.scheduledDate!),
-																	`${String(endH).padStart(2, "0")}:${String(mRaw ?? 0).padStart(2, "0")}`,
-																),
-															}),
-															"_blank",
-														);
-													}}
-												>
-													<CalendarPlus className="mr-1 h-3 w-3" />
-													{t("googleCalendar")}
-												</Button>
-											)}
-										</span>
-									) : (
-										<span className="flex flex-wrap items-center gap-2">
-											<span className="text-muted-foreground">
-												{route.type === "airport_in"
-													? t("departureScheduledLanding")
-													: route.type === "airport_out" ||
-															route.type === "airport"
-														? t("departureScheduledTakeoff")
-														: t("departureScheduledArrival")}
-											</span>
-											<span className="text-muted-foreground">—</span>
-										</span>
-									)
+							{/* Departure details */}
+							<RouteDepartureSection
+								routeType={route.type}
+								scheduledDate={route.scheduledDate}
+								scheduledTime={route.scheduledTime}
+								flightNumber={route.flightNumber}
+								pickup={route.pickup}
+								destination={route.destination}
+								value={
+									adminRouteDepartures[i] ?? {
+										scheduledDate: "",
+										scheduledTime: "",
+										flightNumber: "",
+									}
 								}
-							>
-								<div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-									<div className="space-y-1">
-										<Label className="text-xs">
-											{route.type === "airport_out" || route.type === "airport"
-												? t("routeFlightDate")
-												: route.type === "airport_in"
-													? t("routeLandingDate")
-													: t("routeArrivalDate")}
-										</Label>
-										<Input
-											className="h-7 text-xs"
-											type="date"
-											value={adminRouteDepartures[i]?.scheduledDate ?? ""}
-											onChange={(e) =>
-												setAdminRouteDepartures((prev) => {
-													const next = [...prev];
-													if (next[i]) next[i]!.scheduledDate = e.target.value;
-													return next;
-												})
-											}
-										/>
-									</div>
-									<div className="space-y-1">
-										<Label className="text-xs">
-											{route.type === "airport_out" || route.type === "airport"
-												? t("routeFlightTime")
-												: route.type === "airport_in"
-													? t("routeLandingTime")
-													: t("routeArrivalTime")}
-										</Label>
-										<Input
-											className="h-7 text-xs"
-											type="time"
-											value={adminRouteDepartures[i]?.scheduledTime ?? ""}
-											onChange={(e) =>
-												setAdminRouteDepartures((prev) => {
-													const next = [...prev];
-													if (next[i]) next[i]!.scheduledTime = e.target.value;
-													return next;
-												})
-											}
-										/>
-									</div>
-									<div className="space-y-1">
-										<Label className="text-xs">{t("routeFlightNumber")}</Label>
-										<Input
-											className="h-7 text-xs"
-											placeholder={t("routeFlightNumberPlaceholder")}
-											value={adminRouteDepartures[i]?.flightNumber ?? ""}
-											onChange={(e) =>
-												setAdminRouteDepartures((prev) => {
-													const next = [...prev];
-													if (next[i]) next[i]!.flightNumber = e.target.value;
-													return next;
-												})
-											}
-										/>
-									</div>
-								</div>
-								<div className="mt-2 flex flex-wrap items-center gap-2">
-									<LoadingButton
-										size="sm"
-										variant="outline"
-										isLoading={updateRoutesByAdmin.isPending}
-										onClick={() =>
-											updateRoutesByAdmin.mutate({
-												id: requestId,
-												routes: routes.map((r, j) => ({
-													pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-													destination:
-														adminRoutePlaces[j]?.destination ?? r.destination,
-													type: r.type ?? undefined,
-													scheduledDate:
-														adminRouteDepartures[j]?.scheduledDate || undefined,
-													scheduledTime:
-														adminRouteDepartures[j]?.scheduledTime || undefined,
-													flightNumber:
-														adminRouteDepartures[j]?.flightNumber || undefined,
-												})),
-											})
-										}
-									>
-										{t("saveRouteDetails")}
-									</LoadingButton>
-								</div>
-							</CollapsibleSection>
+								onChange={(field, val) =>
+									setAdminRouteDepartures((prev) => {
+										const next = [...prev];
+										if (next[i]) next[i]![field] = val;
+										return next;
+									})
+								}
+								isLoading={updateRoutesByAdmin.isPending}
+								onSave={() =>
+									updateRoutesByAdmin.mutate({
+										id: requestId,
+										routes: routes.map((r, j) => ({
+											pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+											destination:
+												adminRoutePlaces[j]?.destination ?? r.destination,
+											type: r.type ?? undefined,
+											scheduledDate:
+												adminRouteDepartures[j]?.scheduledDate || undefined,
+											scheduledTime:
+												adminRouteDepartures[j]?.scheduledTime || undefined,
+											flightNumber:
+												adminRouteDepartures[j]?.flightNumber || undefined,
+										})),
+									})
+								}
+							/>
 
 							{/* Pickup info — only when CONFIRMED */}
 							{request.status === "CONFIRMED" && (
-								<CollapsibleSection
-									editLabel={t("edit")}
-									title={
-										route.driverName ? (
-											<span className="flex flex-wrap items-center gap-2">
-												<span className="text-muted-foreground">
-													{t("pickupScheduled")}
-												</span>
-												{route.beThereAtDate && (
-													<span className="font-medium text-foreground">
-														{format(
-															new Date(route.beThereAtDate),
-															"d MMM yyyy",
-														)}
-													</span>
-												)}
-												{route.beThereAtTime && (
-													<span className="font-medium text-foreground">
-														{route.beThereAtTime}
-													</span>
-												)}
-												<span className="font-medium text-foreground">
-													{route.driverName}
-												</span>
-												{route.beThereAtDate && (
-													<Button
-														size="sm"
-														variant="ghost"
-														className="h-5 px-1.5 text-xs"
-														onClick={(e) => {
-															e.stopPropagation();
-															const date = new Date(route.beThereAtDate!);
-															const timeStr = route.beThereAtTime ?? "00:00";
-															const [h, m] = timeStr.split(":").map(Number);
-															const end = new Date(date);
-															end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
-															window.open(
-																googleCalendarUrl({
-																	summary: `${route.pickup} → ${route.destination}`,
-																	description: [
-																		route.driverName &&
-																			`${t("pickupInfoDriverName")}: ${route.driverName}`,
-																		route.driverPhone &&
-																			`${t("pickupInfoDriverPhone")}: ${route.driverPhone}`,
-																	]
-																		.filter(Boolean)
-																		.join("\n"),
-																	location: route.meetingPoint ?? route.pickup,
-																	start: toICSDateTime(date, timeStr),
-																	end: toICSDateTime(end),
-																}),
-																"_blank",
-															);
-														}}
-													>
-														<CalendarPlus className="mr-1 h-3 w-3" />
-														{t("googleCalendar")}
-													</Button>
-												)}
-											</span>
-										) : (
-											<span className="flex flex-wrap items-center gap-2">
-												<span className="text-muted-foreground">
-													{t("pickupScheduled")}
-												</span>
-												<span className="text-muted-foreground">—</span>
-											</span>
-										)
+								<RoutePickupSection
+									pickup={route.pickup}
+									destination={route.destination}
+									driverName={route.driverName}
+									driverPhone={route.driverPhone}
+									beThereAtDate={route.beThereAtDate}
+									beThereAtTime={route.beThereAtTime}
+									meetingPoint={route.meetingPoint}
+									additionalInfo={route.additionalInfo}
+									canEdit
+									value={adminPickupInfos[i]}
+									onChange={(field, val) =>
+										setAdminPickupInfos((prev) => {
+											const next = [...prev];
+											if (next[i]) next[i]![field] = val;
+											return next;
+										})
 									}
-								>
-									{/* Driver quick-select */}
-									{drivers.length > 0 && (
-										<div className="mb-3 space-y-1">
-											<Label className="text-xs">
-												{t("pickupInfoSelectDriver")}
-											</Label>
-											<Select
-												onValueChange={(driverId) => {
-													const d = drivers.find((dr) => dr.id === driverId);
-													if (!d) return;
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i]) {
-															next[i]!.driverName = `${d.name} ${d.surname}`;
-															next[i]!.driverPhone = d.phone;
-														}
-														return next;
-													});
-												}}
-											>
-												<SelectTrigger className="h-7 text-xs">
-													<SelectValue
-														placeholder={t("pickupInfoSelectDriverPlaceholder")}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													{drivers.map((d) => (
-														<SelectItem key={d.id} value={d.id}>
-															{d.name} {d.surname}
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										</div>
-									)}
-
-									<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-										<div className="space-y-1 sm:col-span-2">
-											<Label className="text-xs">
-												{t("pickupInfoMeetingPoint")}
-											</Label>
-											<Input
-												className="h-7 text-xs"
-												placeholder={t("pickupInfoMeetingPointPlaceholder")}
-												value={adminPickupInfos[i]?.meetingPoint ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.meetingPoint = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("pickupInfoBeThereAtDate")}
-											</Label>
-											<Input
-												className="h-7 text-xs"
-												type="date"
-												value={adminPickupInfos[i]?.beThereAtDate ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i])
-															next[i]!.beThereAtDate = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("pickupInfoBeThereAtTime")}
-											</Label>
-											<Input
-												className="h-7 text-xs"
-												type="time"
-												value={adminPickupInfos[i]?.beThereAtTime ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i])
-															next[i]!.beThereAtTime = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("pickupInfoDriverName")}
-											</Label>
-											<Input
-												className="h-7 text-xs"
-												placeholder={t("pickupInfoDriverNamePlaceholder")}
-												value={adminPickupInfos[i]?.driverName ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.driverName = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1">
-											<Label className="text-xs">
-												{t("pickupInfoDriverPhone")}
-											</Label>
-											<Input
-												className="h-7 text-xs"
-												placeholder={t("pickupInfoDriverPhonePlaceholder")}
-												value={adminPickupInfos[i]?.driverPhone ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.driverPhone = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="space-y-1 sm:col-span-2">
-											<Label className="text-xs">
-												{t("pickupInfoAdditionalInfo")}
-											</Label>
-											<Textarea
-												className="text-xs"
-												rows={3}
-												placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
-												value={adminPickupInfos[i]?.additionalInfo ?? ""}
-												onChange={(e) =>
-													setAdminPickupInfos((prev) => {
-														const next = [...prev];
-														if (next[i])
-															next[i]!.additionalInfo = e.target.value;
-														return next;
-													})
-												}
-											/>
-										</div>
-									</div>
-									<div className="mt-2 mb-3 flex flex-wrap gap-2">
-										<LoadingButton
-											size="sm"
-											isLoading={updateRoutesByAdmin.isPending}
-											onClick={() =>
-												updateRoutesByAdmin.mutate({
-													id: requestId,
-													notify: true,
-													routes: routes.map((r, j) => ({
-														pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-														destination:
-															adminRoutePlaces[j]?.destination ?? r.destination,
-														type: r.type ?? undefined,
-														scheduledDate:
-															adminRouteDepartures[j]?.scheduledDate ||
-															undefined,
-														scheduledTime:
-															adminRouteDepartures[j]?.scheduledTime ||
-															undefined,
-														flightNumber:
-															adminRouteDepartures[j]?.flightNumber ||
-															undefined,
-														meetingPoint:
-															adminPickupInfos[j]?.meetingPoint || undefined,
-														beThereAtDate:
-															adminPickupInfos[j]?.beThereAtDate || undefined,
-														beThereAtTime:
-															adminPickupInfos[j]?.beThereAtTime || undefined,
-														driverName:
-															adminPickupInfos[j]?.driverName || undefined,
-														driverPhone:
-															adminPickupInfos[j]?.driverPhone || undefined,
-														additionalInfo:
-															adminPickupInfos[j]?.additionalInfo || undefined,
-													})),
-												})
-											}
-										>
-											{t("saveAndNotifyCustomer")}
-										</LoadingButton>
-									</div>
-									{request.pickupInfoNotifiedAt && (
-										<p className="text-xs text-muted-foreground">
-											{t("notifiedDate", {
-												date: format(
-													new Date(request.pickupInfoNotifiedAt),
-													"d MMM yyyy",
-												),
-												time: format(
-													new Date(request.pickupInfoNotifiedAt),
-													"HH:mm",
-												),
-											})}
-										</p>
-									)}
-								</CollapsibleSection>
+									onSave={() =>
+										updateRoutesByAdmin.mutate({
+											id: requestId,
+											notify: true,
+											routes: routes.map((r, j) => ({
+												pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
+												destination:
+													adminRoutePlaces[j]?.destination ?? r.destination,
+												type: r.type ?? undefined,
+												scheduledDate:
+													adminRouteDepartures[j]?.scheduledDate || undefined,
+												scheduledTime:
+													adminRouteDepartures[j]?.scheduledTime || undefined,
+												flightNumber:
+													adminRouteDepartures[j]?.flightNumber || undefined,
+												meetingPoint:
+													adminPickupInfos[j]?.meetingPoint || undefined,
+												beThereAtDate:
+													adminPickupInfos[j]?.beThereAtDate || undefined,
+												beThereAtTime:
+													adminPickupInfos[j]?.beThereAtTime || undefined,
+												driverName:
+													adminPickupInfos[j]?.driverName || undefined,
+												driverPhone:
+													adminPickupInfos[j]?.driverPhone || undefined,
+												additionalInfo:
+													adminPickupInfos[j]?.additionalInfo || undefined,
+											})),
+										})
+									}
+									isLoading={updateRoutesByAdmin.isPending}
+									drivers={drivers}
+									notifiedAt={request.pickupInfoNotifiedAt}
+									saveLabel={t("saveAndNotifyCustomer")}
+								/>
 							)}
-						</div>
+						</RouteCardWrapper>
 					);
 				})}
 			</SectionCard>
@@ -742,91 +380,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Events */}
-			<SectionCard title={t("events")} contentClassName="space-y-3 pt-0">
-				{(
-					[
-						{
-							label: t("eventRequestCreated"),
-							date: request.createdAt,
-							actor: "customer" as const,
-						},
-						...request.quotations
-							.slice()
-							.reverse()
-							.flatMap((q) => [
-								q.notifiedAt
-									? {
-											label: t("eventQuotationSent"),
-											date: q.notifiedAt,
-											actor: "admin" as const,
-										}
-									: null,
-								q.respondedAt
-									? {
-											label:
-												q.status === "ACCEPTED"
-													? t("eventQuotationAccepted")
-													: t("eventQuotationRejected"),
-											date: q.respondedAt,
-											actor: "customer" as const,
-										}
-									: null,
-							]),
-						request.confirmedAt
-							? {
-									label: t("eventConfirmationSent"),
-									date: request.confirmedAt,
-									actor: "admin" as const,
-								}
-							: null,
-						request.confirmationViewedAt
-							? {
-									label: t("eventCustomerSawConfirmation"),
-									date: request.confirmationViewedAt,
-									actor: "customer" as const,
-								}
-							: null,
-					] as ({
-						label: string;
-						date: Date;
-						actor: "admin" | "customer";
-					} | null)[]
-				)
-					.filter(
-						(
-							e,
-						): e is {
-							label: string;
-							date: Date;
-							actor: "admin" | "customer";
-						} => e !== null,
-					)
-					.sort(
-						(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-					)
-					.map((event, i) => (
-						<div key={i} className="flex items-start gap-3">
-							<span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-muted-foreground/40" />
-							<div>
-								<p className="text-sm font-medium">
-									<span
-										className={`mr-1.5 text-xs font-normal ${event.actor === "admin" ? "text-blue-500" : "text-muted-foreground"}`}
-									>
-										{event.actor === "admin"
-											? t("actorAdmin")
-											: t("actorCustomer")}
-										:
-									</span>
-									{event.label}
-								</p>
-								<p className="text-xs text-muted-foreground">
-									{format(new Date(event.date), "d MMM yyyy")} {t("at")}{" "}
-									{format(new Date(event.date), "HH:mm")}
-								</p>
-							</div>
-						</div>
-					))}
-			</SectionCard>
+			<EventsTimeline
+				events={request.events}
+				adminViewedAt={request.adminViewedAt}
+			/>
 		</div>
 	);
 }

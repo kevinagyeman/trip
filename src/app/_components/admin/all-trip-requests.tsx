@@ -14,7 +14,7 @@ import {
 import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2, MoveRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -85,7 +85,9 @@ export function AllTripRequests() {
 			</div>
 
 			{isLoading ? (
-				<div>{t("loading")}</div>
+				<div className="flex justify-center py-8">
+					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+				</div>
 			) : !items.length ? (
 				<Card>
 					<CardContent className="py-8 text-center text-muted-foreground">
@@ -111,6 +113,9 @@ export function AllTripRequests() {
 											>
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
+											{request.hasUnread && (
+												<span className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
+											)}
 										</div>
 										<p className="truncate text-sm font-semibold mt-3">
 											{request.firstName} {request.lastName}
@@ -122,9 +127,11 @@ export function AllTripRequests() {
 											{request.routes.map((route, i) => (
 												<p
 													key={i}
-													className="truncate text-xs text-muted-foreground"
+													className="flex items-center gap-1 truncate text-xs text-muted-foreground"
 												>
-													{route.pickup} → {route.destination}
+													{route.pickup}{" "}
+													<MoveRight className="h-3 w-3 shrink-0" />{" "}
+													{route.destination}
 												</p>
 											))}
 										</div>
@@ -151,7 +158,11 @@ export function AllTripRequests() {
 								onClick={() => void fetchNextPage()}
 								disabled={isFetchingNextPage}
 							>
-								{isFetchingNextPage ? t("loading") : t("loadMore")}
+								{isFetchingNextPage ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									t("loadMore")
+								)}
 							</Button>
 						</div>
 					)}

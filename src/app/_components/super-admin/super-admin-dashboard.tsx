@@ -1,12 +1,12 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { Link } from "@/i18n/navigation";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Link } from "@/i18n/navigation";
+import { api } from "@/trpc/react";
+import { FileText, Loader2, Plus, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { Building2, Users, FileText, Plus } from "lucide-react";
 
 export function SuperAdminDashboard() {
 	const t = useTranslations("superAdmin");
@@ -14,8 +14,8 @@ export function SuperAdminDashboard() {
 
 	if (isLoading) {
 		return (
-			<div className="container mx-auto px-4 py-8">
-				<p className="text-muted-foreground">{t("loading")}</p>
+			<div className="flex justify-center py-8">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
 			</div>
 		);
 	}
@@ -80,18 +80,7 @@ export function SuperAdminDashboard() {
 					<h2 className="text-lg font-semibold">{t("activeCompanies")}</h2>
 				)}
 				{!companies || companies.length === 0 ? (
-					<Card>
-						<CardContent className="py-12 text-center">
-							<Building2 className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-							<p className="text-muted-foreground">{t("noCompanies")}</p>
-							<Link href="/super-admin/companies/new">
-								<Button className="mt-4" size="sm">
-									<Plus className="h-4 w-4" />
-									{t("createFirstCompany")}
-								</Button>
-							</Link>
-						</CardContent>
-					</Card>
+					<>No companies</>
 				) : (
 					<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
 						{active.map((company) => (

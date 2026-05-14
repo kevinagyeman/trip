@@ -19,7 +19,7 @@ import { TripRequestStatus } from "../../../../generated/prisma";
 const routeSchema = z.object({
 	pickup: z.string().min(1),
 	destination: z.string().min(1),
-	type: z.enum(["airport_out", "airport_in", "standard", "airport"]).optional(),
+	type: z.enum(["airport_out", "airport_in", "standard"]).optional(),
 	departureDate: z.string().optional(),
 	departureTime: z.string().optional(),
 	flightNumber: z.string().optional(),
@@ -267,7 +267,15 @@ export const tripRequestRouter = createTRPCRouter({
 				nextCursor = nextItem?.id;
 			}
 
-			return { items, nextCursor };
+			const itemsWithUnread = items.map((item) => ({
+				...item,
+				hasUnread:
+					item.lastCustomerActivityAt !== null &&
+					(item.adminViewedAt === null ||
+						item.lastCustomerActivityAt > item.adminViewedAt),
+			}));
+
+			return { items: itemsWithUnread, nextCursor };
 		}),
 
 	// ADMIN: Get single request (with all quotations including drafts)
@@ -300,7 +308,80 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
-			return tripRequest;
+			type EventActor = "admin" | "customer";
+			type EventType =
+				| "request_submitted"
+				| "quotation_sent"
+				| "quotation_accepted"
+				| "quotation_rejected"
+				| "trip_confirmed"
+				| "pickup_info_sent"
+				| "customer_accessed"
+				| "departure_updated";
+
+			const rawEvents: Array<{ type: EventType; actor: EventActor; at: Date }> =
+				[];
+
+			rawEvents.push({
+				type: "request_submitted",
+				actor: "customer",
+				at: tripRequest.createdAt,
+			});
+
+			for (const q of tripRequest.quotations) {
+				if (q.notifiedAt)
+					rawEvents.push({
+						type: "quotation_sent",
+						actor: "admin",
+						at: q.notifiedAt,
+					});
+				if (q.respondedAt)
+					rawEvents.push({
+						type:
+							q.status === "ACCEPTED"
+								? "quotation_accepted"
+								: "quotation_rejected",
+						actor: "customer",
+						at: q.respondedAt,
+					});
+			}
+
+			if (tripRequest.confirmedAt)
+				rawEvents.push({
+					type: "trip_confirmed",
+					actor: "admin",
+					at: tripRequest.confirmedAt,
+				});
+			if (tripRequest.pickupInfoNotifiedAt)
+				rawEvents.push({
+					type: "pickup_info_sent",
+					actor: "admin",
+					at: tripRequest.pickupInfoNotifiedAt,
+				});
+			if (
+				tripRequest.lastViewedAt &&
+				tripRequest.confirmedAt &&
+				tripRequest.lastViewedAt > tripRequest.confirmedAt
+			)
+				rawEvents.push({
+					type: "confirmation_viewed",
+					actor: "customer",
+					at: tripRequest.lastViewedAt,
+				});
+			if (
+				tripRequest.lastViewedAt &&
+				tripRequest.pickupInfoNotifiedAt &&
+				tripRequest.lastViewedAt > tripRequest.pickupInfoNotifiedAt
+			)
+				rawEvents.push({
+					type: "pickup_info_viewed",
+					actor: "customer",
+					at: tripRequest.lastViewedAt,
+				});
+
+			const events = rawEvents.sort((a, b) => a.at.getTime() - b.at.getTime());
+
+			return { ...tripRequest, events };
 		}),
 
 	// ADMIN: Update trip request status (guarded transitions)
@@ -391,18 +472,21 @@ export const tripRequestRouter = createTRPCRouter({
 	markAsViewed: publicProcedure
 		.input(z.object({ token: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			const trip = await ctx.db.tripRequest.findUnique({
-				where: { token: input.token },
-				select: { status: true, confirmationViewedAt: true },
-			});
 			await ctx.db.tripRequest.updateMany({
 				where: { token: input.token },
 				data: {
 					lastViewedAt: new Date(),
-					...(trip?.status === "CONFIRMED" && !trip.confirmationViewedAt
-						? { confirmationViewedAt: new Date() }
-						: {}),
+					lastCustomerActivityAt: new Date(),
 				},
+			});
+		}),
+
+	markAsViewedByAdmin: adminProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			await ctx.db.tripRequest.update({
+				where: { id: input.id },
+				data: { adminViewedAt: new Date() },
 			});
 		}),
 
@@ -436,8 +520,8 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "NOT_FOUND" });
 			}
 
-			await Promise.all(
-				input.routes.map((r, i) =>
+			await Promise.all([
+				...input.routes.map((r, i) =>
 					ctx.db.route.updateMany({
 						where: { tripRequestId: tripRequest.id, position: i },
 						data: {
@@ -447,7 +531,11 @@ export const tripRequestRouter = createTRPCRouter({
 						},
 					}),
 				),
-			);
+				ctx.db.tripRequest.update({
+					where: { id: tripRequest.id },
+					data: { lastCustomerActivityAt: new Date() },
+				}),
+			]);
 
 			void sendDepartureDetailsUpdatedToAdmins({
 				id: tripRequest.id,

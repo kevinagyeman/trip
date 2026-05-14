@@ -8,6 +8,7 @@ import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import Link from "next/link";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
+import { Loader2, MoveRight } from "lucide-react";
 
 export function MyTripRequests() {
 	const t = useTranslations("myRequests");
@@ -15,7 +16,11 @@ export function MyTripRequests() {
 	const { data, isLoading } = api.tripRequest.getMyRequests.useQuery();
 
 	if (isLoading) {
-		return <div>{t("loading")}</div>;
+		return (
+			<div className="flex justify-center py-8">
+				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			</div>
+		);
 	}
 
 	if (!data?.items.length) {
@@ -42,8 +47,12 @@ export function MyTripRequests() {
 									{request.firstName} {request.lastName}
 								</CardTitle>
 								{request.routes.map((route, i) => (
-									<p key={i} className="text-xs text-muted-foreground">
-										{route.pickup} → {route.destination}
+									<p
+										key={i}
+										className="flex items-center gap-1 text-xs text-muted-foreground"
+									>
+										{route.pickup} <MoveRight className="h-3 w-3 shrink-0" />{" "}
+										{route.destination}
 										{(route.scheduledTime ?? route.scheduledDate) && (
 											<span className="ml-2">
 												{route.scheduledTime}

@@ -43,7 +43,6 @@ enum RouteType {
     airport_in
     airport_out
     standard
-    airport
 }
 
 model Company {
@@ -173,9 +172,10 @@ model TripRequest {
 
     lastViewedAt                  DateTime?
     confirmedAt                   DateTime?
-    confirmationViewedAt          DateTime?
     departureDetailsRequestedAt   DateTime?
     pickupInfoNotifiedAt          DateTime?
+    lastCustomerActivityAt        DateTime?
+    adminViewedAt                 DateTime?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
