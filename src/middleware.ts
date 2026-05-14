@@ -32,8 +32,26 @@ export default auth((req) => {
 				);
 			}
 			const role = req.auth.user.role;
-			const dest = role === "ADMIN" ? "/admin" : "/dashboard";
+			const dest =
+				role === "SUPER_ADMIN"
+					? "/super-admin"
+					: role === "ADMIN"
+						? "/admin"
+						: "/dashboard";
 			return NextResponse.redirect(new URL(`${localePrefix}${dest}`, req.url));
+		}
+	}
+
+	// Protect /super-admin routes: must be SUPER_ADMIN
+	if (pathWithoutLocale.startsWith("/super-admin")) {
+		const role = req.auth?.user?.role;
+		if (role !== "SUPER_ADMIN") {
+			return NextResponse.redirect(
+				new URL(
+					`${localePrefix}/auth/signin?callbackUrl=${encodeURIComponent(pathWithoutLocale)}`,
+					req.url,
+				),
+			);
 		}
 	}
 

@@ -1,8 +1,41 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+	createTRPCRouter,
+	superAdminProcedure,
+	publicProcedure,
+} from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const companyRouter = createTRPCRouter({
+	// SUPER_ADMIN: List all companies
+	getAll: superAdminProcedure.query(async ({ ctx }) => {
+		return ctx.db.company.findMany({
+			orderBy: { createdAt: "desc" },
+			include: {
+				_count: { select: { users: true, tripRequests: true } },
+			},
+		});
+	}),
+
+	// SUPER_ADMIN: Get a single company by id
+	getById: superAdminProcedure
+		.input(z.object({ id: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const company = await ctx.db.company.findUnique({
+				where: { id: input.id },
+				include: {
+					users: { select: { id: true, name: true, email: true, role: true } },
+					_count: { select: { tripRequests: true } },
+				},
+			});
+
+			if (!company) {
+				throw new TRPCError({ code: "NOT_FOUND" });
+			}
+
+			return company;
+		}),
+
 	// PUBLIC: Get company by slug (used for /book/[slug] page)
 	getBySlug: publicProcedure
 		.input(z.object({ slug: z.string() }))
@@ -22,5 +55,20 @@ export const companyRouter = createTRPCRouter({
 			}
 
 			return company;
+		}),
+
+	// SUPER_ADMIN: Update a company (activate/deactivate)
+	update: superAdminProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				name: z.string().min(1).optional(),
+				logoUrl: z.string().url().optional().nullable(),
+				isActive: z.boolean().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { id, ...data } = input;
+			return ctx.db.company.update({ where: { id }, data });
 		}),
 });

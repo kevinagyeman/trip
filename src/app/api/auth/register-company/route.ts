@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/server/db";
-import { sendEmail, APP_URL } from "@/server/email";
+import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
 import { registerCompanySchema } from "@/lib/schemas/auth";
 import { GenericEmail } from "@/emails/generic-email";
 import bcrypt from "bcryptjs";
@@ -97,22 +97,42 @@ export async function POST(request: Request) {
 			},
 		});
 
-		// Send verification email
 		const verifyUrl = `${APP_URL}/api/auth/verify-email?token=${token}`;
-		await sendEmail({
-			to: email,
-			subject: "Verify your email – dantrip.com",
-			react: createElement(GenericEmail, {
-				href: verifyUrl,
-				data: {
-					preview: "Verify your email address",
-					title: `Hi ${fullName}, please verify your email`,
-					subtitle:
-						"Click the button below to verify your email address. The link expires in 24 hours.",
-					buttonLabel: "Verify Email",
-				},
+		const superAdminUrl = `${APP_URL}/super-admin/companies/${company.id}`;
+
+		await Promise.all([
+			// Send verification email to new user
+			sendEmail({
+				to: email,
+				subject: "Verify your email – dantrip.com",
+				react: createElement(GenericEmail, {
+					href: verifyUrl,
+					data: {
+						preview: "Verify your email address",
+						title: `Hi ${fullName}, please verify your email`,
+						subtitle:
+							"Click the button below to verify your email address. The link expires in 24 hours.",
+						buttonLabel: "Verify Email",
+					},
+				}),
 			}),
-		});
+			// Notify super admin of new registration
+			ADMIN_EMAIL
+				? sendEmail({
+						to: ADMIN_EMAIL,
+						subject: `New company registration: ${companyName}`,
+						react: createElement(GenericEmail, {
+							href: superAdminUrl,
+							data: {
+								preview: `New registration: ${companyName}`,
+								title: "New company registration",
+								subtitle: `${fullName} (${email}) registered "${companyName}" (/${slug}). The company is inactive until you review and activate it.`,
+								buttonLabel: "Review Company",
+							},
+						}),
+					})
+				: Promise.resolve(),
+		]);
 
 		return NextResponse.json({ success: true });
 	} catch (error) {

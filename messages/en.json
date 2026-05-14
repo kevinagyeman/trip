@@ -376,7 +376,6 @@
 		"estimateNoticeDesc": "This text will be pre-filled in the Additional Information field when creating a new quotation. You can edit it per-quotation before sending."
 	},
 	"superAdmin": {
-		"title": "Super Admin Dashboard",
 		"notFound": "Not found",
 		"backToDashboard": "Back to Dashboard",
 		"newCompany": "New Company",
@@ -386,6 +385,7 @@
 		"manage": "Manage",
 		"companyName": "Company Name",
 		"companyUsers": "Users",
+		"tripRequests": "Trip Requests",
 		"noUsers": "No users assigned yet.",
 		"activate": "Activate",
 		"deactivate": "Deactivate",

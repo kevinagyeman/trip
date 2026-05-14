@@ -173,3 +173,17 @@ export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 		},
 	});
 });
+
+export const superAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
+	if (ctx.session.user.role !== "SUPER_ADMIN") {
+		throw new TRPCError({
+			code: "FORBIDDEN",
+			message: "Super admin access required",
+		});
+	}
+	return next({
+		ctx: {
+			session: ctx.session,
+		},
+	});
+});
