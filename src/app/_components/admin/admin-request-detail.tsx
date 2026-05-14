@@ -374,7 +374,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Customer link */}
 			<CopyLinkCard
-				url={`${window.location.origin}/request/${request.token}`}
+				url={`${typeof window !== "undefined" ? window.location.origin : ""}/request/${request.token}`}
 				title={t("customerLinkLabel")}
 				subtitle={t("customerLinkWarning")}
 			/>

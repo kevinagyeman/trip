@@ -328,7 +328,8 @@
 		"eventPickupInfoSent": "Pickup info sent",
 		"eventCustomerAccessed": "Accessed the request",
 		"eventDepartureUpdated": "Updated departure info",
-		"eventPickupInfoViewed": "Saw the pickup info"
+		"eventPickupInfoViewed": "Saw the pickup info",
+		"saveAndNotifyCustomer": "Save & Notify Customer"
 	},
 	"notFound": {
 		"heading": "Page Not Found",

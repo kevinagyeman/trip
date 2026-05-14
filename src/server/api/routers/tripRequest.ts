@@ -553,9 +553,7 @@ export const tripRequestRouter = createTRPCRouter({
 					z.object({
 						pickup: z.string(),
 						destination: z.string(),
-						type: z
-							.enum(["airport_out", "airport_in", "standard"])
-							.optional(),
+						type: z.enum(["airport_out", "airport_in", "standard"]).optional(),
 						scheduledDate: z.string().optional(),
 						scheduledTime: z.string().optional(),
 						flightNumber: z.string().optional(),

@@ -331,7 +331,8 @@
 		"eventPickupInfoSent": "Info ritiro inviate",
 		"eventCustomerAccessed": "Ha aperto la richiesta",
 		"eventDepartureUpdated": "Ha aggiornato la partenza",
-		"eventPickupInfoViewed": "Ha visto le info di ritiro"
+		"eventPickupInfoViewed": "Ha visto le info di ritiro",
+		"saveAndNotifyCustomer": "Salva e Notifica il Cliente"
 	},
 	"notFound": {
 		"heading": "Pagina Non Trovata",
