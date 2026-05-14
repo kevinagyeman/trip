@@ -1,30 +1,27 @@
 "use client";
 
 import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
+import CustomInput from "@/app/_components/ui/custom-input";
+import CustomSelect from "@/app/_components/ui/custom-select";
+import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
+import { pickupSchema, type PickupFormValues } from "@/lib/schemas/pickup";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { z } from "zod";
+import { RequiredLabel } from "./required-label";
 
 export interface PickupValue {
 	meetingPoint: string;
 	beThereAtDate: string;
 	beThereAtTime: string;
 	driverName: string;
+	driverPhoneCountryCode: string;
 	driverPhone: string;
 	additionalInfo: string;
 }
@@ -36,16 +33,7 @@ interface Driver {
 	phone: string;
 }
 
-const pickupSchema = z.object({
-	meetingPoint: z.string().min(1, "Required"),
-	beThereAtDate: z.string().min(1, "Required"),
-	beThereAtTime: z.string().min(1, "Required"),
-	driverName: z.string().min(1, "Required"),
-	driverPhone: z.string().min(1, "Required"),
-	additionalInfo: z.string(),
-});
-
-type PickupErrors = Partial<Record<keyof z.infer<typeof pickupSchema>, string>>;
+type PickupErrors = Partial<Record<keyof PickupFormValues, string>>;
 
 interface Props {
 	// Saved values — shown in title and read-only body
@@ -167,124 +155,98 @@ export function RoutePickupSection({
 				<>
 					{/* Driver quick-select */}
 					{drivers.length > 0 && (
-						<div className="mb-3 space-y-1">
-							<Label className="text-xs">{t("pickupInfoSelectDriver")}</Label>
-							<Select
-								onValueChange={(driverId) => {
-									const d = drivers.find((dr) => dr.id === driverId);
-									if (!d) return;
-									onChange?.("driverName", `${d.name} ${d.surname}`);
-									onChange?.("driverPhone", d.phone);
-								}}
-							>
-								<SelectTrigger className="h-7 text-xs">
-									<SelectValue
-										placeholder={t("pickupInfoSelectDriverPlaceholder")}
-									/>
-								</SelectTrigger>
-								<SelectContent>
-									{drivers.map((d) => (
-										<SelectItem key={d.id} value={d.id}>
-											{d.name} {d.surname}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
-						</div>
+						<CustomSelect
+							className="mb-3"
+							labelText={t("pickupInfoSelectDriver")}
+							placeholder={t("pickupInfoSelectDriverPlaceholder")}
+							value=""
+							options={drivers.map((d) => ({
+								value: d.id,
+								label: `${d.name} ${d.surname}`,
+							}))}
+							onValueChange={(driverId) => {
+								const d = drivers.find((dr) => dr.id === driverId);
+								if (!d) return;
+								onChange?.("driverName", `${d.name} ${d.surname}`);
+								const match = d.phone.match(/^(\+\d+)\s(.+)$/);
+								onChange?.("driverPhoneCountryCode", match?.[1] ?? "+39");
+								onChange?.("driverPhone", match?.[2] ?? d.phone);
+							}}
+						/>
 					)}
 
 					<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-						<div className="space-y-1 sm:col-span-2">
-							<Label className="text-xs">
-								{t("pickupInfoMeetingPoint")}{" "}
-								<span className="text-destructive">*</span>
+						<CustomInput
+							className="sm:col-span-2"
+							labelText={t("pickupInfoMeetingPoint")}
+							required
+							placeholder={t("pickupInfoMeetingPointPlaceholder")}
+							error={errors.meetingPoint}
+							inputProps={{
+								value: value?.meetingPoint ?? "",
+								onChange: (e) => onChange?.("meetingPoint", e.target.value),
+							}}
+						/>
+						<CustomInput
+							labelText={t("pickupInfoBeThereAtDate")}
+							required
+							inputType="date"
+							error={errors.beThereAtDate}
+							inputProps={{
+								value: value?.beThereAtDate ?? "",
+								onChange: (e) => onChange?.("beThereAtDate", e.target.value),
+							}}
+						/>
+						<CustomInput
+							labelText={t("pickupInfoBeThereAtTime")}
+							required
+							inputType="time"
+							error={errors.beThereAtTime}
+							inputProps={{
+								value: value?.beThereAtTime ?? "",
+								onChange: (e) => onChange?.("beThereAtTime", e.target.value),
+							}}
+						/>
+						<CustomInput
+							labelText={t("pickupInfoDriverName")}
+							required
+							placeholder={t("pickupInfoDriverNamePlaceholder")}
+							error={errors.driverName}
+							inputProps={{
+								value: value?.driverName ?? "",
+								onChange: (e) => onChange?.("driverName", e.target.value),
+							}}
+						/>
+						<div className="space-y-2">
+							<Label className="mb-2">
+								{t("pickupInfoDriverPhone")}
+								<RequiredLabel />
 							</Label>
-							<Input
-								className="h-7 text-xs"
-								placeholder={t("pickupInfoMeetingPointPlaceholder")}
-								value={value?.meetingPoint ?? ""}
-								onChange={(e) => onChange?.("meetingPoint", e.target.value)}
+							<PhoneInput
+								countryCode={value?.driverPhoneCountryCode ?? "+39"}
+								onCountryCodeChange={(v) =>
+									onChange?.("driverPhoneCountryCode", v)
+								}
+								phoneNumber={value?.driverPhone ?? ""}
+								onPhoneNumberChange={(v) => onChange?.("driverPhone", v)}
+								error={errors.driverPhone ?? errors.driverPhoneCountryCode}
 							/>
-							{errors.meetingPoint && (
-								<p className="text-xs text-destructive">
-									{errors.meetingPoint}
-								</p>
+							{(errors.driverPhone ?? errors.driverPhoneCountryCode) && (
+								<small className="text-xs text-destructive">
+									{errors.driverPhone ?? errors.driverPhoneCountryCode}
+								</small>
 							)}
 						</div>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{t("pickupInfoBeThereAtDate")}{" "}
-								<span className="text-destructive">*</span>
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								type="date"
-								value={value?.beThereAtDate ?? ""}
-								onChange={(e) => onChange?.("beThereAtDate", e.target.value)}
-							/>
-							{errors.beThereAtDate && (
-								<p className="text-xs text-destructive">
-									{errors.beThereAtDate}
-								</p>
-							)}
-						</div>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{t("pickupInfoBeThereAtTime")}{" "}
-								<span className="text-destructive">*</span>
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								type="time"
-								value={value?.beThereAtTime ?? ""}
-								onChange={(e) => onChange?.("beThereAtTime", e.target.value)}
-							/>
-							{errors.beThereAtTime && (
-								<p className="text-xs text-destructive">
-									{errors.beThereAtTime}
-								</p>
-							)}
-						</div>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{t("pickupInfoDriverName")}{" "}
-								<span className="text-destructive">*</span>
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								placeholder={t("pickupInfoDriverNamePlaceholder")}
-								value={value?.driverName ?? ""}
-								onChange={(e) => onChange?.("driverName", e.target.value)}
-							/>
-							{errors.driverName && (
-								<p className="text-xs text-destructive">{errors.driverName}</p>
-							)}
-						</div>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{t("pickupInfoDriverPhone")}{" "}
-								<span className="text-destructive">*</span>
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								placeholder={t("pickupInfoDriverPhonePlaceholder")}
-								value={value?.driverPhone ?? ""}
-								onChange={(e) => onChange?.("driverPhone", e.target.value)}
-							/>
-							{errors.driverPhone && (
-								<p className="text-xs text-destructive">{errors.driverPhone}</p>
-							)}
-						</div>
-						<div className="space-y-1 sm:col-span-2">
-							<Label className="text-xs">{t("pickupInfoAdditionalInfo")}</Label>
-							<Textarea
-								className="text-xs"
-								rows={3}
-								placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
-								value={value?.additionalInfo ?? ""}
-								onChange={(e) => onChange?.("additionalInfo", e.target.value)}
-							/>
-						</div>
+						<CustomTextArea
+							className="sm:col-span-2"
+							labelText={t("pickupInfoAdditionalInfo")}
+							rows={3}
+							placeholder={t("pickupInfoAdditionalInfoPlaceholder")}
+							textAreaProps={{
+								value: value?.additionalInfo ?? "",
+								onChange: (e) => onChange?.("additionalInfo", e.target.value),
+							}}
+						/>
 					</div>
 
 					<div className="mb-3 mt-2 flex flex-wrap gap-2">

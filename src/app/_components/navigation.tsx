@@ -31,8 +31,7 @@ export async function Navigation() {
 
 	const userName = session.user.name ?? session.user.email ?? "";
 	const role = session.user.role;
-	const isAdmin = role === "ADMIN" || role === "SUPER_ADMIN";
-	const isSuperAdmin = role === "SUPER_ADMIN";
+	const isAdmin = role === "ADMIN";
 
 	return (
 		<nav className="sticky top-0 z-50 border-b bg-background">
@@ -43,12 +42,12 @@ export async function Navigation() {
 						<BrandLogo label={t("brand")} isLoggedIn={true} />
 
 						<div className="hidden items-center gap-2 md:flex">
-							{!isSuperAdmin && !isAdmin && (
+							{!isAdmin && (
 								<Link href="/dashboard">
 									<Button variant="ghost">{t("myTrips")}</Button>
 								</Link>
 							)}
-							{isAdmin && !isSuperAdmin && (
+							{isAdmin && (
 								<>
 									<Link href="/admin">
 										<Button variant="ghost">{t("adminDashboard")}</Button>
@@ -61,20 +60,13 @@ export async function Navigation() {
 									</Link>
 								</>
 							)}
-							{isSuperAdmin && (
-								<Link href="/super-admin">
-									<Button variant="ghost">{t("superAdminDashboard")}</Button>
-								</Link>
-							)}
 						</div>
 					</div>
 
 					{/* Right side */}
 					<div className="flex items-center gap-3">
-						{/* Always visible */}
 						<LanguageSwitcher />
 
-						{/* Desktop only */}
 						<span className="hidden text-sm text-muted-foreground md:block">
 							{userName}
 						</span>
@@ -95,12 +87,10 @@ export async function Navigation() {
 							<MobileMenu
 								userName={userName}
 								isAdmin={isAdmin}
-								isSuperAdmin={isSuperAdmin}
 								myTripsLabel={t("myTrips")}
 								adminLabel={t("adminDashboard")}
 								adminStatsLabel={t("adminStats")}
 								adminGuideLabel={t("adminGuide")}
-								superAdminLabel={t("superAdminDashboard")}
 							/>
 						)}
 					</div>

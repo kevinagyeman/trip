@@ -1,29 +1,34 @@
 "use client";
 
-import type React from "react";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import { RequiredLabel } from "./required-label";
 
 type CustomInputProps = {
 	labelText?: string;
+	required?: boolean;
 	inputType?: string;
 	placeholder?: string;
 	hint?: string;
 	pattern?: string;
 	inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 	error?: string;
+	className?: string;
 };
 
 function CustomInput({
 	labelText,
+	required,
 	inputType = "text",
 	placeholder,
 	hint,
 	pattern,
 	inputProps,
 	error,
+	className,
 }: CustomInputProps) {
 	const [showPassword, setShowPassword] = useState(false);
 	const isPassword = inputType === "password";
@@ -34,8 +39,13 @@ function CustomInput({
 		: inputType;
 
 	return (
-		<div>
-			{labelText && <Label className="mb-2">{labelText}</Label>}
+		<div className={className}>
+			{labelText && (
+				<Label className="mb-2">
+					{labelText}
+					{required && <RequiredLabel />}
+				</Label>
+			)}
 			<div className={isPassword ? "relative" : undefined}>
 				<Input
 					type={resolvedType}

@@ -1,6 +1,8 @@
 "use client";
 
+import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,23 +12,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
-import { COUNTRY_CODES } from "@/lib/phone";
 import { driverSchema, type DriverFormValues } from "@/lib/schemas/driver";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const defaultValues: DriverFormValues = {
 	name: "",
@@ -48,6 +41,8 @@ export function DriversManager() {
 		register,
 		handleSubmit,
 		control,
+		watch,
+		setValue,
 		reset,
 		formState: { errors },
 	} = useForm<DriverFormValues>({
@@ -178,99 +173,52 @@ export function DriversManager() {
 					</DialogHeader>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-							<div className="space-y-1">
-								<Label className="text-xs">{t("name")}</Label>
-								<Input
-									{...register("name")}
-									className={errors.name ? "border-destructive" : ""}
-								/>
-								{errors.name && (
-									<p className="text-xs text-destructive">
-										{errors.name.message}
-									</p>
-								)}
-							</div>
-							<div className="space-y-1">
-								<Label className="text-xs">{t("surname")}</Label>
-								<Input
-									{...register("surname")}
-									className={errors.surname ? "border-destructive" : ""}
-								/>
-								{errors.surname && (
-									<p className="text-xs text-destructive">
-										{errors.surname.message}
-									</p>
-								)}
-							</div>
+							<CustomInput
+								labelText={t("name")}
+								error={errors.name?.message}
+								inputProps={{ ...register("name") }}
+							/>
+							<CustomInput
+								labelText={t("surname")}
+								error={errors.surname?.message}
+								inputProps={{ ...register("surname") }}
+							/>
 							<div className="col-span-full space-y-1">
 								<Label className="text-xs">{t("phone")}</Label>
-								<div className="flex gap-2">
-									<Controller
-										name="phoneCountryCode"
-										control={control}
-										render={({ field }) => (
-											<Select
-												value={field.value}
-												onValueChange={field.onChange}
-											>
-												<SelectTrigger className="w-[110px] shrink-0">
-													<SelectValue>
-														{(() => {
-															const country = COUNTRY_CODES.find(
-																(c) => c.value === field.value,
-															);
-															const flag = country?.label.split(" ")[0] ?? "";
-															return `${flag} ${field.value}`;
-														})()}
-													</SelectValue>
-												</SelectTrigger>
-												<SelectContent className="max-h-72">
-													{COUNTRY_CODES.map((c) => (
-														<SelectItem key={c.value} value={c.value}>
-															{c.label} ({c.value})
-														</SelectItem>
-													))}
-												</SelectContent>
-											</Select>
-										)}
-									/>
-									<Input
-										type="tel"
-										inputMode="numeric"
-										placeholder="1234567890"
-										className={`flex-1 ${errors.phoneNumber ? "border-destructive" : ""}`}
-										{...register("phoneNumber", {
-											onChange: (e) => {
-												e.target.value = e.target.value.replace(/\D/g, "");
-											},
-										})}
-									/>
-								</div>
-								{errors.phoneNumber && (
-									<p className="text-xs text-destructive">
-										{errors.phoneNumber.message}
-									</p>
-								)}
-							</div>
-							<div className="col-span-full space-y-1">
-								<Label className="text-xs">{t("email")}</Label>
-								<Input
-									type="email"
-									{...register("email")}
-									className={errors.email ? "border-destructive" : ""}
+								<PhoneInput
+									countryCode={watch("phoneCountryCode")}
+									onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
+									phoneNumber={watch("phoneNumber")}
+									onPhoneNumberChange={(v) => setValue("phoneNumber", v)}
+									error={
+										errors.phoneCountryCode?.message ??
+										errors.phoneNumber?.message
+									}
 								/>
-								{errors.email && (
-									<p className="text-xs text-destructive">
-										{errors.email.message}
-									</p>
+								{(errors.phoneCountryCode ?? errors.phoneNumber) && (
+									<small className="text-xs text-destructive">
+										{errors.phoneCountryCode?.message ??
+											errors.phoneNumber?.message}
+									</small>
 								)}
 							</div>
+							<CustomInput
+								className="col-span-full"
+								labelText={t("email")}
+								inputType="email"
+								error={errors.email?.message}
+								inputProps={{ ...register("email") }}
+							/>
 						</div>
 						<DialogFooter className="mt-4">
-							<Button type="button" variant="outline" onClick={handleClose}>
+							<Button type="button" variant="secondary" onClick={handleClose}>
 								{t("cancel")}
 							</Button>
-							<LoadingButton type="submit" isLoading={isSaving}>
+							<LoadingButton
+								type="submit"
+								variant={"default"}
+								isLoading={isSaving}
+							>
 								{editingId ? t("save") : t("add")}
 							</LoadingButton>
 						</DialogFooter>

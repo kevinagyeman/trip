@@ -1,10 +1,9 @@
 "use client";
 
 import { CollapsibleSection } from "@/app/_components/ui/collapsible-section";
+import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
@@ -121,46 +120,43 @@ export function RouteDepartureSection({
 					<div
 						className={`grid grid-cols-1 gap-2 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
 					>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{routeType === "airport_out"
+						<CustomInput
+							labelText={
+								routeType === "airport_out"
 									? t("routeFlightDate")
 									: routeType === "airport_in"
 										? t("routeLandingDate")
-										: t("routeArrivalDate")}
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								type="date"
-								value={value.scheduledDate}
-								onChange={(e) => onChange("scheduledDate", e.target.value)}
-							/>
-						</div>
-						<div className="space-y-1">
-							<Label className="text-xs">
-								{routeType === "airport_out"
+										: t("routeArrivalDate")
+							}
+							inputType="date"
+							inputProps={{
+								value: value.scheduledDate,
+								onChange: (e) => onChange("scheduledDate", e.target.value),
+							}}
+						/>
+						<CustomInput
+							labelText={
+								routeType === "airport_out"
 									? t("routeFlightTime")
 									: routeType === "airport_in"
 										? t("routeLandingTime")
-										: t("routeArrivalTime")}
-							</Label>
-							<Input
-								className="h-7 text-xs"
-								type="time"
-								value={value.scheduledTime}
-								onChange={(e) => onChange("scheduledTime", e.target.value)}
-							/>
-						</div>
+										: t("routeArrivalTime")
+							}
+							inputType="time"
+							inputProps={{
+								value: value.scheduledTime,
+								onChange: (e) => onChange("scheduledTime", e.target.value),
+							}}
+						/>
 						{isAirport && (
-							<div className="space-y-1">
-								<Label className="text-xs">{t("routeFlightNumber")}</Label>
-								<Input
-									className="h-7 text-xs"
-									placeholder={t("routeFlightNumberPlaceholder")}
-									value={value.flightNumber}
-									onChange={(e) => onChange("flightNumber", e.target.value)}
-								/>
-							</div>
+							<CustomInput
+								labelText={t("routeFlightNumber")}
+								placeholder={t("routeFlightNumberPlaceholder")}
+								inputProps={{
+									value: value.flightNumber,
+									onChange: (e) => onChange("flightNumber", e.target.value),
+								}}
+							/>
 						)}
 					</div>
 					<div className="mt-2 flex flex-wrap items-center gap-2">

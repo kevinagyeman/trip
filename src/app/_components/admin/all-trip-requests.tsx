@@ -1,16 +1,10 @@
 "use client";
 
+import CustomInput from "@/app/_components/ui/custom-input";
+import CustomSelect from "@/app/_components/ui/custom-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
@@ -56,32 +50,29 @@ export function AllTripRequests() {
 		<div className="space-y-4 pb-8">
 			{/* Filters */}
 			<div className="grid grid-cols-2 gap-3 sm:flex-row sm:items-center">
-				<div className="relative min-w-0 flex-1">
-					<Input
-						className="w-full"
-						placeholder={t("searchPlaceholder")}
-						value={search}
-						onChange={(e) => handleSearch(e.target.value)}
-					/>
-				</div>
-				<Select
+				<CustomInput
+					className="min-w-0 flex-1"
+					placeholder={t("searchPlaceholder")}
+					inputProps={{
+						value: search,
+						onChange: (e) => handleSearch(e.target.value),
+					}}
+				/>
+				<CustomSelect
 					value={statusFilter}
 					onValueChange={(v) => setStatusFilter(v as TripRequestStatus | "ALL")}
-				>
-					<SelectTrigger className="w-full sm:w-[200px]">
-						<SelectValue placeholder={t("filterByStatus")} />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="ALL">{t("allRequests")}</SelectItem>
-						<SelectItem value="PENDING">{t("statusPending")}</SelectItem>
-						<SelectItem value="QUOTED">{t("statusQuoted")}</SelectItem>
-						<SelectItem value="ACCEPTED">{t("statusAccepted")}</SelectItem>
-						<SelectItem value="CONFIRMED">{t("statusConfirmed")}</SelectItem>
-						<SelectItem value="REJECTED">{t("statusRejected")}</SelectItem>
-						<SelectItem value="COMPLETED">{t("statusCompleted")}</SelectItem>
-						<SelectItem value="CANCELLED">{t("statusCancelled")}</SelectItem>
-					</SelectContent>
-				</Select>
+					placeholder={t("filterByStatus")}
+					options={[
+						{ value: "ALL", label: t("allRequests") },
+						{ value: "PENDING", label: t("statusPending") },
+						{ value: "QUOTED", label: t("statusQuoted") },
+						{ value: "ACCEPTED", label: t("statusAccepted") },
+						{ value: "CONFIRMED", label: t("statusConfirmed") },
+						{ value: "REJECTED", label: t("statusRejected") },
+						{ value: "COMPLETED", label: t("statusCompleted") },
+						{ value: "CANCELLED", label: t("statusCancelled") },
+					]}
+				/>
 			</div>
 
 			{isLoading ? (
@@ -114,7 +105,7 @@ export function AllTripRequests() {
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
 											{request.hasUnread && (
-												<span className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
+												<span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
 											)}
 										</div>
 										<p className="truncate text-sm font-semibold mt-3">

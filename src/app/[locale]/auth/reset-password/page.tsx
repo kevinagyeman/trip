@@ -3,6 +3,10 @@
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
+	resetPasswordSchema,
+	type ResetPasswordFormValues,
+} from "@/lib/schemas/auth";
+import {
 	Card,
 	CardContent,
 	CardDescription,
@@ -10,19 +14,26 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { useForm } from "react-hook-form";
 
 function ResetPasswordForm() {
 	const t = useTranslations("auth");
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token") ?? "";
-	const [password, setPassword] = useState("");
-	const [confirm, setConfirm] = useState("");
 	const [done, setDone] = useState(false);
-	const [error, setError] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [serverError, setServerError] = useState("");
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors, isSubmitting },
+	} = useForm<ResetPasswordFormValues>({
+		resolver: zodResolver(resetPasswordSchema),
+	});
 
 	if (!token) {
 		return (
@@ -32,34 +43,22 @@ function ResetPasswordForm() {
 		);
 	}
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setError("");
-		if (password !== confirm) {
-			setError(t("passwordMismatch"));
-			return;
-		}
-		if (password.length < 8) {
-			setError(t("passwordTooShort"));
-			return;
-		}
-		setLoading(true);
+	const onSubmit = async (values: ResetPasswordFormValues) => {
+		setServerError("");
 		try {
 			const res = await fetch("/api/auth/reset-password", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ token, password }),
+				body: JSON.stringify({ token, password: values.password }),
 			});
 			const data = (await res.json()) as { error?: string };
 			if (!res.ok) {
-				setError(data.error ?? t("somethingWentWrong"));
+				setServerError(data.error ?? t("somethingWentWrong"));
 			} else {
 				setDone(true);
 			}
 		} catch {
-			setError(t("somethingWentWrong"));
-		} finally {
-			setLoading(false);
+			setServerError(t("somethingWentWrong"));
 		}
 	};
 
@@ -79,35 +78,32 @@ function ResetPasswordForm() {
 					</div>
 				</div>
 			) : (
-				<form onSubmit={handleSubmit} className="space-y-4">
+				<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 					<CustomInput
 						labelText={t("newPassword")}
 						inputType="password"
-						placeholder="At least 6 characters"
-						inputProps={{
-							value: password,
-							onChange: (e) => setPassword(e.target.value),
-							required: true,
-							disabled: loading,
-						}}
+						error={errors.password?.message}
+						inputProps={{ ...register("password"), disabled: isSubmitting }}
 					/>
 					<CustomInput
 						labelText={t("confirmNewPassword")}
 						inputType="password"
-						placeholder="Repeat password"
+						error={errors.confirmPassword?.message}
 						inputProps={{
-							value: confirm,
-							onChange: (e) => setConfirm(e.target.value),
-							required: true,
-							disabled: loading,
+							...register("confirmPassword"),
+							disabled: isSubmitting,
 						}}
 					/>
-					{error && (
+					{serverError && (
 						<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-							{error}
+							{serverError}
 						</div>
 					)}
-					<LoadingButton type="submit" className="w-full" isLoading={loading}>
+					<LoadingButton
+						type="submit"
+						className="w-full"
+						isLoading={isSubmitting}
+					>
 						{t("resetPasswordButton")}
 					</LoadingButton>
 				</form>

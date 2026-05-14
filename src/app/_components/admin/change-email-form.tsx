@@ -2,39 +2,44 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import {
+	changeEmailSchema,
+	type ChangeEmailFormValues,
+} from "@/lib/schemas/auth";
 import { api } from "@/trpc/react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 	const t = useTranslations("settings");
-	const [newEmail, setNewEmail] = useState("");
-	const [currentPassword, setCurrentPassword] = useState("");
-	const [error, setError] = useState("");
 	const [success, setSuccess] = useState(false);
+
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { errors },
+	} = useForm<ChangeEmailFormValues>({
+		resolver: zodResolver(changeEmailSchema),
+	});
 
 	const changeEmail = api.user.changeEmail.useMutation({
 		onSuccess: () => {
 			setSuccess(true);
-			setNewEmail("");
-			setCurrentPassword("");
-			setError("");
+			reset();
 		},
-		onError: (e) => {
-			setError(e.message);
-			setSuccess(false);
-		},
+		onError: () => setSuccess(false),
 	});
 
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		setError("");
+	const onSubmit = (values: ChangeEmailFormValues) => {
 		setSuccess(false);
-		changeEmail.mutate({ newEmail, currentPassword });
+		changeEmail.mutate(values);
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-4 max-w-sm">
+		<form onSubmit={handleSubmit(onSubmit)} className="max-w-sm space-y-4">
 			<p className="text-sm text-muted-foreground">
 				{t("currentEmail")}:{" "}
 				<span className="font-medium text-foreground">{currentEmail}</span>
@@ -43,22 +48,18 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 				labelText={t("newEmail")}
 				inputType="email"
 				placeholder="new@email.com"
-				inputProps={{
-					value: newEmail,
-					onChange: (e) => setNewEmail(e.target.value),
-					required: true,
-				}}
+				error={errors.newEmail?.message}
+				inputProps={{ ...register("newEmail") }}
 			/>
 			<CustomInput
 				labelText={t("currentPassword")}
 				inputType="password"
-				inputProps={{
-					value: currentPassword,
-					onChange: (e) => setCurrentPassword(e.target.value),
-					required: true,
-				}}
+				error={errors.currentPassword?.message}
+				inputProps={{ ...register("currentPassword") }}
 			/>
-			{error && <p className="text-sm text-destructive">{error}</p>}
+			{changeEmail.error && (
+				<p className="text-sm text-destructive">{changeEmail.error.message}</p>
+			)}
 			{success && (
 				<p className="text-sm text-green-600 dark:text-green-400">
 					{t("emailUpdated")}

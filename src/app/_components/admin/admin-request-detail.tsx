@@ -13,17 +13,11 @@ import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
 import { RouteDepartureSection } from "@/app/_components/ui/route-departure-section";
 import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
+import CustomSelect from "@/app/_components/ui/custom-select";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { buildStatusLabels } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
@@ -71,6 +65,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			beThereAtDate: string;
 			beThereAtTime: string;
 			driverName: string;
+			driverPhoneCountryCode: string;
 			driverPhone: string;
 			additionalInfo: string;
 		}>
@@ -92,14 +87,18 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				})),
 			);
 			setAdminPickupInfos(
-				request.routes.map((r) => ({
-					meetingPoint: r.meetingPoint ?? "",
-					beThereAtDate: r.beThereAtDate ?? "",
-					beThereAtTime: r.beThereAtTime ?? "",
-					driverName: r.driverName ?? "",
-					driverPhone: r.driverPhone ?? "",
-					additionalInfo: r.additionalInfo ?? "",
-				})),
+				request.routes.map((r) => {
+					const phoneMatch = r.driverPhone?.match(/^(\+\d+)\s(.+)$/);
+					return {
+						meetingPoint: r.meetingPoint ?? "",
+						beThereAtDate: r.beThereAtDate ?? "",
+						beThereAtTime: r.beThereAtTime ?? "",
+						driverName: r.driverName ?? "",
+						driverPhoneCountryCode: phoneMatch?.[1] ?? "+39",
+						driverPhone: phoneMatch?.[2] ?? r.driverPhone ?? "",
+						additionalInfo: r.additionalInfo ?? "",
+					};
+				}),
 			);
 		}
 	}, [request?.id]);
@@ -160,24 +159,15 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				headerActions={
 					<>
 						{!["COMPLETED", "CANCELLED"].includes(request.status) && (
-							<Select
+							<CustomSelect
 								value={pendingStatus ?? ""}
-								onValueChange={(value) =>
-									setPendingStatus(value as TripRequestStatus)
-								}
-							>
-								<SelectTrigger className="w-[140px]">
-									<SelectValue placeholder={t("markAs")} />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="COMPLETED">
-										{t("statusCompleted")}
-									</SelectItem>
-									<SelectItem value="CANCELLED">
-										{t("statusCancelled")}
-									</SelectItem>
-								</SelectContent>
-							</Select>
+								onValueChange={(v) => setPendingStatus(v as TripRequestStatus)}
+								placeholder={t("markAs")}
+								options={[
+									{ value: "COMPLETED", label: t("statusCompleted") },
+									{ value: "CANCELLED", label: t("statusCancelled") },
+								]}
+							/>
 						)}
 						{pendingStatus && pendingStatus !== request.status && (
 							<LoadingButton
@@ -207,27 +197,25 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<div className="w-full space-y-2">
 									<RouteTypeLabel routeType={route.type} n={i + 1} />
 									<div className="flex flex-wrap items-center gap-2">
-										<Input
-											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+										<RouteAddressInput
 											value={adminRoutePlaces[i]?.pickup ?? route.pickup}
-											onChange={(e) =>
+											onChange={(val) =>
 												setAdminRoutePlaces((prev) => {
 													const next = [...prev];
-													if (next[i]) next[i]!.pickup = e.target.value;
+													if (next[i]) next[i]!.pickup = val;
 													return next;
 												})
 											}
 										/>
 										<MoveRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-										<Input
-											className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+										<RouteAddressInput
 											value={
 												adminRoutePlaces[i]?.destination ?? route.destination
 											}
-											onChange={(e) =>
+											onChange={(val) =>
 												setAdminRoutePlaces((prev) => {
 													const next = [...prev];
-													if (next[i]) next[i]!.destination = e.target.value;
+													if (next[i]) next[i]!.destination = val;
 													return next;
 												})
 											}
@@ -321,8 +309,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 													adminPickupInfos[j]?.beThereAtTime || undefined,
 												driverName:
 													adminPickupInfos[j]?.driverName || undefined,
-												driverPhone:
-													adminPickupInfos[j]?.driverPhone || undefined,
+												driverPhone: adminPickupInfos[j]
+													? `${adminPickupInfos[j].driverPhoneCountryCode} ${adminPickupInfos[j].driverPhone}`.trim() ||
+														undefined
+													: undefined,
 												additionalInfo:
 													adminPickupInfos[j]?.additionalInfo || undefined,
 											})),
@@ -374,7 +364,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Customer link */}
 			<CopyLinkCard
-				url={`${typeof window !== "undefined" ? window.location.origin : ""}/request/${request.token}`}
+				url={`/request/${request.token}`}
 				title={t("customerLinkLabel")}
 				subtitle={t("customerLinkWarning")}
 			/>
@@ -385,5 +375,21 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				adminViewedAt={request.adminViewedAt}
 			/>
 		</div>
+	);
+}
+
+function RouteAddressInput({
+	value,
+	onChange,
+}: {
+	value: string;
+	onChange: (val: string) => void;
+}) {
+	return (
+		<Input
+			className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
+			value={value}
+			onChange={(e) => onChange(e.target.value)}
+		/>
 	);
 }

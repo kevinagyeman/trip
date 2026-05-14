@@ -9,6 +9,7 @@ import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import CustomInput from "@/app/_components/ui/custom-input";
+import CustomSelect from "@/app/_components/ui/custom-select";
 import {
 	registerCompanySchema,
 	type RegisterCompanyFormValues,
@@ -24,6 +25,8 @@ export function RegisterCompanyForm() {
 	const {
 		register,
 		handleSubmit,
+		watch,
+		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm<RegisterCompanyFormValues>({
 		resolver: zodResolver(registerCompanySchema),
@@ -96,26 +99,14 @@ export function RegisterCompanyForm() {
 							error={errors.address?.message}
 							inputProps={{ ...register("address"), disabled: isSubmitting }}
 						/>
-						<div className="space-y-1">
-							<label className="text-sm font-medium">{t("country")} *</label>
-							<select
-								{...register("country")}
-								disabled={isSubmitting}
-								className="w-full rounded-md border bg-background px-3 py-2 text-sm disabled:opacity-50"
-							>
-								<option value="">{t("countryPlaceholder")}</option>
-								{COUNTRIES.map((c) => (
-									<option key={c} value={c}>
-										{c}
-									</option>
-								))}
-							</select>
-							{errors.country && (
-								<p className="text-xs text-destructive">
-									{errors.country.message}
-								</p>
-							)}
-						</div>
+						<CustomSelect
+							labelText={`${t("country")} *`}
+							placeholder={t("countryPlaceholder")}
+							value={watch("country") ?? ""}
+							onValueChange={(v) => setValue("country", v)}
+							options={COUNTRIES.map((c) => ({ value: c, label: c }))}
+							error={errors.country?.message}
+						/>
 					</div>
 
 					<CustomInput

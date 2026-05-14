@@ -3,12 +3,13 @@ import { Textarea } from "@/components/ui/textarea";
 import type React from "react";
 
 type CustomTextAreaProps = {
-	labelText: string;
+	labelText?: string;
 	placeholder?: string;
 	hint?: string;
 	rows?: number;
 	textAreaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 	error?: string;
+	className?: string;
 };
 
 function CustomTextArea({
@@ -18,10 +19,11 @@ function CustomTextArea({
 	rows = 1,
 	textAreaProps,
 	error,
+	className,
 }: CustomTextAreaProps) {
 	return (
-		<div>
-			<Label className="mb-2">{labelText}</Label>
+		<div className={className}>
+			{labelText && <Label className="mb-2">{labelText}</Label>}
 			<Textarea
 				placeholder={placeholder}
 				rows={rows}

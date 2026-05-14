@@ -20,6 +20,7 @@ type CustomSelectProps = {
 	options: readonly SelectOption[];
 	value: string;
 	onValueChange: (value: string) => void;
+	className?: string;
 };
 
 function CustomSelect({
@@ -30,9 +31,10 @@ function CustomSelect({
 	options,
 	value,
 	onValueChange,
+	className,
 }: CustomSelectProps) {
 	return (
-		<div>
+		<div className={className}>
 			{labelText && <Label className="mb-2">{labelText}</Label>}
 			<Select value={value} onValueChange={onValueChange}>
 				<SelectTrigger className={error ? "border-destructive" : ""}>

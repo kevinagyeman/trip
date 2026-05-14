@@ -2,6 +2,7 @@
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
@@ -10,9 +11,7 @@ import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { format } from "date-fns";
 import { Loader2, MoveRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
@@ -249,37 +248,27 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</p>
 						</div>
 					)}
-					{quotation.notifiedAt && (
-						<p className="text-sm text-muted-foreground">
-							{t("notifiedDate", {
-								date: format(new Date(quotation.notifiedAt), "d MMM yyyy"),
-								time: format(new Date(quotation.notifiedAt), "HH:mm"),
-							})}
-						</p>
-					)}
 					{quotation.status === "PENDING" && quotation.notifiedAt && (
 						<div className="flex gap-2">
-							<Button
+							<LoadingButton
 								onClick={() =>
 									acceptQuotation.mutate({ id: quotation.id, token })
 								}
-								disabled={
-									acceptQuotation.isPending || rejectQuotation.isPending
-								}
+								isLoading={acceptQuotation.isPending}
+								disabled={rejectQuotation.isPending}
 							>
 								{t("acceptQuotation")}
-							</Button>
-							<Button
+							</LoadingButton>
+							<LoadingButton
 								variant="secondary"
 								onClick={() =>
 									rejectQuotation.mutate({ id: quotation.id, token })
 								}
-								disabled={
-									acceptQuotation.isPending || rejectQuotation.isPending
-								}
+								isLoading={rejectQuotation.isPending}
+								disabled={acceptQuotation.isPending}
 							>
 								{t("rejectQuotation")}
-							</Button>
+							</LoadingButton>
 						</div>
 					)}
 				</SectionCard>

@@ -173,23 +173,3 @@ export const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 		},
 	});
 });
-
-/**
- * Super Admin-only procedure
- *
- * Requires user to be logged in AND have SUPER_ADMIN role.
- * Use this for operations that manage companies and global settings.
- */
-export const superAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
-	if (ctx.session.user.role !== "SUPER_ADMIN") {
-		throw new TRPCError({
-			code: "FORBIDDEN",
-			message: "Super admin access required",
-		});
-	}
-	return next({
-		ctx: {
-			session: ctx.session,
-		},
-	});
-});

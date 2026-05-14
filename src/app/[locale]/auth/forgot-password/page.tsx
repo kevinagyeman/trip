@@ -3,6 +3,10 @@
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
+	forgotPasswordSchema,
+	type ForgotPasswordFormValues,
+} from "@/lib/schemas/auth";
+import {
 	Card,
 	CardContent,
 	CardDescription,
@@ -10,36 +14,41 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function ForgotPasswordPage() {
 	const t = useTranslations("auth");
-	const [email, setEmail] = useState("");
 	const [submitted, setSubmitted] = useState(false);
-	const [error, setError] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [serverError, setServerError] = useState("");
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setError("");
-		setLoading(true);
+	const {
+		register,
+		handleSubmit,
+		getValues,
+		formState: { errors, isSubmitting },
+	} = useForm<ForgotPasswordFormValues>({
+		resolver: zodResolver(forgotPasswordSchema),
+	});
+
+	const onSubmit = async (values: ForgotPasswordFormValues) => {
+		setServerError("");
 		try {
 			const res = await fetch("/api/auth/forgot-password", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ email }),
+				body: JSON.stringify(values),
 			});
 			if (!res.ok) {
 				const data = (await res.json()) as { error?: string };
-				setError(data.error ?? t("somethingWentWrong"));
+				setServerError(data.error ?? t("somethingWentWrong"));
 			} else {
 				setSubmitted(true);
 			}
 		} catch {
-			setError(t("somethingWentWrong"));
-		} finally {
-			setLoading(false);
+			setServerError(t("somethingWentWrong"));
 		}
 	};
 
@@ -59,7 +68,7 @@ export default function ForgotPasswordPage() {
 						<div className="space-y-4">
 							<div className="rounded-md border border-green-200 bg-green-50 p-3">
 								<p className="text-sm text-green-800">
-									{t("forgotPasswordEmailSent", { email })}
+									{t("forgotPasswordEmailSent", { email: getValues("email") })}
 								</p>
 							</div>
 							<div className="text-center text-sm">
@@ -72,27 +81,23 @@ export default function ForgotPasswordPage() {
 							</div>
 						</div>
 					) : (
-						<form onSubmit={handleSubmit} className="space-y-4">
+						<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 							<CustomInput
 								labelText={t("email")}
 								inputType="email"
 								placeholder="your@email.com"
-								inputProps={{
-									value: email,
-									onChange: (e) => setEmail(e.target.value),
-									required: true,
-									disabled: loading,
-								}}
+								error={errors.email?.message}
+								inputProps={{ ...register("email"), disabled: isSubmitting }}
 							/>
-							{error && (
+							{serverError && (
 								<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-									{error}
+									{serverError}
 								</div>
 							)}
 							<LoadingButton
 								type="submit"
 								className="w-full"
-								isLoading={loading}
+								isLoading={isSubmitting}
 							>
 								{t("sendResetLink")}
 							</LoadingButton>

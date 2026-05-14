@@ -12,25 +12,15 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { CURRENCIES } from "@/lib/currencies";
+import {
+	quotationSchema,
+	type QuotationFormValues,
+} from "@/lib/schemas/quotation";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { z } from "zod";
-
-const quotationSchema = z.object({
-	price: z.coerce
-		.number({ invalid_type_error: "Price is required" })
-		.positive("Price must be greater than 0"),
-	currency: z.string(),
-	isPriceEachWay: z.boolean(),
-	areCarSeatsIncluded: z.boolean(),
-	additionalInfo: z.string().optional(),
-});
-
-type QuotationFormValues = z.infer<typeof quotationSchema>;
 
 type QuotationData = {
 	price: { toNumber: () => number } | number;
@@ -196,15 +186,6 @@ export function QuotationForm({
 					>
 						{t("resendNotification")}
 					</LoadingButton>
-				)}
-
-				{quotation?.notifiedAt && (
-					<p className="text-sm text-muted-foreground">
-						{t("notifiedDate", {
-							date: format(new Date(quotation.notifiedAt), "d MMM yyyy"),
-							time: format(new Date(quotation.notifiedAt), "HH:mm"),
-						})}
-					</p>
 				)}
 			</div>
 		</form>

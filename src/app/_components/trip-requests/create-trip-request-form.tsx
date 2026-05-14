@@ -5,6 +5,7 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { COUNTRY_CODES } from "@/lib/phone";
 import { LANGUAGES } from "@/lib/quick-fill";
 import {
 	createTripRequestSchema,
@@ -29,6 +29,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { RequiredLabel } from "../ui/required-label";
 
 export function CreateTripRequestForm({
 	companySlug,
@@ -238,6 +239,7 @@ export function CreateTripRequestForm({
 								<>
 									<CustomInput
 										labelText={isAirportIn ? t("airport") : t("pickup")}
+										required
 										placeholder={
 											isAirportIn
 												? t("airportPlaceholder")
@@ -247,6 +249,7 @@ export function CreateTripRequestForm({
 										inputProps={{ ...register(`routes.${index}.pickup`) }}
 									/>
 									<CustomInput
+										required
 										labelText={isAirportOut ? t("airport") : t("destination")}
 										placeholder={
 											isAirportOut
@@ -310,7 +313,7 @@ export function CreateTripRequestForm({
 					className="w-full"
 					onClick={() => appendRoute({ pickup: "", destination: "" })}
 				>
-					<Plus className="mr-2 h-4 w-4" />
+					<Plus className="h-4 w-4" />
 					{t("addRoute")}
 				</Button>
 
@@ -328,12 +331,14 @@ export function CreateTripRequestForm({
 			>
 				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 					<CustomInput
+						required
 						labelText={t("firstName")}
 						placeholder={t("firstNamePlaceholder")}
 						error={errors.firstName?.message}
 						inputProps={{ ...register("firstName") }}
 					/>
 					<CustomInput
+						required
 						labelText={t("lastName")}
 						placeholder={t("lastNamePlaceholder")}
 						error={errors.lastName?.message}
@@ -341,6 +346,7 @@ export function CreateTripRequestForm({
 					/>
 				</div>
 				<CustomInput
+					required
 					labelText={t("email")}
 					placeholder={t("emailPlaceholder")}
 					inputType="email"
@@ -348,46 +354,19 @@ export function CreateTripRequestForm({
 					inputProps={{ ...register("email") }}
 				/>
 				<div>
-					<Label className="mb-2">{t("phoneNumber")}</Label>
-					<div className="flex gap-2">
-						<Controller
-							name="phoneCountryCode"
-							control={control}
-							render={({ field }) => (
-								<Select value={field.value} onValueChange={field.onChange}>
-									<SelectTrigger className="w-[100px] shrink-0">
-										<SelectValue>
-											{(() => {
-												const country = COUNTRY_CODES.find(
-													(c) => c.value === field.value,
-												);
-												const flag = country?.label.split(" ")[0] ?? "";
-												return `${flag} ${field.value}`;
-											})()}
-										</SelectValue>
-									</SelectTrigger>
-									<SelectContent className="max-h-72">
-										{COUNTRY_CODES.map((c) => (
-											<SelectItem key={c.value} value={c.value}>
-												{c.label} ({c.value})
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-							)}
-						/>
-						<Input
-							type="tel"
-							inputMode="numeric"
-							placeholder={t("phonePlaceholder")}
-							className="flex-1"
-							{...register("phoneNumber", {
-								onChange: (e) => {
-									e.target.value = e.target.value.replace(/\D/g, "");
-								},
-							})}
-						/>
-					</div>
+					<Label className="mb-2">
+						{t("phoneNumber")} <RequiredLabel />
+					</Label>
+					<PhoneInput
+						countryCode={watch("phoneCountryCode")}
+						onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
+						phoneNumber={watch("phoneNumber") ?? ""}
+						onPhoneNumberChange={(v) => setValue("phoneNumber", v)}
+						placeholder={t("phonePlaceholder")}
+						error={
+							errors.phoneCountryCode?.message ?? errors.phoneNumber?.message
+						}
+					/>
 					{(errors.phoneCountryCode ?? errors.phoneNumber) && (
 						<small className="text-xs text-destructive">
 							{errors.phoneCountryCode?.message ?? errors.phoneNumber?.message}
@@ -490,6 +469,7 @@ export function CreateTripRequestForm({
 							<div key={field.id} className="space-y-1">
 								<Label className="text-sm font-medium">
 									{t("childAge", { n: index + 1 })}
+									<RequiredLabel />
 								</Label>
 								<div className="flex gap-2">
 									<Input
@@ -600,13 +580,12 @@ export function CreateTripRequestForm({
 			</SectionCard>
 
 			{/* Privacy Policy */}
-			<div className="space-y-1">
-				<label className="flex cursor-pointer items-start gap-2 text-sm">
-					<input
-						type="checkbox"
-						className="mt-0.5 h-4 w-4 shrink-0 rounded border"
-						{...register("privacyAccepted")}
-					/>
+			<CustomCheckbox
+				inputProps={{
+					className: "mt-0.5 h-4 w-4 shrink-0 rounded border",
+					...register("privacyAccepted"),
+				}}
+				label={
 					<span>
 						{t("privacyPolicyAccept")}{" "}
 						<a
@@ -617,20 +596,20 @@ export function CreateTripRequestForm({
 						>
 							{t("privacyPolicyLink")}
 						</a>
+						<span className="ml-1">
+							<RequiredLabel />
+						</span>
 					</span>
-				</label>
-				{errors.privacyAccepted && (
-					<p className="text-xs text-destructive">
-						{errors.privacyAccepted.message}
-					</p>
-				)}
-			</div>
+				}
+				error={errors.privacyAccepted?.message}
+			/>
 
 			<LoadingButton
 				type="submit"
 				isLoading={createRequest.isPending}
 				className="w-full"
 				size={"lg"}
+				variant={"default"}
 			>
 				{t("submitRequest")}
 			</LoadingButton>

@@ -157,10 +157,14 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 								<DialogDescription>{t("confirmModalDesc")}</DialogDescription>
 							</DialogHeader>
 							<DialogFooter className="gap-2">
-								<Button variant="outline" onClick={() => setConfirmOpen(false)}>
+								<Button
+									variant="secondary"
+									onClick={() => setConfirmOpen(false)}
+								>
 									{t("confirmModalCancel")}
 								</Button>
 								<LoadingButton
+									variant={"default"}
 									isLoading={confirmTrip.isPending}
 									onClick={() => confirmTrip.mutate({ id: requestId })}
 								>
