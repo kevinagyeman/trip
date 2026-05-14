@@ -1,20 +1,19 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
-import { LoadingButton } from "@/app/_components/ui/loading-button";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { Link } from "@/i18n/navigation";
+import { COUNTRIES } from "@/lib/countries";
 import {
 	registerCompanySchema,
 	type RegisterCompanyFormValues,
 } from "@/lib/schemas/auth";
-import { COUNTRIES } from "@/lib/countries";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export function RegisterCompanyForm() {
 	const t = useTranslations("registerCompany");
@@ -66,7 +65,8 @@ export function RegisterCompanyForm() {
 					</p>
 
 					<CustomInput
-						labelText={`${t("companyName")} *`}
+						required
+						labelText={`${t("companyName")}`}
 						inputType="text"
 						placeholder={t("companyNamePlaceholder")}
 						error={errors.companyName?.message}
@@ -75,14 +75,16 @@ export function RegisterCompanyForm() {
 
 					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<CustomInput
-							labelText={`${t("slug")} *`}
+							required
+							labelText={`${t("slug")}`}
 							inputType="text"
 							placeholder={t("slugPlaceholder")}
 							error={errors.slug?.message}
 							inputProps={{ ...register("slug"), disabled: isSubmitting }}
 						/>
 						<CustomInput
-							labelText={`${t("vat")} *`}
+							required
+							labelText={`${t("vat")}`}
 							inputType="text"
 							placeholder={t("vatPlaceholder")}
 							error={errors.vat?.message}
@@ -93,14 +95,15 @@ export function RegisterCompanyForm() {
 
 					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<CustomInput
-							labelText={`${t("address")} *`}
+							required
+							labelText={`${t("address")}`}
 							inputType="text"
 							placeholder={t("addressPlaceholder")}
 							error={errors.address?.message}
 							inputProps={{ ...register("address"), disabled: isSubmitting }}
 						/>
 						<CustomSelect
-							labelText={`${t("country")} *`}
+							labelText={`${t("country")}`}
 							placeholder={t("countryPlaceholder")}
 							value={watch("country") ?? ""}
 							onValueChange={(v) => setValue("country", v)}
@@ -126,14 +129,16 @@ export function RegisterCompanyForm() {
 
 					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<CustomInput
-							labelText={`${t("fullName")} *`}
+							required
+							labelText={`${t("fullName")}`}
 							inputType="text"
 							placeholder={t("fullNamePlaceholder")}
 							error={errors.fullName?.message}
 							inputProps={{ ...register("fullName"), disabled: isSubmitting }}
 						/>
 						<CustomInput
-							labelText={`${t("email")} *`}
+							required
+							labelText={`${t("email")}`}
 							inputType="email"
 							placeholder="you@company.com"
 							error={errors.email?.message}
@@ -143,13 +148,15 @@ export function RegisterCompanyForm() {
 
 					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<CustomInput
-							labelText={`${t("password")} *`}
+							required
+							labelText={`${t("password")}`}
 							inputType="password"
 							error={errors.password?.message}
 							inputProps={{ ...register("password"), disabled: isSubmitting }}
 						/>
 						<CustomInput
-							labelText={`${t("confirmPassword")} *`}
+							required
+							labelText={`${t("confirmPassword")}`}
 							inputType="password"
 							error={errors.confirmPassword?.message}
 							inputProps={{
@@ -196,6 +203,7 @@ export function RegisterCompanyForm() {
 					type="submit"
 					className="w-full"
 					isLoading={isSubmitting}
+					variant={"default"}
 				>
 					{t("register")}
 				</LoadingButton>

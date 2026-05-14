@@ -20,6 +20,7 @@ import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { RequiredLabel } from "../ui/required-label";
 
 const defaultValues: DriverFormValues = {
 	name: "",
@@ -174,17 +175,21 @@ export function DriversManager() {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 							<CustomInput
+								required
 								labelText={t("name")}
 								error={errors.name?.message}
 								inputProps={{ ...register("name") }}
 							/>
 							<CustomInput
+								required
 								labelText={t("surname")}
 								error={errors.surname?.message}
 								inputProps={{ ...register("surname") }}
 							/>
 							<div className="col-span-full space-y-1">
-								<Label className="text-xs">{t("phone")}</Label>
+								<Label className="text-xs">
+									{t("phone")} <RequiredLabel />
+								</Label>
 								<PhoneInput
 									countryCode={watch("phoneCountryCode")}
 									onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
@@ -203,6 +208,7 @@ export function DriversManager() {
 								)}
 							</div>
 							<CustomInput
+								required
 								className="col-span-full"
 								labelText={t("email")}
 								inputType="email"
