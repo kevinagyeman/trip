@@ -15,6 +15,7 @@ import {
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { TripRequestStatus } from "../../../../generated/prisma";
+import type { TripEvent, EventType, EventActor } from "@/lib/trip-events";
 
 const routeSchema = z.object({
 	pickup: z.string().min(1),
@@ -308,19 +309,7 @@ export const tripRequestRouter = createTRPCRouter({
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
-			type EventActor = "admin" | "customer";
-			type EventType =
-				| "request_submitted"
-				| "quotation_sent"
-				| "quotation_accepted"
-				| "quotation_rejected"
-				| "trip_confirmed"
-				| "pickup_info_sent"
-				| "customer_accessed"
-				| "departure_updated";
-
-			const rawEvents: Array<{ type: EventType; actor: EventActor; at: Date }> =
-				[];
+			const rawEvents: TripEvent[] = [];
 
 			rawEvents.push({
 				type: "request_submitted",

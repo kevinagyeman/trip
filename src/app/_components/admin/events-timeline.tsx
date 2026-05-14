@@ -1,29 +1,13 @@
 "use client";
 
 import { SectionCard } from "@/app/_components/ui/section-card";
+import type { TripEvent } from "@/lib/trip-events";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
-
-type EventActor = "admin" | "customer";
-type EventType =
-	| "request_submitted"
-	| "quotation_sent"
-	| "quotation_accepted"
-	| "quotation_rejected"
-	| "trip_confirmed"
-	| "pickup_info_sent"
-	| "departure_updated"
-	| "confirmation_viewed"
-	| "pickup_info_viewed";
-
-interface Event {
-	type: EventType;
-	actor: EventActor;
-	at: Date;
-}
+import type { EventType } from "@/lib/trip-events";
 
 interface Props {
-	events: Event[];
+	events: TripEvent[];
 	adminViewedAt?: Date | null;
 }
 
