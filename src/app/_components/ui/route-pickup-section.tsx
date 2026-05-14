@@ -65,7 +65,7 @@ interface Props {
 	onSave?: () => void;
 	isLoading?: boolean;
 	drivers?: Driver[];
-	notifiedAt?: string | null;
+	notifiedAt?: Date | string | null;
 	saveLabel?: string;
 }
 
