@@ -197,29 +197,43 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								<div className="w-full space-y-2">
 									<RouteTypeLabel routeType={route.type} n={i + 1} />
 									<div className="flex flex-wrap items-center gap-2">
-										<RouteAddressInput
-											value={adminRoutePlaces[i]?.pickup ?? route.pickup}
-											onChange={(val) =>
-												setAdminRoutePlaces((prev) => {
-													const next = [...prev];
-													if (next[i]) next[i]!.pickup = val;
-													return next;
-												})
-											}
-										/>
-										<MoveRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-										<RouteAddressInput
-											value={
-												adminRoutePlaces[i]?.destination ?? route.destination
-											}
-											onChange={(val) =>
-												setAdminRoutePlaces((prev) => {
-													const next = [...prev];
-													if (next[i]) next[i]!.destination = val;
-													return next;
-												})
-											}
-										/>
+										<div className="flex flex-1 flex-col gap-1">
+											<span className="text-xs text-muted-foreground">
+												{route.type === "airport_in"
+													? t("labelAirport")
+													: t("labelDeparturePoint")}
+											</span>
+											<RouteAddressInput
+												value={adminRoutePlaces[i]?.pickup ?? route.pickup}
+												onChange={(val) =>
+													setAdminRoutePlaces((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.pickup = val;
+														return next;
+													})
+												}
+											/>
+										</div>
+										<MoveRight className="h-3.5 w-3.5 shrink-0 self-end mb-1 text-muted-foreground" />
+										<div className="flex flex-1 flex-col gap-1">
+											<span className="text-xs text-muted-foreground">
+												{route.type === "airport_out"
+													? t("labelAirport")
+													: t("labelDestination")}
+											</span>
+											<RouteAddressInput
+												value={
+													adminRoutePlaces[i]?.destination ?? route.destination
+												}
+												onChange={(val) =>
+													setAdminRoutePlaces((prev) => {
+														const next = [...prev];
+														if (next[i]) next[i]!.destination = val;
+														return next;
+													})
+												}
+											/>
+										</div>
 									</div>
 								</div>
 							</div>

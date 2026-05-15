@@ -28,10 +28,6 @@ export const registerCompanySchema = z
 			.min(1, "Slug is required")
 			.regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and hyphens only"),
 		vat: z.string().min(1, "VAT number is required"),
-		address: z.string().min(1, "Address is required"),
-		country: z.string().min(1, "Country is required"),
-		website: z.string().url("Enter a valid URL").optional().or(z.literal("")),
-		fullName: z.string().min(1, "Full name is required"),
 		email: z.string().email("Invalid email address"),
 		password: z.string().min(8, "Password must be at least 8 characters"),
 		confirmPassword: z.string().min(1, "Please confirm your password"),

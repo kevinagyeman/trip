@@ -252,7 +252,10 @@
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled",
-		"call": "Call"
+		"call": "Call",
+		"labelDeparturePoint": "Departure point",
+		"labelDestination": "Destination",
+		"labelAirport": "Airport"
 	},
 	"messages": {
 		"title": "Messages"
@@ -333,7 +336,10 @@
 		"eventCustomerAccessed": "Accessed the request",
 		"eventDepartureUpdated": "Updated departure info",
 		"eventPickupInfoViewed": "Saw the pickup info",
-		"saveAndNotifyCustomer": "Save & Notify Customer"
+		"saveAndNotifyCustomer": "Save & Notify Customer",
+		"labelDeparturePoint": "Departure point",
+		"labelDestination": "Destination",
+		"labelAirport": "Airport"
 	},
 	"notFound": {
 		"heading": "Page Not Found",
@@ -373,7 +379,16 @@
 		"languageUpdated": "Language preference saved.",
 		"changeLanguageButton": "Save Language",
 		"estimateNoticeTitle": "Estimate notice",
-		"estimateNoticeDesc": "This text will be pre-filled in the Additional Information field when creating a new quotation. You can edit it per-quotation before sending."
+		"estimateNoticeDesc": "This text will be pre-filled in the Additional Information field when creating a new quotation. You can edit it per-quotation before sending.",
+		"companyDetailsTitle": "Company Details",
+		"companyName": "Company Name",
+		"vat": "VAT Number",
+		"vatPlaceholder": "IT12345678901",
+		"address": "Address",
+		"addressPlaceholder": "Via Roma 1, 00100 Rome",
+		"country": "Country",
+		"countryPlaceholder": "Select your country",
+		"website": "Website"
 	},
 	"superAdmin": {
 		"notFound": "Not found",

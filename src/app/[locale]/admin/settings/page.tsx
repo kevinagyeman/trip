@@ -2,6 +2,7 @@ import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
+import { CompanyDetailsForm } from "@/app/_components/admin/company-details-form";
 import { DriversManager } from "@/app/_components/admin/drivers-manager";
 import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
 import { SectionCard } from "@/app/_components/ui/section-card";
@@ -36,7 +37,15 @@ export default async function AdminSettingsPage({
 		session.user.companyId
 			? db.company.findUnique({
 					where: { id: session.user.companyId },
-					select: { slug: true, estimateNotice: true },
+					select: {
+						slug: true,
+						estimateNotice: true,
+						name: true,
+						vat: true,
+						address: true,
+						country: true,
+						website: true,
+					},
 				})
 			: null,
 	]);
@@ -50,6 +59,11 @@ export default async function AdminSettingsPage({
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}
+				{company && (
+					<SectionCard title={t("companyDetailsTitle")}>
+						<CompanyDetailsForm initialValues={company} />
+					</SectionCard>
+				)}
 				{session.user.role !== "SUPER_ADMIN" && <DriversManager />}
 				<SectionCard title={t("languageTitle")}>
 					<ChangeLanguageForm

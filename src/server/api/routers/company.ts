@@ -1,6 +1,7 @@
 import {
 	createTRPCRouter,
 	superAdminProcedure,
+	adminProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
@@ -55,6 +56,33 @@ export const companyRouter = createTRPCRouter({
 			}
 
 			return company;
+		}),
+
+	// ADMIN: Update own company details
+	updateMyCompany: adminProcedure
+		.input(
+			z.object({
+				name: z.string().min(1).optional(),
+				vat: z.string().optional(),
+				address: z.string().optional(),
+				country: z.string().optional(),
+				website: z
+					.string()
+					.url("Enter a valid URL")
+					.optional()
+					.or(z.literal("")),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const companyId = ctx.session.user.companyId;
+			if (!companyId) throw new TRPCError({ code: "FORBIDDEN" });
+			return ctx.db.company.update({
+				where: { id: companyId },
+				data: {
+					...input,
+					website: input.website || null,
+				},
+			});
 		}),
 
 	// SUPER_ADMIN: Update a company (activate/deactivate)

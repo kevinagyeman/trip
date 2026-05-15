@@ -19,17 +19,7 @@ export async function POST(request: Request) {
 			);
 		}
 
-		const {
-			companyName,
-			slug,
-			vat,
-			address,
-			country,
-			website,
-			fullName,
-			email,
-			password,
-		} = parsed.data;
+		const { companyName, slug, vat, email, password } = parsed.data;
 
 		const locale =
 			typeof body.locale === "string" && ["en", "it"].includes(body.locale)
@@ -62,9 +52,6 @@ export async function POST(request: Request) {
 				name: companyName,
 				slug,
 				vat,
-				address,
-				country,
-				website: website || null,
 				isActive: false,
 				estimateNotice: JSON.stringify({
 					en: "Please note that this is an estimate based on the information provided. The final price may vary depending on the departure time — night or early morning transfers may incur a surcharge.",
@@ -76,7 +63,7 @@ export async function POST(request: Request) {
 		// Create admin user (unverified)
 		await db.user.create({
 			data: {
-				name: fullName,
+				name: null,
 				email,
 				password: hashedPassword,
 				role: "ADMIN",
@@ -109,7 +96,7 @@ export async function POST(request: Request) {
 					href: verifyUrl,
 					data: {
 						preview: "Verify your email address",
-						title: `Hi ${fullName}, please verify your email`,
+						title: "Please verify your email",
 						subtitle:
 							"Click the button below to verify your email address. The link expires in 24 hours.",
 						buttonLabel: "Verify Email",
@@ -126,7 +113,7 @@ export async function POST(request: Request) {
 							data: {
 								preview: `New registration: ${companyName}`,
 								title: "New company registration",
-								subtitle: `${fullName} (${email}) registered "${companyName}" (/${slug}). The company is inactive until you review and activate it.`,
+								subtitle: `${email} registered "${companyName}" (/${slug}). The company is inactive until you review and activate it.`,
 								buttonLabel: "Review Company",
 							},
 						}),

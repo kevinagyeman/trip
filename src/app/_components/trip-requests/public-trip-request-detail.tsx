@@ -117,9 +117,23 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								<RouteTypeLabel routeType={route.type} n={i + 1} />
 
 								<div className="flex items-center gap-2 font-semibold">
-									<span>{route.pickup}</span>
+									<div className="flex flex-col">
+										<span className="text-xs font-normal text-muted-foreground">
+											{route.type === "airport_in"
+												? t("labelAirport")
+												: t("labelDeparturePoint")}
+										</span>
+										<span>{route.pickup}</span>
+									</div>
 									<MoveRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-									<span>{route.destination}</span>
+									<div className="flex flex-col">
+										<span className="text-xs font-normal text-muted-foreground">
+											{route.type === "airport_out"
+												? t("labelAirport")
+												: t("labelDestination")}
+										</span>
+										<span>{route.destination}</span>
+									</div>
 								</div>
 							</div>
 

@@ -1,10 +1,8 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
-import CustomSelect from "@/app/_components/ui/custom-select";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Link } from "@/i18n/navigation";
-import { COUNTRIES } from "@/lib/countries";
 import {
 	registerCompanySchema,
 	type RegisterCompanyFormValues,
@@ -24,8 +22,6 @@ export function RegisterCompanyForm() {
 	const {
 		register,
 		handleSubmit,
-		watch,
-		setValue,
 		formState: { errors, isSubmitting },
 	} = useForm<RegisterCompanyFormValues>({
 		resolver: zodResolver(registerCompanySchema),
@@ -57,114 +53,60 @@ export function RegisterCompanyForm() {
 				<p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
 			</div>
 
-			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-				{/* Company Information */}
-				<div className="space-y-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("companySection")}
-					</p>
+			<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+				<CustomInput
+					required
+					labelText={t("companyName")}
+					placeholder={t("companyNamePlaceholder")}
+					error={errors.companyName?.message}
+					inputProps={{ ...register("companyName"), disabled: isSubmitting }}
+				/>
 
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 					<CustomInput
 						required
-						labelText={`${t("companyName")}`}
-						inputType="text"
-						placeholder={t("companyNamePlaceholder")}
-						error={errors.companyName?.message}
-						inputProps={{ ...register("companyName"), disabled: isSubmitting }}
+						labelText={t("slug")}
+						placeholder={t("slugPlaceholder")}
+						error={errors.slug?.message}
+						inputProps={{ ...register("slug"), disabled: isSubmitting }}
 					/>
-
-					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-						<CustomInput
-							required
-							labelText={`${t("slug")}`}
-							inputType="text"
-							placeholder={t("slugPlaceholder")}
-							error={errors.slug?.message}
-							inputProps={{ ...register("slug"), disabled: isSubmitting }}
-						/>
-						<CustomInput
-							required
-							labelText={`${t("vat")}`}
-							inputType="text"
-							placeholder={t("vatPlaceholder")}
-							error={errors.vat?.message}
-							inputProps={{ ...register("vat"), disabled: isSubmitting }}
-						/>
-					</div>
-					<p className="text-xs text-muted-foreground">{t("slugHint")}</p>
-
-					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-						<CustomInput
-							required
-							labelText={`${t("address")}`}
-							inputType="text"
-							placeholder={t("addressPlaceholder")}
-							error={errors.address?.message}
-							inputProps={{ ...register("address"), disabled: isSubmitting }}
-						/>
-						<CustomSelect
-							labelText={`${t("country")}`}
-							placeholder={t("countryPlaceholder")}
-							value={watch("country") ?? ""}
-							onValueChange={(v) => setValue("country", v)}
-							options={COUNTRIES.map((c) => ({ value: c, label: c }))}
-							error={errors.country?.message}
-						/>
-					</div>
-
 					<CustomInput
-						labelText={t("website")}
-						inputType="url"
-						placeholder="https://yourcompany.com"
-						error={errors.website?.message}
-						inputProps={{ ...register("website"), disabled: isSubmitting }}
+						required
+						labelText={t("vat")}
+						placeholder={t("vatPlaceholder")}
+						error={errors.vat?.message}
+						inputProps={{ ...register("vat"), disabled: isSubmitting }}
 					/>
 				</div>
+				<p className="text-xs text-muted-foreground">{t("slugHint")}</p>
 
-				{/* Admin Account */}
-				<div className="space-y-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("accountSection")}
-					</p>
+				<CustomInput
+					required
+					labelText={t("email")}
+					inputType="email"
+					placeholder="you@company.com"
+					error={errors.email?.message}
+					inputProps={{ ...register("email"), disabled: isSubmitting }}
+				/>
 
-					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-						<CustomInput
-							required
-							labelText={`${t("fullName")}`}
-							inputType="text"
-							placeholder={t("fullNamePlaceholder")}
-							error={errors.fullName?.message}
-							inputProps={{ ...register("fullName"), disabled: isSubmitting }}
-						/>
-						<CustomInput
-							required
-							labelText={`${t("email")}`}
-							inputType="email"
-							placeholder="you@company.com"
-							error={errors.email?.message}
-							inputProps={{ ...register("email"), disabled: isSubmitting }}
-						/>
-					</div>
-
-					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-						<CustomInput
-							required
-							labelText={`${t("password")}`}
-							inputType="password"
-							error={errors.password?.message}
-							inputProps={{ ...register("password"), disabled: isSubmitting }}
-						/>
-						<CustomInput
-							required
-							labelText={`${t("confirmPassword")}`}
-							inputType="password"
-							error={errors.confirmPassword?.message}
-							inputProps={{
-								...register("confirmPassword"),
-								disabled: isSubmitting,
-							}}
-						/>
-					</div>
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<CustomInput
+						required
+						labelText={t("password")}
+						inputType="password"
+						error={errors.password?.message}
+						inputProps={{ ...register("password"), disabled: isSubmitting }}
+					/>
+					<CustomInput
+						required
+						labelText={t("confirmPassword")}
+						inputType="password"
+						error={errors.confirmPassword?.message}
+						inputProps={{
+							...register("confirmPassword"),
+							disabled: isSubmitting,
+						}}
+					/>
 				</div>
 
 				{/* Privacy policy */}
@@ -203,7 +145,7 @@ export function RegisterCompanyForm() {
 					type="submit"
 					className="w-full"
 					isLoading={isSubmitting}
-					variant={"default"}
+					variant="default"
 				>
 					{t("register")}
 				</LoadingButton>
