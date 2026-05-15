@@ -6,6 +6,7 @@ import { EventsTimeline } from "@/app/_components/admin/events-timeline";
 import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
+import CustomSelect from "@/app/_components/ui/custom-select";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
@@ -13,15 +14,12 @@ import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
 import { RouteDepartureSection } from "@/app/_components/ui/route-departure-section";
 import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
-import CustomSelect from "@/app/_components/ui/custom-select";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { buildStatusLabels } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
-import { format } from "date-fns";
-import { Loader2, MoveRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -196,12 +194,12 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							<div className="flex items-start justify-between gap-3 p-3">
 								<div className="w-full space-y-2">
 									<RouteTypeLabel routeType={route.type} n={i + 1} />
-									<div className="flex flex-wrap items-center gap-2">
-										<div className="flex flex-1 flex-col gap-1">
-											<span className="text-xs text-muted-foreground">
+									{/* <div className="space-y-2">
+										<div className="flex flex-1 flex-col gap-0.5">
+											<span className=" text-muted-foreground">
 												{route.type === "airport_in"
-													? t("labelAirport")
-													: t("labelDeparturePoint")}
+													? t("routeFromAirport")
+													: t("routeFrom")}
 											</span>
 											<RouteAddressInput
 												value={adminRoutePlaces[i]?.pickup ?? route.pickup}
@@ -214,12 +212,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												}
 											/>
 										</div>
-										<MoveRight className="h-3.5 w-3.5 shrink-0 self-end mb-1 text-muted-foreground" />
-										<div className="flex flex-1 flex-col gap-1">
-											<span className="text-xs text-muted-foreground">
+										<div className="flex flex-1 flex-col gap-0.5">
+											<span className=" text-muted-foreground">
 												{route.type === "airport_out"
-													? t("labelAirport")
-													: t("labelDestination")}
+													? t("routeToAirport")
+													: t("routeTo")}
 											</span>
 											<RouteAddressInput
 												value={
@@ -234,7 +231,25 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 												}
 											/>
 										</div>
-									</div>
+									</div> */}
+
+									<p className="text-base">
+										<span className="text-muted-foreground mr-2">
+											{route.type === "airport_in"
+												? t("routeFromAirport")
+												: t("routeFrom")}
+										</span>
+
+										<span className="font-semibold">{route.pickup}</span>
+
+										<span className="text-muted-foreground mx-2">
+											{route.type === "airport_out"
+												? t("routeToAirport")
+												: t("routeTo")}
+										</span>
+
+										<span className="font-semibold">{route.destination}</span>
+									</p>
 								</div>
 							</div>
 

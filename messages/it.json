@@ -197,7 +197,7 @@
 		"submitRequest": "Invia Richiesta di Preventivo",
 		"airport": "Aeroporto",
 		"airportPlaceholder": "es. Malpensa, Linate Milano",
-		"airportInvolved": "C'è un aeroporto?",
+		"airportInvolved": "Da/per aeroporto?",
 		"flightArrival": "Arrivo",
 		"flightDeparture": "Partenza",
 		"airportYes": "Sì",
@@ -256,7 +256,11 @@
 		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro. Dopo la conferma del transfer, ti indicheremo quando verremo a prenderti.",
 		"labelDeparturePoint": "Punto di partenza",
 		"labelDestination": "Destinazione",
-		"labelAirport": "Aeroporto"
+		"labelAirport": "Aeroporto",
+		"routeFrom": "Da",
+		"routeTo": "A",
+		"routeFromAirport": "Dall'aeroporto di",
+		"routeToAirport": "All'aeroporto di"
 	},
 	"messages": {
 		"title": "Messaggi"
@@ -345,7 +349,11 @@
 		"saveAndNotifyCustomer": "Salva e Notifica il Cliente",
 		"labelDeparturePoint": "Punto di partenza",
 		"labelDestination": "Destinazione",
-		"labelAirport": "Aeroporto"
+		"labelAirport": "Aeroporto",
+		"routeFrom": "Da",
+		"routeTo": "A",
+		"routeFromAirport": "Dall'aeroporto di",
+		"routeToAirport": "All'aeroporto di"
 	},
 	"notFound": {
 		"heading": "Pagina Non Trovata",

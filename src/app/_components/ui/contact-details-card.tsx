@@ -30,18 +30,18 @@ export function ContactDetailsCard({
 			title={t("contactDetails")}
 			contentClassName="space-y-1.5 pt-0 text-sm"
 		>
-			<p className="flex items-center gap-2">
-				<User className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+			<p className="flex items-center gap-2  text-base">
+				<User className="h-4 w-4 shrink-0 text-muted-foreground" />
 				<span className="font-medium">
 					{firstName} {lastName}
 				</span>
 			</p>
-			<p className="flex items-center gap-2">
-				<Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+			<p className="flex items-center gap-2  text-base">
+				<Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
 				<span className="font-medium">{email}</span>
 			</p>
-			<div className="flex flex-wrap items-center gap-2">
-				<Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+			<div className="flex flex-wrap items-center gap-2  text-base">
+				<Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
 				<span className="font-medium">{phone}</span>
 				{whatsappHref && (
 					<>
@@ -64,8 +64,8 @@ export function ContactDetailsCard({
 					</>
 				)}
 			</div>
-			<p className="flex items-center gap-2">
-				<Globe className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+			<p className="flex items-center gap-2  text-base">
+				<Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
 				<span className="font-medium">
 					{LANGUAGE_LABELS[language] ?? language}
 				</span>

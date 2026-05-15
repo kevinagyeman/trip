@@ -21,7 +21,11 @@ export function SectionCard({
 		<Card className="gap-0">
 			{(title ?? subtitle) && (
 				<CardHeader className="pb-0">
-					{title && <CardTitle className="text-base">{title}</CardTitle>}
+					{title && (
+						<CardTitle className="text-base font-semibold uppercase tracking-wide text-muted-foreground">
+							{title}
+						</CardTitle>
+					)}
 					{subtitle && (
 						<CardDescription className="pb-4">{subtitle}</CardDescription>
 					)}

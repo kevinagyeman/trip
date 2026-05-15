@@ -102,7 +102,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 								{quotation!.currency} {quotation!.price.toString()}
 							</p>
 							{quotation!.isPriceEachWay && (
-								<p className="text-sm text-muted-foreground">
+								<p className="text-base text-muted-foreground">
 									{t("priceEachWay")}
 								</p>
 							)}
@@ -110,10 +110,10 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					</div>
 					{quotation!.quotationAdditionalInfo && (
 						<div>
-							<p className="text-sm font-medium text-muted-foreground">
+							<p className="text-base text-muted-foreground">
 								{t("additionalInfoCustomer")}
 							</p>
-							<p className="mt-1 whitespace-pre-wrap text-sm">
+							<p className="mt-1 whitespace-pre-wrap text-base">
 								{quotation!.quotationAdditionalInfo}
 							</p>
 						</div>

@@ -60,23 +60,22 @@ export function RouteDepartureSection({
 
 	const title = hasDepInfo ? (
 		<span className="flex flex-wrap items-center gap-2">
-			<span className="text-muted-foreground">{depLabel}</span>
+			<span className="text-muted-foreground text-base">{depLabel}</span>
 			{scheduledDate && (
-				<span className="font-medium text-foreground">
+				<span className="text-base text-foreground">
 					{format(new Date(scheduledDate), "d MMM yyyy")}
 				</span>
 			)}
 			{scheduledTime && (
-				<span className="font-medium text-foreground">{scheduledTime}</span>
+				<span className="text-base text-foreground">{scheduledTime}</span>
 			)}
 			{flightNumber && (
-				<span className="font-medium text-foreground">{flightNumber}</span>
+				<span className="text-base text-foreground">{flightNumber}</span>
 			)}
 			{scheduledDate && (
 				<Button
 					size="sm"
-					variant="ghost"
-					className="h-5 px-1.5 text-xs"
+					variant="outline"
 					onClick={(e) => {
 						e.stopPropagation();
 						const [hRaw, mRaw] = (scheduledTime ?? "00:00")
@@ -104,7 +103,7 @@ export function RouteDepartureSection({
 			)}
 		</span>
 	) : (
-		<span className="flex flex-wrap items-center gap-2">
+		<span className="flex flex-wrap items-center gap-2  text-base">
 			<span className="text-muted-foreground">{depLabel}</span>
 			<span className="text-muted-foreground">—</span>
 		</span>
@@ -118,7 +117,7 @@ export function RouteDepartureSection({
 			{canEdit ? (
 				<>
 					<div
-						className={`grid grid-cols-1 gap-2 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
+						className={`grid grid-cols-1 gap-2 mt-4 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
 					>
 						<CustomInput
 							labelText={
@@ -166,11 +165,11 @@ export function RouteDepartureSection({
 				</>
 			) : (
 				hasDepInfo && (
-					<div className="space-y-1.5 pt-2 text-xs">
+					<div className="space-y-1.5 pt-2 text-base">
 						{scheduledDate && (
 							<p>
 								<span className="text-muted-foreground">{depLabel} </span>
-								<span className="font-medium">
+								<span>
 									{format(new Date(scheduledDate), "d MMM yyyy")}
 									{scheduledTime && ` · ${scheduledTime}`}
 								</span>
@@ -181,7 +180,7 @@ export function RouteDepartureSection({
 								<span className="text-muted-foreground">
 									{t("routeFlightNumber")}:{" "}
 								</span>
-								<span className="font-medium">{flightNumber}</span>
+								<span>{flightNumber}</span>
 							</p>
 						)}
 					</div>

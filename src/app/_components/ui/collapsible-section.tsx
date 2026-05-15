@@ -22,7 +22,7 @@ export function CollapsibleSection({
 		<div className={noBorderTop ? "" : "border-t border-dashed"}>
 			{/* biome-ignore lint/a11y/useSemanticElements: title prop may contain <button> elements, making <button> invalid here */}
 			<div
-				className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground cursor-pointer"
+				className="flex w-full items-center justify-between px-3 py-2 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
 				role="button"
 				tabIndex={0}
 				onClick={() => setOpen((v) => !v)}

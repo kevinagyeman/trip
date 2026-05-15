@@ -81,22 +81,21 @@ export function RoutePickupSection({
 	const [errors, setErrors] = useState<PickupErrors>({});
 
 	const title = driverName ? (
-		<span className="flex flex-wrap items-center gap-2">
+		<span className="flex flex-wrap items-center gap-2 text-base">
 			<span className="text-muted-foreground">{t("pickupScheduled")}</span>
 			{beThereAtDate && (
-				<span className="font-medium text-foreground">
+				<span className=" text-foreground">
 					{format(new Date(beThereAtDate), "d MMM yyyy")}
 				</span>
 			)}
 			{beThereAtTime && (
-				<span className="font-medium text-foreground">{beThereAtTime}</span>
+				<span className=" text-foreground">{beThereAtTime}</span>
 			)}
-			<span className="font-medium text-foreground">{driverName}</span>
+			<span className="text-foreground">{driverName}</span>
 			{beThereAtDate && (
 				<Button
 					size="sm"
-					variant="ghost"
-					className="h-5 px-1.5 text-xs"
+					variant="outline"
 					onClick={(e) => {
 						e.stopPropagation();
 						const date = new Date(beThereAtDate);
@@ -127,7 +126,7 @@ export function RoutePickupSection({
 			)}
 		</span>
 	) : (
-		<span className="flex flex-wrap items-center gap-2">
+		<span className="flex flex-wrap items-center gap-2 text-base">
 			<span className="text-muted-foreground">{t("pickupScheduled")}</span>
 			<span className="text-muted-foreground">—</span>
 		</span>
@@ -262,13 +261,13 @@ export function RoutePickupSection({
 					</div>
 				</>
 			) : (meetingPoint ?? beThereAtDate ?? driverName) ? (
-				<div className="space-y-1.5 pt-2 text-xs">
+				<div className="space-y-1.5 pt-2 text-base">
 					{meetingPoint && (
 						<p>
 							<span className="text-muted-foreground">
 								{t("pickupInfoMeetingPoint")}:{" "}
 							</span>
-							<span className="font-medium">{meetingPoint}</span>
+							<span className="">{meetingPoint}</span>
 						</p>
 					)}
 					{(beThereAtDate ?? beThereAtTime) && (
@@ -276,7 +275,7 @@ export function RoutePickupSection({
 							<span className="text-muted-foreground">
 								{t("pickupInfoBeThereAt")}:{" "}
 							</span>
-							<span className="font-medium">
+							<span className="">
 								{beThereAtDate && format(new Date(beThereAtDate), "d MMM yyyy")}
 								{beThereAtDate && beThereAtTime && " · "}
 								{beThereAtTime}
@@ -288,7 +287,7 @@ export function RoutePickupSection({
 							<span className="text-muted-foreground">
 								{t("pickupInfoDriverName")}:{" "}
 							</span>
-							<span className="font-medium">{driverName}</span>
+							<span className="">{driverName}</span>
 						</p>
 					)}
 					{driverPhone && (
@@ -296,7 +295,7 @@ export function RoutePickupSection({
 							<span className="text-muted-foreground">
 								{t("pickupInfoDriverPhone")}:{" "}
 							</span>
-							<a href={`tel:${driverPhone}`} className="font-medium underline">
+							<a href={`tel:${driverPhone}`} className=" underline">
 								{driverPhone}
 							</a>
 						</p>
@@ -306,12 +305,12 @@ export function RoutePickupSection({
 							<span className="text-muted-foreground">
 								{t("pickupInfoAdditionalInfo")}:{" "}
 							</span>
-							<span className="font-medium">{additionalInfo}</span>
+							<span className="">{additionalInfo}</span>
 						</p>
 					)}
 				</div>
 			) : pendingNote ? (
-				<p className="pt-2 text-xs text-muted-foreground">{pendingNote}</p>
+				<p className="pt-2 text-base text-muted-foreground">{pendingNote}</p>
 			) : null}
 		</CollapsibleSection>
 	);

@@ -197,7 +197,7 @@
 		"submitRequest": "Submit Quotation Request",
 		"airport": "Airport",
 		"airportPlaceholder": "e.g. Malpensa, Milan Linate",
-		"airportInvolved": "Airport involved?",
+		"airportInvolved": "From/To airport?",
 		"flightArrival": "Arriving",
 		"flightDeparture": "Departing",
 		"airportYes": "Yes",
@@ -256,7 +256,11 @@
 		"pickupTimeNote": "Based on the time you provide, we will calculate your pickup time. After confirming your transfer, we will let you know exactly when we will come to pick you up.",
 		"labelDeparturePoint": "Departure point",
 		"labelDestination": "Destination",
-		"labelAirport": "Airport"
+		"labelAirport": "Airport",
+		"routeFrom": "From",
+		"routeTo": "To",
+		"routeFromAirport": "From the airport of",
+		"routeToAirport": "To the airport of"
 	},
 	"messages": {
 		"title": "Messages"
@@ -342,7 +346,11 @@
 		"saveAndNotifyCustomer": "Save & Notify Customer",
 		"labelDeparturePoint": "Departure point",
 		"labelDestination": "Destination",
-		"labelAirport": "Airport"
+		"labelAirport": "Airport",
+		"routeFrom": "From",
+		"routeTo": "To",
+		"routeFromAirport": "From the airport of",
+		"routeToAirport": "To the airport of"
 	},
 	"notFound": {
 		"heading": "Page Not Found",

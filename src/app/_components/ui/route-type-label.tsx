@@ -10,14 +10,15 @@ interface Props {
 
 export function RouteTypeLabel({ routeType, n }: Props) {
 	const t = useTranslations("common");
+	const iconSize = "h-4 w-4";
 	return (
-		<div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+		<div className="flex items-center gap-1.5 text-base font-semibold uppercase tracking-wide text-muted-foreground mb-2">
 			{routeType === "airport_in" ? (
-				<PlaneLanding className="h-3.5 w-3.5" />
+				<PlaneLanding className={iconSize} />
 			) : routeType === "airport_out" ? (
-				<PlaneTakeoff className="h-3.5 w-3.5" />
+				<PlaneTakeoff className={iconSize} />
 			) : (
-				<Car className="h-3.5 w-3.5" />
+				<Car className={iconSize} />
 			)}
 			{t("routeN", { n })}
 		</div>

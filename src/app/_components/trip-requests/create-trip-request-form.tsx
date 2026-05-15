@@ -289,7 +289,7 @@ export function CreateTripRequestForm({
 											}}
 										/>
 									</div>
-									<p className="text-xs text-muted-foreground">
+									<p className="text-base text-muted-foreground">
 										{t("pickupTimeNote")}
 									</p>
 									{hasAirport && (
