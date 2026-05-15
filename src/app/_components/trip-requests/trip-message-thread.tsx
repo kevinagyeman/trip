@@ -99,8 +99,6 @@ export function TripMessageThread(props: Props) {
 
 	return (
 		<div className="space-y-4">
-			<h3 className="text-lg font-semibold">{t("title")}</h3>
-
 			{/* Message list */}
 			<div className="max-h-96 overflow-y-auto space-y-3 rounded-lg border p-4 bg-muted/30">
 				{data.length === 0 ? (
@@ -156,6 +154,7 @@ export function TripMessageThread(props: Props) {
 					onChange={(e) => setBody(e.target.value)}
 					rows={1}
 					className="flex-1 resize-none min-h-9"
+					placeholder={t("inputPlaceholder")}
 					onKeyDown={(e) => {
 						if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
 							e.preventDefault();
@@ -167,6 +166,7 @@ export function TripMessageThread(props: Props) {
 					onClick={handleSend}
 					isLoading={isPending}
 					disabled={!body.trim()}
+					variant={"default"}
 				>
 					<ArrowRight className="h-4 w-4" />
 				</LoadingButton>

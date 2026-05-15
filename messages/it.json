@@ -161,7 +161,7 @@
 		"destination": "Destinazione",
 		"destinationPlaceholder": "Nome hotel, campeggio, stazione, indirizzo...",
 		"addRoute": "Aggiungi Percorso",
-		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro. Dopo la conferma del transfer, ti indicheremo quando verremo a prenderti.",
+		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro in base a traffico e distanza. Dopo la conferma del transfer, ti indicheremo l'orario di ritiro.",
 		"contactDetails": "Dati di Contatto",
 		"passengers": "Passeggeri",
 		"preferences": "Preferenze",
@@ -253,17 +253,19 @@
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato",
 		"call": "Chiama",
-		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro. Dopo la conferma del transfer, ti indicheremo quando verremo a prenderti.",
+		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro in base a traffico e distanza. Dopo la conferma del transfer, ti indicheremo l'orario di ritiro.",
 		"labelDeparturePoint": "Punto di partenza",
 		"labelDestination": "Destinazione",
 		"labelAirport": "Aeroporto",
 		"routeFrom": "Da",
 		"routeTo": "A",
 		"routeFromAirport": "Dall'aeroporto di",
-		"routeToAirport": "All'aeroporto di"
+		"routeToAirport": "All'aeroporto di",
+		"messagesSubtitle": "Usa questa chat per tutto ciò che non puoi comunicare tramite il modulo qui sopra."
 	},
 	"messages": {
-		"title": "Messaggi"
+		"title": "Messaggi",
+		"inputPlaceholder": "Scrivi un messaggio..."
 	},
 	"adminDashboard": {
 		"title": "Dashboard Admin",

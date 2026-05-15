@@ -161,7 +161,7 @@
 		"destination": "Destination",
 		"destinationPlaceholder": "Hotel name, campsite, station, address...",
 		"addRoute": "Add Route",
-		"pickupTimeNote": "Based on the time you provide, we will calculate your pickup time. After confirming your transfer, we will let you know exactly when we will come to pick you up.",
+		"pickupTimeNote": "Based on the time you indicated, we'll calculate the pickup time based on traffic and distance. After the transfer is confirmed, we'll let you know the pickup time.",
 		"contactDetails": "Contact Details",
 		"passengers": "Passengers",
 		"preferences": "Preferences",
@@ -253,17 +253,19 @@
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled",
 		"call": "Call",
-		"pickupTimeNote": "Based on the time you provide, we will calculate your pickup time. After confirming your transfer, we will let you know exactly when we will come to pick you up.",
+		"pickupTimeNote": "Based on the time you indicated, we'll calculate the pickup time based on traffic and distance. After the transfer is confirmed, we'll let you know the pickup time.",
 		"labelDeparturePoint": "Departure point",
 		"labelDestination": "Destination",
 		"labelAirport": "Airport",
 		"routeFrom": "From",
 		"routeTo": "To",
 		"routeFromAirport": "From the airport of",
-		"routeToAirport": "To the airport of"
+		"routeToAirport": "To the airport of",
+		"messagesSubtitle": "Use this chat for anything that can't be communicated through the form above."
 	},
 	"messages": {
-		"title": "Messages"
+		"title": "Messages",
+		"inputPlaceholder": "Write a message..."
 	},
 	"adminDashboard": {
 		"title": "Dashboard",

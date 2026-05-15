@@ -21,6 +21,7 @@ import { buildStatusLabels, QUOTATION_STATUS_COLORS } from "@/lib/trip-utils";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
+	const tMessages = useTranslations("messages");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
@@ -285,7 +286,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			))}
 
 			{/* Messages */}
-			<SectionCard contentClassName="pt-0">
+			<SectionCard title={tMessages("title")} subtitle={t("messagesSubtitle")}>
 				<TripMessageThread mode="customer" token={token} />
 			</SectionCard>
 		</div>
