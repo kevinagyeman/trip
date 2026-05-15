@@ -128,7 +128,7 @@ export function RoutePickupSection({
 	) : (
 		<span className="flex flex-wrap items-center gap-2 text-base">
 			<span className="text-muted-foreground">{t("pickupScheduled")}</span>
-			<span className="text-muted-foreground">—</span>
+			<span className="text-muted-foreground">{t("pickupTimeNote")}</span>
 		</span>
 	);
 
@@ -309,9 +309,7 @@ export function RoutePickupSection({
 						</p>
 					)}
 				</div>
-			) : pendingNote ? (
-				<p className="pt-2 text-base text-muted-foreground">{pendingNote}</p>
-			) : null}
+			) : pendingNote ? null : null}
 		</CollapsibleSection>
 	);
 }

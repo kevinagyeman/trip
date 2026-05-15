@@ -504,6 +504,7 @@
 		"pickupInfoAdditionalInfoPlaceholder": "Note per il cliente...",
 		"pickupInfoSelectDriver": "Seleziona autista",
 		"pickupInfoSelectDriverPlaceholder": "Scegli tra i tuoi autisti...",
-		"saveAndNotifyCustomer": "Salva e Notifica Cliente"
+		"saveAndNotifyCustomer": "Salva e Notifica Cliente",
+		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro in base a traffico e distanza. Dopo la conferma del transfer, ti indicheremo l'orario di ritiro."
 	}
 }

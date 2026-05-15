@@ -501,6 +501,7 @@
 		"pickupInfoAdditionalInfoPlaceholder": "Any notes for the customer...",
 		"pickupInfoSelectDriver": "Select driver",
 		"pickupInfoSelectDriverPlaceholder": "Choose from your drivers...",
-		"saveAndNotifyCustomer": "Save & Notify Customer"
+		"saveAndNotifyCustomer": "Save & Notify Customer",
+		"pickupTimeNote": "Based on the time you indicated, we'll calculate the pickup time based on traffic and distance. After the transfer is confirmed, we'll let you know the pickup time."
 	}
 }
