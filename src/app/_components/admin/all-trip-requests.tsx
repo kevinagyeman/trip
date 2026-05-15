@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
+import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import type { TripRequestStatus } from "../../../../generated/prisma";
 export function AllTripRequests() {
 	const t = useTranslations("adminRequests");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
+	const { data: myCompany } = api.company.getMySlug.useQuery();
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -80,11 +82,19 @@ export function AllTripRequests() {
 					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
 				</div>
 			) : !items.length ? (
-				<Card>
-					<CardContent className="py-8 text-center text-muted-foreground">
-						{t("noRequests")}
-					</CardContent>
-				</Card>
+				myCompany?.slug ? (
+					<CopyLinkCard
+						url={`/book/${myCompany.slug}`}
+						title={t("noRequests")}
+						subtitle={t("noRequestsDesc")}
+					/>
+				) : (
+					<Card>
+						<CardContent className="py-8 text-center text-muted-foreground">
+							{t("noRequests")}
+						</CardContent>
+					</Card>
+				)
 			) : (
 				<>
 					{items.map((request) => (

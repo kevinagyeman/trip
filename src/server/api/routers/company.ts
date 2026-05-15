@@ -58,6 +58,16 @@ export const companyRouter = createTRPCRouter({
 			return company;
 		}),
 
+	// ADMIN: Get own company slug (for booking link)
+	getMySlug: adminProcedure.query(async ({ ctx }) => {
+		const companyId = ctx.session.user.companyId;
+		if (!companyId) return null;
+		return ctx.db.company.findUnique({
+			where: { id: companyId },
+			select: { slug: true },
+		});
+	}),
+
 	// ADMIN: Update own company details
 	updateMyCompany: adminProcedure
 		.input(

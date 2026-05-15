@@ -115,7 +115,7 @@ export function DriversManager() {
 
 	return (
 		<SectionCard title={t("title")} subtitle={t("subtitle")}>
-			<Button onClick={openCreate} size="sm" className="mb-4">
+			<Button onClick={openCreate} size="sm">
 				<Plus className="h-4 w-4" />
 				{t("addDriver")}
 			</Button>
@@ -124,12 +124,6 @@ export function DriversManager() {
 				<div className="flex justify-center py-4">
 					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
 				</div>
-			)}
-
-			{!isLoading && drivers.length === 0 && (
-				<SectionCard contentClassName="py-8 text-center text-sm text-muted-foreground">
-					{t("noDrivers")}
-				</SectionCard>
 			)}
 
 			<div className="space-y-2">

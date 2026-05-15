@@ -109,6 +109,7 @@ function SignInForm() {
 
 					<LoadingButton
 						type="submit"
+						variant={"default"}
 						className="w-full"
 						isLoading={isSubmitting}
 					>
@@ -125,7 +126,12 @@ function SignInForm() {
 
 					<div className="rounded-lg border p-4 text-center text-sm">
 						<p className="mb-2 text-muted-foreground">{t("isYourCompany")}</p>
-						<Button variant="outline" className="w-full" type="button" asChild>
+						<Button
+							variant="secondary"
+							className="w-full"
+							type="button"
+							asChild
+						>
 							<Link href="/register-company">{t("registerCompanyLink")}</Link>
 						</Button>
 					</div>

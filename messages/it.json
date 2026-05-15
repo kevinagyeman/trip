@@ -281,7 +281,9 @@
 		"statusRejected": "Rifiutato",
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato",
-		"noRequests": "Nessuna richiesta trovata.",
+		"noRequests": "Nessuna richiesta ancora.",
+		"noRequestsDesc": "Condividi il tuo link e inizia subito a ricevere prenotazioni.",
+		"noRequestsLink": "Copia link prenotazione",
 		"searchPlaceholder": "Cerca per nome, email o numero d'ordine...",
 		"loadMore": "Carica altri"
 	},

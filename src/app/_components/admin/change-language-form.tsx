@@ -61,9 +61,7 @@ export function ChangeLanguageForm({
 					{t("languageUpdated")}
 				</p>
 			)}
-			<LoadingButton type="submit" isLoading={changeLanguage.isPending}>
-				{t("changeLanguageButton")}
-			</LoadingButton>
+			<LoadingButton type="submit" isLoading={changeLanguage.isPending} />
 		</form>
 	);
 }

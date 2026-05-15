@@ -66,12 +66,19 @@ export function CompanyDetailsForm({
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
 			<CustomInput
 				labelText={t("companyName")}
-				inputProps={{ ...register("name") }}
+				inputProps={{
+					...register("name"),
+					readOnly: true,
+					className: "bg-muted text-muted-foreground cursor-not-allowed",
+				}}
 			/>
 			<CustomInput
 				labelText={t("vat")}
-				placeholder={t("vatPlaceholder")}
-				inputProps={{ ...register("vat") }}
+				inputProps={{
+					...register("vat"),
+					readOnly: true,
+					className: "bg-muted text-muted-foreground cursor-not-allowed",
+				}}
 			/>
 			<CustomInput
 				labelText={t("address")}

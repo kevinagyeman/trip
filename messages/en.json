@@ -281,7 +281,9 @@
 		"statusRejected": "Rejected",
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled",
-		"noRequests": "No requests found.",
+		"noRequests": "No requests yet.",
+		"noRequestsDesc": "Share your booking link and start receiving bookings right away.",
+		"noRequestsLink": "Copy booking link",
 		"searchPlaceholder": "Search by name, email or order number...",
 		"loadMore": "Load more"
 	},
