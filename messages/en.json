@@ -253,6 +253,7 @@
 		"statusCompleted": "Completed",
 		"statusCancelled": "Cancelled",
 		"call": "Call",
+		"pickupTimeNote": "Based on the time you provide, we will calculate your pickup time. After confirming your transfer, we will let you know exactly when we will come to pick you up.",
 		"labelDeparturePoint": "Departure point",
 		"labelDestination": "Destination",
 		"labelAirport": "Airport"

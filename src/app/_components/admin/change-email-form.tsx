@@ -65,9 +65,7 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 					{t("emailUpdated")}
 				</p>
 			)}
-			<LoadingButton type="submit" isLoading={changeEmail.isPending}>
-				{t("changeEmailButton")}
-			</LoadingButton>
+			<LoadingButton type="submit" isLoading={changeEmail.isPending} />
 		</form>
 	);
 }

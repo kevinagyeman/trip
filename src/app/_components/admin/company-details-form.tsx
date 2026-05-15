@@ -69,7 +69,7 @@ export function CompanyDetailsForm({
 				inputProps={{
 					...register("name"),
 					readOnly: true,
-					className: "bg-muted text-muted-foreground cursor-not-allowed",
+					disabled: true,
 				}}
 			/>
 			<CustomInput
@@ -77,7 +77,7 @@ export function CompanyDetailsForm({
 				inputProps={{
 					...register("vat"),
 					readOnly: true,
-					className: "bg-muted text-muted-foreground cursor-not-allowed",
+					disabled: true,
 				}}
 			/>
 			<CustomInput

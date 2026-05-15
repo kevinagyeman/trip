@@ -71,9 +71,7 @@ export function ChangePasswordForm() {
 					{t("passwordChanged")}
 				</p>
 			)}
-			<LoadingButton type="submit" isLoading={changePassword.isPending}>
-				{t("changePasswordButton")}
-			</LoadingButton>
+			<LoadingButton type="submit" isLoading={changePassword.isPending} />
 		</form>
 	);
 }

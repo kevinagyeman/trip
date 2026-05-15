@@ -126,7 +126,7 @@ export function DriversManager() {
 				</div>
 			)}
 
-			<div className="space-y-2">
+			<div className="space-y-2 mt-4">
 				{drivers.map((d) => (
 					<div
 						className="border rounded-lg p-4 flex items-center justify-between gap-4"
@@ -218,9 +218,7 @@ export function DriversManager() {
 								type="submit"
 								variant={"default"}
 								isLoading={isSaving}
-							>
-								{editingId ? t("save") : t("add")}
-							</LoadingButton>
+							/>
 						</DialogFooter>
 					</form>
 				</DialogContent>

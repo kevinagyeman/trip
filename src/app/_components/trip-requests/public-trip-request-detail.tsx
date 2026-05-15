@@ -185,20 +185,17 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							/>
 
 							{/* Pickup info */}
-							{(route.meetingPoint ??
-								route.beThereAtDate ??
-								route.driverName) && (
-								<RoutePickupSection
-									pickup={route.pickup}
-									destination={route.destination}
-									driverName={route.driverName}
-									driverPhone={route.driverPhone}
-									beThereAtDate={route.beThereAtDate}
-									beThereAtTime={route.beThereAtTime}
-									meetingPoint={route.meetingPoint}
-									additionalInfo={route.additionalInfo}
-								/>
-							)}
+							<RoutePickupSection
+								pickup={route.pickup}
+								destination={route.destination}
+								driverName={route.driverName}
+								driverPhone={route.driverPhone}
+								beThereAtDate={route.beThereAtDate}
+								beThereAtTime={route.beThereAtTime}
+								meetingPoint={route.meetingPoint}
+								additionalInfo={route.additionalInfo}
+								pendingNote={t("pickupTimeNote")}
+							/>
 						</RouteCardWrapper>
 					);
 				})}
@@ -265,6 +262,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					{quotation.status === "PENDING" && quotation.notifiedAt && (
 						<div className="flex gap-2">
 							<LoadingButton
+								variant={"default"}
 								onClick={() =>
 									acceptQuotation.mutate({ id: quotation.id, token })
 								}

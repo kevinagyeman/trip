@@ -55,6 +55,7 @@ interface Props {
 	drivers?: Driver[];
 	notifiedAt?: Date | string | null;
 	saveLabel?: string;
+	pendingNote?: string;
 }
 
 export function RoutePickupSection({
@@ -74,6 +75,7 @@ export function RoutePickupSection({
 	drivers = [],
 	notifiedAt,
 	saveLabel,
+	pendingNote,
 }: Props) {
 	const t = useTranslations("common");
 	const [errors, setErrors] = useState<PickupErrors>({});
@@ -249,7 +251,7 @@ export function RoutePickupSection({
 						/>
 					</div>
 
-					<div className="mb-3 mt-2 flex flex-wrap gap-2">
+					<div className="mt-2 flex flex-wrap gap-2">
 						<LoadingButton
 							size="sm"
 							isLoading={!!isLoading}
@@ -258,72 +260,59 @@ export function RoutePickupSection({
 							{saveLabel ?? t("save")}
 						</LoadingButton>
 					</div>
-
-					{notifiedAt && (
-						<p className="text-xs text-muted-foreground">
-							{t("notifiedDate", {
-								date: format(new Date(notifiedAt), "d MMM yyyy"),
-								time: format(new Date(notifiedAt), "HH:mm"),
-							})}
+				</>
+			) : (meetingPoint ?? beThereAtDate ?? driverName) ? (
+				<div className="space-y-1.5 pt-2 text-xs">
+					{meetingPoint && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("pickupInfoMeetingPoint")}:{" "}
+							</span>
+							<span className="font-medium">{meetingPoint}</span>
 						</p>
 					)}
-				</>
-			) : (
-				(meetingPoint ?? beThereAtDate ?? driverName) && (
-					<div className="space-y-1.5 pt-2 text-xs">
-						{meetingPoint && (
-							<p>
-								<span className="text-muted-foreground">
-									{t("pickupInfoMeetingPoint")}:{" "}
-								</span>
-								<span className="font-medium">{meetingPoint}</span>
-							</p>
-						)}
-						{(beThereAtDate ?? beThereAtTime) && (
-							<p>
-								<span className="text-muted-foreground">
-									{t("pickupInfoBeThereAt")}:{" "}
-								</span>
-								<span className="font-medium">
-									{beThereAtDate &&
-										format(new Date(beThereAtDate), "d MMM yyyy")}
-									{beThereAtDate && beThereAtTime && " · "}
-									{beThereAtTime}
-								</span>
-							</p>
-						)}
-						{driverName && (
-							<p>
-								<span className="text-muted-foreground">
-									{t("pickupInfoDriverName")}:{" "}
-								</span>
-								<span className="font-medium">{driverName}</span>
-							</p>
-						)}
-						{driverPhone && (
-							<p>
-								<span className="text-muted-foreground">
-									{t("pickupInfoDriverPhone")}:{" "}
-								</span>
-								<a
-									href={`tel:${driverPhone}`}
-									className="font-medium underline"
-								>
-									{driverPhone}
-								</a>
-							</p>
-						)}
-						{additionalInfo && (
-							<p>
-								<span className="text-muted-foreground">
-									{t("pickupInfoAdditionalInfo")}:{" "}
-								</span>
-								<span className="font-medium">{additionalInfo}</span>
-							</p>
-						)}
-					</div>
-				)
-			)}
+					{(beThereAtDate ?? beThereAtTime) && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("pickupInfoBeThereAt")}:{" "}
+							</span>
+							<span className="font-medium">
+								{beThereAtDate && format(new Date(beThereAtDate), "d MMM yyyy")}
+								{beThereAtDate && beThereAtTime && " · "}
+								{beThereAtTime}
+							</span>
+						</p>
+					)}
+					{driverName && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("pickupInfoDriverName")}:{" "}
+							</span>
+							<span className="font-medium">{driverName}</span>
+						</p>
+					)}
+					{driverPhone && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("pickupInfoDriverPhone")}:{" "}
+							</span>
+							<a href={`tel:${driverPhone}`} className="font-medium underline">
+								{driverPhone}
+							</a>
+						</p>
+					)}
+					{additionalInfo && (
+						<p>
+							<span className="text-muted-foreground">
+								{t("pickupInfoAdditionalInfo")}:{" "}
+							</span>
+							<span className="font-medium">{additionalInfo}</span>
+						</p>
+					)}
+				</div>
+			) : pendingNote ? (
+				<p className="pt-2 text-xs text-muted-foreground">{pendingNote}</p>
+			) : null}
 		</CollapsibleSection>
 	);
 }

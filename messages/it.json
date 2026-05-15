@@ -253,6 +253,7 @@
 		"statusCompleted": "Completato",
 		"statusCancelled": "Annullato",
 		"call": "Chiama",
+		"pickupTimeNote": "In base all'orario che hai indicato, calcoleremo l'orario di ritiro. Dopo la conferma del transfer, ti indicheremo quando verremo a prenderti.",
 		"labelDeparturePoint": "Punto di partenza",
 		"labelDestination": "Destinazione",
 		"labelAirport": "Aeroporto"
