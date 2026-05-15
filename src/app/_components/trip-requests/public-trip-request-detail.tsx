@@ -238,12 +238,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							{quotation.currency} {quotation.price.toString()}
 						</p>
 						{quotation.isPriceEachWay && (
-							<p className="text-sm text-muted-foreground">
+							<p className="text-sm">
 								{t("priceEachWay")}
 							</p>
 						)}
 						{quotation.areCarSeatsIncluded && (
-							<p className="text-sm text-muted-foreground">
+							<p className="text-sm">
 								{t("carSeatsIncluded")}
 							</p>
 						)}
