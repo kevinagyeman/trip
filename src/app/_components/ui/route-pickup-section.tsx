@@ -37,7 +37,7 @@ export function RoutePickupSection({
 	// Admin: flat display, no banner
 	if (isAdmin) {
 		return (
-			<div className="border-t border-dashed px-3 py-3 space-y-1.5 text-base">
+			<div className="px-3 py-3 space-y-1.5 text-base">
 				<PickupReadOnlyView
 					meetingPoint={meetingPoint}
 					beThereAtDate={beThereAtDate}
@@ -54,7 +54,7 @@ export function RoutePickupSection({
 	// Customer: no data yet
 	if (!hasData) {
 		return (
-			<div className="border-t border-dashed px-3 py-3">
+			<div className="px-3 py-3">
 				<AlertBanner
 					variant="info"
 					title={t("pickupScheduled")}
@@ -73,7 +73,7 @@ export function RoutePickupSection({
 
 	// Customer: data present
 	return (
-		<div className="border-t border-dashed px-3 py-3 space-y-1.5 text-base">
+		<div className="px-3 py-3 space-y-1.5 text-base">
 			<AlertBanner
 				variant="success"
 				title={t("pickupConfirmedTitle")}
@@ -148,9 +148,10 @@ function PickupReadOnlyView({
 				<InfoRow
 					label={t("pickupInfoDriverPhone")}
 					value={
-						<a href={`tel:${driverPhone}`} className="underline">
-							{driverPhone}
-						</a>
+						// <a href={`tel:${driverPhone}`} className="underline">
+						// 	{driverPhone}
+						// </a>
+						driverPhone
 					}
 				/>
 			)}

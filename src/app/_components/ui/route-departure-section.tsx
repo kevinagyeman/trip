@@ -38,7 +38,7 @@ export function RouteDepartureSection({
 
 	if (!hasData) {
 		return (
-			<div className="border-t border-dashed px-3 pt-3 text-base">
+			<div className="px-3 pt-3 text-base">
 				<span className="text-muted-foreground">{depLabel}</span>{" "}
 				<span className="text-muted-foreground">—</span>
 			</div>
@@ -46,7 +46,7 @@ export function RouteDepartureSection({
 	}
 
 	return (
-		<div className="border-t border-dashed px-3 py-2 space-y-1 text-base">
+		<div className="px-3 py-2 space-y-1 text-base">
 			<p>
 				<span className="text-muted-foreground">{depLabel} </span>
 

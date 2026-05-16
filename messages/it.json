@@ -499,7 +499,7 @@
 		"routeLandingTime": "Orario di atterraggio del volo",
 		"routeN": "Percorso {n}",
 		"pickupScheduled": "Ritiro programmato:",
-		"pickupAdminWarningTitle": "Non hai ancora fatto sapere al cliente quando passeranno a prenderlo",
+		"pickupAdminWarningTitle": "Non hai ancora fatto sapere al cliente quando passerai a prenderlo",
 		"pickupConfirmedTitle": "I tuoi dati di ritiro sono stati programmati!",
 		"pickupConfirmedDescription": "Fatti trovare al punto di incontro all'orario stabilito. Se si tratta di un volo in arrivo, il nostro autista monitorerà l'orario di atterraggio per eventuali ritardi e si adatterà di conseguenza.",
 		"notifiedDate": "Notificato: {date} alle {time}",

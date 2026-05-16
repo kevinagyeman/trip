@@ -133,7 +133,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			<SectionCard title={t("routes")} contentClassName="pt-0">
 				{routes.map((route, i) => (
 					<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
-						{/* Route header — read-only */}
+						{/* 1 – Route */}
 						<div className="p-3">
 							<RouteTypeLabel routeType={route.type} n={i + 1} />
 							<p className="text-base mt-1">
@@ -152,43 +152,45 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 							</p>
 						</div>
 
-						{/* Departure flat display */}
-						<RouteDepartureSection
-							routeType={route.type}
-							scheduledDate={route.scheduledDate}
-							scheduledTime={route.scheduledTime}
-							flightNumber={route.flightNumber}
-							pickup={route.pickup}
-							destination={route.destination}
-							showCalendar
-						/>
-
-						{/* Route edit button */}
-						<div className="p-3">
-							<AdminRouteEditDialog
-								requestId={requestId}
-								route={route}
-								routeIndex={i}
-								allRoutes={routes}
-								isLoading={updateRoutesByAdmin.isPending}
-								label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
-								onSave={updateRoutesByAdmin.mutate}
+						{/* 2 – Departure */}
+						<div className="border-t border-dashed">
+							<RouteDepartureSection
+								routeType={route.type}
+								scheduledDate={route.scheduledDate}
+								scheduledTime={route.scheduledTime}
+								flightNumber={route.flightNumber}
+								pickup={route.pickup}
+								destination={route.destination}
+								showCalendar
 							/>
+							<div className="px-3 pb-3">
+								<AdminRouteEditDialog
+									requestId={requestId}
+									route={route}
+									routeIndex={i}
+									allRoutes={routes}
+									isLoading={updateRoutesByAdmin.isPending}
+									label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
+									onSave={updateRoutesByAdmin.mutate}
+								/>
+							</div>
 						</div>
 
-						{/* Pickup section — only when CONFIRMED */}
+						{/* 3 – Pickup */}
 						{request.status === "CONFIRMED" && (
-							<PickupAdminBlock
-								requestId={requestId}
-								route={route}
-								routeIndex={i}
-								allRoutes={routes}
-								drivers={drivers}
-								isLoading={updateRoutesByAdmin.isPending}
-								onSave={updateRoutesByAdmin.mutate}
-								warningTitle={tCommon("pickupAdminWarningTitle")}
-								warningText={tCommon("pickupAdminTimeNote")}
-							/>
+							<div className="border-t border-dashed">
+								<PickupAdminBlock
+									requestId={requestId}
+									route={route}
+									routeIndex={i}
+									allRoutes={routes}
+									drivers={drivers}
+									isLoading={updateRoutesByAdmin.isPending}
+									onSave={updateRoutesByAdmin.mutate}
+									warningTitle={tCommon("pickupAdminWarningTitle")}
+									warningText={tCommon("pickupAdminTimeNote")}
+								/>
+							</div>
 						)}
 					</RouteCardWrapper>
 				))}
@@ -270,27 +272,24 @@ function PickupAdminBlock({
 		route.driverName
 	);
 
-	const pickupDialog = (
-		<AdminPickupEditDialog
-			requestId={requestId}
-			route={route}
-			routeIndex={routeIndex}
-			allRoutes={allRoutes}
-			drivers={drivers}
-			isLoading={isLoading}
-			onSave={onSave}
-		/>
-	);
-
 	if (!hasPickupData) {
 		return (
-			<div className="border-t border-dashed px-3 py-3">
+			<div className="px-3 py-3">
 				<AlertBanner
 					variant="warning"
 					title={warningTitle}
 					description={warningText}
 				>
-					{pickupDialog}
+					<AdminPickupEditDialog
+						requestId={requestId}
+						route={route}
+						routeIndex={routeIndex}
+						allRoutes={allRoutes}
+						drivers={drivers}
+						isLoading={isLoading}
+						inBanner
+						onSave={onSave}
+					/>
 				</AlertBanner>
 			</div>
 		);
@@ -309,7 +308,17 @@ function PickupAdminBlock({
 				additionalInfo={route.additionalInfo}
 				isAdmin
 			/>
-			<div className="px-3 py-2">{pickupDialog}</div>
+			<div className="px-3 pb-3">
+				<AdminPickupEditDialog
+					requestId={requestId}
+					route={route}
+					routeIndex={routeIndex}
+					allRoutes={allRoutes}
+					drivers={drivers}
+					isLoading={isLoading}
+					onSave={onSave}
+				/>
+			</div>
 		</>
 	);
 }

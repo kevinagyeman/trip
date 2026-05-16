@@ -147,65 +147,65 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			<SectionCard title={t("routes")} contentClassName="pt-0">
 				{routes.map((route, i) => (
 					<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
+						{/* 1 – Route */}
 						<div className="px-3 py-3">
 							<RouteTypeLabel routeType={route.type} n={i + 1} />
-
 							<p className="text-base">
 								<span className="text-muted-foreground mr-2">
 									{route.type === "airport_in"
 										? t("routeFromAirport")
 										: t("routeFrom")}
 								</span>
-
 								<span className="font-semibold">{route.pickup}</span>
-
 								<span className="text-muted-foreground mx-2">
 									{route.type === "airport_out"
 										? t("routeToAirport")
 										: t("routeTo")}
 								</span>
-
 								<span className="font-semibold">{route.destination}</span>
 							</p>
 						</div>
 
-						{/* Departure details */}
-						<RouteDepartureSection
-							routeType={route.type}
-							scheduledDate={route.scheduledDate}
-							scheduledTime={route.scheduledTime}
-							flightNumber={route.flightNumber}
-						/>
-						{canEdit && (
-							<div className="p-3">
-								<CustomerDepartureEditDialog
-									route={route}
-									routeIndex={i}
-									allRoutes={routes}
-									isLoading={updateRoutes.isPending}
-									label={`${t("editDeparture")} — ${tCommon("routeN", { n: i + 1 })}`}
-									onSave={(routesPayload, options) =>
-										updateRoutes.mutate(
-											{ token, routes: routesPayload },
-											options,
-										)
-									}
-								/>
-							</div>
-						)}
+						{/* 2 – Departure */}
+						<div className="border-t border-dashed">
+							<RouteDepartureSection
+								routeType={route.type}
+								scheduledDate={route.scheduledDate}
+								scheduledTime={route.scheduledTime}
+								flightNumber={route.flightNumber}
+							/>
+							{canEdit && (
+								<div className="px-3 pb-3">
+									<CustomerDepartureEditDialog
+										route={route}
+										routeIndex={i}
+										allRoutes={routes}
+										isLoading={updateRoutes.isPending}
+										label={`${t("editDeparture")} — ${tCommon("routeN", { n: i + 1 })}`}
+										onSave={(routesPayload, options) =>
+											updateRoutes.mutate(
+												{ token, routes: routesPayload },
+												options,
+											)
+										}
+									/>
+								</div>
+							)}
+						</div>
 
-						{/* Pickup info */}
-
-						<RoutePickupSection
-							pickup={route.pickup}
-							destination={route.destination}
-							driverName={route.driverName}
-							driverPhone={route.driverPhone}
-							beThereAtDate={route.beThereAtDate}
-							beThereAtTime={route.beThereAtTime}
-							meetingPoint={route.meetingPoint}
-							additionalInfo={route.additionalInfo}
-						/>
+						{/* 3 – Pickup */}
+						<div className="border-t border-dashed">
+							<RoutePickupSection
+								pickup={route.pickup}
+								destination={route.destination}
+								driverName={route.driverName}
+								driverPhone={route.driverPhone}
+								beThereAtDate={route.beThereAtDate}
+								beThereAtTime={route.beThereAtTime}
+								meetingPoint={route.meetingPoint}
+								additionalInfo={route.additionalInfo}
+							/>
+						</div>
 					</RouteCardWrapper>
 				))}
 			</SectionCard>

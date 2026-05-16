@@ -9,7 +9,6 @@ import { RequiredLabel } from "@/app/_components/ui/required-label";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { pickupSchema, type PickupFormValues } from "@/lib/schemas/pickup";
-import { Car } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -44,6 +43,7 @@ interface Props {
 	allRoutes: RouteData[];
 	drivers: Driver[];
 	isLoading: boolean;
+	inBanner?: boolean;
 	onSave: (
 		input: {
 			id: string;
@@ -74,6 +74,7 @@ export function AdminPickupEditDialog({
 	allRoutes,
 	drivers,
 	isLoading,
+	inBanner = false,
 	onSave,
 }: Props) {
 	const t = useTranslations("adminDetail");
@@ -178,8 +179,15 @@ export function AdminPickupEditDialog({
 			isLoading={isLoading}
 			saveLabel={t("saveAndNotifyCustomer")}
 			trigger={
-				<Button variant="outline" size="sm">
-					<Car />
+				<Button
+					variant="secondary"
+					size="sm"
+					className={
+						inBanner
+							? "dark:text-yellow-200 text-yellow-900 dark:border-yellow-800 border-yellow-900 dark:bg-yellow-950/30 bg-yellow-100 hover:bg-yellow-100 hover:dark:bg-yellow-950/30 border"
+							: ""
+					}
+				>
 					{t("editPickup")}
 				</Button>
 			}
