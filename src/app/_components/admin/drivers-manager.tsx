@@ -1,17 +1,10 @@
 "use client";
 
+import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
-import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { driverSchema, type DriverFormValues } from "@/lib/schemas/driver";
 import { api } from "@/trpc/react";
@@ -154,75 +147,58 @@ export function DriversManager() {
 				))}
 			</div>
 
-			<Dialog
+			<AppDialog
 				open={open}
 				onOpenChange={(v) => {
 					if (!v) handleClose();
 				}}
+				title={editingId ? t("editDriver") : t("addDriver")}
+				onSave={() => handleSubmit(onSubmit)()}
+				isLoading={isSaving}
 			>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>
-							{editingId ? t("editDriver") : t("addDriver")}
-						</DialogTitle>
-					</DialogHeader>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-							<CustomInput
-								required
-								labelText={t("name")}
-								error={errors.name?.message}
-								inputProps={{ ...register("name") }}
-							/>
-							<CustomInput
-								required
-								labelText={t("surname")}
-								error={errors.surname?.message}
-								inputProps={{ ...register("surname") }}
-							/>
-							<div className="col-span-full space-y-1">
-								<Label className="text-xs">
-									{t("phone")} <RequiredLabel />
-								</Label>
-								<PhoneInput
-									countryCode={watch("phoneCountryCode")}
-									onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
-									phoneNumber={watch("phoneNumber")}
-									onPhoneNumberChange={(v) => setValue("phoneNumber", v)}
-									error={
-										errors.phoneCountryCode?.message ??
-										errors.phoneNumber?.message
-									}
-								/>
-								{(errors.phoneCountryCode ?? errors.phoneNumber) && (
-									<small className="text-xs text-destructive">
-										{errors.phoneCountryCode?.message ??
-											errors.phoneNumber?.message}
-									</small>
-								)}
-							</div>
-							<CustomInput
-								required
-								className="col-span-full"
-								labelText={t("email")}
-								inputType="email"
-								error={errors.email?.message}
-								inputProps={{ ...register("email") }}
-							/>
-						</div>
-						<DialogFooter className="mt-4">
-							<Button type="button" variant="secondary" onClick={handleClose}>
-								{t("cancel")}
-							</Button>
-							<LoadingButton
-								type="submit"
-								variant={"default"}
-								isLoading={isSaving}
-							/>
-						</DialogFooter>
-					</form>
-				</DialogContent>
-			</Dialog>
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<CustomInput
+						required
+						labelText={t("name")}
+						error={errors.name?.message}
+						inputProps={{ ...register("name") }}
+					/>
+					<CustomInput
+						required
+						labelText={t("surname")}
+						error={errors.surname?.message}
+						inputProps={{ ...register("surname") }}
+					/>
+					<div className="col-span-full space-y-1">
+						<Label className="text-xs">
+							{t("phone")} <RequiredLabel />
+						</Label>
+						<PhoneInput
+							countryCode={watch("phoneCountryCode")}
+							onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
+							phoneNumber={watch("phoneNumber")}
+							onPhoneNumberChange={(v) => setValue("phoneNumber", v)}
+							error={
+								errors.phoneCountryCode?.message ?? errors.phoneNumber?.message
+							}
+						/>
+						{(errors.phoneCountryCode ?? errors.phoneNumber) && (
+							<small className="text-xs text-destructive">
+								{errors.phoneCountryCode?.message ??
+									errors.phoneNumber?.message}
+							</small>
+						)}
+					</div>
+					<CustomInput
+						required
+						className="col-span-full"
+						labelText={t("email")}
+						inputType="email"
+						error={errors.email?.message}
+						inputProps={{ ...register("email") }}
+					/>
+				</div>
+			</AppDialog>
 		</SectionCard>
 	);
 }

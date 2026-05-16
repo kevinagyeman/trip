@@ -245,6 +245,8 @@
 		"rejectQuotation": "Reject Quotation",
 		"saveRouteDetails": "Save details",
 		"adminNotified": "The admin has been notified.",
+		"editDeparture": "Edit departure",
+		"editDepartureTitle": "Edit departure details",
 		"statusPending": "Pending",
 		"statusQuoted": "Quoted",
 		"statusAccepted": "Accepted",
@@ -346,6 +348,11 @@
 		"eventDepartureUpdated": "Updated departure info",
 		"eventPickupInfoViewed": "Saw the pickup info",
 		"saveAndNotifyCustomer": "Save & Notify Customer",
+		"editRoute": "Edit data",
+		"editPickup": "Edit pickup details",
+		"routeSection": "Route",
+		"departureSection": "Departure details",
+		"pickupSection": "Pickup details",
 		"labelDeparturePoint": "Departure point",
 		"labelDestination": "Destination",
 		"labelAirport": "Airport",
@@ -473,6 +480,8 @@
 	"common": {
 		"save": "Save",
 		"edit": "Edit",
+		"view": "View all",
+		"close": "Close",
 		"googleCalendar": "Add to Google Calendar",
 		"departureScheduledTakeoff": "Flight takeoff time:",
 		"departureScheduledLanding": "Flight landing time:",
@@ -487,6 +496,9 @@
 		"routeLandingTime": "Flight Landing Time",
 		"routeN": "Route {n}",
 		"pickupScheduled": "Scheduled pickup:",
+		"pickupAdminWarningTitle": "You haven't yet told the customer when they will be picked up",
+		"pickupConfirmedTitle": "Your pickup has been scheduled!",
+		"pickupConfirmedDescription": "Be at the meeting point at the scheduled time. If it's an arriving flight, our driver will monitor the landing time for any delays and adapt accordingly.",
 		"notifiedDate": "Notified: {date} at {time}",
 		"pickupInfoMeetingPoint": "Meeting point",
 		"pickupInfoMeetingPointPlaceholder": "e.g. Arrivals hall, Exit 2",
@@ -502,6 +514,8 @@
 		"pickupInfoSelectDriver": "Select driver",
 		"pickupInfoSelectDriverPlaceholder": "Choose from your drivers...",
 		"saveAndNotifyCustomer": "Save & Notify Customer",
-		"pickupTimeNote": "Based on the time you indicated, we'll calculate the pickup time based on traffic and distance. After the transfer is confirmed, we'll let you know the pickup time."
+		"pickupTimeNote": "Based on the time you indicated, we'll calculate the pickup time based on traffic and distance. After the transfer is confirmed, we'll let you know the pickup time.",
+		"pickupAdminTimeNote": "Let the customer know the exact pickup time once you have all the necessary information (departure date/time, flight number, etc.)",
+		"noPickupData": "There are no pickup details for this route yet. You will receive an email when they are available."
 	}
 }

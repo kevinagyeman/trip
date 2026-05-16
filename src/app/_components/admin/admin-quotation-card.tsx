@@ -1,18 +1,11 @@
 "use client";
 
 import { QuotationForm } from "@/app/_components/admin/quotation-form";
+import { AppDialog } from "@/app/_components/ui/app-dialog";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
@@ -150,29 +143,16 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 							</div>
 						</div>
 					)}
-					<Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-						<DialogContent>
-							<DialogHeader>
-								<DialogTitle>{t("confirmModalTitle")}</DialogTitle>
-								<DialogDescription>{t("confirmModalDesc")}</DialogDescription>
-							</DialogHeader>
-							<DialogFooter className="gap-2">
-								<Button
-									variant="secondary"
-									onClick={() => setConfirmOpen(false)}
-								>
-									{t("confirmModalCancel")}
-								</Button>
-								<LoadingButton
-									variant={"default"}
-									isLoading={confirmTrip.isPending}
-									onClick={() => confirmTrip.mutate({ id: requestId })}
-								>
-									{t("confirmModalConfirm")}
-								</LoadingButton>
-							</DialogFooter>
-						</DialogContent>
-					</Dialog>
+					<AppDialog
+						open={confirmOpen}
+						onOpenChange={setConfirmOpen}
+						title={t("confirmModalTitle")}
+						onSave={() => confirmTrip.mutate({ id: requestId })}
+						isLoading={confirmTrip.isPending}
+						saveLabel={t("confirmModalConfirm")}
+					>
+						<p className="text-muted-foreground">{t("confirmModalDesc")}</p>
+					</AppDialog>
 				</>
 			) : (
 				<QuotationForm

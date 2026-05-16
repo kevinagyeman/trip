@@ -36,6 +36,7 @@ interface AlertBannerProps {
 	variant: Variant;
 	title?: ReactNode;
 	description?: ReactNode;
+	children?: ReactNode;
 	className?: string;
 }
 
@@ -43,17 +44,21 @@ export function AlertBanner({
 	variant,
 	title,
 	description,
+	children,
 	className,
 }: AlertBannerProps) {
 	const s = styles[variant];
 	return (
-		<div className={`${s.wrapper}${className ? ` ${className}` : ""}`}>
+		<div
+			className={`text-base ${s.wrapper}${className ? ` ${className}` : ""}`}
+		>
 			{title && <p className={s.title}>{title}</p>}
 			{description && (
-				<p className={`text-sm${title ? " mt-1" : ""} ${s.description}`}>
+				<p className={`${title ? "mt-1" : ""} ${s.description}`}>
 					{description}
 				</p>
 			)}
+			{children && <div className="mt-3">{children}</div>}
 		</div>
 	);
 }

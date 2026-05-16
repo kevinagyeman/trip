@@ -31,7 +31,6 @@ export function TripMessageThread(props: Props) {
 	const dateFnsLocale = locale === "it" ? itLocale : enUS;
 	const utils = api.useUtils();
 	const [body, setBody] = useState("");
-	const bottomRef = useRef<HTMLDivElement>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	const token = props.mode === "customer" ? props.token : "";
@@ -78,20 +77,11 @@ export function TripMessageThread(props: Props) {
 		}
 	};
 
-	// Scroll to bottom when messages change
-	useEffect(() => {
-		bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-	}, [messages.data?.length]);
-
 	// Prefill textarea when requested
 	useEffect(() => {
 		if (props.prefillMessage) {
 			setBody(props.prefillMessage);
 			textareaRef.current?.focus();
-			textareaRef.current?.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-			});
 		}
 	}, [props.prefillTrigger]);
 
@@ -143,7 +133,6 @@ export function TripMessageThread(props: Props) {
 						);
 					})
 				)}
-				<div ref={bottomRef} />
 			</div>
 
 			{/* Compose */}

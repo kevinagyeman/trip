@@ -1,9 +1,12 @@
 "use client";
 
 import { AdminMessagesCard } from "@/app/_components/admin/admin-messages-card";
+import { AdminPickupEditDialog } from "@/app/_components/admin/admin-pickup-edit-dialog";
 import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card";
+import { AdminRouteEditDialog } from "@/app/_components/admin/admin-route-edit-dialog";
 import { EventsTimeline } from "@/app/_components/admin/events-timeline";
 import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -16,7 +19,6 @@ import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { buildStatusLabels } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
@@ -28,6 +30,7 @@ import type { TripRequestStatus } from "../../../../generated/prisma";
 export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
+	const tCommon = useTranslations("common");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
@@ -43,63 +46,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const [pendingStatus, setPendingStatus] = useState<TripRequestStatus | null>(
 		null,
 	);
-
-	// Route departures state (admin editable)
-	const [adminRoutePlaces, setAdminRoutePlaces] = useState<
-		Array<{ pickup: string; destination: string }>
-	>([]);
-
-	const [adminRouteDepartures, setAdminRouteDepartures] = useState<
-		Array<{
-			scheduledDate: string;
-			scheduledTime: string;
-			flightNumber: string;
-		}>
-	>([]);
-
-	const [adminPickupInfos, setAdminPickupInfos] = useState<
-		Array<{
-			meetingPoint: string;
-			beThereAtDate: string;
-			beThereAtTime: string;
-			driverName: string;
-			driverPhoneCountryCode: string;
-			driverPhone: string;
-			additionalInfo: string;
-		}>
-	>([]);
-
-	useEffect(() => {
-		if (request) {
-			setAdminRoutePlaces(
-				request.routes.map((r) => ({
-					pickup: r.pickup,
-					destination: r.destination,
-				})),
-			);
-			setAdminRouteDepartures(
-				request.routes.map((r) => ({
-					scheduledDate: r.scheduledDate ?? "",
-					scheduledTime: r.scheduledTime ?? "",
-					flightNumber: r.flightNumber ?? "",
-				})),
-			);
-			setAdminPickupInfos(
-				request.routes.map((r) => {
-					const phoneMatch = r.driverPhone?.match(/^(\+\d+)\s(.+)$/);
-					return {
-						meetingPoint: r.meetingPoint ?? "",
-						beThereAtDate: r.beThereAtDate ?? "",
-						beThereAtTime: r.beThereAtTime ?? "",
-						driverName: r.driverName ?? "",
-						driverPhoneCountryCode: phoneMatch?.[1] ?? "+39",
-						driverPhone: phoneMatch?.[2] ?? r.driverPhone ?? "",
-						additionalInfo: r.additionalInfo ?? "",
-					};
-				}),
-			);
-		}
-	}, [request?.id]);
 
 	const updateStatus = api.tripRequest.updateStatus.useMutation({
 		onSuccess: async () => {
@@ -185,177 +131,67 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="pt-0">
-				{routes.map((route, i) => {
-					const hasDepInfo = !!(route.scheduledDate ?? route.scheduledTime);
-					const hasPickupInfo = !!(route.meetingPoint ?? route.driverName);
-					return (
-						<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
-							{/* Route header */}
-							<div className="flex items-start justify-between gap-3 p-3">
-								<div className="w-full space-y-2">
-									<RouteTypeLabel routeType={route.type} n={i + 1} />
-									{/* <div className="space-y-2">
-										<div className="flex flex-1 flex-col gap-0.5">
-											<span className=" text-muted-foreground">
-												{route.type === "airport_in"
-													? t("routeFromAirport")
-													: t("routeFrom")}
-											</span>
-											<RouteAddressInput
-												value={adminRoutePlaces[i]?.pickup ?? route.pickup}
-												onChange={(val) =>
-													setAdminRoutePlaces((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.pickup = val;
-														return next;
-													})
-												}
-											/>
-										</div>
-										<div className="flex flex-1 flex-col gap-0.5">
-											<span className=" text-muted-foreground">
-												{route.type === "airport_out"
-													? t("routeToAirport")
-													: t("routeTo")}
-											</span>
-											<RouteAddressInput
-												value={
-													adminRoutePlaces[i]?.destination ?? route.destination
-												}
-												onChange={(val) =>
-													setAdminRoutePlaces((prev) => {
-														const next = [...prev];
-														if (next[i]) next[i]!.destination = val;
-														return next;
-													})
-												}
-											/>
-										</div>
-									</div> */}
+				{routes.map((route, i) => (
+					<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
+						{/* Route header — read-only */}
+						<div className="p-3">
+							<RouteTypeLabel routeType={route.type} n={i + 1} />
+							<p className="text-base mt-1">
+								<span className="text-muted-foreground mr-2">
+									{route.type === "airport_in"
+										? t("routeFromAirport")
+										: t("routeFrom")}
+								</span>
+								<span className="font-semibold">{route.pickup}</span>
+								<span className="text-muted-foreground mx-2">
+									{route.type === "airport_out"
+										? t("routeToAirport")
+										: t("routeTo")}
+								</span>
+								<span className="font-semibold">{route.destination}</span>
+							</p>
+						</div>
 
-									<p className="text-base">
-										<span className="text-muted-foreground mr-2">
-											{route.type === "airport_in"
-												? t("routeFromAirport")
-												: t("routeFrom")}
-										</span>
+						{/* Departure flat display */}
+						<RouteDepartureSection
+							routeType={route.type}
+							scheduledDate={route.scheduledDate}
+							scheduledTime={route.scheduledTime}
+							flightNumber={route.flightNumber}
+							pickup={route.pickup}
+							destination={route.destination}
+							showCalendar
+						/>
 
-										<span className="font-semibold">{route.pickup}</span>
-
-										<span className="text-muted-foreground mx-2">
-											{route.type === "airport_out"
-												? t("routeToAirport")
-												: t("routeTo")}
-										</span>
-
-										<span className="font-semibold">{route.destination}</span>
-									</p>
-								</div>
-							</div>
-
-							{/* Departure details */}
-							<RouteDepartureSection
-								routeType={route.type}
-								scheduledDate={route.scheduledDate}
-								scheduledTime={route.scheduledTime}
-								flightNumber={route.flightNumber}
-								pickup={route.pickup}
-								destination={route.destination}
-								value={
-									adminRouteDepartures[i] ?? {
-										scheduledDate: "",
-										scheduledTime: "",
-										flightNumber: "",
-									}
-								}
-								onChange={(field, val) =>
-									setAdminRouteDepartures((prev) => {
-										const next = [...prev];
-										if (next[i]) next[i]![field] = val;
-										return next;
-									})
-								}
+						{/* Route edit button */}
+						<div className="p-3">
+							<AdminRouteEditDialog
+								requestId={requestId}
+								route={route}
+								routeIndex={i}
+								allRoutes={routes}
 								isLoading={updateRoutesByAdmin.isPending}
-								onSave={() =>
-									updateRoutesByAdmin.mutate({
-										id: requestId,
-										routes: routes.map((r, j) => ({
-											pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-											destination:
-												adminRoutePlaces[j]?.destination ?? r.destination,
-											type: r.type ?? undefined,
-											scheduledDate:
-												adminRouteDepartures[j]?.scheduledDate || undefined,
-											scheduledTime:
-												adminRouteDepartures[j]?.scheduledTime || undefined,
-											flightNumber:
-												adminRouteDepartures[j]?.flightNumber || undefined,
-										})),
-									})
-								}
+								label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
+								onSave={updateRoutesByAdmin.mutate}
 							/>
+						</div>
 
-							{/* Pickup info — only when CONFIRMED */}
-							{request.status === "CONFIRMED" && (
-								<RoutePickupSection
-									pickup={route.pickup}
-									destination={route.destination}
-									driverName={route.driverName}
-									driverPhone={route.driverPhone}
-									beThereAtDate={route.beThereAtDate}
-									beThereAtTime={route.beThereAtTime}
-									meetingPoint={route.meetingPoint}
-									additionalInfo={route.additionalInfo}
-									canEdit
-									value={adminPickupInfos[i]}
-									onChange={(field, val) =>
-										setAdminPickupInfos((prev) => {
-											const next = [...prev];
-											if (next[i]) next[i]![field] = val;
-											return next;
-										})
-									}
-									onSave={() =>
-										updateRoutesByAdmin.mutate({
-											id: requestId,
-											notify: true,
-											routes: routes.map((r, j) => ({
-												pickup: adminRoutePlaces[j]?.pickup ?? r.pickup,
-												destination:
-													adminRoutePlaces[j]?.destination ?? r.destination,
-												type: r.type ?? undefined,
-												scheduledDate:
-													adminRouteDepartures[j]?.scheduledDate || undefined,
-												scheduledTime:
-													adminRouteDepartures[j]?.scheduledTime || undefined,
-												flightNumber:
-													adminRouteDepartures[j]?.flightNumber || undefined,
-												meetingPoint:
-													adminPickupInfos[j]?.meetingPoint || undefined,
-												beThereAtDate:
-													adminPickupInfos[j]?.beThereAtDate || undefined,
-												beThereAtTime:
-													adminPickupInfos[j]?.beThereAtTime || undefined,
-												driverName:
-													adminPickupInfos[j]?.driverName || undefined,
-												driverPhone: adminPickupInfos[j]
-													? `${adminPickupInfos[j].driverPhoneCountryCode} ${adminPickupInfos[j].driverPhone}`.trim() ||
-														undefined
-													: undefined,
-												additionalInfo:
-													adminPickupInfos[j]?.additionalInfo || undefined,
-											})),
-										})
-									}
-									isLoading={updateRoutesByAdmin.isPending}
-									drivers={drivers}
-									notifiedAt={request.pickupInfoNotifiedAt}
-									saveLabel={t("saveAndNotifyCustomer")}
-								/>
-							)}
-						</RouteCardWrapper>
-					);
-				})}
+						{/* Pickup section — only when CONFIRMED */}
+						{request.status === "CONFIRMED" && (
+							<PickupAdminBlock
+								requestId={requestId}
+								route={route}
+								routeIndex={i}
+								allRoutes={routes}
+								drivers={drivers}
+								isLoading={updateRoutesByAdmin.isPending}
+								onSave={updateRoutesByAdmin.mutate}
+								warningTitle={tCommon("pickupAdminWarningTitle")}
+								warningText={tCommon("pickupAdminTimeNote")}
+							/>
+						)}
+					</RouteCardWrapper>
+				))}
 			</SectionCard>
 
 			{/* Contact Details */}
@@ -407,18 +243,73 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	);
 }
 
-function RouteAddressInput({
-	value,
-	onChange,
+function PickupAdminBlock({
+	requestId,
+	route,
+	routeIndex,
+	allRoutes,
+	drivers,
+	isLoading,
+	onSave,
+	warningTitle,
+	warningText,
 }: {
-	value: string;
-	onChange: (val: string) => void;
+	requestId: string;
+	route: Parameters<typeof AdminPickupEditDialog>[0]["route"];
+	routeIndex: number;
+	allRoutes: Parameters<typeof AdminPickupEditDialog>[0]["allRoutes"];
+	drivers: Parameters<typeof AdminPickupEditDialog>[0]["drivers"];
+	isLoading: boolean;
+	onSave: Parameters<typeof AdminPickupEditDialog>[0]["onSave"];
+	warningTitle: string;
+	warningText: string;
 }) {
-	return (
-		<Input
-			className="h-7 w-auto min-w-[140px] flex-1 text-sm font-semibold"
-			value={value}
-			onChange={(e) => onChange(e.target.value)}
+	const hasPickupData = !!(
+		route.meetingPoint ??
+		route.beThereAtDate ??
+		route.driverName
+	);
+
+	const pickupDialog = (
+		<AdminPickupEditDialog
+			requestId={requestId}
+			route={route}
+			routeIndex={routeIndex}
+			allRoutes={allRoutes}
+			drivers={drivers}
+			isLoading={isLoading}
+			onSave={onSave}
 		/>
+	);
+
+	if (!hasPickupData) {
+		return (
+			<div className="border-t border-dashed px-3 py-3">
+				<AlertBanner
+					variant="warning"
+					title={warningTitle}
+					description={warningText}
+				>
+					{pickupDialog}
+				</AlertBanner>
+			</div>
+		);
+	}
+
+	return (
+		<>
+			<RoutePickupSection
+				pickup={route.pickup}
+				destination={route.destination}
+				driverName={route.driverName}
+				driverPhone={route.driverPhone}
+				beThereAtDate={route.beThereAtDate}
+				beThereAtTime={route.beThereAtTime}
+				meetingPoint={route.meetingPoint}
+				additionalInfo={route.additionalInfo}
+				isAdmin
+			/>
+			<div className="px-3 py-2">{pickupDialog}</div>
+		</>
 	);
 }

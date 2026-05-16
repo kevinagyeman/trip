@@ -14,13 +14,15 @@ import { Badge } from "@/components/ui/badge";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
 import { TripMessageThread } from "./trip-message-thread";
 
 import { buildStatusLabels, QUOTATION_STATUS_COLORS } from "@/lib/trip-utils";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
+	const tCommon = useTranslations("common");
 	const tMessages = useTranslations("messages");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
@@ -31,32 +33,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 		isError,
 	} = api.tripRequest.getByToken.useQuery({ token });
 
-	const [routeDepartures, setRouteDepartures] = useState<
-		Array<{
-			scheduledDate: string;
-			scheduledTime: string;
-			flightNumber: string;
-		}>
-	>([]);
-
-	useEffect(() => {
-		if (request) {
-			setRouteDepartures(
-				request.routes.map((r) => ({
-					scheduledDate: r.scheduledDate ?? "",
-					scheduledTime: r.scheduledTime ?? "",
-					flightNumber: r.flightNumber ?? "",
-				})),
-			);
-		}
-	}, [request?.id]);
-
 	const markAsViewed = api.tripRequest.markAsViewed.useMutation();
 	useEffect(() => {
 		markAsViewed.mutate({ token });
 	}, [token]);
-
-	const [notified, setNotified] = useState(false);
 
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({
 		onSuccess: async () => {
@@ -73,7 +53,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
-			setNotified(true);
 		},
 	});
 
@@ -90,9 +69,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
 		request.status,
 	);
-	const hasRejectedQuotation = request.quotations.some(
-		(q) => q.status === "REJECTED",
-	);
 
 	return (
 		<div className="space-y-6">
@@ -107,116 +83,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 				firstName={request.firstName}
 				lastName={request.lastName}
 				status={request.status}
-			/>
-
-			{/* Routes */}
-			<SectionCard title={t("routes")} contentClassName="pt-0">
-				{routes.map((route, i) => {
-					return (
-						<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
-							<div className="px-3 py-3">
-								<RouteTypeLabel routeType={route.type} n={i + 1} />
-
-								<p className="text-base">
-									<span className="text-muted-foreground mr-2">
-										{route.type === "airport_in"
-											? t("routeFromAirport")
-											: t("routeFrom")}
-									</span>
-
-									<span className="font-semibold">{route.pickup}</span>
-
-									<span className="text-muted-foreground mx-2">
-										{route.type === "airport_out"
-											? t("routeToAirport")
-											: t("routeTo")}
-									</span>
-
-									<span className="font-semibold">{route.destination}</span>
-								</p>
-							</div>
-
-							{/* Departure details */}
-							<RouteDepartureSection
-								routeType={route.type}
-								scheduledDate={route.scheduledDate}
-								scheduledTime={route.scheduledTime}
-								flightNumber={route.flightNumber}
-								pickup={route.pickup}
-								destination={route.destination}
-								value={
-									routeDepartures[i] ?? {
-										scheduledDate: "",
-										scheduledTime: "",
-										flightNumber: "",
-									}
-								}
-								onChange={(field, val) =>
-									setRouteDepartures((prev) => {
-										const next = [...prev];
-										if (next[i]) next[i]![field] = val;
-										return next;
-									})
-								}
-								isLoading={updateRoutes.isPending}
-								canEdit={canEdit}
-								onSave={() => {
-									setNotified(false);
-									updateRoutes.mutate({
-										token,
-										routes: routes.map((_, j) => ({
-											scheduledDate:
-												routeDepartures[j]?.scheduledDate || undefined,
-											scheduledTime:
-												routeDepartures[j]?.scheduledTime || undefined,
-											flightNumber:
-												routeDepartures[j]?.flightNumber || undefined,
-										})),
-									});
-								}}
-								afterSave={
-									notified && (
-										<p className="text-xs text-muted-foreground">
-											{t("adminNotified")}
-										</p>
-									)
-								}
-							/>
-
-							{/* Pickup info */}
-							<RoutePickupSection
-								pickup={route.pickup}
-								destination={route.destination}
-								driverName={route.driverName}
-								driverPhone={route.driverPhone}
-								beThereAtDate={route.beThereAtDate}
-								beThereAtTime={route.beThereAtTime}
-								meetingPoint={route.meetingPoint}
-								additionalInfo={route.additionalInfo}
-								pendingNote={t("pickupTimeNote")}
-							/>
-						</RouteCardWrapper>
-					);
-				})}
-			</SectionCard>
-
-			{/* Contact */}
-			<ContactDetailsCard
-				email={request.customerEmail}
-				phone={request.phone}
-				language={request.language}
-				firstName={request.firstName}
-				lastName={request.lastName}
-			/>
-
-			{/* Passengers */}
-			<PassengersCard
-				numberOfAdults={request.numberOfAdults}
-				areThereChildren={request.areThereChildren}
-				numberOfChildren={request.numberOfChildren}
-				ageOfChildren={request.ageOfChildren}
-				numberOfChildSeats={request.numberOfChildSeats}
-				additionalInfo={request.additionalInfo}
 			/>
 
 			{/* Quotations */}
@@ -237,16 +103,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						<p className="text-2xl font-bold">
 							{quotation.currency} {quotation.price.toString()}
 						</p>
-						{quotation.isPriceEachWay && (
-							<p className="text-sm">
-								{t("priceEachWay")}
-							</p>
-						)}
-						{quotation.areCarSeatsIncluded && (
-							<p className="text-sm">
-								{t("carSeatsIncluded")}
-							</p>
-						)}
+						{quotation.isPriceEachWay && <p>{t("priceEachWay")}</p>}
+						{quotation.areCarSeatsIncluded && <p>{t("carSeatsIncluded")}</p>}
 					</div>
 					{quotation.quotationAdditionalInfo && (
 						<div>
@@ -284,6 +142,92 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					)}
 				</SectionCard>
 			))}
+
+			{/* Routes */}
+			<SectionCard title={t("routes")} contentClassName="pt-0">
+				{routes.map((route, i) => (
+					<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
+						<div className="px-3 py-3">
+							<RouteTypeLabel routeType={route.type} n={i + 1} />
+
+							<p className="text-base">
+								<span className="text-muted-foreground mr-2">
+									{route.type === "airport_in"
+										? t("routeFromAirport")
+										: t("routeFrom")}
+								</span>
+
+								<span className="font-semibold">{route.pickup}</span>
+
+								<span className="text-muted-foreground mx-2">
+									{route.type === "airport_out"
+										? t("routeToAirport")
+										: t("routeTo")}
+								</span>
+
+								<span className="font-semibold">{route.destination}</span>
+							</p>
+						</div>
+
+						{/* Departure details */}
+						<RouteDepartureSection
+							routeType={route.type}
+							scheduledDate={route.scheduledDate}
+							scheduledTime={route.scheduledTime}
+							flightNumber={route.flightNumber}
+						/>
+						{canEdit && (
+							<div className="p-3">
+								<CustomerDepartureEditDialog
+									route={route}
+									routeIndex={i}
+									allRoutes={routes}
+									isLoading={updateRoutes.isPending}
+									label={`${t("editDeparture")} — ${tCommon("routeN", { n: i + 1 })}`}
+									onSave={(routesPayload, options) =>
+										updateRoutes.mutate(
+											{ token, routes: routesPayload },
+											options,
+										)
+									}
+								/>
+							</div>
+						)}
+
+						{/* Pickup info */}
+
+						<RoutePickupSection
+							pickup={route.pickup}
+							destination={route.destination}
+							driverName={route.driverName}
+							driverPhone={route.driverPhone}
+							beThereAtDate={route.beThereAtDate}
+							beThereAtTime={route.beThereAtTime}
+							meetingPoint={route.meetingPoint}
+							additionalInfo={route.additionalInfo}
+						/>
+					</RouteCardWrapper>
+				))}
+			</SectionCard>
+
+			{/* Contact */}
+			<ContactDetailsCard
+				email={request.customerEmail}
+				phone={request.phone}
+				language={request.language}
+				firstName={request.firstName}
+				lastName={request.lastName}
+			/>
+
+			{/* Passengers */}
+			<PassengersCard
+				numberOfAdults={request.numberOfAdults}
+				areThereChildren={request.areThereChildren}
+				numberOfChildren={request.numberOfChildren}
+				ageOfChildren={request.ageOfChildren}
+				numberOfChildSeats={request.numberOfChildSeats}
+				additionalInfo={request.additionalInfo}
+			/>
 
 			{/* Messages */}
 			<SectionCard title={tMessages("title")} subtitle={t("messagesSubtitle")}>
