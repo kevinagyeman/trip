@@ -54,20 +54,20 @@ export function RoutePickupSection({
 	// Customer: no data yet
 	if (!hasData) {
 		return (
-			<div className="px-3 py-3">
-				<AlertBanner
-					variant="info"
-					title={t("pickupScheduled")}
-					description={
-						<>
-							{t("pickupTimeNote")}
-							<br />
-							<br />
-							{t("noPickupData")}
-						</>
-					}
-				/>
-			</div>
+			// <div className="px-3 py-3">
+			// 	<AlertBanner
+			// 		variant="info"
+			// 		title={t("pickupScheduled")}
+			// 		description={
+			// 			<>
+			// 				{t("pickupTimeNote")}
+			// 				<br />
+			// 				{t("noPickupData")}
+			// 			</>
+			// 		}
+			// 	/>
+			// </div>
+			null
 		);
 	}
 

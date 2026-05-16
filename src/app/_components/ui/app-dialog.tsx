@@ -42,7 +42,7 @@ export function AppDialog({
 			<DialogContent
 				showCloseButton={false}
 				onInteractOutside={(e) => e.preventDefault()}
-				className="flex flex-col max-h-[90vh] sm:max-w-lg p-0 gap-0"
+				className="flex flex-col max-h-[90vh] sm:max-w-sm p-0 gap-0"
 			>
 				<DialogHeader className="px-6 py-4 border-b">
 					<DialogTitle>{title}</DialogTitle>
@@ -50,14 +50,15 @@ export function AppDialog({
 
 				<div className="overflow-y-auto px-6 py-4 flex-1">{children}</div>
 
-				<DialogFooter className="px-6 py-4 border-t">
+				<DialogFooter className="px-6 py-4 border-t flex-row gap-2">
 					<Button variant="secondary" onClick={() => onOpenChange(false)}>
 						{t("close")}
 					</Button>
 					<LoadingButton
 						isLoading={isLoading}
 						onClick={onSave}
-						variant={"default"}
+						variant="default"
+						className="flex-1"
 					>
 						{saveLabel ?? t("save")}
 					</LoadingButton>

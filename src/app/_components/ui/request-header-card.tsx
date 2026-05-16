@@ -37,7 +37,7 @@ export function RequestHeaderCard({
 						</h2>
 					</div>
 					<div className="flex flex-shrink-0 flex-wrap items-center gap-2">
-						<Badge className={STATUS_COLORS[status]}>
+						<Badge className={`${STATUS_COLORS[status]} text-sm`}>
 							{statusLabels[status] ?? status}
 						</Badge>
 						{headerActions}

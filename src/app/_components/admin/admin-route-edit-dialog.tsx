@@ -146,7 +146,7 @@ export function AdminRouteEditDialog({
 					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 						{t("routeSection")}
 					</p>
-					<div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+					<div className="flex flex-col gap-3">
 						<CustomInput
 							labelText={
 								route.type === "airport_in"
@@ -176,9 +176,7 @@ export function AdminRouteEditDialog({
 					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
 						{t("departureSection")}
 					</p>
-					<div
-						className={`grid grid-cols-1 gap-2 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
-					>
+					<div className="flex flex-col gap-3">
 						<CustomInput
 							labelText={dateLabel}
 							inputType="date"

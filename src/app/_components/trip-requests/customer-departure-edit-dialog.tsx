@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
@@ -101,35 +102,36 @@ export function CustomerDepartureEditDialog({
 				</Button>
 			}
 		>
-			<div
-				className={`grid grid-cols-1 gap-2 ${isAirport ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}
-			>
-				<CustomInput
-					labelText={dateLabel}
-					inputType="date"
-					inputProps={{
-						value: scheduledDate,
-						onChange: (e) => setScheduledDate(e.target.value),
-					}}
-				/>
-				<CustomInput
-					labelText={timeLabel}
-					inputType="time"
-					inputProps={{
-						value: scheduledTime,
-						onChange: (e) => setScheduledTime(e.target.value),
-					}}
-				/>
-				{isAirport && (
+			<div className="space-y-4">
+				<div className="flex flex-col gap-3">
 					<CustomInput
-						labelText={tCommon("routeFlightNumber")}
-						placeholder={tCommon("routeFlightNumberPlaceholder")}
+						labelText={dateLabel}
+						inputType="date"
 						inputProps={{
-							value: flightNumber,
-							onChange: (e) => setFlightNumber(e.target.value),
+							value: scheduledDate,
+							onChange: (e) => setScheduledDate(e.target.value),
 						}}
 					/>
-				)}
+					<CustomInput
+						labelText={timeLabel}
+						inputType="time"
+						inputProps={{
+							value: scheduledTime,
+							onChange: (e) => setScheduledTime(e.target.value),
+						}}
+					/>
+					{isAirport && (
+						<CustomInput
+							labelText={tCommon("routeFlightNumber")}
+							placeholder={tCommon("routeFlightNumberPlaceholder")}
+							inputProps={{
+								value: flightNumber,
+								onChange: (e) => setFlightNumber(e.target.value),
+							}}
+						/>
+					)}
+				</div>
+				<AlertBanner variant="info" description={t("editDepartureNotice")} />
 			</div>
 		</AppDialog>
 	);
