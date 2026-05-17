@@ -8,9 +8,7 @@ interface Props {
 export function RouteCardWrapper({ isLast, children }: Props) {
 	return (
 		<div>
-			<div className="overflow-hidden rounded-lg border-2 text-sm">
-				{children}
-			</div>
+			<div className="overflow-hidden rounded-lg border-2">{children}</div>
 			{!isLast && (
 				<div className="flex justify-center">
 					<div className="w-0.5 bg-border" style={{ height: "2rem" }} />

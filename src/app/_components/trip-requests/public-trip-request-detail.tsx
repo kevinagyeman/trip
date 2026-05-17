@@ -100,7 +100,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 				>
 					<div>
 						<p className="text-2xl font-bold">
-							{quotation.currency} {quotation.price.toString()}
+							{quotation.price.toString()}{" "}
+							<span className="text-sm">{quotation.currency} </span>
 						</p>
 						<p>
 							{quotation.isPriceEachWay ? t("priceEachWay") : t("priceTotal")}
@@ -155,7 +156,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 				{routes.map((route, i) => (
 					<RouteCardWrapper key={i} isLast={i === routes.length - 1}>
 						{/* 1 – Route */}
-						<div className="px-3 py-3">
+						<div className="p-3">
 							<RouteTypeLabel routeType={route.type} n={i + 1} />
 							<p className="text-base">
 								<span className="text-muted-foreground mr-2">
@@ -210,6 +211,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								beThereAtTime={route.beThereAtTime}
 								meetingPoint={route.meetingPoint}
 								additionalInfo={route.additionalInfo}
+								inBanner={true}
 							/>
 						</div>
 					</RouteCardWrapper>

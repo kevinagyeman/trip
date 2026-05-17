@@ -17,6 +17,7 @@ interface Props {
 	meetingPoint?: string | null;
 	additionalInfo?: string | null;
 	isAdmin?: boolean;
+	inBanner?: boolean;
 }
 
 export function RoutePickupSection({
@@ -29,6 +30,7 @@ export function RoutePickupSection({
 	meetingPoint,
 	additionalInfo,
 	isAdmin = false,
+	inBanner = false,
 }: Props) {
 	const t = useTranslations("common");
 
@@ -110,6 +112,7 @@ export function RoutePickupSection({
 						beThereAtDate={beThereAtDate}
 						beThereAtTime={beThereAtTime}
 						t={t}
+						inBanner={inBanner}
 					/>
 				)}
 			</div>
@@ -182,6 +185,7 @@ function AddToCalendarButton({
 	beThereAtDate,
 	beThereAtTime,
 	t,
+	inBanner = false,
 }: {
 	pickup: string;
 	destination: string;
@@ -191,11 +195,12 @@ function AddToCalendarButton({
 	beThereAtDate: string;
 	beThereAtTime?: string | null;
 	t: ReturnType<typeof useTranslations>;
+	inBanner?: boolean;
 }) {
 	return (
 		<Button
 			size="sm"
-			variant="outline"
+			variant={inBanner ? "success" : "outline"}
 			onClick={() => {
 				const date = new Date(beThereAtDate);
 				const timeStr = beThereAtTime ?? "00:00";
