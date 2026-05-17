@@ -12372,7 +12372,7 @@ export namespace Prisma {
     price: Decimal
     currency: string
     isPriceEachWay: boolean
-    areCarSeatsIncluded: boolean
+    areCarSeatsIncluded: boolean | null
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus
     notifiedAt: Date | null
@@ -12455,7 +12455,7 @@ export namespace Prisma {
       price: Prisma.Decimal
       currency: string
       isPriceEachWay: boolean
-      areCarSeatsIncluded: boolean
+      areCarSeatsIncluded: boolean | null
       quotationAdditionalInfo: string | null
       status: $Enums.QuotationStatus
       notifiedAt: Date | null
@@ -14524,7 +14524,7 @@ export namespace Prisma {
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
     isPriceEachWay?: BoolFilter<"Quotation"> | boolean
-    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolNullableFilter<"Quotation"> | boolean | null
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -14542,7 +14542,7 @@ export namespace Prisma {
     price?: SortOrder
     currency?: SortOrder
     isPriceEachWay?: SortOrder
-    areCarSeatsIncluded?: SortOrder
+    areCarSeatsIncluded?: SortOrderInput | SortOrder
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     notifiedAt?: SortOrderInput | SortOrder
@@ -14564,7 +14564,7 @@ export namespace Prisma {
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
     isPriceEachWay?: BoolFilter<"Quotation"> | boolean
-    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolNullableFilter<"Quotation"> | boolean | null
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -14582,7 +14582,7 @@ export namespace Prisma {
     price?: SortOrder
     currency?: SortOrder
     isPriceEachWay?: SortOrder
-    areCarSeatsIncluded?: SortOrder
+    areCarSeatsIncluded?: SortOrderInput | SortOrder
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     notifiedAt?: SortOrderInput | SortOrder
@@ -14606,7 +14606,7 @@ export namespace Prisma {
     price?: DecimalWithAggregatesFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringWithAggregatesFilter<"Quotation"> | string
     isPriceEachWay?: BoolWithAggregatesFilter<"Quotation"> | boolean
-    areCarSeatsIncluded?: BoolWithAggregatesFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolNullableWithAggregatesFilter<"Quotation"> | boolean | null
     quotationAdditionalInfo?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
@@ -15597,7 +15597,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -15613,7 +15613,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -15629,7 +15629,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15645,7 +15645,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15661,7 +15661,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -15677,7 +15677,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15691,7 +15691,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -16581,6 +16581,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type BoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type EnumQuotationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.QuotationStatus | EnumQuotationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.QuotationStatus[]
@@ -16664,6 +16669,14 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type EnumQuotationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -17284,6 +17297,10 @@ export namespace Prisma {
     divide?: Decimal | DecimalJsLike | number | string
   }
 
+  export type NullableBoolFieldUpdateOperationsInput = {
+    set?: boolean | null
+  }
+
   export type EnumQuotationStatusFieldUpdateOperationsInput = {
     set?: $Enums.QuotationStatus
   }
@@ -17588,6 +17605,11 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type NestedBoolNullableFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
   export type NestedEnumQuotationStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.QuotationStatus | EnumQuotationStatusFieldRefInput<$PrismaModel>
     in?: $Enums.QuotationStatus[]
@@ -17609,6 +17631,14 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
+    not?: NestedBoolNullableWithAggregatesFilter<$PrismaModel> | boolean | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedBoolNullableFilter<$PrismaModel>
+    _max?: NestedBoolNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumQuotationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -18302,7 +18332,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -18317,7 +18347,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -18483,7 +18513,7 @@ export namespace Prisma {
     price?: DecimalFilter<"Quotation"> | Decimal | DecimalJsLike | number | string
     currency?: StringFilter<"Quotation"> | string
     isPriceEachWay?: BoolFilter<"Quotation"> | boolean
-    areCarSeatsIncluded?: BoolFilter<"Quotation"> | boolean
+    areCarSeatsIncluded?: BoolNullableFilter<"Quotation"> | boolean | null
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
@@ -18575,7 +18605,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -18590,7 +18620,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -19636,7 +19666,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -19806,7 +19836,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19821,7 +19851,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19836,7 +19866,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19851,7 +19881,7 @@ export namespace Prisma {
     price: Decimal | DecimalJsLike | number | string
     currency?: string
     isPriceEachWay?: boolean
-    areCarSeatsIncluded?: boolean
+    areCarSeatsIncluded?: boolean | null
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
@@ -19893,7 +19923,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19908,7 +19938,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -19923,7 +19953,7 @@ export namespace Prisma {
     price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currency?: StringFieldUpdateOperationsInput | string
     isPriceEachWay?: BoolFieldUpdateOperationsInput | boolean
-    areCarSeatsIncluded?: BoolFieldUpdateOperationsInput | boolean
+    areCarSeatsIncluded?: NullableBoolFieldUpdateOperationsInput | boolean | null
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

@@ -1,7 +1,7 @@
 "use client";
 
-import CustomCheckbox from "@/app/_components/ui/custom-checkbox";
 import CustomInput from "@/app/_components/ui/custom-input";
+import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
@@ -26,7 +26,7 @@ type QuotationData = {
 	price: { toNumber: () => number } | number;
 	currency: string;
 	isPriceEachWay: boolean;
-	areCarSeatsIncluded: boolean;
+	areCarSeatsIncluded: boolean | null;
 	quotationAdditionalInfo: string | null;
 	notifiedAt: Date | null;
 	status: string;
@@ -50,6 +50,34 @@ export function QuotationForm({
 }: Props) {
 	const t = useTranslations("adminDetail");
 
+	function buildDefaultValues() {
+		if (quotation) {
+			return {
+				price:
+					typeof quotation.price === "object"
+						? quotation.price.toNumber()
+						: quotation.price,
+				currency: quotation.currency ?? "EUR",
+				priceType: (quotation.isPriceEachWay
+					? "each_way"
+					: "not_each_way") as QuotationFormValues["priceType"],
+				carSeatsStatus: (quotation.areCarSeatsIncluded === true
+					? "included"
+					: quotation.areCarSeatsIncluded === false
+						? "not_included"
+						: "not_applicable") as QuotationFormValues["carSeatsStatus"],
+				additionalInfo: quotation.quotationAdditionalInfo ?? "",
+			};
+		}
+		return {
+			price: undefined,
+			currency: "EUR",
+			priceType: undefined,
+			carSeatsStatus: undefined,
+			additionalInfo: estimateNotice ?? "",
+		};
+	}
+
 	const {
 		register,
 		handleSubmit,
@@ -58,28 +86,12 @@ export function QuotationForm({
 		formState: { errors },
 	} = useForm<QuotationFormValues>({
 		resolver: zodResolver(quotationSchema),
-		defaultValues: {
-			price: undefined,
-			currency: "EUR",
-			isPriceEachWay: false,
-			areCarSeatsIncluded: false,
-			additionalInfo: estimateNotice ?? "",
-		},
+		defaultValues: buildDefaultValues(),
 	});
 
 	useEffect(() => {
-		if (quotation) {
-			reset({
-				price:
-					typeof quotation.price === "object"
-						? quotation.price.toNumber()
-						: quotation.price,
-				currency: quotation.currency ?? "EUR",
-				isPriceEachWay: quotation.isPriceEachWay,
-				areCarSeatsIncluded: quotation.areCarSeatsIncluded,
-				additionalInfo: quotation.quotationAdditionalInfo ?? "",
-			});
-		}
+		reset(buildDefaultValues());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		quotation?.price,
 		quotation?.currency,
@@ -97,8 +109,13 @@ export function QuotationForm({
 			tripRequestId: requestId,
 			price: values.price,
 			currency: values.currency,
-			isPriceEachWay: values.isPriceEachWay,
-			areCarSeatsIncluded: values.areCarSeatsIncluded,
+			isPriceEachWay: values.priceType === "each_way",
+			areCarSeatsIncluded:
+				values.carSeatsStatus === "included"
+					? true
+					: values.carSeatsStatus === "not_included"
+						? false
+						: null,
 			quotationAdditionalInfo: values.additionalInfo || undefined,
 		};
 	}
@@ -136,17 +153,44 @@ export function QuotationForm({
 				/>
 			</div>
 
-			{/* Checkboxes */}
-			<div className="space-y-2">
-				<CustomCheckbox
-					label={t("isPriceEachWay")}
-					inputProps={{ ...register("isPriceEachWay") }}
-				/>
-				<CustomCheckbox
-					label={t("areCarSeatsIncluded")}
-					inputProps={{ ...register("areCarSeatsIncluded") }}
-				/>
-			</div>
+			{/* Price type */}
+			<Controller
+				name="priceType"
+				control={control}
+				render={({ field }) => (
+					<CustomSelect
+						labelText={t("priceTypeLabel")}
+						placeholder={t("priceTypePlaceholder")}
+						value={field.value ?? ""}
+						options={[
+							{ value: "each_way", label: t("priceTypeEachWay") },
+							{ value: "not_each_way", label: t("priceTypeNotEachWay") },
+						]}
+						onValueChange={field.onChange}
+						error={errors.priceType?.message}
+					/>
+				)}
+			/>
+
+			{/* Car seats */}
+			<Controller
+				name="carSeatsStatus"
+				control={control}
+				render={({ field }) => (
+					<CustomSelect
+						labelText={t("carSeatsStatusLabel")}
+						placeholder={t("carSeatsStatusPlaceholder")}
+						value={field.value ?? ""}
+						options={[
+							{ value: "included", label: t("carSeatsIncluded") },
+							{ value: "not_included", label: t("carSeatsNotIncluded") },
+							{ value: "not_applicable", label: t("carSeatsNotApplicable") },
+						]}
+						onValueChange={field.onChange}
+						error={errors.carSeatsStatus?.message}
+					/>
+				)}
+			/>
 
 			{/* Additional info */}
 			<CustomTextArea

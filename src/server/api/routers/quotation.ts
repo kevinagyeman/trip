@@ -47,7 +47,7 @@ export const quotationRouter = createTRPCRouter({
 				price: z.number().positive(),
 				currency: z.string().default("EUR"),
 				isPriceEachWay: z.boolean().default(false),
-				areCarSeatsIncluded: z.boolean().default(false),
+				areCarSeatsIncluded: z.boolean().nullable().default(null),
 				quotationAdditionalInfo: z.string().optional(),
 			}),
 		)
@@ -98,7 +98,7 @@ export const quotationRouter = createTRPCRouter({
 				price: z.number().positive(),
 				currency: z.string().default("EUR"),
 				isPriceEachWay: z.boolean().default(false),
-				areCarSeatsIncluded: z.boolean().default(false),
+				areCarSeatsIncluded: z.boolean().nullable().default(null),
 				quotationAdditionalInfo: z.string().optional(),
 			}),
 		)
