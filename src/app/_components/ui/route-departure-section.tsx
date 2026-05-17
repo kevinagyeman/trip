@@ -38,7 +38,7 @@ export function RouteDepartureSection({
 
 	if (!hasData) {
 		return (
-			<div className="px-3 pt-3 text-base">
+			<div className="text-base">
 				<span className="text-muted-foreground">{depLabel}</span>{" "}
 				<span className="text-muted-foreground">—</span>
 			</div>
@@ -46,7 +46,7 @@ export function RouteDepartureSection({
 	}
 
 	return (
-		<div className="px-3 py-2 space-y-1 text-base">
+		<div className="space-y-3 text-base">
 			<p>
 				<span className="text-muted-foreground">{depLabel} </span>
 
@@ -57,19 +57,17 @@ export function RouteDepartureSection({
 				{scheduledTime && <span> - {scheduledTime}</span>}
 
 				{flightNumber && <span> - {flightNumber}</span>}
-				<span className="ml-4">
-					{showCalendar && scheduledDate && pickup && destination && (
-						<AddToCalendarButton
-							pickup={pickup}
-							destination={destination}
-							scheduledDate={scheduledDate}
-							scheduledTime={scheduledTime}
-							flightNumber={flightNumber}
-							t={t}
-						/>
-					)}
-				</span>
 			</p>
+			{showCalendar && scheduledDate && pickup && destination && (
+				<AddToCalendarButton
+					pickup={pickup}
+					destination={destination}
+					scheduledDate={scheduledDate}
+					scheduledTime={scheduledTime}
+					flightNumber={flightNumber}
+					t={t}
+				/>
+			)}
 		</div>
 	);
 }

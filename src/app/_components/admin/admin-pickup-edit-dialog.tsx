@@ -9,6 +9,7 @@ import { RequiredLabel } from "@/app/_components/ui/required-label";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { pickupSchema, type PickupFormValues } from "@/lib/schemas/pickup";
+import { MapPinned } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -188,6 +189,7 @@ export function AdminPickupEditDialog({
 							: ""
 					}
 				>
+					<MapPinned />
 					{t("editPickup")}
 				</Button>
 			}

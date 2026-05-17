@@ -108,9 +108,7 @@ export function CompanyDetailsForm({
 					{t("saved")}
 				</p>
 			)}
-			<LoadingButton type="submit" isLoading={updateMyCompany.isPending}>
-				{t("save")}
-			</LoadingButton>
+			<LoadingButton type="submit" isLoading={updateMyCompany.isPending} />
 		</form>
 	);
 }

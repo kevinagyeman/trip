@@ -3,7 +3,7 @@
 import { Button, type buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { isValidElement, type ComponentProps } from "react";
 
@@ -38,7 +38,12 @@ export function LoadingButton({
 			{isLoading ? (
 				<Loader2 className="animate-spin" />
 			) : (
-				(children ?? t("save"))
+				(children ?? (
+					<>
+						<Check />
+						{t("save")}
+					</>
+				))
 			)}
 		</Button>
 	);

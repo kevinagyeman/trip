@@ -153,7 +153,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 
 						{/* 2 – Departure */}
-						<div className="border-t border-dashed">
+						<div className="border-t border-dashed p-3 space-y-3">
 							<RouteDepartureSection
 								routeType={route.type}
 								scheduledDate={route.scheduledDate}
@@ -163,22 +163,21 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								destination={route.destination}
 								showCalendar
 							/>
-							<div className="px-3 pb-3">
-								<AdminRouteEditDialog
-									requestId={requestId}
-									route={route}
-									routeIndex={i}
-									allRoutes={routes}
-									isLoading={updateRoutesByAdmin.isPending}
-									label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
-									onSave={updateRoutesByAdmin.mutate}
-								/>
-							</div>
+
+							<AdminRouteEditDialog
+								requestId={requestId}
+								route={route}
+								routeIndex={i}
+								allRoutes={routes}
+								isLoading={updateRoutesByAdmin.isPending}
+								label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
+								onSave={updateRoutesByAdmin.mutate}
+							/>
 						</div>
 
 						{/* 3 – Pickup */}
 						{request.status === "CONFIRMED" && (
-							<div className="border-t border-dashed">
+							<div className="border-t border-dashed p-3 space-y-3">
 								<PickupAdminBlock
 									requestId={requestId}
 									route={route}
@@ -274,24 +273,22 @@ function PickupAdminBlock({
 
 	if (!hasPickupData) {
 		return (
-			<div className="px-3 py-3">
-				<AlertBanner
-					variant="warning"
-					title={warningTitle}
-					description={warningText}
-				>
-					<AdminPickupEditDialog
-						requestId={requestId}
-						route={route}
-						routeIndex={routeIndex}
-						allRoutes={allRoutes}
-						drivers={drivers}
-						isLoading={isLoading}
-						inBanner
-						onSave={onSave}
-					/>
-				</AlertBanner>
-			</div>
+			<AlertBanner
+				variant="warning"
+				title={warningTitle}
+				description={warningText}
+			>
+				<AdminPickupEditDialog
+					requestId={requestId}
+					route={route}
+					routeIndex={routeIndex}
+					allRoutes={allRoutes}
+					drivers={drivers}
+					isLoading={isLoading}
+					inBanner
+					onSave={onSave}
+				/>
+			</AlertBanner>
 		);
 	}
 
@@ -308,17 +305,16 @@ function PickupAdminBlock({
 				additionalInfo={route.additionalInfo}
 				isAdmin
 			/>
-			<div className="px-3 pb-3">
-				<AdminPickupEditDialog
-					requestId={requestId}
-					route={route}
-					routeIndex={routeIndex}
-					allRoutes={allRoutes}
-					drivers={drivers}
-					isLoading={isLoading}
-					onSave={onSave}
-				/>
-			</div>
+
+			<AdminPickupEditDialog
+				requestId={requestId}
+				route={route}
+				routeIndex={routeIndex}
+				allRoutes={allRoutes}
+				drivers={drivers}
+				isLoading={isLoading}
+				onSave={onSave}
+			/>
 		</>
 	);
 }

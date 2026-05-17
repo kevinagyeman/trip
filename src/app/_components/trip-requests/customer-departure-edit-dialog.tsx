@@ -4,6 +4,7 @@ import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
+import { Route } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
@@ -98,6 +99,7 @@ export function CustomerDepartureEditDialog({
 			isLoading={isLoading}
 			trigger={
 				<Button variant="secondary" size="sm">
+					<Route />
 					{label ?? t("editDeparture")}
 				</Button>
 			}

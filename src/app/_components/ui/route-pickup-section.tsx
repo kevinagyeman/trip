@@ -37,7 +37,7 @@ export function RoutePickupSection({
 	// Admin: flat display, no banner
 	if (isAdmin) {
 		return (
-			<div className="px-3 py-3 space-y-1.5 text-base">
+			<div className="text-base space-y-3">
 				<PickupReadOnlyView
 					meetingPoint={meetingPoint}
 					beThereAtDate={beThereAtDate}
@@ -47,6 +47,18 @@ export function RoutePickupSection({
 					additionalInfo={additionalInfo}
 					t={t}
 				/>
+				{beThereAtDate && (
+					<AddToCalendarButton
+						pickup={pickup}
+						destination={destination}
+						driverName={driverName ?? ""}
+						driverPhone={driverPhone}
+						meetingPoint={meetingPoint}
+						beThereAtDate={beThereAtDate}
+						beThereAtTime={beThereAtTime}
+						t={t}
+					/>
+				)}
 			</div>
 		);
 	}
@@ -73,12 +85,12 @@ export function RoutePickupSection({
 
 	// Customer: data present
 	return (
-		<div className="px-3 py-3 space-y-1.5 text-base">
-			<AlertBanner
-				variant="success"
-				title={t("pickupConfirmedTitle")}
-				description={t("pickupConfirmedDescription")}
-			>
+		<AlertBanner
+			variant="success"
+			title={t("pickupConfirmedTitle")}
+			description={t("pickupConfirmedDescription")}
+		>
+			<div className="space-y-3">
 				<PickupReadOnlyView
 					meetingPoint={meetingPoint}
 					beThereAtDate={beThereAtDate}
@@ -89,21 +101,19 @@ export function RoutePickupSection({
 					t={t}
 				/>
 				{beThereAtDate && (
-					<div className="pt-1">
-						<AddToCalendarButton
-							pickup={pickup}
-							destination={destination}
-							driverName={driverName ?? ""}
-							driverPhone={driverPhone}
-							meetingPoint={meetingPoint}
-							beThereAtDate={beThereAtDate}
-							beThereAtTime={beThereAtTime}
-							t={t}
-						/>
-					</div>
+					<AddToCalendarButton
+						pickup={pickup}
+						destination={destination}
+						driverName={driverName ?? ""}
+						driverPhone={driverPhone}
+						meetingPoint={meetingPoint}
+						beThereAtDate={beThereAtDate}
+						beThereAtTime={beThereAtTime}
+						t={t}
+					/>
 				)}
-			</AlertBanner>
-		</div>
+			</div>
+		</AlertBanner>
 	);
 }
 
@@ -125,7 +135,7 @@ function PickupReadOnlyView({
 	t: ReturnType<typeof useTranslations>;
 }) {
 	return (
-		<>
+		<div>
 			{meetingPoint && (
 				<InfoRow label={t("pickupInfoMeetingPoint")} value={meetingPoint} />
 			)}
@@ -145,20 +155,12 @@ function PickupReadOnlyView({
 				<InfoRow label={t("pickupInfoDriverName")} value={driverName} />
 			)}
 			{driverPhone && (
-				<InfoRow
-					label={t("pickupInfoDriverPhone")}
-					value={
-						// <a href={`tel:${driverPhone}`} className="underline">
-						// 	{driverPhone}
-						// </a>
-						driverPhone
-					}
-				/>
+				<InfoRow label={t("pickupInfoDriverPhone")} value={driverPhone} />
 			)}
 			{additionalInfo && (
 				<InfoRow label={t("pickupInfoAdditionalInfo")} value={additionalInfo} />
 			)}
-		</>
+		</div>
 	);
 }
 

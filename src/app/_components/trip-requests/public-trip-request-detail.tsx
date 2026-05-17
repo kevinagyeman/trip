@@ -174,34 +174,33 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						</div>
 
 						{/* 2 – Departure */}
-						<div className="border-t border-dashed">
+						<div className="border-t border-dashed p-3 space-y-3">
 							<RouteDepartureSection
 								routeType={route.type}
 								scheduledDate={route.scheduledDate}
 								scheduledTime={route.scheduledTime}
 								flightNumber={route.flightNumber}
 							/>
+
 							{canEdit && (
-								<div className="px-3 pb-3">
-									<CustomerDepartureEditDialog
-										route={route}
-										routeIndex={i}
-										allRoutes={routes}
-										isLoading={updateRoutes.isPending}
-										label={`${t("editDeparture")} — ${tCommon("routeN", { n: i + 1 })}`}
-										onSave={(routesPayload, options) =>
-											updateRoutes.mutate(
-												{ token, routes: routesPayload },
-												options,
-											)
-										}
-									/>
-								</div>
+								<CustomerDepartureEditDialog
+									route={route}
+									routeIndex={i}
+									allRoutes={routes}
+									isLoading={updateRoutes.isPending}
+									label={`${t("editDeparture")} — ${tCommon("routeN", { n: i + 1 })}`}
+									onSave={(routesPayload, options) =>
+										updateRoutes.mutate(
+											{ token, routes: routesPayload },
+											options,
+										)
+									}
+								/>
 							)}
 						</div>
 
 						{/* 3 – Pickup */}
-						<div className="border-t border-dashed">
+						<div className="border-t border-dashed p-3">
 							<RoutePickupSection
 								pickup={route.pickup}
 								destination={route.destination}

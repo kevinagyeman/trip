@@ -10,6 +10,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
@@ -60,7 +61,12 @@ export function AppDialog({
 						variant="default"
 						className="flex-1"
 					>
-						{saveLabel ?? t("save")}
+						{saveLabel ?? (
+							<>
+								<Check />
+								{t("save")}
+							</>
+						)}
 					</LoadingButton>
 				</DialogFooter>
 			</DialogContent>
