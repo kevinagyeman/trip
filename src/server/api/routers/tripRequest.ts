@@ -445,7 +445,10 @@ export const tripRequestRouter = createTRPCRouter({
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
 				include: {
-					quotations: { orderBy: { createdAt: "desc" } },
+					quotations: {
+						where: { notifiedAt: { not: null } },
+						orderBy: { createdAt: "desc" },
+					},
 					routes: { orderBy: { position: "asc" } },
 				},
 			});

@@ -10,7 +10,6 @@ import { RouteDepartureSection } from "@/app/_components/ui/route-departure-sect
 import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
-import { Badge } from "@/components/ui/badge";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -92,9 +91,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					title={
 						<div className="flex items-center gap-2">
 							<span>{t("quotations")}</span>
-							<Badge className={QUOTATION_STATUS_COLORS[quotation.status]}>
+							<span className={QUOTATION_STATUS_COLORS[quotation.status]}>
 								{quotation.status}
-							</Badge>
+							</span>
 						</div>
 					}
 					contentClassName="space-y-4 pt-0"
@@ -103,7 +102,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						<p className="text-2xl font-bold">
 							{quotation.currency} {quotation.price.toString()}
 						</p>
-						{quotation.isPriceEachWay && <p>{t("priceEachWay")}</p>}
+						<p>
+							{quotation.isPriceEachWay ? t("priceEachWay") : t("priceTotal")}
+						</p>
 						{quotation.areCarSeatsIncluded && <p>{t("carSeatsIncluded")}</p>}
 					</div>
 					{quotation.quotationAdditionalInfo && (
@@ -139,6 +140,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								{t("rejectQuotation")}
 							</LoadingButton>
 						</div>
+					)}
+					{quotation.status === "PENDING" && quotation.notifiedAt && (
+						<AlertBanner
+							variant="info"
+							description={t("editDepartureNotice")}
+						/>
 					)}
 				</SectionCard>
 			))}

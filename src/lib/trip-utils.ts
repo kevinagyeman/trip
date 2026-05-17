@@ -9,9 +9,9 @@ export const STATUS_COLORS: Record<string, string> = {
 };
 
 export const QUOTATION_STATUS_COLORS: Record<string, string> = {
-	PENDING: "bg-blue-500",
-	ACCEPTED: "bg-green-500",
-	REJECTED: "bg-red-500",
+	PENDING: "text-blue-500",
+	ACCEPTED: "text-green-500",
+	REJECTED: "text-red-500",
 };
 
 // Accepts any t() function that covers the status keys — works with all namespaces

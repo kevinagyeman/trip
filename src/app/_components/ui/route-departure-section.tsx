@@ -91,8 +91,8 @@ function AddToCalendarButton({
 }) {
 	return (
 		<Button
-			size="xs"
-			variant="ghost"
+			size="sm"
+			variant="outline"
 			onClick={() => {
 				const [hRaw, mRaw] = (scheduledTime ?? "00:00").split(":").map(Number);
 				const endH = ((hRaw ?? 0) + 1) % 24;

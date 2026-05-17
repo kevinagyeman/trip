@@ -100,7 +100,6 @@ export function QuotationForm({
 		quotation?.quotationAdditionalInfo,
 	]);
 
-	const saveQuotation = api.quotation.save.useMutation({ onSuccess });
 	const saveAndSend = api.quotation.saveAndSend.useMutation({ onSuccess });
 	const notifyQuotation = api.quotation.notify.useMutation({ onSuccess });
 
@@ -212,14 +211,6 @@ export function QuotationForm({
 				>
 					{isRejected ? t("reviseAndResend") : t("saveAndSend")}
 				</LoadingButton>
-
-				<LoadingButton
-					type="button"
-					isLoading={saveQuotation.isPending}
-					onClick={handleSubmit((values) =>
-						saveQuotation.mutate(buildMutationInput(values)),
-					)}
-				></LoadingButton>
 
 				{quotation?.notifiedAt && !isRejected && (
 					<LoadingButton

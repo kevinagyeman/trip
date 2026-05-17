@@ -4,10 +4,8 @@ import { QuotationForm } from "@/app/_components/admin/quotation-form";
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { SectionCard } from "@/app/_components/ui/section-card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -43,7 +41,6 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 	const quotation = request.quotations[0];
 	const isQuotationAccepted = quotation?.status === "ACCEPTED";
 	const isQuotationRejected = quotation?.status === "REJECTED";
-	const isQuotationSent = !!quotation?.notifiedAt;
 
 	const estimateNotice = (() => {
 		try {
@@ -63,25 +60,21 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 				<div className="flex items-center gap-2">
 					<span>{t("quotation")}</span>
 					{quotation && (
-						<Badge
+						<span
 							className={
 								isQuotationAccepted
-									? "bg-green-500"
+									? "text-green-500"
 									: isQuotationRejected
-										? "bg-red-500"
-										: isQuotationSent
-											? "bg-blue-500"
-											: "bg-muted text-muted-foreground"
+										? "text-red-500"
+										: "text-blue-500"
 							}
 						>
 							{isQuotationAccepted
 								? t("statusAccepted")
 								: isQuotationRejected
 									? t("statusRejected")
-									: isQuotationSent
-										? t("quotationSentLabel")
-										: t("quotationDraftLabel")}
-						</Badge>
+									: t("quotationSentLabel")}
+						</span>
 					)}
 				</div>
 			}
@@ -95,9 +88,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 								{quotation!.currency} {quotation!.price.toString()}
 							</p>
 							{quotation!.isPriceEachWay && (
-								<p className="text-base text-muted-foreground">
-									{t("priceEachWay")}
-								</p>
+								<p className="text-base">{t("priceEachWay")}</p>
 							)}
 						</div>
 					</div>
@@ -126,20 +117,6 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 								>
 									{t("requestDetails")}
 								</LoadingButton>
-								{request.departureDetailsRequestedAt && (
-									<p className="text-xs text-muted-foreground">
-										{t("notifiedDate", {
-											date: format(
-												new Date(request.departureDetailsRequestedAt),
-												"d MMM yyyy",
-											),
-											time: format(
-												new Date(request.departureDetailsRequestedAt),
-												"HH:mm",
-											),
-										})}
-									</p>
-								)}
 							</div>
 						</div>
 					)}

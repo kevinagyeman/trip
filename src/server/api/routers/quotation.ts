@@ -39,57 +39,6 @@ function assertQuotationTransition(
 }
 
 export const quotationRouter = createTRPCRouter({
-	// ADMIN: Save (create or update) the single quotation for a trip request
-	save: adminProcedure
-		.input(
-			z.object({
-				tripRequestId: z.string(),
-				price: z.number().positive(),
-				currency: z.string().default("EUR"),
-				isPriceEachWay: z.boolean().default(false),
-				areCarSeatsIncluded: z.boolean().nullable().default(null),
-				quotationAdditionalInfo: z.string().optional(),
-			}),
-		)
-		.mutation(async ({ ctx, input }) => {
-			const { tripRequestId, ...data } = input;
-
-			const tripRequest = await ctx.db.tripRequest.findUnique({
-				where: { id: tripRequestId },
-			});
-			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
-
-			const existing = await ctx.db.quotation.findFirst({
-				where: { tripRequestId },
-			});
-
-			if (existing) {
-				if (existing.status === QuotationStatus.ACCEPTED) {
-					throw new TRPCError({
-						code: "BAD_REQUEST",
-						message: "Cannot edit an accepted quotation",
-					});
-				}
-				return ctx.db.quotation.update({
-					where: { id: existing.id },
-					data,
-				});
-			}
-
-			return ctx.db.quotation.create({
-				data: {
-					...data,
-					tripRequestId,
-					status: QuotationStatus.PENDING,
-					createdById: ctx.session.user.id,
-				},
-			});
-		}),
-
 	// ADMIN: Save quotation AND notify customer in one step
 	saveAndSend: adminProcedure
 		.input(

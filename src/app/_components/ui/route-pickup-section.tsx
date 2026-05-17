@@ -192,8 +192,8 @@ function AddToCalendarButton({
 }) {
 	return (
 		<Button
-			size="xs"
-			variant="ghost"
+			size="sm"
+			variant="outline"
 			onClick={() => {
 				const date = new Date(beThereAtDate);
 				const timeStr = beThereAtTime ?? "00:00";
