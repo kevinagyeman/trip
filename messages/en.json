@@ -134,6 +134,7 @@
 		"numberOfAdults": "Number of Adults",
 		"areThereChildren": "Are there children traveling?",
 		"numberOfChildren": "Number of Children",
+		"totalPassengers": "Total passengers",
 		"childAge": "Child {n} age",
 		"ageYears": "Years",
 		"ageMonths": "Months",

@@ -555,6 +555,13 @@ export function CreateTripRequestForm({
 						</div>
 					</>
 				)}
+				<p className="text-sm text-muted-foreground pt-1">
+					{t("totalPassengers")}:{" "}
+					<span className="font-semibold text-foreground">
+						{(Number(numberOfAdults) || 0) +
+							(areThereChildren ? Number(numberOfChildren) || 0 : 0)}
+					</span>
+				</p>
 			</SectionCard>
 
 			{/* Preferences */}
