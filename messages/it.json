@@ -1,6 +1,6 @@
 {
 	"navigation": {
-		"brand": "Gestione Viaggi",
+		"brand": "dantrip.com",
 		"myTrips": "I Miei Viaggi",
 		"adminDashboard": "Pannello di controllo",
 		"adminStats": "Statistiche"
@@ -67,7 +67,7 @@
 	},
 	"auth": {
 		"welcomeBack": "Bentornato",
-		"signInSubtitle": "Accedi al tuo account Gestione Viaggi",
+		"signInSubtitle": "Accedi al tuo account dantrip.com",
 		"email": "Email",
 		"password": "Password",
 		"signIn": "Accedi",
@@ -77,7 +77,7 @@
 		"invalidCredentials": "Email o password non validi.",
 		"unexpectedError": "Si è verificato un errore imprevisto.",
 		"createAccount": "Crea un Account",
-		"registerSubtitle": "Inserisci i tuoi dati per registrarti su Gestione Viaggi",
+		"registerSubtitle": "Inserisci i tuoi dati per registrarti su dantrip.com",
 		"confirmPassword": "Conferma Password",
 		"passwordRequired": "Password",
 		"alreadyHaveAccount": "Hai già un account?",
