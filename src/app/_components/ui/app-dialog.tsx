@@ -43,6 +43,7 @@ export function AppDialog({
 			<DialogContent
 				showCloseButton={false}
 				onInteractOutside={(e) => e.preventDefault()}
+				onOpenAutoFocus={(e) => e.preventDefault()}
 				className="flex flex-col max-h-[90vh] sm:max-w-sm p-0 gap-0"
 			>
 				<DialogHeader className="px-6 py-4 border-b">
