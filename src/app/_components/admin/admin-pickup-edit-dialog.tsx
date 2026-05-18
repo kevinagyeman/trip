@@ -207,9 +207,8 @@ export function AdminPickupEditDialog({
 					/>
 				)}
 
-				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+				<div className="flex flex-col gap-3">
 					<CustomInput
-						className="sm:col-span-2"
 						labelText={tCommon("pickupInfoMeetingPoint")}
 						required
 						placeholder={tCommon("pickupInfoMeetingPointPlaceholder")}
@@ -272,7 +271,6 @@ export function AdminPickupEditDialog({
 						)}
 					</div>
 					<CustomTextArea
-						className="sm:col-span-2"
 						labelText={tCommon("pickupInfoAdditionalInfo")}
 						rows={3}
 						placeholder={tCommon("pickupInfoAdditionalInfoPlaceholder")}
