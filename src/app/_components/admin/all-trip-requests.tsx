@@ -100,8 +100,8 @@ export function AllTripRequests() {
 					{items.map((request) => (
 						<Card key={request.id}>
 							<CardContent>
-								<div className="flex items-start justify-between gap-3">
-									<div className="space-y-2">
+								<div className="flex items-start justify-between gap-3 min-w-0">
+									<div className="space-y-2 min-w-0">
 										<div className="flex items-center gap-2">
 											<p className="text-muted-foreground text-xs">
 												#{String(request.orderNumber).padStart(7, "0")}
@@ -119,25 +119,25 @@ export function AllTripRequests() {
 											)}
 										</div>
 
-										<div className="text-sm">
+										<div className="text-sm min-w-0">
 											<p className="truncate font-semibold">
 												{request.firstName} {request.lastName}
 											</p>
-
-											<p className="text-muted-foreground">
+											<p className="truncate text-muted-foreground">
 												{request.user?.email ?? request.customerEmail}
 											</p>
 										</div>
 
-										<div className="space-y-0.5 text-xs">
+										<div className="space-y-0.5 text-xs min-w-0">
 											{request.routes.map((route, i) => (
-												<span
+												<p
 													key={i}
-													className="flex items-center gap-1 truncate  text-muted-foreground"
+													className="flex items-center gap-1 text-muted-foreground"
 												>
-													{route.pickup} <MoveRight className="h-3 w-3" />{" "}
-													{route.destination}
-												</span>
+													<span className="truncate">{route.pickup}</span>
+													<MoveRight className="h-3 w-3 shrink-0" />
+													<span className="truncate">{route.destination}</span>
+												</p>
 											))}
 										</div>
 									</div>
