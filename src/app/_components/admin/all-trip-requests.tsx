@@ -138,6 +138,20 @@ export function AllTripRequests() {
 						{ value: "this_month", label: t("thisMonth") },
 					]}
 				/>
+				{(statusFilter !== "ALL" || dateRange !== "ALL" || search) && (
+					<Button
+						variant="secondary"
+						size="sm"
+						onClick={() => {
+							setStatusFilter("ALL");
+							setDateRange("ALL");
+							setSearch("");
+							setDebouncedSearch("");
+						}}
+					>
+						{t("resetFilters")}
+					</Button>
+				)}
 			</div>
 
 			{isLoading ? (
@@ -205,17 +219,16 @@ export function AllTripRequests() {
 														className="flex items-center gap-1 text-muted-foreground"
 													>
 														<span
-															title={
+															className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium leading-none ${
 																isScheduled
-																	? t("pickupPlanned")
-																	: t("pickupNotPlanned")
-															}
-															className={`h-1.5 w-1.5 rounded-full shrink-0 ${
-																isScheduled
-																	? "bg-green-500"
-																	: "bg-muted-foreground/30"
+																	? "bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300"
+																	: "bg-muted text-muted-foreground"
 															}`}
-														/>
+														>
+															{isScheduled
+																? t("pickupPlanned")
+																: t("pickupNotPlanned")}
+														</span>
 														<span className="truncate">{route.pickup}</span>
 														<MoveRight className="h-3 w-3 shrink-0" />
 														<span className="truncate">
