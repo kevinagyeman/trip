@@ -85,7 +85,8 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					<div className="flex items-start justify-between">
 						<div>
 							<p className="text-2xl font-bold">
-								{quotation!.currency} {quotation!.price.toString()}
+								{quotation!.price.toString()}{" "}
+								<span className="text-sm">{quotation!.currency}</span>
 							</p>
 							{quotation!.isPriceEachWay && (
 								<p className="text-base">{t("priceEachWay")}</p>

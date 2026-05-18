@@ -34,27 +34,26 @@ type CustomerTarget = TripRequestBase & {
 const ADMIN_TRANSLATIONS = {
 	en: {
 		newRequest: (o: string, name: string) =>
-			`New transfer request ${o} | ${name}`,
-		newMessage: (o: string, name: string) => `New message on ${o} | ${name}`,
+			`${o} - New transfer request | ${name}`,
+		newMessage: (o: string, name: string) => `${o} - New message | ${name}`,
 		departureUpdated: (o: string, name: string) =>
-			`Customer updated departure details — ${o} | ${name}`,
+			`${o} - Customer updated departure details | ${name}`,
 		quotationAccepted: (o: string, name: string) =>
-			`Quotation accepted — ${o} | ${name}`,
+			`${o} - Quotation accepted | ${name}`,
 		quotationRejected: (o: string, name: string) =>
-			`Quotation rejected — ${o} | ${name}`,
+			`${o} - Quotation rejected | ${name}`,
 		button: "View Request",
 	},
 	it: {
 		newRequest: (o: string, name: string) =>
-			`Nuova richiesta di trasferimento ${o} | ${name}`,
-		newMessage: (o: string, name: string) =>
-			`Nuovo messaggio su ${o} | ${name}`,
+			`${o} - Nuova richiesta di trasferimento | ${name}`,
+		newMessage: (o: string, name: string) => `${o} - Nuovo messaggio | ${name}`,
 		departureUpdated: (o: string, name: string) =>
-			`Il cliente ha aggiornato i dati di partenza — ${o} | ${name}`,
+			`${o} - Il cliente ha aggiornato i dati di partenza | ${name}`,
 		quotationAccepted: (o: string, name: string) =>
-			`Preventivo accettato — ${o} | ${name}`,
+			`${o} - Preventivo accettato | ${name}`,
 		quotationRejected: (o: string, name: string) =>
-			`Preventivo rifiutato — ${o} | ${name}`,
+			`${o} - Preventivo rifiutato | ${name}`,
 		button: "Visualizza",
 	},
 } as const;

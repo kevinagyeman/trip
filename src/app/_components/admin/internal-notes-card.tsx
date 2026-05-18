@@ -28,6 +28,7 @@ export function InternalNotesCard({
 				rows={3}
 				value={notes}
 				onChange={(e) => setNotes(e.target.value)}
+				placeholder={t("internalNotesPlaceholder")}
 			/>
 			<LoadingButton
 				isLoading={update.isPending}

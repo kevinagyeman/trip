@@ -13,7 +13,6 @@ interface MobileMenuProps {
 	myTripsLabel: string;
 	adminLabel: string;
 	adminStatsLabel: string;
-	adminGuideLabel: string;
 }
 
 export function MobileMenu({
@@ -22,7 +21,6 @@ export function MobileMenu({
 	myTripsLabel,
 	adminLabel,
 	adminStatsLabel,
-	adminGuideLabel,
 }: MobileMenuProps) {
 	const [open, setOpen] = useState(false);
 
@@ -60,11 +58,6 @@ export function MobileMenu({
 								<Link href="/admin/stats" onClick={() => setOpen(false)}>
 									<Button variant="ghost" className="w-full justify-start">
 										{adminStatsLabel}
-									</Button>
-								</Link>
-								<Link href="/admin/guide" onClick={() => setOpen(false)}>
-									<Button variant="ghost" className="w-full justify-start">
-										{adminGuideLabel}
 									</Button>
 								</Link>
 							</>

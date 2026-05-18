@@ -1,8 +1,8 @@
 "use client";
 
+import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
-import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -99,11 +99,11 @@ export function AllTripRequests() {
 				<>
 					{items.map((request) => (
 						<Card key={request.id}>
-							<CardContent className="px-3">
+							<CardContent>
 								<div className="flex items-start justify-between gap-3">
-									<div className="min-w-0 space-y-0.5">
+									<div className="space-y-2">
 										<div className="flex items-center gap-2">
-											<p className="text-xs text-muted-foreground">
+											<p className="text-muted-foreground text-xs">
 												#{String(request.orderNumber).padStart(7, "0")}
 												<span className="ml-2">
 													{format(new Date(request.createdAt), "d MMM yyyy")}
@@ -118,33 +118,37 @@ export function AllTripRequests() {
 												<span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
 											)}
 										</div>
-										<p className="truncate text-sm font-semibold mt-3">
-											{request.firstName} {request.lastName}
-											<span className="ml-1.5 font-normal text-muted-foreground">
+
+										<div className="text-sm">
+											<p className="truncate font-semibold">
+												{request.firstName} {request.lastName}
+											</p>
+
+											<p className="text-muted-foreground">
 												{request.user?.email ?? request.customerEmail}
-											</span>
-										</p>
-										<div className="mt-1.5 space-y-0.5">
+											</p>
+										</div>
+
+										<div className="space-y-0.5 text-xs">
 											{request.routes.map((route, i) => (
-												<p
+												<span
 													key={i}
-													className="flex items-center gap-1 truncate text-xs text-muted-foreground"
+													className="flex items-center gap-1 truncate  text-muted-foreground"
 												>
-													{route.pickup}{" "}
-													<MoveRight className="h-3 w-3 shrink-0" />{" "}
+													{route.pickup} <MoveRight className="h-3 w-3" />{" "}
 													{route.destination}
-												</p>
+												</span>
 											))}
 										</div>
 									</div>
 									<Button
 										asChild
-										variant="ghost"
-										size="icon-sm"
+										variant="secondary"
+										size="icon"
 										className="shrink-0 self-center"
 									>
 										<Link href={`/admin/requests/${request.id}`}>
-											<ArrowRight className="h-4 w-4" />
+											<ArrowRight />
 										</Link>
 									</Button>
 								</div>
