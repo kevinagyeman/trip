@@ -202,7 +202,7 @@ export function AllTripRequests() {
 											</p>
 										</div>
 
-										<div className="space-y-0.5 text-xs min-w-0">
+										<div className="space-y-1 text-xs min-w-0">
 											{request.routes.map((route, i) => {
 												const isScheduled = !!(
 													route.meetingPoint ??
@@ -219,7 +219,7 @@ export function AllTripRequests() {
 														className="flex items-center gap-1 text-muted-foreground"
 													>
 														<span
-															className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium leading-none ${
+															className={`inline-flex items-center shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
 																isScheduled
 																	? "bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300"
 																	: "bg-muted text-muted-foreground"
