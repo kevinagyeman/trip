@@ -253,8 +253,9 @@
 		"relativeToday": "oggi",
 		"relativeTomorrow": "domani",
 		"relativeInDays": "tra {days} giorni",
-		"pickupPlanned": "Pickup pianificato",
-		"pickupNotPlanned": "Pickup non ancora pianificato"
+		"pickupPlanned": "Info pickup impostate",
+		"pickupNotPlanned": "Info pickup non ancora impostate",
+		"resetFilters": "Reimposta filtri"
 	},
 	"adminDetail": {
 		"notFound": "Non trovato",

@@ -253,8 +253,9 @@
 		"relativeToday": "today",
 		"relativeTomorrow": "tomorrow",
 		"relativeInDays": "in {days} days",
-		"pickupPlanned": "Pickup scheduled",
-		"pickupNotPlanned": "Pickup not scheduled yet"
+		"pickupPlanned": "Pickup info set",
+		"pickupNotPlanned": "Pickup info not set yet",
+		"resetFilters": "Reset filters"
 	},
 	"adminDetail": {
 		"notFound": "Not found",

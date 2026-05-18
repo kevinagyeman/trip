@@ -190,7 +190,11 @@ export function AllTripRequests() {
 
 										<div className="space-y-0.5 text-xs min-w-0">
 											{request.routes.map((route, i) => {
-												const isScheduled = !!route.scheduledDate;
+												const isScheduled = !!(
+													route.meetingPoint ??
+													route.beThereAtDate ??
+													route.driverName
+												);
 												const diff = route.scheduledDate
 													? getRelativeDays(route.scheduledDate)
 													: null;
