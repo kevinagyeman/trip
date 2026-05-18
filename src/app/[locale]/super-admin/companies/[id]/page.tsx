@@ -16,7 +16,7 @@ export default async function CompanyDetailPage({
 
 	return (
 		<HydrateClient>
-			<div className="container mx-auto max-w-4xl px-4 py-8">
+			<div className="container mx-auto max-w-4xl p-4">
 				<div className="mb-6">
 					<Link href="/super-admin">
 						<Button variant="outline" size="sm">

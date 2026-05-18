@@ -1,6 +1,6 @@
+import { PublicTripRequestDetail } from "@/app/_components/trip-requests/public-trip-request-detail";
 import { api } from "@/trpc/server";
 import { notFound } from "next/navigation";
-import { PublicTripRequestDetail } from "@/app/_components/trip-requests/public-trip-request-detail";
 
 export default async function PublicRequestPage({
 	params,
@@ -16,7 +16,7 @@ export default async function PublicRequestPage({
 	}
 
 	return (
-		<div className="container mx-auto max-w-3xl py-8 px-4">
+		<div className="container mx-auto max-w-3xl p-4">
 			<PublicTripRequestDetail token={token} />
 		</div>
 	);

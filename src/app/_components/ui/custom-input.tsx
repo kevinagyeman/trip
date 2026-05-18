@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
@@ -15,6 +16,7 @@ type CustomInputProps = {
 	hint?: string;
 	pattern?: string;
 	inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+	inputClassName?: string;
 	error?: string;
 	className?: string;
 };
@@ -27,6 +29,7 @@ function CustomInput({
 	hint,
 	pattern,
 	inputProps,
+	inputClassName,
 	error,
 	className,
 }: CustomInputProps) {
@@ -52,7 +55,7 @@ function CustomInput({
 					placeholder={placeholder}
 					pattern={pattern}
 					{...inputProps}
-					className={isPassword ? "pr-10" : undefined}
+					className={cn(isPassword ? "pr-10" : undefined, inputClassName)}
 					autoComplete="on"
 				/>
 				{isPassword && (

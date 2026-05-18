@@ -26,7 +26,7 @@ export default async function AdminRequestPage({
 
 	return (
 		<HydrateClient>
-			<div className="container mx-auto max-w-3xl py-8 px-4">
+			<div className="container mx-auto max-w-3xl p-4">
 				<AdminRequestDetail requestId={id} />
 			</div>
 		</HydrateClient>

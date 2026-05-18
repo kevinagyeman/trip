@@ -348,7 +348,7 @@ export const quotationRouter = createTRPCRouter({
 				await tx.tripRequest.update({
 					where: { id: quotation.tripRequestId },
 					data: {
-						status: TripRequestStatus.PENDING,
+						status: TripRequestStatus.REJECTED,
 						lastCustomerActivityAt: new Date(),
 					},
 				});

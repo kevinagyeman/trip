@@ -55,7 +55,7 @@ export default async function AdminSettingsPage({
 		: null;
 
 	return (
-		<div className="container mx-auto px-4 py-8">
+		<div className="container mx-auto p-4">
 			<h1 className="mb-6 text-3xl font-bold">{t("title")}</h1>
 			<div className="flex flex-col gap-6 max-w-lg">
 				{bookingUrl && <BookingLinkCard url={bookingUrl} />}

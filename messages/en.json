@@ -253,8 +253,10 @@
 		"relativeToday": "today",
 		"relativeTomorrow": "tomorrow",
 		"relativeInDays": "in {days} days",
-		"pickupPlanned": "pickup ok",
-		"pickupNotPlanned": "no pickup",
+		"legendPickupSet": "pickup info set",
+		"legendPickupNotSet": "pickup info missing",
+		"legendPassengers": "total passengers",
+		"legendPrice": "quoted price",
 		"resetFilters": "Reset filters"
 	},
 	"adminDetail": {

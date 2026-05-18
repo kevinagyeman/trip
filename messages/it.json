@@ -220,7 +220,7 @@
 		"inputPlaceholder": "Scrivi un messaggio..."
 	},
 	"adminDashboard": {
-		"title": "Dashboard Admin",
+		"title": "Pannello di Controllo",
 		"statTotal": "Totale",
 		"statPending": "In Attesa",
 		"statQuoted": "Preventivati",
@@ -253,8 +253,10 @@
 		"relativeToday": "oggi",
 		"relativeTomorrow": "domani",
 		"relativeInDays": "tra {days} giorni",
-		"pickupPlanned": "pickup ok",
-		"pickupNotPlanned": "no pickup",
+		"legendPickupSet": "info pickup impostate",
+		"legendPickupNotSet": "info pickup mancanti",
+		"legendPassengers": "passeggeri totali",
+		"legendPrice": "prezzo preventivato",
 		"resetFilters": "Reimposta filtri"
 	},
 	"adminDetail": {

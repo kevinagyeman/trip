@@ -24,7 +24,7 @@ export function SuperAdminDashboard() {
 	const active = companies?.filter((c) => c.isActive) ?? [];
 
 	return (
-		<div className="container mx-auto space-y-8 px-4 py-8">
+		<div className="container mx-auto space-y-8 p-4">
 			{/* Pending approvals */}
 			{pending.length > 0 && (
 				<div className="space-y-3">

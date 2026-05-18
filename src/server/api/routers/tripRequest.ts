@@ -230,7 +230,11 @@ export const tripRequestRouter = createTRPCRouter({
 		return {
 			pending: map.PENDING ?? 0,
 			quoted: map.QUOTED ?? 0,
+			accepted: map.ACCEPTED ?? 0,
 			confirmed: map.CONFIRMED ?? 0,
+			rejected: map.REJECTED ?? 0,
+			completed: map.COMPLETED ?? 0,
+			cancelled: map.CANCELLED ?? 0,
 		};
 	}),
 
@@ -452,19 +456,28 @@ export const tripRequestRouter = createTRPCRouter({
 			> = {
 				PENDING: [
 					TripRequestStatus.QUOTED,
-					TripRequestStatus.REJECTED,
 					TripRequestStatus.CANCELLED,
+					TripRequestStatus.COMPLETED,
 				],
 				QUOTED: [
-					TripRequestStatus.PENDING,
+					TripRequestStatus.ACCEPTED,
 					TripRequestStatus.REJECTED,
 					TripRequestStatus.CANCELLED,
+					TripRequestStatus.COMPLETED,
 				],
-				ACCEPTED: [TripRequestStatus.CONFIRMED, TripRequestStatus.CANCELLED],
+				ACCEPTED: [
+					TripRequestStatus.CONFIRMED,
+					TripRequestStatus.CANCELLED,
+					TripRequestStatus.COMPLETED,
+				],
 				CONFIRMED: [TripRequestStatus.COMPLETED, TripRequestStatus.CANCELLED],
 				COMPLETED: [],
-				REJECTED: [TripRequestStatus.PENDING],
-				CANCELLED: [TripRequestStatus.PENDING],
+				REJECTED: [
+					TripRequestStatus.QUOTED,
+					TripRequestStatus.CANCELLED,
+					TripRequestStatus.COMPLETED,
+				],
+				CANCELLED: [],
 			};
 
 			const current = await ctx.db.tripRequest.findUnique({

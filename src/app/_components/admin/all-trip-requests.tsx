@@ -62,49 +62,11 @@ export function AllTripRequests() {
 
 	return (
 		<div className="space-y-4 pb-8">
-			{/* Summary strip */}
-			{counts && (
-				<div className="flex flex-wrap gap-2">
-					<button
-						type="button"
-						onClick={() => {
-							setStatusFilter("PENDING");
-							setDateRange("ALL");
-						}}
-						className="flex items-center gap-1.5 rounded-full border border-yellow-300 bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-900 hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-200"
-					>
-						<span className="h-1.5 w-1.5 rounded-full bg-yellow-500" />
-						{counts.pending} {t("statusPending")}
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							setStatusFilter("QUOTED");
-							setDateRange("ALL");
-						}}
-						className="flex items-center gap-1.5 rounded-full border border-blue-300 bg-blue-100 px-3 py-1 text-xs font-medium text-blue-900 hover:bg-blue-200 dark:border-blue-700 dark:bg-blue-900/50 dark:text-blue-200"
-					>
-						<span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-						{counts.quoted} {t("statusQuoted")}
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							setStatusFilter("CONFIRMED");
-							setDateRange("ALL");
-						}}
-						className="flex items-center gap-1.5 rounded-full border border-green-300 bg-green-100 px-3 py-1 text-xs font-medium text-green-800 hover:bg-green-200 dark:border-green-700 dark:bg-green-900/50 dark:text-green-300"
-					>
-						<span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-						{counts.confirmed} {t("statusConfirmed")}
-					</button>
-				</div>
-			)}
-
 			{/* Filters */}
 			<div className="flex flex-wrap gap-3">
 				<CustomInput
 					className="w-full"
+					inputClassName="text-sm sm:text-base"
 					placeholder={t("searchPlaceholder")}
 					inputProps={{
 						value: search,
@@ -117,13 +79,34 @@ export function AllTripRequests() {
 					placeholder={t("filterByStatus")}
 					options={[
 						{ value: "ALL", label: t("allRequests") },
-						{ value: "PENDING", label: t("statusPending") },
-						{ value: "QUOTED", label: t("statusQuoted") },
-						{ value: "ACCEPTED", label: t("statusAccepted") },
-						{ value: "CONFIRMED", label: t("statusConfirmed") },
-						{ value: "REJECTED", label: t("statusRejected") },
-						{ value: "COMPLETED", label: t("statusCompleted") },
-						{ value: "CANCELLED", label: t("statusCancelled") },
+						{
+							value: "PENDING",
+							label: `${t("statusPending")}${counts ? ` (${counts.pending})` : ""}`,
+						},
+						{
+							value: "QUOTED",
+							label: `${t("statusQuoted")}${counts ? ` (${counts.quoted})` : ""}`,
+						},
+						{
+							value: "ACCEPTED",
+							label: `${t("statusAccepted")}${counts ? ` (${counts.accepted})` : ""}`,
+						},
+						{
+							value: "CONFIRMED",
+							label: `${t("statusConfirmed")}${counts ? ` (${counts.confirmed})` : ""}`,
+						},
+						{
+							value: "REJECTED",
+							label: `${t("statusRejected")}${counts ? ` (${counts.rejected})` : ""}`,
+						},
+						{
+							value: "COMPLETED",
+							label: `${t("statusCompleted")}${counts ? ` (${counts.completed})` : ""}`,
+						},
+						{
+							value: "CANCELLED",
+							label: `${t("statusCancelled")}${counts ? ` (${counts.cancelled})` : ""}`,
+						},
 					]}
 				/>
 				<CustomSelect
@@ -154,6 +137,25 @@ export function AllTripRequests() {
 				)}
 			</div>
 
+			<div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+				<span className="flex items-center gap-1.5">
+					<span className="h-2 w-2 rounded-full bg-sky-500 shrink-0" />
+					{t("legendPickupSet")}
+				</span>
+				<span className="flex items-center gap-1.5">
+					<span className="h-2 w-2 rounded-full bg-muted-foreground/30 shrink-0" />
+					{t("legendPickupNotSet")}
+				</span>
+				<span className="flex items-center gap-1.5">
+					<Users className="h-3 w-3 shrink-0" />
+					{t("legendPassengers")}
+				</span>
+				<span className="flex items-center gap-1.5">
+					<Tag className="h-3 w-3 shrink-0" />
+					{t("legendPrice")}
+				</span>
+			</div>
+
 			{isLoading ? (
 				<div className="flex justify-center py-8">
 					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
@@ -175,7 +177,10 @@ export function AllTripRequests() {
 			) : (
 				<>
 					{items.map((request) => (
-						<Card key={request.id}>
+						<Card key={request.id} className="relative">
+							{/* {request.hasUnread && (
+							<span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-blue-500 ring-2 ring-background" />
+						)} */}
 							<CardContent>
 								<div className="flex items-start justify-between gap-3 min-w-0">
 									<div className="space-y-2 min-w-0 flex-1">
@@ -188,9 +193,6 @@ export function AllTripRequests() {
 											>
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
-											{request.hasUnread && (
-												<span className="h-2 w-2 rounded-full bg-blue-500 shrink-0" />
-											)}
 										</div>
 
 										<div className="text-sm min-w-0">
@@ -219,16 +221,12 @@ export function AllTripRequests() {
 														className="flex items-center gap-1 text-muted-foreground"
 													>
 														<span
-															className={`inline-flex items-center shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+															className={`h-2 w-2 rounded-full shrink-0 ${
 																isScheduled
-																	? "bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300"
-																	: "bg-muted text-muted-foreground"
+																	? "bg-sky-500"
+																	: "bg-muted-foreground/30"
 															}`}
-														>
-															{isScheduled
-																? t("pickupPlanned")
-																: t("pickupNotPlanned")}
-														</span>
+														/>
 														<span className="truncate">{route.pickup}</span>
 														<MoveRight className="h-3 w-3 shrink-0" />
 														<span className="truncate">
