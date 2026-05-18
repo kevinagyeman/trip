@@ -129,6 +129,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				}
 			/>
 
+			{/* Quotation */}
+			<AdminQuotationCard requestId={requestId} />
+
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="pt-0">
 				{routes.map((route, i) => (
@@ -176,7 +179,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 
 						{/* 3 – Pickup */}
-						{request.status === "CONFIRMED" && (
+						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+							request.status,
+						) && (
 							<div className="border-t border-dashed p-3 space-y-3">
 								<PickupAdminBlock
 									requestId={requestId}
@@ -215,9 +220,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				numberOfChildSeats={request.numberOfChildSeats}
 				additionalInfo={request.additionalInfo}
 			/>
-
-			{/* Quotation */}
-			<AdminQuotationCard requestId={requestId} />
 
 			{/* Messages */}
 			<AdminMessagesCard requestId={requestId} />

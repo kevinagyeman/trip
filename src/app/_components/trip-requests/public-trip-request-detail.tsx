@@ -142,12 +142,6 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</LoadingButton>
 						</div>
 					)}
-					{quotation.status === "PENDING" && quotation.notifiedAt && (
-						<AlertBanner
-							variant="info"
-							description={t("editDepartureNotice")}
-						/>
-					)}
 				</SectionCard>
 			))}
 
@@ -201,19 +195,23 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						</div>
 
 						{/* 3 – Pickup */}
-						<div className="border-t border-dashed p-3">
-							<RoutePickupSection
-								pickup={route.pickup}
-								destination={route.destination}
-								driverName={route.driverName}
-								driverPhone={route.driverPhone}
-								beThereAtDate={route.beThereAtDate}
-								beThereAtTime={route.beThereAtTime}
-								meetingPoint={route.meetingPoint}
-								additionalInfo={route.additionalInfo}
-								inBanner={true}
-							/>
-						</div>
+						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+							request.status,
+						) && (
+							<div className="border-t border-dashed p-3">
+								<RoutePickupSection
+									pickup={route.pickup}
+									destination={route.destination}
+									driverName={route.driverName}
+									driverPhone={route.driverPhone}
+									beThereAtDate={route.beThereAtDate}
+									beThereAtTime={route.beThereAtTime}
+									meetingPoint={route.meetingPoint}
+									additionalInfo={route.additionalInfo}
+									inBanner={true}
+								/>
+							</div>
+						)}
 					</RouteCardWrapper>
 				))}
 			</SectionCard>

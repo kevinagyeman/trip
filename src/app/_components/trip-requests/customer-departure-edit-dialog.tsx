@@ -1,6 +1,5 @@
 "use client";
 
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
 import { Button } from "@/components/ui/button";
@@ -97,6 +96,7 @@ export function CustomerDepartureEditDialog({
 			title={label ?? t("editDepartureTitle")}
 			onSave={handleSave}
 			isLoading={isLoading}
+			saveLabel={t("saveAndNotifyAdmin")}
 			trigger={
 				<Button variant="secondary" size="sm">
 					<Route />
@@ -133,7 +133,6 @@ export function CustomerDepartureEditDialog({
 						/>
 					)}
 				</div>
-				<AlertBanner variant="info" description={t("editDepartureNotice")} />
 			</div>
 		</AppDialog>
 	);
