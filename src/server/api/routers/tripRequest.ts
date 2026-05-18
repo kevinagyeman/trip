@@ -14,7 +14,7 @@ import {
 } from "@/server/emails/trip-emails";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { TripRequestStatus } from "../../../../generated/prisma";
+import { type Prisma, TripRequestStatus } from "../../../../generated/prisma";
 import type { TripEvent, EventType, EventActor } from "@/lib/trip-events";
 
 const routeSchema = z.object({
@@ -212,11 +212,36 @@ export const tripRequestRouter = createTRPCRouter({
 	}),
 
 	// ADMIN: Get all trip requests (scoped to company)
+	getStatusCounts: adminProcedure.query(async ({ ctx }) => {
+		const { companyId, role } = ctx.session.user;
+		if (role === "ADMIN" && !companyId) {
+			throw new TRPCError({
+				code: "FORBIDDEN",
+				message: "No company assigned",
+			});
+		}
+		const counts = await ctx.db.tripRequest.groupBy({
+			by: ["status"],
+			where: companyId ? { companyId } : {},
+			_count: true,
+		});
+		const map: Partial<Record<string, number>> = {};
+		for (const c of counts) map[c.status] = c._count;
+		return {
+			pending: map.PENDING ?? 0,
+			quoted: map.QUOTED ?? 0,
+			confirmed: map.CONFIRMED ?? 0,
+		};
+	}),
+
 	getAllRequests: adminProcedure
 		.input(
 			z
 				.object({
 					status: z.nativeEnum(TripRequestStatus).optional(),
+					dateRange: z
+						.enum(["today", "this_week", "next_week", "this_month"])
+						.optional(),
 					search: z.string().optional(),
 					limit: z.number().min(1).max(100).default(20),
 					cursor: z.string().optional(),
@@ -235,22 +260,62 @@ export const tripRequestRouter = createTRPCRouter({
 			}
 			const search = input?.search?.trim();
 
+			const dateRangeFilter = (() => {
+				const range = input?.dateRange;
+				if (!range) return undefined;
+				const pad = (n: number) => String(n).padStart(2, "0");
+				const fmt = (d: Date) =>
+					`${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+				const today = new Date();
+				if (range === "today") {
+					const s = fmt(today);
+					return { gte: s, lte: s };
+				}
+				if (range === "this_week") {
+					const day = today.getDay() === 0 ? 6 : today.getDay() - 1;
+					const start = new Date(today);
+					start.setDate(today.getDate() - day);
+					const end = new Date(start);
+					end.setDate(start.getDate() + 6);
+					return { gte: fmt(start), lte: fmt(end) };
+				}
+				if (range === "next_week") {
+					const day = today.getDay() === 0 ? 6 : today.getDay() - 1;
+					const start = new Date(today);
+					start.setDate(today.getDate() - day + 7);
+					const end = new Date(start);
+					end.setDate(start.getDate() + 6);
+					return { gte: fmt(start), lte: fmt(end) };
+				}
+				if (range === "this_month") {
+					const start = new Date(today.getFullYear(), today.getMonth(), 1);
+					const end = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+					return { gte: fmt(start), lte: fmt(end) };
+				}
+				return undefined;
+			})();
+
+			const where: Prisma.TripRequestWhereInput = {};
+			if (input?.status) where.status = input.status;
+			if (companyId) where.companyId = companyId;
+			if (dateRangeFilter)
+				where.routes = { some: { scheduledDate: dateRangeFilter } };
+			if (search) {
+				const numSearch =
+					Number.isFinite(Number(search.replace(/^0+/, "") || "0")) &&
+					!Number.isNaN(Number(search))
+						? [{ orderNumber: Number(search) }]
+						: [];
+				where.OR = [
+					{ customerEmail: { contains: search } },
+					{ firstName: { contains: search } },
+					{ lastName: { contains: search } },
+					...numSearch,
+				];
+			}
+
 			const items = await ctx.db.tripRequest.findMany({
-				where: {
-					...(input?.status && { status: input.status }),
-					...(companyId ? { companyId } : {}),
-					...(search && {
-						OR: [
-							{ customerEmail: { contains: search } },
-							{ firstName: { contains: search } },
-							{ lastName: { contains: search } },
-							...(Number.isFinite(Number(search.replace(/^0+/, "") || "0")) &&
-							!Number.isNaN(Number(search))
-								? [{ orderNumber: Number(search) }]
-								: []),
-						],
-					}),
-				},
+				where,
 				take: limit + 1,
 				cursor: cursor ? { id: cursor } : undefined,
 				orderBy: { createdAt: "desc" },

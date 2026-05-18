@@ -243,7 +243,18 @@
 		"noRequests": "No requests yet.",
 		"noRequestsDesc": "Share your booking link and start receiving bookings right away.",
 		"searchPlaceholder": "Search by name, email or order number...",
-		"loadMore": "Load more"
+		"loadMore": "Load more",
+		"filterByDate": "Filter by date",
+		"allDates": "All dates",
+		"today": "Today",
+		"thisWeek": "This week",
+		"nextWeek": "Next week",
+		"thisMonth": "This month",
+		"relativeToday": "today",
+		"relativeTomorrow": "tomorrow",
+		"relativeInDays": "in {days} days",
+		"pickupPlanned": "Pickup scheduled",
+		"pickupNotPlanned": "Pickup not scheduled yet"
 	},
 	"adminDetail": {
 		"notFound": "Not found",

@@ -243,7 +243,18 @@
 		"noRequests": "Nessuna richiesta ancora.",
 		"noRequestsDesc": "Condividi il tuo link e inizia subito a ricevere prenotazioni.",
 		"searchPlaceholder": "Cerca per nome, email o numero d'ordine...",
-		"loadMore": "Carica altri"
+		"loadMore": "Carica altri",
+		"filterByDate": "Filtra per data",
+		"allDates": "Tutte le date",
+		"today": "Oggi",
+		"thisWeek": "Questa settimana",
+		"nextWeek": "Prossima settimana",
+		"thisMonth": "Questo mese",
+		"relativeToday": "oggi",
+		"relativeTomorrow": "domani",
+		"relativeInDays": "tra {days} giorni",
+		"pickupPlanned": "Pickup pianificato",
+		"pickupNotPlanned": "Pickup non ancora pianificato"
 	},
 	"adminDetail": {
 		"notFound": "Non trovato",
