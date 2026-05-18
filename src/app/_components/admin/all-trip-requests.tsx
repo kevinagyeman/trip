@@ -9,7 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { format } from "date-fns";
-import { ArrowRight, Loader2, MoveRight } from "lucide-react";
+import { ArrowRight, Loader2, MoveRight, Tag, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -105,9 +105,6 @@ export function AllTripRequests() {
 										<div className="flex items-center gap-2">
 											<p className="text-muted-foreground text-xs">
 												#{String(request.orderNumber).padStart(7, "0")}
-												<span className="ml-2">
-													{format(new Date(request.createdAt), "d MMM yyyy")}
-												</span>
 											</p>
 											<Badge
 												className={`px-1.5 py-0 text-xs font-medium ${STATUS_COLORS[request.status]}`}
@@ -137,8 +134,41 @@ export function AllTripRequests() {
 													<span className="truncate">{route.pickup}</span>
 													<MoveRight className="h-3 w-3 shrink-0" />
 													<span className="truncate">{route.destination}</span>
+													{route.scheduledDate && (
+														<>
+															<span className="shrink-0 text-muted-foreground/50">
+																·
+															</span>
+															<span className="shrink-0">
+																{format(
+																	new Date(`${route.scheduledDate}T12:00:00`),
+																	"d MMM",
+																)}
+															</span>
+														</>
+													)}
 												</p>
 											))}
+										</div>
+
+										<div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+											<span className="flex items-center gap-1">
+												<Users className="h-3 w-3 shrink-0" />
+												{(request.numberOfAdults ?? 0) +
+													(request.numberOfChildren ?? 0)}
+											</span>
+											{(() => {
+												const q = request.quotations.find(
+													(q) => q.notifiedAt !== null,
+												);
+												if (!q) return null;
+												return (
+													<span className="flex items-center gap-1">
+														<Tag className="h-3 w-3 shrink-0" />
+														{q.price.toString()} {q.currency}
+													</span>
+												);
+											})()}
 										</div>
 									</div>
 									<Button
