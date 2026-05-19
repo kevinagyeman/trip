@@ -119,6 +119,16 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</p>
 						</div>
 					)}
+					{quotation.status === "ACCEPTED" &&
+						!["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+							request.status,
+						) && (
+							<AlertBanner
+								title={t("quotationAccepted")}
+								variant="success"
+								description={t("quotationAcceptedNotice")}
+							/>
+						)}
 					{quotation.status === "REJECTED" && (
 						<AlertBanner
 							title={t("quotationRejected")}

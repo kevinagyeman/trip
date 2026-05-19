@@ -197,6 +197,8 @@
 		"additionalInfoLabel": "Informazioni Aggiuntive",
 		"acceptQuotation": "Accetta e notifica l'admin",
 		"rejectQuotation": "Rifiuta e notifica l'admin",
+		"quotationAccepted": "Preventivo Accettato",
+		"quotationAcceptedNotice": "Hai accettato questo preventivo. Il trasferimento non è ancora confermato — l'operatore deve ancora revisionare e confermare la tua prenotazione. Riceverai una notifica una volta confermato.",
 		"quotationRejected": "Preventivo Rifiutato",
 		"quotationRejectedNotice": "Hai rifiutato questa proposta. L'admin può inviarti una versione rivista.",
 		"editDeparture": "Modifica dati",

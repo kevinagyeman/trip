@@ -197,6 +197,8 @@
 		"additionalInfoLabel": "Additional Information",
 		"acceptQuotation": "Accept & notify admin",
 		"rejectQuotation": "Reject & notify admin",
+		"quotationAccepted": "Quotation Accepted",
+		"quotationAcceptedNotice": "You accepted this quotation. Your transfer is not yet confirmed — the operator still needs to review and confirm your booking. You will receive a notification once confirmed.",
 		"quotationRejected": "Quotation Rejected",
 		"quotationRejectedNotice": "You rejected this proposal. The admin can send you a revised one.",
 		"editDeparture": "Edit departure",
