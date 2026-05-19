@@ -23,6 +23,7 @@ const buttonVariants = cva(
         success: "border border-green-300 bg-green-100 text-green-800 hover:bg-green-200 dark:border-green-700 dark:bg-green-900/50 dark:text-green-300 dark:hover:bg-green-900/70",
         warning: "border border-yellow-300 bg-yellow-100 text-yellow-900 hover:bg-yellow-200 dark:border-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-200 dark:hover:bg-yellow-900/70",
         error: "border border-red-300 bg-red-100 text-red-800 hover:bg-red-200 dark:border-red-700 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900/70",
+        danger: "border border-red-300 bg-red-100 text-red-800 hover:bg-red-200 dark:border-red-700 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900/70",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

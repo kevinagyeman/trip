@@ -7,6 +7,12 @@ import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import type { QuotationFormValues } from "@/lib/schemas/quotation";
 import { api } from "@/trpc/react";
+import {
+	BellDot,
+	CalendarCheck,
+	DollarSign,
+	FileQuestionMark,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { AlertBanner } from "../ui/alert-banner";
@@ -141,7 +147,12 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					)}
 					{!isLocked && (
 						<div className="flex flex-wrap items-start gap-3">
-							<Button size="sm" onClick={() => setConfirmOpen(true)}>
+							<Button
+								size="sm"
+								onClick={() => setConfirmOpen(true)}
+								variant={"success"}
+							>
+								<CalendarCheck />
 								{t("confirmTrip")}
 							</Button>
 							<LoadingButton
@@ -151,6 +162,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 									requestDepartureDetails.mutate({ id: requestId })
 								}
 							>
+								<FileQuestionMark />
 								{t("requestDetails")}
 							</LoadingButton>
 						</div>
@@ -211,6 +223,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 
 					<div className="flex flex-wrap gap-3">
 						<Button size="sm" onClick={() => setQuotationOpen(true)}>
+							<DollarSign />
 							{quotation ? t("editQuotation") : t("createQuotation")}
 						</Button>
 						{quotation?.notifiedAt && !isQuotationRejected && (
@@ -221,6 +234,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 									notifyQuotation.mutate({ tripRequestId: requestId })
 								}
 							>
+								<BellDot />
 								{t("resendNotification")}
 							</LoadingButton>
 						)}

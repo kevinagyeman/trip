@@ -11,7 +11,7 @@ import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
 import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { api } from "@/trpc/react";
-import { Loader2 } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
@@ -141,23 +141,25 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						quotation.notifiedAt && (
 							<div className="flex gap-2">
 								<LoadingButton
-									variant={"default"}
+									variant={"success"}
 									onClick={() =>
 										acceptQuotation.mutate({ id: quotation.id, token })
 									}
 									isLoading={acceptQuotation.isPending}
 									disabled={rejectQuotation.isPending}
 								>
+									<Check />
 									{t("acceptQuotation")}
 								</LoadingButton>
 								<LoadingButton
-									variant="secondary"
+									variant="danger"
 									onClick={() =>
 										rejectQuotation.mutate({ id: quotation.id, token })
 									}
 									isLoading={rejectQuotation.isPending}
 									disabled={acceptQuotation.isPending}
 								>
+									<X />
 									{t("rejectQuotation")}
 								</LoadingButton>
 							</div>
