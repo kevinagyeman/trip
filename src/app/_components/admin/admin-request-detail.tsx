@@ -182,24 +182,26 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						</div>
 
 						{/* 3 – Pickup */}
-						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
-							request.status,
-						) && (
-							<div className="border-t border-dashed p-3 space-y-3">
-								<PickupAdminBlock
-									requestId={requestId}
-									route={route}
-									routeIndex={i}
-									allRoutes={routes}
-									drivers={drivers}
-									isLoading={updateRoutesByAdmin.isPending}
-									onSave={updateRoutesByAdmin.mutate}
-									warningTitle={tCommon("pickupAdminWarningTitle")}
-									warningText={tCommon("pickupAdminTimeNote")}
-									disabled={isLocked}
-								/>
-							</div>
-						)}
+						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(request.status) &&
+							!(
+								isLocked &&
+								!(route.meetingPoint ?? route.beThereAtDate ?? route.driverName)
+							) && (
+								<div className="border-t border-dashed p-3 space-y-3">
+									<PickupAdminBlock
+										requestId={requestId}
+										route={route}
+										routeIndex={i}
+										allRoutes={routes}
+										drivers={drivers}
+										isLoading={updateRoutesByAdmin.isPending}
+										onSave={updateRoutesByAdmin.mutate}
+										warningTitle={tCommon("pickupAdminWarningTitle")}
+										warningText={tCommon("pickupAdminTimeNote")}
+										disabled={isLocked}
+									/>
+								</div>
+							)}
 					</RouteCardWrapper>
 				))}
 			</SectionCard>

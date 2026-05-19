@@ -5,13 +5,15 @@ import { Link } from "@/i18n/navigation";
 export function BrandLogo({
 	label,
 	isLoggedIn,
+	href = "/",
 }: {
 	label: string;
 	isLoggedIn: boolean;
+	href?: string;
 }) {
 	if (isLoggedIn) {
 		return (
-			<Link href="/" className="text-xl font-bold">
+			<Link href={href} className="text-xl font-bold">
 				{label}
 			</Link>
 		);

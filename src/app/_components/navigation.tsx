@@ -32,6 +32,12 @@ export async function Navigation() {
 	const userName = session.user.name ?? session.user.email ?? "";
 	const role = session.user.role;
 	const isAdmin = role === "ADMIN";
+	const isSuperAdmin = role === "SUPER_ADMIN";
+	const logoHref = isAdmin
+		? "/admin"
+		: isSuperAdmin
+			? "/super-admin"
+			: "/dashboard";
 
 	return (
 		<nav className="sticky top-0 z-50 border-b bg-background">
@@ -39,10 +45,10 @@ export async function Navigation() {
 				<div className="flex items-center justify-between">
 					{/* Brand + desktop nav links */}
 					<div className="flex items-center gap-6">
-						<BrandLogo label={t("brand")} isLoggedIn={true} />
+						<BrandLogo label={t("brand")} isLoggedIn={true} href={logoHref} />
 
 						<div className="hidden items-center gap-2 md:flex">
-							{!isAdmin && (
+							{!isAdmin && !isSuperAdmin && (
 								<Link href="/dashboard">
 									<Button variant="ghost">{t("myTrips")}</Button>
 								</Link>
@@ -80,10 +86,11 @@ export async function Navigation() {
 						</div>
 
 						{/* Mobile burger */}
-						{isAdmin && (
+						{(isAdmin || isSuperAdmin) && (
 							<MobileMenu
 								userName={userName}
 								isAdmin={isAdmin}
+								isSuperAdmin={isSuperAdmin}
 								myTripsLabel={t("myTrips")}
 								adminLabel={t("adminDashboard")}
 								adminStatsLabel={t("adminStats")}

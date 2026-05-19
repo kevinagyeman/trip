@@ -3,7 +3,6 @@
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
-import { LoadingButton } from "@/app/_components/ui/loading-button";
 import {
 	Select,
 	SelectContent,
@@ -16,7 +15,6 @@ import {
 	quotationSchema,
 	type QuotationFormValues,
 } from "@/lib/schemas/quotation";
-import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
@@ -34,19 +32,17 @@ type QuotationData = {
 };
 
 type Props = {
-	requestId: string;
-	isRejected: boolean;
 	quotation: QuotationData | null | undefined;
 	estimateNotice?: string | null;
-	onSuccess: () => void;
+	formId: string;
+	onSubmit: (values: QuotationFormValues) => void;
 };
 
 export function QuotationForm({
-	requestId,
-	isRejected,
 	quotation,
 	estimateNotice,
-	onSuccess,
+	formId,
+	onSubmit,
 }: Props) {
 	const t = useTranslations("adminDetail");
 
@@ -100,27 +96,8 @@ export function QuotationForm({
 		quotation?.quotationAdditionalInfo,
 	]);
 
-	const saveAndSend = api.quotation.saveAndSend.useMutation({ onSuccess });
-	const notifyQuotation = api.quotation.notify.useMutation({ onSuccess });
-
-	function buildMutationInput(values: QuotationFormValues) {
-		return {
-			tripRequestId: requestId,
-			price: values.price,
-			currency: values.currency,
-			isPriceEachWay: values.priceType === "each_way",
-			areCarSeatsIncluded:
-				values.carSeatsStatus === "included"
-					? true
-					: values.carSeatsStatus === "not_included"
-						? false
-						: null,
-			quotationAdditionalInfo: values.additionalInfo || undefined,
-		};
-	}
-
 	return (
-		<form className="space-y-4">
+		<form id={formId} className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
 			{/* Price + Currency */}
 			<div className="flex items-end gap-2">
 				<div className="w-36">
@@ -197,32 +174,6 @@ export function QuotationForm({
 				rows={4}
 				textAreaProps={{ ...register("additionalInfo") }}
 			/>
-
-			{/* Actions */}
-			<div className="flex flex-wrap items-center gap-3">
-				<LoadingButton
-					type="button"
-					size="sm"
-					variant={"default"}
-					isLoading={saveAndSend.isPending}
-					onClick={handleSubmit((values) =>
-						saveAndSend.mutate(buildMutationInput(values)),
-					)}
-				>
-					{isRejected ? t("reviseAndResend") : t("saveAndSend")}
-				</LoadingButton>
-
-				{quotation?.notifiedAt && !isRejected && (
-					<LoadingButton
-						type="button"
-						size="sm"
-						isLoading={notifyQuotation.isPending}
-						onClick={() => notifyQuotation.mutate({ tripRequestId: requestId })}
-					>
-						{t("resendNotification")}
-					</LoadingButton>
-				)}
-			</div>
 		</form>
 	);
 }

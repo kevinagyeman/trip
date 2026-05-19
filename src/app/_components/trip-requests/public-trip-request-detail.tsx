@@ -119,6 +119,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</p>
 						</div>
 					)}
+					{quotation.status === "REJECTED" && (
+						<AlertBanner
+							title={t("quotationRejected")}
+							variant="error"
+							description={t("quotationRejectedNotice")}
+						/>
+					)}
 					{!isLocked &&
 						quotation.status === "PENDING" &&
 						quotation.notifiedAt && (
@@ -198,24 +205,27 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						</div>
 
 						{/* 3 – Pickup */}
-						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
-							request.status,
-						) && (
-							<div className="border-t border-dashed p-3">
-								<RoutePickupSection
-									pickup={route.pickup}
-									destination={route.destination}
-									driverName={route.driverName}
-									driverPhone={route.driverPhone}
-									beThereAtDate={route.beThereAtDate}
-									beThereAtTime={route.beThereAtTime}
-									meetingPoint={route.meetingPoint}
-									additionalInfo={route.additionalInfo}
-									inBanner={true}
-									disabled={isLocked}
-								/>
-							</div>
-						)}
+						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(request.status) &&
+							!!(
+								route.meetingPoint ??
+								route.beThereAtDate ??
+								route.driverName
+							) && (
+								<div className="border-t border-dashed p-3">
+									<RoutePickupSection
+										pickup={route.pickup}
+										destination={route.destination}
+										driverName={route.driverName}
+										driverPhone={route.driverPhone}
+										beThereAtDate={route.beThereAtDate}
+										beThereAtTime={route.beThereAtTime}
+										meetingPoint={route.meetingPoint}
+										additionalInfo={route.additionalInfo}
+										inBanner={true}
+										disabled={isLocked}
+									/>
+								</div>
+							)}
 					</RouteCardWrapper>
 				))}
 			</SectionCard>

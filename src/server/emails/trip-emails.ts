@@ -37,7 +37,7 @@ const ADMIN_TRANSLATIONS = {
 			`${o} - New transfer request | ${name}`,
 		newMessage: (o: string, name: string) => `${o} - New message | ${name}`,
 		departureUpdated: (o: string, name: string) =>
-			`${o} - Customer updated departure details | ${name}`,
+			`${o} - Customer updated transfer date and time details | ${name}`,
 		quotationAccepted: (o: string, name: string) =>
 			`${o} - Quotation accepted | ${name}`,
 		quotationRejected: (o: string, name: string) =>
@@ -49,7 +49,7 @@ const ADMIN_TRANSLATIONS = {
 			`${o} - Nuova richiesta di trasferimento | ${name}`,
 		newMessage: (o: string, name: string) => `${o} - Nuovo messaggio | ${name}`,
 		departureUpdated: (o: string, name: string) =>
-			`${o} - Il cliente ha aggiornato i dati di partenza | ${name}`,
+			`${o} - Il cliente ha aggiornato i dati del trasferimento | ${name}`,
 		quotationAccepted: (o: string, name: string) =>
 			`${o} - Preventivo accettato | ${name}`,
 		quotationRejected: (o: string, name: string) =>
@@ -92,13 +92,13 @@ const TRANSLATIONS = {
 	en: {
 		departureDetailsRequest: {
 			subject: (o: string, name: string) =>
-				`${o} - Please provide your departure details | ${name}`,
-			preview: "We need your departure details",
+				`${o} - Complete your trip details | ${name}`,
+			preview: "We need your date and time of your transfer",
 			title: (firstName: string) =>
-				`Dear ${firstName}, please provide your departure details.`,
+				`Dear ${firstName}, please complete your trip details.`,
 			subtitle:
-				"To prepare your transfer, we need your departure date, time, and flight number (if applicable). Open your request to fill in the details.",
-			button: "Add Departure Details",
+				"To prepare your transfer, we need your travel date, time, and flight number (if applicable). Open your request to fill in the details.",
+			button: "Add Details",
 		},
 		requestReceived: {
 			subject: (o: string, name: string) => `${o} - Request received | ${name}`,
@@ -147,12 +147,12 @@ const TRANSLATIONS = {
 	it: {
 		departureDetailsRequest: {
 			subject: (o: string, name: string) =>
-				`${o} - Inserisci i dettagli di partenza | ${name}`,
-			preview: "Abbiamo bisogno dei tuoi dettagli di partenza",
+				`${o} - Completa i dati del tuo trasferimento | ${name}`,
+			preview: "Abbiamo bisogno di data, orario",
 			title: (firstName: string) =>
-				`Gentile ${firstName}, inserisci i dettagli di partenza.`,
+				`Gentile ${firstName}, completa i dati del tuo trasferimento.`,
 			subtitle:
-				"Per preparare il tuo trasferimento, abbiamo bisogno della data, dell'orario di partenza e del numero di volo (se applicabile). Apri la tua richiesta per inserire i dettagli.",
+				"Per preparare il tuo trasferimento, abbiamo bisogno della data, dell'orario e del numero di volo (se applicabile). Apri la tua richiesta per inserire i dettagli.",
 			button: "Inserisci Dettagli",
 		},
 		requestReceived: {

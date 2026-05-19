@@ -10,6 +10,7 @@ import { useState } from "react";
 interface MobileMenuProps {
 	userName: string;
 	isAdmin: boolean;
+	isSuperAdmin?: boolean;
 	myTripsLabel: string;
 	adminLabel: string;
 	adminStatsLabel: string;
@@ -18,6 +19,7 @@ interface MobileMenuProps {
 export function MobileMenu({
 	userName,
 	isAdmin,
+	isSuperAdmin = false,
 	myTripsLabel,
 	adminLabel,
 	adminStatsLabel,
@@ -41,7 +43,7 @@ export function MobileMenu({
 						<p className="truncate text-sm text-muted-foreground">{userName}</p>
 					</div>
 					<div className="flex flex-col gap-1 p-2">
-						{!isAdmin && (
+						{!isAdmin && !isSuperAdmin && (
 							<Link href="/dashboard" onClick={() => setOpen(false)}>
 								<Button variant="ghost" className="w-full justify-start">
 									{myTripsLabel}
@@ -61,6 +63,13 @@ export function MobileMenu({
 									</Button>
 								</Link>
 							</>
+						)}
+						{isSuperAdmin && (
+							<Link href="/super-admin" onClick={() => setOpen(false)}>
+								<Button variant="ghost" className="w-full justify-start">
+									{adminLabel}
+								</Button>
+							</Link>
 						)}
 					</div>
 					{isAdmin && (

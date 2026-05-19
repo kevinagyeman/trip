@@ -5,9 +5,13 @@ import { AppDialog } from "@/app/_components/ui/app-dialog";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
+import type { QuotationFormValues } from "@/lib/schemas/quotation";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { AlertBanner } from "../ui/alert-banner";
+
+const QUOTATION_FORM_ID = "admin-quotation-form";
 
 export function AdminQuotationCard({ requestId }: { requestId: string }) {
 	const t = useTranslations("adminDetail");
@@ -17,6 +21,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 		id: requestId,
 	});
 
+	const [quotationOpen, setQuotationOpen] = useState(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
 	const invalidate = async () => {
@@ -29,6 +34,17 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 			await invalidate();
 			await utils.tripRequest.getAllRequests.invalidate();
 		},
+	});
+
+	const saveAndSend = api.quotation.saveAndSend.useMutation({
+		onSuccess: async () => {
+			setQuotationOpen(false);
+			await invalidate();
+		},
+	});
+
+	const notifyQuotation = api.quotation.notify.useMutation({
+		onSuccess: invalidate,
 	});
 
 	const requestDepartureDetails =
@@ -53,6 +69,26 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 			return "";
 		}
 	})();
+
+	function buildMutationInput(values: QuotationFormValues) {
+		return {
+			tripRequestId: requestId,
+			price: values.price,
+			currency: values.currency,
+			isPriceEachWay: values.priceType === "each_way",
+			areCarSeatsIncluded:
+				values.carSeatsStatus === "included"
+					? true
+					: values.carSeatsStatus === "not_included"
+						? false
+						: null,
+			quotationAdditionalInfo: values.additionalInfo || undefined,
+		};
+	}
+
+	const isLocked = ["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+		request.status,
+	);
 
 	return (
 		<SectionCard
@@ -103,24 +139,20 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 							</p>
 						</div>
 					)}
-					{!["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
-						request.status,
-					) && (
+					{!isLocked && (
 						<div className="flex flex-wrap items-start gap-3">
 							<Button size="sm" onClick={() => setConfirmOpen(true)}>
 								{t("confirmTrip")}
 							</Button>
-							<div className="flex flex-col gap-1">
-								<LoadingButton
-									size="sm"
-									isLoading={requestDepartureDetails.isPending}
-									onClick={() =>
-										requestDepartureDetails.mutate({ id: requestId })
-									}
-								>
-									{t("requestDetails")}
-								</LoadingButton>
-							</div>
+							<LoadingButton
+								size="sm"
+								isLoading={requestDepartureDetails.isPending}
+								onClick={() =>
+									requestDepartureDetails.mutate({ id: requestId })
+								}
+							>
+								{t("requestDetails")}
+							</LoadingButton>
 						</div>
 					)}
 					<AppDialog
@@ -135,13 +167,89 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					</AppDialog>
 				</>
 			) : (
-				<QuotationForm
-					requestId={requestId}
-					isRejected={isQuotationRejected}
-					quotation={quotation}
-					estimateNotice={estimateNotice}
-					onSuccess={invalidate}
-				/>
+				<>
+					{quotation && (
+						<>
+							<div>
+								<p className="text-2xl font-bold">
+									{quotation.price.toString()}{" "}
+									<span className="text-sm">{quotation.currency}</span>
+								</p>
+								<p className="text-base">
+									{quotation.isPriceEachWay
+										? t("priceEachWay")
+										: t("priceTypeNotEachWay")}
+								</p>
+								{quotation.areCarSeatsIncluded !== null && (
+									<p className="text-base">
+										{quotation.areCarSeatsIncluded
+											? t("carSeatsIncluded")
+											: t("carSeatsNotIncluded")}
+									</p>
+								)}
+							</div>
+							{quotation.quotationAdditionalInfo && (
+								<div>
+									<p className="text-base text-muted-foreground">
+										{t("additionalInfoCustomer")}
+									</p>
+									<p className="mt-1 whitespace-pre-wrap text-base">
+										{quotation.quotationAdditionalInfo}
+									</p>
+								</div>
+							)}
+						</>
+					)}
+
+					{isQuotationRejected && (
+						<AlertBanner
+							variant="error"
+							title={t("quotationRejectedAdminTitle")}
+							description={t("quotationRejectedAdminNotice")}
+						/>
+					)}
+
+					<div className="flex flex-wrap gap-3">
+						<Button size="sm" onClick={() => setQuotationOpen(true)}>
+							{quotation ? t("editQuotation") : t("createQuotation")}
+						</Button>
+						{quotation?.notifiedAt && !isQuotationRejected && (
+							<LoadingButton
+								size="sm"
+								isLoading={notifyQuotation.isPending}
+								onClick={() =>
+									notifyQuotation.mutate({ tripRequestId: requestId })
+								}
+							>
+								{t("resendNotification")}
+							</LoadingButton>
+						)}
+					</div>
+
+					<AppDialog
+						open={quotationOpen}
+						onOpenChange={setQuotationOpen}
+						title={quotation ? t("editQuotation") : t("createQuotation")}
+						onSave={() => {
+							(
+								document.getElementById(
+									QUOTATION_FORM_ID,
+								) as HTMLFormElement | null
+							)?.requestSubmit();
+						}}
+						isLoading={saveAndSend.isPending}
+						saveLabel={t("saveAndNotifyCustomer")}
+					>
+						<QuotationForm
+							formId={QUOTATION_FORM_ID}
+							quotation={quotation}
+							estimateNotice={estimateNotice}
+							onSubmit={(values) =>
+								saveAndSend.mutate(buildMutationInput(values))
+							}
+						/>
+					</AppDialog>
+				</>
 			)}
 		</SectionCard>
 	);
