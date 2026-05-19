@@ -65,6 +65,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
+	const isLocked = ["COMPLETED", "CANCELLED"].includes(request.status);
 	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
 		request.status,
 	);
@@ -118,30 +119,32 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							</p>
 						</div>
 					)}
-					{quotation.status === "PENDING" && quotation.notifiedAt && (
-						<div className="flex gap-2">
-							<LoadingButton
-								variant={"default"}
-								onClick={() =>
-									acceptQuotation.mutate({ id: quotation.id, token })
-								}
-								isLoading={acceptQuotation.isPending}
-								disabled={rejectQuotation.isPending}
-							>
-								{t("acceptQuotation")}
-							</LoadingButton>
-							<LoadingButton
-								variant="secondary"
-								onClick={() =>
-									rejectQuotation.mutate({ id: quotation.id, token })
-								}
-								isLoading={rejectQuotation.isPending}
-								disabled={acceptQuotation.isPending}
-							>
-								{t("rejectQuotation")}
-							</LoadingButton>
-						</div>
-					)}
+					{!isLocked &&
+						quotation.status === "PENDING" &&
+						quotation.notifiedAt && (
+							<div className="flex gap-2">
+								<LoadingButton
+									variant={"default"}
+									onClick={() =>
+										acceptQuotation.mutate({ id: quotation.id, token })
+									}
+									isLoading={acceptQuotation.isPending}
+									disabled={rejectQuotation.isPending}
+								>
+									{t("acceptQuotation")}
+								</LoadingButton>
+								<LoadingButton
+									variant="secondary"
+									onClick={() =>
+										rejectQuotation.mutate({ id: quotation.id, token })
+									}
+									isLoading={rejectQuotation.isPending}
+									disabled={acceptQuotation.isPending}
+								>
+									{t("rejectQuotation")}
+								</LoadingButton>
+							</div>
+						)}
 				</SectionCard>
 			))}
 
@@ -209,6 +212,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									meetingPoint={route.meetingPoint}
 									additionalInfo={route.additionalInfo}
 									inBanner={true}
+									disabled={isLocked}
 								/>
 							</div>
 						)}
@@ -237,7 +241,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 			{/* Messages */}
 			<SectionCard title={tMessages("title")} subtitle={t("messagesSubtitle")}>
-				<TripMessageThread mode="customer" token={token} />
+				<TripMessageThread mode="customer" token={token} disabled={isLocked} />
 			</SectionCard>
 		</div>
 	);

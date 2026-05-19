@@ -103,7 +103,9 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 							</p>
 						</div>
 					)}
-					{request.status !== "CONFIRMED" && (
+					{!["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+						request.status,
+					) && (
 						<div className="flex flex-wrap items-start gap-3">
 							<Button size="sm" onClick={() => setConfirmOpen(true)}>
 								{t("confirmTrip")}

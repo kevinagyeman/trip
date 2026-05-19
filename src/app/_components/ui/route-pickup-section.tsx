@@ -18,6 +18,7 @@ interface Props {
 	additionalInfo?: string | null;
 	isAdmin?: boolean;
 	inBanner?: boolean;
+	disabled?: boolean;
 }
 
 export function RoutePickupSection({
@@ -31,6 +32,7 @@ export function RoutePickupSection({
 	additionalInfo,
 	isAdmin = false,
 	inBanner = false,
+	disabled = false,
 }: Props) {
 	const t = useTranslations("common");
 
@@ -49,7 +51,7 @@ export function RoutePickupSection({
 					additionalInfo={additionalInfo}
 					t={t}
 				/>
-				{beThereAtDate && (
+				{!disabled && beThereAtDate && (
 					<AddToCalendarButton
 						pickup={pickup}
 						destination={destination}
@@ -102,7 +104,7 @@ export function RoutePickupSection({
 					additionalInfo={additionalInfo}
 					t={t}
 				/>
-				{beThereAtDate && (
+				{!disabled && beThereAtDate && (
 					<AddToCalendarButton
 						pickup={pickup}
 						destination={destination}

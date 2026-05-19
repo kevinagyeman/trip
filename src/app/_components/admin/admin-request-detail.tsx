@@ -87,6 +87,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
+	const isLocked = ["COMPLETED", "CANCELLED"].includes(request.status);
 
 	return (
 		<div className="space-y-4">
@@ -164,18 +165,20 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								flightNumber={route.flightNumber}
 								pickup={route.pickup}
 								destination={route.destination}
-								showCalendar
+								showCalendar={!isLocked}
 							/>
 
-							<AdminRouteEditDialog
-								requestId={requestId}
-								route={route}
-								routeIndex={i}
-								allRoutes={routes}
-								isLoading={updateRoutesByAdmin.isPending}
-								label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
-								onSave={updateRoutesByAdmin.mutate}
-							/>
+							{!isLocked && (
+								<AdminRouteEditDialog
+									requestId={requestId}
+									route={route}
+									routeIndex={i}
+									allRoutes={routes}
+									isLoading={updateRoutesByAdmin.isPending}
+									label={`${t("editRoute")} — ${tCommon("routeN", { n: i + 1 })}`}
+									onSave={updateRoutesByAdmin.mutate}
+								/>
+							)}
 						</div>
 
 						{/* 3 – Pickup */}
@@ -193,6 +196,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 									onSave={updateRoutesByAdmin.mutate}
 									warningTitle={tCommon("pickupAdminWarningTitle")}
 									warningText={tCommon("pickupAdminTimeNote")}
+									disabled={isLocked}
 								/>
 							</div>
 						)}
@@ -222,7 +226,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Messages */}
-			<AdminMessagesCard requestId={requestId} />
+			<AdminMessagesCard requestId={requestId} disabled={isLocked} />
 
 			{/* Internal Notes */}
 			<InternalNotesCard
@@ -256,6 +260,7 @@ function PickupAdminBlock({
 	onSave,
 	warningTitle,
 	warningText,
+	disabled = false,
 }: {
 	requestId: string;
 	route: Parameters<typeof AdminPickupEditDialog>[0]["route"];
@@ -266,6 +271,7 @@ function PickupAdminBlock({
 	onSave: Parameters<typeof AdminPickupEditDialog>[0]["onSave"];
 	warningTitle: string;
 	warningText: string;
+	disabled?: boolean;
 }) {
 	const hasPickupData = !!(
 		route.meetingPoint ??
@@ -274,6 +280,7 @@ function PickupAdminBlock({
 	);
 
 	if (!hasPickupData) {
+		if (disabled) return null;
 		return (
 			<AlertBanner
 				variant="warning"
@@ -306,17 +313,20 @@ function PickupAdminBlock({
 				meetingPoint={route.meetingPoint}
 				additionalInfo={route.additionalInfo}
 				isAdmin
+				disabled={disabled}
 			/>
 
-			<AdminPickupEditDialog
-				requestId={requestId}
-				route={route}
-				routeIndex={routeIndex}
-				allRoutes={allRoutes}
-				drivers={drivers}
-				isLoading={isLoading}
-				onSave={onSave}
-			/>
+			{!disabled && (
+				<AdminPickupEditDialog
+					requestId={requestId}
+					route={route}
+					routeIndex={routeIndex}
+					allRoutes={allRoutes}
+					drivers={drivers}
+					isLoading={isLoading}
+					onSave={onSave}
+				/>
+			)}
 		</>
 	);
 }

@@ -17,12 +17,14 @@ type Props =
 			token: string;
 			prefillMessage?: string;
 			prefillTrigger?: number;
+			disabled?: boolean;
 	  }
 	| {
 			mode: "admin";
 			requestId: string;
 			prefillMessage?: string;
 			prefillTrigger?: number;
+			disabled?: boolean;
 	  };
 
 export function TripMessageThread(props: Props) {
@@ -67,6 +69,7 @@ export function TripMessageThread(props: Props) {
 	});
 
 	const isPending = sendAsCustomer.isPending || sendAsAdmin.isPending;
+	const disabled = "disabled" in props ? props.disabled : false;
 
 	const handleSend = () => {
 		if (!body.trim()) return;
@@ -136,30 +139,32 @@ export function TripMessageThread(props: Props) {
 			</div>
 
 			{/* Compose */}
-			<div className="flex items-end gap-2">
-				<Textarea
-					ref={textareaRef}
-					value={body}
-					onChange={(e) => setBody(e.target.value)}
-					rows={1}
-					className="flex-1 resize-none min-h-9"
-					placeholder={t("inputPlaceholder")}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-							e.preventDefault();
-							handleSend();
-						}
-					}}
-				/>
-				<LoadingButton
-					onClick={handleSend}
-					isLoading={isPending}
-					disabled={!body.trim()}
-					variant={"default"}
-				>
-					<ArrowRight className="h-4 w-4" />
-				</LoadingButton>
-			</div>
+			{!disabled && (
+				<div className="flex items-end gap-2">
+					<Textarea
+						ref={textareaRef}
+						value={body}
+						onChange={(e) => setBody(e.target.value)}
+						rows={1}
+						className="flex-1 resize-none min-h-9"
+						placeholder={t("inputPlaceholder")}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+								e.preventDefault();
+								handleSend();
+							}
+						}}
+					/>
+					<LoadingButton
+						onClick={handleSend}
+						isLoading={isPending}
+						disabled={!body.trim()}
+						variant={"default"}
+					>
+						<ArrowRight className="h-4 w-4" />
+					</LoadingButton>
+				</div>
+			)}
 		</div>
 	);
 }
