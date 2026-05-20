@@ -466,6 +466,8 @@
 		"saveAndNotifyCustomer": "Save & Notify Customer",
 		"pickupTimeNote": "After the transfer is confirmed, based on the time you indicated, we'll calculate the pickup time based on traffic and distance.",
 		"pickupAdminTimeNote": "Let the customer know the exact pickup time once you have all the necessary information (departure date/time, flight number, etc.)",
-		"noPickupData": "There are no pickup details for this route yet. You will receive an email when they are available."
+		"noPickupData": "There are no pickup details for this route yet. You will receive an email when they are available.",
+		"pickupAirportInAdminNoticeTitle": "Arriving flight — indicative time",
+		"pickupAirportInAdminNotice": "The customer will be informed that the pickup time is indicative. You will monitor the flight for any delays and adjust accordingly."
 	}
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -191,6 +192,13 @@ export function AdminPickupEditDialog({
 			}
 		>
 			<div className="space-y-4">
+				{route.type === "airport_in" && (
+					<AlertBanner
+						variant="info"
+						title={tCommon("pickupAirportInAdminNoticeTitle")}
+						description={tCommon("pickupAirportInAdminNotice")}
+					/>
+				)}
 				{drivers.length > 0 && (
 					<CustomSelect
 						labelText={tCommon("pickupInfoSelectDriver")}
