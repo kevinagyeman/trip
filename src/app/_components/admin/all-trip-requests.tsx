@@ -66,7 +66,6 @@ export function AllTripRequests() {
 			<div className="flex flex-wrap gap-3">
 				<CustomInput
 					className="w-full"
-					inputClassName="text-sm sm:text-base"
 					placeholder={t("searchPlaceholder")}
 					inputProps={{
 						value: search,
