@@ -139,9 +139,10 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					{!isLocked &&
 						quotation.status === "PENDING" &&
 						quotation.notifiedAt && (
-							<div className="flex gap-2">
+							<div className="flex flex-wrap gap-2">
 								<LoadingButton
 									variant={"success"}
+									className="w-full sm:w-auto"
 									onClick={() =>
 										acceptQuotation.mutate({ id: quotation.id, token })
 									}
@@ -153,6 +154,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								</LoadingButton>
 								<LoadingButton
 									variant="danger"
+									className="w-full sm:w-auto"
 									onClick={() =>
 										rejectQuotation.mutate({ id: quotation.id, token })
 									}

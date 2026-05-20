@@ -10,7 +10,7 @@ import { api } from "@/trpc/react";
 import {
 	BellDot,
 	CalendarCheck,
-	DollarSign,
+	CircleDollarSign,
 	FileQuestionMark,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -222,8 +222,12 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 					)}
 
 					<div className="flex flex-wrap gap-3">
-						<Button size="sm" onClick={() => setQuotationOpen(true)}>
-							<DollarSign />
+						<Button
+							size="sm"
+							onClick={() => setQuotationOpen(true)}
+							className="w-full sm:w-auto"
+						>
+							<CircleDollarSign />
 							{quotation ? t("editQuotation") : t("createQuotation")}
 						</Button>
 						{quotation?.notifiedAt && !isQuotationRejected && (
@@ -233,6 +237,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 								onClick={() =>
 									notifyQuotation.mutate({ tripRequestId: requestId })
 								}
+								className="w-full sm:w-auto"
 							>
 								<BellDot />
 								{t("resendNotification")}

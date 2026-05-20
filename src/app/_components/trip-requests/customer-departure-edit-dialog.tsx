@@ -98,7 +98,7 @@ export function CustomerDepartureEditDialog({
 			isLoading={isLoading}
 			saveLabel={t("saveAndNotifyAdmin")}
 			trigger={
-				<Button variant="secondary" size="sm">
+				<Button variant="secondary" size="sm" className="w-full sm:w-auto">
 					<Route />
 					{label ?? t("editDeparture")}
 				</Button>

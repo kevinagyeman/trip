@@ -180,7 +180,11 @@ export function AdminPickupEditDialog({
 			isLoading={isLoading}
 			saveLabel={t("saveAndNotifyCustomer")}
 			trigger={
-				<Button variant={inBanner ? "warning" : "secondary"} size="sm">
+				<Button
+					variant={inBanner ? "warning" : "secondary"}
+					size="sm"
+					className="w-full sm:w-auto"
+				>
 					<MapPinned />
 					{t("editPickup")}
 				</Button>

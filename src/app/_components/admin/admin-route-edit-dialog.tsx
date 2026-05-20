@@ -137,7 +137,7 @@ export function AdminRouteEditDialog({
 			onSave={handleSave}
 			isLoading={isLoading}
 			trigger={
-				<Button variant="secondary" size="sm">
+				<Button variant="secondary" size="sm" className="w-full sm:w-auto">
 					<Route />
 					{label ?? t("editRoute")}
 				</Button>
