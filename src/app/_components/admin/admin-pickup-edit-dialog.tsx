@@ -6,12 +6,12 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { PhoneInput } from "@/app/_components/ui/phone-input";
-import { RequiredLabel } from "@/app/_components/ui/required-label";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { pickupSchema, type PickupFormValues } from "@/lib/schemas/pickup";
 import { MapPinned } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export interface RouteData {
@@ -81,6 +81,7 @@ export function AdminPickupEditDialog({
 }: Props) {
 	const t = useTranslations("adminDetail");
 	const tCommon = useTranslations("common");
+	const params = useParams<{ locale: string }>();
 
 	const [open, setOpen] = useState(false);
 
@@ -205,7 +206,7 @@ export function AdminPickupEditDialog({
 						description={tCommon("pickupAirportInAdminNotice")}
 					/>
 				)}
-				{drivers.length > 0 && (
+				<div className="space-y-1">
 					<CustomSelect
 						labelText={tCommon("pickupInfoSelectDriver")}
 						placeholder={tCommon("pickupInfoSelectDriverPlaceholder")}
@@ -223,9 +224,15 @@ export function AdminPickupEditDialog({
 							setDriverPhone(match?.[2] ?? d.phone);
 						}}
 					/>
-				)}
+					<Link
+						href={`/${params.locale}/admin/settings#drivers`}
+						className="text-xs text-muted-foreground underline underline-offset-3"
+					>
+						{t("addDriversLink")}
+					</Link>
+				</div>
 
-				<div className="flex flex-col gap-3">
+				<div className="space-y-4">
 					<CustomInput
 						labelText={tCommon("pickupInfoMeetingPoint")}
 						required
@@ -266,28 +273,17 @@ export function AdminPickupEditDialog({
 							onChange: (e) => setDriverName(e.target.value),
 						}}
 					/>
-					<div className="space-y-2">
-						<Label className="mb-2">
-							{tCommon("pickupInfoDriverPhone")}
-							<RequiredLabel />
-						</Label>
-						<PhoneInput
-							countryCode={driverPhoneCC}
-							onCountryCodeChange={setDriverPhoneCC}
-							phoneNumber={driverPhone}
-							onPhoneNumberChange={setDriverPhone}
-							error={
-								pickupErrors.driverPhone ?? pickupErrors.driverPhoneCountryCode
-							}
-						/>
-						{(pickupErrors.driverPhone ??
-							pickupErrors.driverPhoneCountryCode) && (
-							<small className="text-xs text-destructive">
-								{pickupErrors.driverPhone ??
-									pickupErrors.driverPhoneCountryCode}
-							</small>
-						)}
-					</div>
+					<PhoneInput
+						labelText={tCommon("pickupInfoDriverPhone")}
+						required
+						countryCode={driverPhoneCC}
+						onCountryCodeChange={setDriverPhoneCC}
+						phoneNumber={driverPhone}
+						onPhoneNumberChange={setDriverPhone}
+						error={
+							pickupErrors.driverPhone ?? pickupErrors.driverPhoneCountryCode
+						}
+					/>
 					<CustomTextArea
 						labelText={tCommon("pickupInfoAdditionalInfo")}
 						rows={3}

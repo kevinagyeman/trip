@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -37,7 +38,9 @@ function CustomSelect({
 		<div className={className}>
 			{labelText && <Label className="mb-2">{labelText}</Label>}
 			<Select value={value} onValueChange={onValueChange}>
-				<SelectTrigger className={error ? "border-destructive" : ""}>
+				<SelectTrigger
+					className={cn("w-full", error ? "border-destructive" : "")}
+				>
 					<SelectValue placeholder={placeholder} />
 				</SelectTrigger>
 				<SelectContent>

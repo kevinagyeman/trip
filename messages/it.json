@@ -318,6 +318,8 @@
 		"quotationRejectedAdminNotice": "Il cliente ha rifiutato questa proposta. Modificala e inviala di nuovo.",
 		"editRoute": "Modifica dati",
 		"editPickup": "Gestisci ritiro",
+		"addDriversLink": "Aggiungi autisti alla tua lista contatti",
+		"editPrefilledMessage": "Modifica il messaggio precompilato",
 		"routeSection": "Tratta",
 		"departureSection": "Dati di partenza",
 		"pickupSection": "Dati di ritiro"
@@ -425,10 +427,10 @@
 	"common": {
 		"save": "Salva",
 		"close": "Chiudi",
-		"googleCalendar": "Google Calendar",
+		"googleCalendar": "Aggiungi a Google Calendar",
 		"departureScheduledTakeoff": "Orario di decollo del volo:",
 		"departureScheduledLanding": "Orario di atterraggio del volo:",
-		"departureScheduledArrival": "Orario di arrivo a destinazione",
+		"departureScheduledArrival": "Orario di arrivo a destinazione:",
 		"routeFlightDate": "Data di partenza del volo",
 		"routeFlightTime": "Orario di partenza del volo",
 		"routeArrivalDate": "Data di arrivo a destinazione",

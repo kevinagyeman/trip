@@ -1,6 +1,7 @@
 "use client";
 
 import CustomInput from "@/app/_components/ui/custom-input";
+import { RequiredLabel } from "@/app/_components/ui/required-label";
 import {
 	Select,
 	SelectContent,
@@ -8,6 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { COUNTRY_CODES } from "@/lib/phone";
 
 interface PhoneInputProps {
@@ -17,6 +19,8 @@ interface PhoneInputProps {
 	onPhoneNumberChange: (number: string) => void;
 	error?: string;
 	placeholder?: string;
+	labelText?: string;
+	required?: boolean;
 }
 
 export function PhoneInput({
@@ -26,36 +30,47 @@ export function PhoneInput({
 	onPhoneNumberChange,
 	error,
 	placeholder,
+	labelText,
+	required,
 }: PhoneInputProps) {
 	const flag =
 		COUNTRY_CODES.find((c) => c.value === countryCode)?.label.split(" ")[0] ??
 		"";
 
 	return (
-		<div className="flex gap-2">
-			<Select value={countryCode} onValueChange={onCountryCodeChange}>
-				<SelectTrigger className="w-[110px] shrink-0">
-					<SelectValue>{`${flag} ${countryCode}`}</SelectValue>
-				</SelectTrigger>
-				<SelectContent className="max-h-72">
-					{COUNTRY_CODES.map((c) => (
-						<SelectItem key={c.value} value={c.value}>
-							{c.label} ({c.value})
-						</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
-			<CustomInput
-				className="flex-1"
-				inputType="tel"
-				placeholder={placeholder ?? "1234567890"}
-				inputProps={{
-					inputMode: "numeric",
-					value: phoneNumber,
-					onChange: (e) =>
-						onPhoneNumberChange(e.target.value.replace(/\D/g, "")),
-				}}
-			/>
+		<div className="space-y-2">
+			{labelText && (
+				<Label>
+					{labelText}
+					{required && <RequiredLabel />}
+				</Label>
+			)}
+			<div className="flex gap-2">
+				<Select value={countryCode} onValueChange={onCountryCodeChange}>
+					<SelectTrigger className="w-[110px] shrink-0">
+						<SelectValue>{`${flag} ${countryCode}`}</SelectValue>
+					</SelectTrigger>
+					<SelectContent className="max-h-72">
+						{COUNTRY_CODES.map((c) => (
+							<SelectItem key={c.value} value={c.value}>
+								{c.label} ({c.value})
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				<CustomInput
+					className="flex-1"
+					inputType="tel"
+					placeholder={placeholder ?? "1234567890"}
+					inputProps={{
+						inputMode: "numeric",
+						value: phoneNumber,
+						onChange: (e) =>
+							onPhoneNumberChange(e.target.value.replace(/\D/g, "")),
+					}}
+				/>
+			</div>
+			{error && <small className="text-xs text-destructive">{error}</small>}
 		</div>
 	);
 }

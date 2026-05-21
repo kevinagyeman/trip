@@ -201,7 +201,7 @@ function AddToCalendarButton({
 }) {
 	return (
 		<Button
-			size="sm"
+			size="xs"
 			variant={inBanner ? "success" : "outline"}
 			onClick={() => {
 				const date = new Date(beThereAtDate);

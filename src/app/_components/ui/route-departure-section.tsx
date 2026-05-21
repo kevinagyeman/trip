@@ -39,8 +39,7 @@ export function RouteDepartureSection({
 	if (!hasData) {
 		return (
 			<div className="text-base">
-				<span className="text-muted-foreground">{depLabel}</span>{" "}
-				<span className="text-muted-foreground">—</span>
+				<span className="text-muted-foreground">{depLabel} —</span>
 			</div>
 		);
 	}
@@ -89,7 +88,7 @@ function AddToCalendarButton({
 }) {
 	return (
 		<Button
-			size="sm"
+			size="xs"
 			variant="outline"
 			onClick={() => {
 				const [hRaw, mRaw] = (scheduledTime ?? "00:00").split(":").map(Number);

@@ -64,16 +64,22 @@ export default async function AdminSettingsPage({
 						<CompanyDetailsForm initialValues={company} />
 					</SectionCard>
 				)}
-				{session.user.role !== "SUPER_ADMIN" && <DriversManager />}
+				{session.user.role !== "SUPER_ADMIN" && (
+					<div id="drivers">
+						<DriversManager />
+					</div>
+				)}
 				<SectionCard title={t("languageTitle")}>
 					<ChangeLanguageForm
 						currentLanguage={dbUser?.preferredLanguage ?? "en"}
 					/>
 				</SectionCard>
 				{company && (
-					<SectionCard title={t("estimateNoticeTitle")}>
-						<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
-					</SectionCard>
+					<div id="estimate-notice">
+						<SectionCard title={t("estimateNoticeTitle")}>
+							<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
+						</SectionCard>
+					</div>
 				)}
 				<SectionCard title={t("changeEmailTitle")} subtitle={t("emailNotice")}>
 					<ChangeEmailForm currentEmail={session.user.email ?? ""} />

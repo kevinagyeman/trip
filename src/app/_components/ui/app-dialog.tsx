@@ -10,7 +10,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
@@ -55,16 +55,20 @@ export function AppDialog({
 				onOpenAutoFocus={(e) => e.preventDefault()}
 				className="flex flex-col max-h-[90vh] sm:max-w-sm p-0 gap-0"
 			>
-				<DialogHeader className="px-6 py-4 border-b">
+				<DialogHeader className="px-6 py-4 border-b flex-row items-center justify-between">
 					<DialogTitle>{title}</DialogTitle>
+					<Button
+						variant="outline"
+						size="icon"
+						onClick={() => onOpenChange(false)}
+					>
+						<X />
+					</Button>
 				</DialogHeader>
 
 				<div className="overflow-y-auto px-6 py-4 flex-1">{children}</div>
 
 				<DialogFooter className="px-6 py-4 border-t flex-row gap-2">
-					<Button variant="secondary" onClick={() => onOpenChange(false)}>
-						{t("close")}
-					</Button>
 					<LoadingButton
 						isLoading={isLoading}
 						onClick={onSave}

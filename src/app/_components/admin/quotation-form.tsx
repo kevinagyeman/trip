@@ -17,6 +17,8 @@ import {
 } from "@/lib/schemas/quotation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -45,6 +47,7 @@ export function QuotationForm({
 	onSubmit,
 }: Props) {
 	const t = useTranslations("adminDetail");
+	const params = useParams<{ locale: string }>();
 
 	function buildDefaultValues() {
 		if (quotation) {
@@ -100,7 +103,7 @@ export function QuotationForm({
 		<form id={formId} className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
 			{/* Price + Currency */}
 			<div className="flex items-end gap-2">
-				<div className="w-36">
+				<div className="flex-1">
 					<CustomInput
 						labelText={t("price")}
 						inputType="number"
@@ -169,11 +172,20 @@ export function QuotationForm({
 			/>
 
 			{/* Additional info */}
-			<CustomTextArea
-				labelText={t("additionalInfoCustomer")}
-				rows={4}
-				textAreaProps={{ ...register("additionalInfo") }}
-			/>
+			<div className="space-y-1">
+				<CustomTextArea
+					labelText={t("additionalInfoCustomer")}
+					rows={4}
+					textAreaProps={{ ...register("additionalInfo") }}
+				/>
+				<Link
+					href={`/${params.locale}/admin/settings#estimate-notice`}
+					target="_blank"
+					className="text-xs text-muted-foreground underline underline-offset-3"
+				>
+					{t("editPrefilledMessage")}
+				</Link>
+			</div>
 		</form>
 	);
 }

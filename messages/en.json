@@ -315,6 +315,8 @@
 		"quotationRejectedAdminNotice": "The customer rejected this proposal. Edit and resend a new one.",
 		"editRoute": "Edit data",
 		"editPickup": "Edit pickup details",
+		"addDriversLink": "Add drivers to your contact list",
+		"editPrefilledMessage": "Edit prefilled message",
 		"routeSection": "Route",
 		"departureSection": "Departure details",
 		"pickupSection": "Pickup details"
@@ -422,7 +424,7 @@
 	"common": {
 		"save": "Save",
 		"close": "Close",
-		"googleCalendar": "Google Calendar",
+		"googleCalendar": "Add to Google Calendar",
 		"departureScheduledTakeoff": "Flight takeoff time:",
 		"departureScheduledLanding": "Flight landing time:",
 		"departureScheduledArrival": "Preferred arrival time:",

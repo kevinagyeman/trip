@@ -143,70 +143,55 @@ export function AdminRouteEditDialog({
 				</Button>
 			}
 		>
-			<div className="space-y-6">
-				<div className="space-y-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("routeSection")}
-					</p>
-					<div className="flex flex-col gap-3">
-						<CustomInput
-							labelText={
-								route.type === "airport_in"
-									? tCommon("routeFromAirport")
-									: tCommon("routeFrom")
-							}
-							inputProps={{
-								value: pickup,
-								onChange: (e) => setPickup(e.target.value),
-							}}
-						/>
-						<CustomInput
-							labelText={
-								route.type === "airport_out"
-									? tCommon("routeToAirport")
-									: tCommon("routeTo")
-							}
-							inputProps={{
-								value: destination,
-								onChange: (e) => setDestination(e.target.value),
-							}}
-						/>
-					</div>
-				</div>
-
-				<div className="space-y-3">
-					<p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-						{t("departureSection")}
-					</p>
-					<div className="flex flex-col gap-3">
-						<CustomInput
-							labelText={dateLabel}
-							inputType="date"
-							inputProps={{
-								value: scheduledDate,
-								onChange: (e) => setScheduledDate(e.target.value),
-							}}
-						/>
-						<CustomInput
-							labelText={timeLabel}
-							inputType="time"
-							inputProps={{
-								value: scheduledTime,
-								onChange: (e) => setScheduledTime(e.target.value),
-							}}
-						/>
-						{isAirport && (
-							<CustomInput
-								labelText={tCommon("routeFlightNumber")}
-								placeholder={tCommon("routeFlightNumberPlaceholder")}
-								inputProps={{
-									value: flightNumber,
-									onChange: (e) => setFlightNumber(e.target.value),
-								}}
-							/>
-						)}
-					</div>
-				</div>
+			<div className="space-y-4">
+				<CustomInput
+					labelText={
+						route.type === "airport_in"
+							? tCommon("routeFromAirport")
+							: tCommon("routeFrom")
+					}
+					inputProps={{
+						value: pickup,
+						onChange: (e) => setPickup(e.target.value),
+					}}
+				/>
+				<CustomInput
+					labelText={
+						route.type === "airport_out"
+							? tCommon("routeToAirport")
+							: tCommon("routeTo")
+					}
+					inputProps={{
+						value: destination,
+						onChange: (e) => setDestination(e.target.value),
+					}}
+				/>
+				<CustomInput
+					labelText={dateLabel}
+					inputType="date"
+					inputProps={{
+						value: scheduledDate,
+						onChange: (e) => setScheduledDate(e.target.value),
+					}}
+				/>
+				<CustomInput
+					labelText={timeLabel}
+					inputType="time"
+					inputProps={{
+						value: scheduledTime,
+						onChange: (e) => setScheduledTime(e.target.value),
+					}}
+				/>
+				{isAirport && (
+					<CustomInput
+						labelText={tCommon("routeFlightNumber")}
+						placeholder={tCommon("routeFlightNumberPlaceholder")}
+						inputProps={{
+							value: flightNumber,
+							onChange: (e) => setFlightNumber(e.target.value),
+						}}
+					/>
+				)}
 			</div>
 		</AppDialog>
 	);
