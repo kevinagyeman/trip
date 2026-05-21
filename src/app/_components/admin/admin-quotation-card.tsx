@@ -6,6 +6,7 @@ import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import type { QuotationFormValues } from "@/lib/schemas/quotation";
+import type { RouterOutputs } from "@/trpc/react";
 import { api } from "@/trpc/react";
 import {
 	BellDot,
@@ -15,17 +16,22 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { toast } from "sonner";
 import { AlertBanner } from "../ui/alert-banner";
 
 const QUOTATION_FORM_ID = "admin-quotation-form";
 
-export function AdminQuotationCard({ requestId }: { requestId: string }) {
-	const t = useTranslations("adminDetail");
-	const utils = api.useUtils();
+type Request = NonNullable<RouterOutputs["tripRequest"]["getByIdAdmin"]>;
 
-	const { data: request } = api.tripRequest.getByIdAdmin.useQuery({
-		id: requestId,
-	});
+interface Props {
+	requestId: string;
+	request: Request;
+}
+
+export function AdminQuotationCard({ requestId, request }: Props) {
+	const t = useTranslations("adminDetail");
+	const tCommon = useTranslations("common");
+	const utils = api.useUtils();
 
 	const [quotationOpen, setQuotationOpen] = useState(false);
 	const [confirmOpen, setConfirmOpen] = useState(false);
@@ -39,6 +45,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 			setConfirmOpen(false);
 			await invalidate();
 			await utils.tripRequest.getAllRequests.invalidate();
+			toast.success(tCommon("toastEmailSent"));
 		},
 	});
 
@@ -46,23 +53,31 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 		onSuccess: async () => {
 			setQuotationOpen(false);
 			await invalidate();
+			toast.success(tCommon("toastEmailSent"));
 		},
 	});
 
 	const notifyQuotation = api.quotation.notify.useMutation({
-		onSuccess: invalidate,
+		onSuccess: async () => {
+			await invalidate();
+			toast.success(tCommon("toastEmailSent"));
+		},
 	});
 
 	const requestDepartureDetails =
 		api.tripRequest.requestDepartureDetails.useMutation({
-			onSuccess: invalidate,
+			onSuccess: async () => {
+				await invalidate();
+				toast.success(tCommon("toastEmailSent"));
+			},
 		});
-
-	if (!request) return null;
 
 	const quotation = request.quotations[0];
 	const isQuotationAccepted = quotation?.status === "ACCEPTED";
 	const isQuotationRejected = quotation?.status === "REJECTED";
+	const locked = ["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
+		request.status,
+	);
 
 	const estimateNotice = (() => {
 		try {
@@ -91,10 +106,6 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 			quotationAdditionalInfo: values.additionalInfo || undefined,
 		};
 	}
-
-	const isLocked = ["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
-		request.status,
-	);
 
 	return (
 		<SectionCard
@@ -145,17 +156,19 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 							</p>
 						</div>
 					)}
-					{!isLocked && (
+					{!locked && (
 						<div className="flex flex-wrap items-start gap-3">
 							<Button
 								size="sm"
 								onClick={() => setConfirmOpen(true)}
 								variant={"success"}
+								className="w-full sm:w-auto"
 							>
 								<CalendarCheck />
 								{t("confirmTrip")}
 							</Button>
 							<LoadingButton
+								className="w-full sm:w-auto"
 								size="sm"
 								isLoading={requestDepartureDetails.isPending}
 								onClick={() =>
@@ -257,7 +270,7 @@ export function AdminQuotationCard({ requestId }: { requestId: string }) {
 							)?.requestSubmit();
 						}}
 						isLoading={saveAndSend.isPending}
-						saveLabel={t("saveAndNotifyCustomer")}
+						notifyCustomer
 					>
 						<QuotationForm
 							formId={QUOTATION_FORM_ID}

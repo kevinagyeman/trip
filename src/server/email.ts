@@ -39,6 +39,17 @@ export async function resolveAdminUsers(
 	return ADMIN_EMAIL ? [{ email: ADMIN_EMAIL, preferredLanguage: "en" }] : [];
 }
 
+export async function resolveSuperAdminEmails(): Promise<string[]> {
+	const superAdmins = await db.user.findMany({
+		where: { role: "SUPER_ADMIN" },
+		select: { email: true },
+	});
+	const emails = superAdmins
+		.map((u) => u.email)
+		.filter((e): e is string => !!e);
+	return emails.length > 0 ? emails : ADMIN_EMAIL ? [ADMIN_EMAIL] : [];
+}
+
 export async function resolveCompanyName(
 	companyId: string | null | undefined,
 ): Promise<string | null> {

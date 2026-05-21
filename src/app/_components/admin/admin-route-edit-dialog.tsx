@@ -152,8 +152,8 @@ export function AdminRouteEditDialog({
 						<CustomInput
 							labelText={
 								route.type === "airport_in"
-									? t("routeFromAirport")
-									: t("routeFrom")
+									? tCommon("routeFromAirport")
+									: tCommon("routeFrom")
 							}
 							inputProps={{
 								value: pickup,
@@ -163,8 +163,8 @@ export function AdminRouteEditDialog({
 						<CustomInput
 							labelText={
 								route.type === "airport_out"
-									? t("routeToAirport")
-									: t("routeTo")
+									? tCommon("routeToAirport")
+									: tCommon("routeTo")
 							}
 							inputProps={{
 								value: destination,

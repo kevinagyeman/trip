@@ -1,12 +1,11 @@
 "use client";
 
 import { AdminMessagesCard } from "@/app/_components/admin/admin-messages-card";
-import { AdminPickupEditDialog } from "@/app/_components/admin/admin-pickup-edit-dialog";
+import { PickupAdminBlock } from "@/app/_components/admin/admin-pickup-block";
 import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card";
 import { AdminRouteEditDialog } from "@/app/_components/admin/admin-route-edit-dialog";
 import { EventsTimeline } from "@/app/_components/admin/events-timeline";
 import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -15,14 +14,17 @@ import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
 import { RouteDepartureSection } from "@/app/_components/ui/route-departure-section";
-import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
-import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
+import {
+	RouteFromToLabel,
+	RouteTypeLabel,
+} from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
-import { buildStatusLabels } from "@/lib/trip-utils";
+import { isRequestLocked } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
@@ -31,7 +33,6 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
 	const tCommon = useTranslations("common");
-	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
@@ -60,6 +61,19 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		},
 	});
 
+	const handlePickupSave: typeof updateRoutesByAdmin.mutate = (
+		input,
+		options,
+	) => {
+		updateRoutesByAdmin.mutate(input, {
+			...options,
+			onSuccess: (...args) => {
+				options?.onSuccess?.(...args);
+				toast.success(tCommon("toastEmailSent"));
+			},
+		});
+	};
+
 	const { data: drivers = [] } = api.driver.getAll.useQuery();
 
 	const [whatsappHref, setWhatsappHref] = useState("");
@@ -87,7 +101,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
-	const isLocked = ["COMPLETED", "CANCELLED"].includes(request.status);
+	const locked = isRequestLocked(request.status);
 
 	return (
 		<div className="space-y-4">
@@ -103,7 +117,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				status={request.status}
 				headerActions={
 					<>
-						{!["COMPLETED", "CANCELLED"].includes(request.status) && (
+						{!locked && (
 							<CustomSelect
 								value={pendingStatus ?? ""}
 								onValueChange={(v) => setPendingStatus(v as TripRequestStatus)}
@@ -131,7 +145,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Quotation */}
-			<AdminQuotationCard requestId={requestId} />
+			<AdminQuotationCard requestId={requestId} request={request} />
 
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="pt-0">
@@ -140,20 +154,11 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						{/* 1 – Route */}
 						<div className="p-3">
 							<RouteTypeLabel routeType={route.type} n={i + 1} />
-							<p className="text-base mt-1">
-								<span className="text-muted-foreground mr-2">
-									{route.type === "airport_in"
-										? t("routeFromAirport")
-										: t("routeFrom")}
-								</span>
-								<span className="font-semibold">{route.pickup}</span>
-								<span className="text-muted-foreground mx-2">
-									{route.type === "airport_out"
-										? t("routeToAirport")
-										: t("routeTo")}
-								</span>
-								<span className="font-semibold">{route.destination}</span>
-							</p>
+							<RouteFromToLabel
+								routeType={route.type}
+								pickup={route.pickup}
+								destination={route.destination}
+							/>
 						</div>
 
 						{/* 2 – Departure */}
@@ -165,10 +170,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								flightNumber={route.flightNumber}
 								pickup={route.pickup}
 								destination={route.destination}
-								showCalendar={!isLocked}
+								showCalendar={!locked}
 							/>
 
-							{!isLocked && (
+							{!locked && (
 								<AdminRouteEditDialog
 									requestId={requestId}
 									route={route}
@@ -184,7 +189,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 						{/* 3 – Pickup */}
 						{["CONFIRMED", "COMPLETED", "CANCELLED"].includes(request.status) &&
 							!(
-								isLocked &&
+								locked &&
 								!(route.meetingPoint ?? route.beThereAtDate ?? route.driverName)
 							) && (
 								<div className="border-t border-dashed p-3 space-y-3">
@@ -195,10 +200,10 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										allRoutes={routes}
 										drivers={drivers}
 										isLoading={updateRoutesByAdmin.isPending}
-										onSave={updateRoutesByAdmin.mutate}
+										onSave={handlePickupSave}
 										warningTitle={tCommon("pickupAdminWarningTitle")}
 										warningText={tCommon("pickupAdminTimeNote")}
-										disabled={isLocked}
+										disabled={locked}
 									/>
 								</div>
 							)}
@@ -228,7 +233,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Messages */}
-			<AdminMessagesCard requestId={requestId} disabled={isLocked} />
+			<AdminMessagesCard requestId={requestId} disabled={locked} />
 
 			{/* Internal Notes */}
 			<InternalNotesCard
@@ -249,86 +254,5 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				adminViewedAt={request.adminViewedAt}
 			/>
 		</div>
-	);
-}
-
-function PickupAdminBlock({
-	requestId,
-	route,
-	routeIndex,
-	allRoutes,
-	drivers,
-	isLoading,
-	onSave,
-	warningTitle,
-	warningText,
-	disabled = false,
-}: {
-	requestId: string;
-	route: Parameters<typeof AdminPickupEditDialog>[0]["route"];
-	routeIndex: number;
-	allRoutes: Parameters<typeof AdminPickupEditDialog>[0]["allRoutes"];
-	drivers: Parameters<typeof AdminPickupEditDialog>[0]["drivers"];
-	isLoading: boolean;
-	onSave: Parameters<typeof AdminPickupEditDialog>[0]["onSave"];
-	warningTitle: string;
-	warningText: string;
-	disabled?: boolean;
-}) {
-	const hasPickupData = !!(
-		route.meetingPoint ??
-		route.beThereAtDate ??
-		route.driverName
-	);
-
-	if (!hasPickupData) {
-		if (disabled) return null;
-		return (
-			<AlertBanner
-				variant="warning"
-				title={warningTitle}
-				description={warningText}
-			>
-				<AdminPickupEditDialog
-					requestId={requestId}
-					route={route}
-					routeIndex={routeIndex}
-					allRoutes={allRoutes}
-					drivers={drivers}
-					isLoading={isLoading}
-					inBanner
-					onSave={onSave}
-				/>
-			</AlertBanner>
-		);
-	}
-
-	return (
-		<>
-			<RoutePickupSection
-				pickup={route.pickup}
-				destination={route.destination}
-				driverName={route.driverName}
-				driverPhone={route.driverPhone}
-				beThereAtDate={route.beThereAtDate}
-				beThereAtTime={route.beThereAtTime}
-				meetingPoint={route.meetingPoint}
-				additionalInfo={route.additionalInfo}
-				isAdmin
-				disabled={disabled}
-			/>
-
-			{!disabled && (
-				<AdminPickupEditDialog
-					requestId={requestId}
-					route={route}
-					routeIndex={routeIndex}
-					allRoutes={allRoutes}
-					drivers={drivers}
-					isLoading={isLoading}
-					onSave={onSave}
-				/>
-			)}
-		</>
 	);
 }

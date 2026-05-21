@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
-import { db } from "@/server/db";
-import { sendEmail, ADMIN_EMAIL, APP_URL } from "@/server/email";
-import { registerCompanySchema } from "@/lib/schemas/auth";
 import { GenericEmail } from "@/emails/generic-email";
+import { registerCompanySchema } from "@/lib/schemas/auth";
+import { db } from "@/server/db";
+import { APP_URL, resolveSuperAdminEmails, sendEmail } from "@/server/email";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 import crypto from "node:crypto";
 import { createElement } from "react";
 
@@ -87,6 +87,8 @@ export async function POST(request: Request) {
 		const verifyUrl = `${APP_URL}/api/auth/verify-email?token=${token}`;
 		const superAdminUrl = `${APP_URL}/super-admin/companies/${company.id}`;
 
+		const superAdminEmails = await resolveSuperAdminEmails();
+
 		await Promise.all([
 			// Send verification email to new user
 			sendEmail({
@@ -103,22 +105,22 @@ export async function POST(request: Request) {
 					},
 				}),
 			}),
-			// Notify super admin of new registration
-			ADMIN_EMAIL
-				? sendEmail({
-						to: ADMIN_EMAIL,
-						subject: `New company registration: ${companyName}`,
-						react: createElement(GenericEmail, {
-							href: superAdminUrl,
-							data: {
-								preview: `New registration: ${companyName}`,
-								title: "New company registration",
-								subtitle: `${email} registered "${companyName}" (/${slug}). The company is inactive until you review and activate it.`,
-								buttonLabel: "Review Company",
-							},
-						}),
-					})
-				: Promise.resolve(),
+			// Notify all super admins of new registration
+			...superAdminEmails.map((superAdminEmail) =>
+				sendEmail({
+					to: superAdminEmail,
+					subject: `New company registration: ${companyName}`,
+					react: createElement(GenericEmail, {
+						href: superAdminUrl,
+						data: {
+							preview: `New registration: ${companyName}`,
+							title: "New company registration",
+							subtitle: `${email} registered "${companyName}" (/${slug}).`,
+							buttonLabel: "Review Company",
+						},
+					}),
+				}),
+			),
 		]);
 
 		return NextResponse.json({ success: true });

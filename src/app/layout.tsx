@@ -6,6 +6,7 @@ import Script from "next/script";
 
 import { CrispVisibility } from "@/app/_components/crisp-visibility";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
 
 export const metadata: Metadata = {
@@ -91,6 +92,7 @@ export default function RootLayout({
 					>
 						<CrispVisibility />
 						{children}
+						<Toaster />
 					</ThemeProvider>
 				</TRPCReactProvider>
 			</body>

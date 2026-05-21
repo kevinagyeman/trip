@@ -96,7 +96,7 @@ export function CustomerDepartureEditDialog({
 			title={label ?? t("editDepartureTitle")}
 			onSave={handleSave}
 			isLoading={isLoading}
-			saveLabel={t("saveAndNotifyAdmin")}
+			notifyAdmin
 			trigger={
 				<Button variant="secondary" size="sm" className="w-full sm:w-auto">
 					<Route />

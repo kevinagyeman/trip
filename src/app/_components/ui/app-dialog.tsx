@@ -22,6 +22,8 @@ interface Props {
 	onSave: () => void;
 	isLoading?: boolean;
 	saveLabel?: string;
+	notifyCustomer?: boolean;
+	notifyAdmin?: boolean;
 	trigger?: ReactNode;
 }
 
@@ -33,9 +35,16 @@ export function AppDialog({
 	onSave,
 	isLoading = false,
 	saveLabel,
+	notifyCustomer,
+	notifyAdmin,
 	trigger,
 }: Props) {
 	const t = useTranslations("common");
+	const suffix = notifyCustomer
+		? ` ${t("notifyCustomerSuffix")}`
+		: notifyAdmin
+			? ` ${t("notifyAdminSuffix")}`
+			: "";
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -62,12 +71,9 @@ export function AppDialog({
 						variant="default"
 						className="flex-1"
 					>
-						{saveLabel ?? (
-							<>
-								<Check />
-								{t("save")}
-							</>
-						)}
+						<Check />
+						{saveLabel ?? t("save")}
+						{suffix}
 					</LoadingButton>
 				</DialogFooter>
 			</DialogContent>

@@ -8,6 +8,32 @@ interface Props {
 	n: number;
 }
 
+interface RouteFromToProps {
+	routeType?: string | null;
+	pickup: string;
+	destination: string;
+}
+
+export function RouteFromToLabel({
+	routeType,
+	pickup,
+	destination,
+}: RouteFromToProps) {
+	const t = useTranslations("common");
+	return (
+		<p className="text-base">
+			<span className="text-muted-foreground mr-2">
+				{routeType === "airport_in" ? t("routeFromAirport") : t("routeFrom")}
+			</span>
+			<span className="font-semibold">{pickup}</span>
+			<span className="text-muted-foreground mx-2">
+				{routeType === "airport_out" ? t("routeToAirport") : t("routeTo")}
+			</span>
+			<span className="font-semibold">{destination}</span>
+		</p>
+	);
+}
+
 export function RouteTypeLabel({ routeType, n }: Props) {
 	const t = useTranslations("common");
 	const iconSize = "h-4 w-4 text-blue-900 dark:text-blue-200";

@@ -14,7 +14,7 @@ import { MapPinned } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-interface RouteData {
+export interface RouteData {
 	pickup: string;
 	destination: string;
 	type?: string | null;
@@ -29,7 +29,7 @@ interface RouteData {
 	additionalInfo?: string | null;
 }
 
-interface Driver {
+export interface Driver {
 	id: string;
 	name: string;
 	surname: string;
@@ -96,8 +96,14 @@ export function AdminPickupEditDialog({
 	useEffect(() => {
 		if (!open) return;
 		setMeetingPoint(route.meetingPoint ?? "");
-		setBeThereAtDate(route.beThereAtDate ?? "");
-		setBeThereAtTime(route.beThereAtTime ?? "");
+		setBeThereAtDate(
+			route.beThereAtDate ??
+				(route.type === "airport_in" ? (route.scheduledDate ?? "") : ""),
+		);
+		setBeThereAtTime(
+			route.beThereAtTime ??
+				(route.type === "airport_in" ? (route.scheduledTime ?? "") : ""),
+		);
 		setDriverName(route.driverName ?? "");
 		const phoneMatch = route.driverPhone?.match(/^(\+\d+)\s(.+)$/);
 		setDriverPhoneCC(phoneMatch?.[1] ?? "+39");
@@ -179,7 +185,7 @@ export function AdminPickupEditDialog({
 			title={t("pickupSection")}
 			onSave={handleSave}
 			isLoading={isLoading}
-			saveLabel={t("saveAndNotifyCustomer")}
+			notifyCustomer
 			trigger={
 				<Button
 					variant={inBanner ? "warning" : "secondary"}

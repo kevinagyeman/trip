@@ -8,16 +8,25 @@ import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
 import { RouteDepartureSection } from "@/app/_components/ui/route-departure-section";
 import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
-import { RouteTypeLabel } from "@/app/_components/ui/route-type-label";
+import {
+	RouteFromToLabel,
+	RouteTypeLabel,
+} from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { api } from "@/trpc/react";
 import { Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
+import { toast } from "sonner";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
 import { TripMessageThread } from "./trip-message-thread";
 
-import { buildStatusLabels, QUOTATION_STATUS_COLORS } from "@/lib/trip-utils";
+import {
+	buildStatusLabels,
+	canEditRequest,
+	isRequestLocked,
+	QUOTATION_STATUS_COLORS,
+} from "@/lib/trip-utils";
 
 export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
@@ -40,18 +49,21 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const acceptQuotation = api.quotation.acceptByToken.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
+			toast.success(tCommon("toastEmailSentToAdmin"));
 		},
 	});
 
 	const rejectQuotation = api.quotation.rejectByToken.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
+			toast.success(tCommon("toastEmailSentToAdmin"));
 		},
 	});
 
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
+			toast.success(tCommon("toastEmailSentToAdmin"));
 		},
 	});
 
@@ -65,10 +77,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	if (!request) return <div>{t("notFound")}</div>;
 
 	const routes = request.routes;
-	const isLocked = ["COMPLETED", "CANCELLED"].includes(request.status);
-	const canEdit = !["COMPLETED", "CANCELLED", "CONFIRMED"].includes(
-		request.status,
-	);
+	const isLocked = isRequestLocked(request.status);
+	const canEdit = canEditRequest(request.status);
 
 	return (
 		<div className="space-y-6">
@@ -148,6 +158,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									}
 									isLoading={acceptQuotation.isPending}
 									disabled={rejectQuotation.isPending}
+									notifyAdmin
 								>
 									<Check />
 									{t("acceptQuotation")}
@@ -160,6 +171,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 									}
 									isLoading={rejectQuotation.isPending}
 									disabled={acceptQuotation.isPending}
+									notifyAdmin
 								>
 									<X />
 									{t("rejectQuotation")}
@@ -176,20 +188,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						{/* 1 – Route */}
 						<div className="p-3">
 							<RouteTypeLabel routeType={route.type} n={i + 1} />
-							<p className="text-base">
-								<span className="text-muted-foreground mr-2">
-									{route.type === "airport_in"
-										? t("routeFromAirport")
-										: t("routeFrom")}
-								</span>
-								<span className="font-semibold">{route.pickup}</span>
-								<span className="text-muted-foreground mx-2">
-									{route.type === "airport_out"
-										? t("routeToAirport")
-										: t("routeTo")}
-								</span>
-								<span className="font-semibold">{route.destination}</span>
-							</p>
+							<RouteFromToLabel
+								routeType={route.type}
+								pickup={route.pickup}
+								destination={route.destination}
+							/>
 						</div>
 
 						{/* 2 – Departure */}
