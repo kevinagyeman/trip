@@ -180,7 +180,6 @@ export function QuotationForm({
 				/>
 				<Link
 					href={`/${params.locale}/admin/settings#estimate-notice`}
-					target="_blank"
 					className="text-xs text-muted-foreground underline underline-offset-3"
 				>
 					{t("editPrefilledMessage")}
