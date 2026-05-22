@@ -52,16 +52,16 @@ export function AdminStats() {
 	];
 
 	return (
-		<div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-4">
+		<div className="flex flex-col gap-4 lg:grid lg:grid-cols-4">
 			{stats.map((stat) => (
 				<Card key={stat.label}>
 					<CardHeader className="pb-2 pt-4">
-						<CardTitle className="text-xs font-medium text-muted-foreground">
+						<CardTitle className="font-medium text-muted-foreground">
 							{stat.label}
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="pb-4">
-						<p className={`text-3xl font-bold ${stat.className}`}>
+						<p className={`text-6xl font-bold ${stat.className}`}>
 							{isLoading ? "—" : stat.value}
 						</p>
 					</CardContent>
