@@ -1,18 +1,34 @@
-import type React from "react";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import type React from "react";
 
 type CustomCheckboxProps = {
-	inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+	id?: string;
+	checked: boolean;
+	onCheckedChange: (checked: boolean) => void;
 	label: React.ReactNode;
 	error?: string;
 };
 
-function CustomCheckbox({ inputProps, label, error }: CustomCheckboxProps) {
+function CustomCheckbox({
+	id,
+	checked,
+	onCheckedChange,
+	label,
+	error,
+}: CustomCheckboxProps) {
+	const inputId = id ?? Math.random().toString(36).slice(2);
 	return (
 		<div>
 			<div className="flex items-center space-x-2">
-				<input type="checkbox" {...inputProps} />
-				<Label>{label}</Label>
+				<Checkbox
+					id={inputId}
+					checked={checked}
+					onCheckedChange={onCheckedChange}
+				/>
+				<Label htmlFor={inputId} className="cursor-pointer font-normal">
+					{label}
+				</Label>
 			</div>
 			{error && <small className="text-xs text-destructive">{error}</small>}
 		</div>

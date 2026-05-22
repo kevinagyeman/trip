@@ -51,7 +51,7 @@ export function CreateTripRequestForm({
 		resolver: zodResolver(createTripRequestSchema),
 		defaultValues: {
 			routes: [{ pickup: "", destination: "" }],
-			language: "en",
+			language: undefined,
 			email: "",
 			phoneCountryCode: "+39",
 			numberOfAdults: 1,
@@ -149,11 +149,11 @@ export function CreateTripRequestForm({
 									{routeFields.length > 1 && (
 										<Button
 											type="button"
-											variant="ghost"
+											variant="outline"
 											size="icon"
 											onClick={() => removeRoute(index)}
 										>
-											<X className="h-4 w-4" />
+											<X />
 										</Button>
 									)}
 								</div>
@@ -313,7 +313,7 @@ export function CreateTripRequestForm({
 					className="w-full"
 					onClick={() => appendRoute({ pickup: "", destination: "" })}
 				>
-					<Plus className="h-4 w-4" />
+					<Plus />
 					{t("addRoute")}
 				</Button>
 
@@ -417,9 +417,17 @@ export function CreateTripRequestForm({
 					)}
 				</div>
 
-				<CustomCheckbox
-					label={t("areThereChildren")}
-					inputProps={{ ...register("areThereChildren") }}
+				<Controller
+					name="areThereChildren"
+					control={control}
+					render={({ field }) => (
+						<CustomCheckbox
+							id="areThereChildren"
+							checked={field.value}
+							onCheckedChange={field.onChange}
+							label={t("areThereChildren")}
+						/>
+					)}
 				/>
 
 				{areThereChildren && (
@@ -578,37 +586,44 @@ export function CreateTripRequestForm({
 					render={({ field }) => (
 						<CustomSelect
 							labelText={t("preferredLanguage")}
+							placeholder={t("preferredLanguagePlaceholder")}
 							options={LANGUAGES}
-							value={field.value}
+							value={field.value ?? ""}
 							onValueChange={field.onChange}
+							error={errors.language?.message}
 						/>
 					)}
 				/>
 			</SectionCard>
 
 			{/* Privacy Policy */}
-			<CustomCheckbox
-				inputProps={{
-					className: "mt-0.5 h-4 w-4 shrink-0 rounded border",
-					...register("privacyAccepted"),
-				}}
-				label={
-					<span>
-						{t("privacyPolicyAccept")}{" "}
-						<a
-							href="https://www.iubenda.com/privacy-policy/61494361"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
-						>
-							{t("privacyPolicyLink")}
-						</a>
-						<span className="ml-1">
-							<RequiredLabel />
-						</span>
-					</span>
-				}
-				error={errors.privacyAccepted?.message}
+			<Controller
+				name="privacyAccepted"
+				control={control}
+				render={({ field }) => (
+					<CustomCheckbox
+						id="privacyAccepted"
+						checked={field.value}
+						onCheckedChange={field.onChange}
+						label={
+							<span>
+								{t("privacyPolicyAccept")}{" "}
+								<a
+									href="https://www.iubenda.com/privacy-policy/61494361"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
+								>
+									{t("privacyPolicyLink")}
+								</a>
+								<span className="ml-1">
+									<RequiredLabel />
+								</span>
+							</span>
+						}
+						error={errors.privacyAccepted?.message}
+					/>
+				)}
 			/>
 
 			<LoadingButton
