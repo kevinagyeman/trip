@@ -18,7 +18,7 @@ export async function Navigation() {
 			<nav className="sticky top-0 z-50 border-b bg-background">
 				<div className="container mx-auto px-4 py-4">
 					<div className="flex items-center justify-between">
-						<BrandLogo label={t("brand")} isLoggedIn={false} />
+						<BrandLogo label={t("brand")} />
 						<div className="flex items-center gap-3">
 							<LanguageSwitcher />
 							<ThemeToggle />
@@ -45,7 +45,7 @@ export async function Navigation() {
 				<div className="flex items-center justify-between">
 					{/* Brand + desktop nav links */}
 					<div className="flex items-center gap-6">
-						<BrandLogo label={t("brand")} isLoggedIn={true} href={logoHref} />
+						<BrandLogo label={t("brand")} href={logoHref} />
 
 						<div className="hidden items-center gap-2 md:flex">
 							{!isAdmin && !isSuperAdmin && (

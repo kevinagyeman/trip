@@ -1,31 +1,30 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
+import { usePathname } from "next/navigation";
 
 export function BrandLogo({
 	label,
-	isLoggedIn,
 	href = "/",
 }: {
 	label: string;
-	isLoggedIn: boolean;
 	href?: string;
 }) {
-	if (isLoggedIn) {
-		return (
-			<Link href={href} className="text-xl font-bold">
-				{label}
-			</Link>
-		);
-	}
+	const pathname = usePathname();
+	const isBookPage = /\/book\//.test(pathname);
 
 	return (
-		<button
-			type="button"
-			className="text-xl font-bold cursor-pointer"
-			onClick={() => window.location.reload()}
+		<Link
+			href={href}
+			className="text-xl font-bold"
+			onClick={(e) => {
+				if (isBookPage) {
+					e.preventDefault();
+					window.location.reload();
+				}
+			}}
 		>
 			{label}
-		</button>
+		</Link>
 	);
 }

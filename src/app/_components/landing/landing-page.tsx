@@ -33,7 +33,7 @@ export async function LandingPage() {
 						{t("heroSubtitle")}
 					</p>
 					<div className="flex flex-row items-center justify-center gap-3">
-						<Link href="/auth/signin">
+						<Link href="/register-company">
 							<Button size="lg" className="gap-2 px-8 text-base">
 								{t("ctaStart")} <ArrowRight className="h-4 w-4" />
 							</Button>
@@ -389,7 +389,7 @@ export async function LandingPage() {
 					<p className="mb-10 text-lg text-muted-foreground">
 						{t("ctaBannerSubtitle")}
 					</p>
-					<Link href="/auth/signin">
+					<Link href="/register-company">
 						<Button size="lg" className="gap-2 px-10 text-base">
 							{t("ctaBannerButton")} <ArrowRight className="h-4 w-4" />
 						</Button>
