@@ -222,6 +222,8 @@
 	},
 	"adminDashboard": {
 		"title": "Dashboard",
+		"statRevenue": "Est. Revenue",
+		"statRevenueNote": "Sum of accepted quotations — does not reflect actual payments received",
 		"statTotal": "Total",
 		"statPending": "Pending",
 		"statQuoted": "Quoted",

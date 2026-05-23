@@ -51,8 +51,32 @@ export function AdminStats() {
 		},
 	];
 
+	const revenue = data?.revenue ?? 0;
+	const revenueFormatted = isLoading
+		? "—"
+		: new Intl.NumberFormat("it-IT", {
+				style: "currency",
+				currency: "EUR",
+				maximumFractionDigits: 0,
+			}).format(revenue);
+
 	return (
 		<div className="flex flex-col gap-4 lg:grid lg:grid-cols-4">
+			{/* Revenue card */}
+			<Card className="lg:col-span-4">
+				<CardHeader className="pb-2 pt-4">
+					<CardTitle className="font-medium text-muted-foreground">
+						{t("statRevenue")}
+					</CardTitle>
+				</CardHeader>
+				<CardContent className="pb-4">
+					<p className="text-5xl font-bold">{revenueFormatted}</p>
+					<p className="mt-1 text-xs text-muted-foreground">
+						{t("statRevenueNote")}
+					</p>
+				</CardContent>
+			</Card>
+
 			{stats.map((stat) => (
 				<Card key={stat.label}>
 					<CardHeader className="pb-2 pt-4">
@@ -61,7 +85,7 @@ export function AdminStats() {
 						</CardTitle>
 					</CardHeader>
 					<CardContent className="pb-4">
-						<p className={`text-6xl font-bold ${stat.className}`}>
+						<p className={`text-5xl font-bold ${stat.className}`}>
 							{isLoading ? "—" : stat.value}
 						</p>
 					</CardContent>

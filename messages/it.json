@@ -222,6 +222,8 @@
 	},
 	"adminDashboard": {
 		"title": "Pannello di Controllo",
+		"statRevenue": "Fatturato Stimato",
+		"statRevenueNote": "Somma dei preventivi accettati — non riflette i pagamenti effettivamente ricevuti",
 		"statTotal": "Totale",
 		"statPending": "In Attesa",
 		"statQuoted": "Preventivati",

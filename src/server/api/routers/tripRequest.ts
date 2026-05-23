@@ -179,6 +179,10 @@ export const tripRequestRouter = createTRPCRouter({
 		}
 		const where = companyId ? { companyId } : {};
 
+		const quotationWhere = companyId
+			? { status: "ACCEPTED" as const, tripRequest: { companyId } }
+			: { status: "ACCEPTED" as const };
+
 		const [
 			total,
 			pending,
@@ -188,6 +192,7 @@ export const tripRequestRouter = createTRPCRouter({
 			completed,
 			rejected,
 			cancelled,
+			revenueAgg,
 		] = await Promise.all([
 			ctx.db.tripRequest.count({ where }),
 			ctx.db.tripRequest.count({ where: { ...where, status: "PENDING" } }),
@@ -197,6 +202,10 @@ export const tripRequestRouter = createTRPCRouter({
 			ctx.db.tripRequest.count({ where: { ...where, status: "COMPLETED" } }),
 			ctx.db.tripRequest.count({ where: { ...where, status: "REJECTED" } }),
 			ctx.db.tripRequest.count({ where: { ...where, status: "CANCELLED" } }),
+			ctx.db.quotation.aggregate({
+				_sum: { price: true },
+				where: quotationWhere,
+			}),
 		]);
 
 		return {
@@ -208,6 +217,7 @@ export const tripRequestRouter = createTRPCRouter({
 			completed,
 			rejected,
 			cancelled,
+			revenue: revenueAgg._sum.price?.toNumber() ?? 0,
 		};
 	}),
 
