@@ -183,6 +183,10 @@ export const tripRequestRouter = createTRPCRouter({
 			? { status: "ACCEPTED" as const, tripRequest: { companyId } }
 			: { status: "ACCEPTED" as const };
 
+		const now = new Date();
+		const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+		const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
 		const [
 			total,
 			pending,
@@ -193,6 +197,12 @@ export const tripRequestRouter = createTRPCRouter({
 			rejected,
 			cancelled,
 			revenueAgg,
+			thisMonth,
+			lastMonth,
+			everQuoted,
+			everAccepted,
+			everConfirmed,
+			notifiedQuotations,
 		] = await Promise.all([
 			ctx.db.tripRequest.count({ where }),
 			ctx.db.tripRequest.count({ where: { ...where, status: "PENDING" } }),
@@ -206,7 +216,49 @@ export const tripRequestRouter = createTRPCRouter({
 				_sum: { price: true },
 				where: quotationWhere,
 			}),
+			ctx.db.tripRequest.count({
+				where: { ...where, createdAt: { gte: thisMonthStart } },
+			}),
+			ctx.db.tripRequest.count({
+				where: {
+					...where,
+					createdAt: { gte: lastMonthStart, lt: thisMonthStart },
+				},
+			}),
+			ctx.db.tripRequest.count({
+				where: { ...where, quotations: { some: {} } },
+			}),
+			ctx.db.tripRequest.count({
+				where: {
+					...where,
+					status: { in: ["ACCEPTED", "CONFIRMED", "COMPLETED"] },
+				},
+			}),
+			ctx.db.tripRequest.count({
+				where: { ...where, status: { in: ["CONFIRMED", "COMPLETED"] } },
+			}),
+			ctx.db.quotation.findMany({
+				where: {
+					notifiedAt: { not: null },
+					...(companyId ? { tripRequest: { companyId } } : {}),
+				},
+				select: {
+					notifiedAt: true,
+					tripRequest: { select: { createdAt: true } },
+				},
+			}),
 		]);
+
+		const avgResponseTimeHours =
+			notifiedQuotations.length > 0
+				? notifiedQuotations.reduce((sum, q) => {
+						return (
+							sum +
+							(q.notifiedAt!.getTime() - q.tripRequest.createdAt.getTime()) /
+								(1000 * 60 * 60)
+						);
+					}, 0) / notifiedQuotations.length
+				: 0;
 
 		return {
 			total,
@@ -218,6 +270,12 @@ export const tripRequestRouter = createTRPCRouter({
 			rejected,
 			cancelled,
 			revenue: revenueAgg._sum.price?.toNumber() ?? 0,
+			thisMonth,
+			lastMonth,
+			avgResponseTimeHours,
+			everQuoted,
+			everAccepted,
+			everConfirmed,
 		};
 	}),
 
