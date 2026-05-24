@@ -18,11 +18,9 @@ function formatHours(h: number): string {
 }
 
 function formatEur(value: number): string {
-	return (
-		Math.round(value)
-			.toString()
-			.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " €"
-	);
+	return `${Math.round(value)
+		.toString()
+		.replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €`;
 }
 
 export function AdminStats() {

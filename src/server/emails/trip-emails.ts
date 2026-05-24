@@ -126,7 +126,7 @@ const TRANSLATIONS = {
 			button: "View Details",
 		},
 		newMessage: {
-			subject: (o: string) => `New message on your request ${o}`,
+			subject: (o: string) => `${o} - New message on your request`,
 			preview: "You have a new message",
 			title: (firstName: string) =>
 				`Dear ${firstName}, the operator sent you a new message.`,
