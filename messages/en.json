@@ -381,7 +381,10 @@
 		"addressPlaceholder": "Via Roma 1, 00100 Rome",
 		"country": "Country",
 		"countryPlaceholder": "Select your country",
-		"website": "Website"
+		"website": "Website",
+		"logoUrl": "Logo URL",
+		"coverPhotoUrl": "Cover Photo URL",
+		"brandColor": "Brand Color"
 	},
 	"superAdmin": {
 		"notFound": "Not found",

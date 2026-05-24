@@ -1932,6 +1932,8 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    brandColor: string | null
+    coverPhotoUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1947,6 +1949,8 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    brandColor: string | null
+    coverPhotoUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1962,6 +1966,8 @@ export namespace Prisma {
     country: number
     website: number
     estimateNotice: number
+    brandColor: number
+    coverPhotoUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1979,6 +1985,8 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    brandColor?: true
+    coverPhotoUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1994,6 +2002,8 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    brandColor?: true
+    coverPhotoUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2009,6 +2019,8 @@ export namespace Prisma {
     country?: true
     website?: true
     estimateNotice?: true
+    brandColor?: true
+    coverPhotoUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2097,6 +2109,8 @@ export namespace Prisma {
     country: string | null
     website: string | null
     estimateNotice: string | null
+    brandColor: string | null
+    coverPhotoUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -2129,6 +2143,8 @@ export namespace Prisma {
     country?: boolean
     website?: boolean
     estimateNotice?: boolean
+    brandColor?: boolean
+    coverPhotoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -2150,11 +2166,13 @@ export namespace Prisma {
     country?: boolean
     website?: boolean
     estimateNotice?: boolean
+    brandColor?: boolean
+    coverPhotoUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "brandColor" | "coverPhotoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -2180,6 +2198,8 @@ export namespace Prisma {
       country: string | null
       website: string | null
       estimateNotice: string | null
+      brandColor: string | null
+      coverPhotoUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2564,6 +2584,8 @@ export namespace Prisma {
     readonly country: FieldRef<"Company", 'String'>
     readonly website: FieldRef<"Company", 'String'>
     readonly estimateNotice: FieldRef<"Company", 'String'>
+    readonly brandColor: FieldRef<"Company", 'String'>
+    readonly coverPhotoUrl: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -13234,6 +13256,8 @@ export namespace Prisma {
     country: 'country',
     website: 'website',
     estimateNotice: 'estimateNotice',
+    brandColor: 'brandColor',
+    coverPhotoUrl: 'coverPhotoUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13432,7 +13456,9 @@ export namespace Prisma {
     address: 'address',
     country: 'country',
     website: 'website',
-    estimateNotice: 'estimateNotice'
+    estimateNotice: 'estimateNotice',
+    brandColor: 'brandColor',
+    coverPhotoUrl: 'coverPhotoUrl'
   };
 
   export type CompanyOrderByRelevanceFieldEnum = (typeof CompanyOrderByRelevanceFieldEnum)[keyof typeof CompanyOrderByRelevanceFieldEnum]
@@ -13663,6 +13689,8 @@ export namespace Prisma {
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    brandColor?: StringNullableFilter<"Company"> | string | null
+    coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -13681,6 +13709,8 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    brandColor?: SortOrderInput | SortOrder
+    coverPhotoUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -13703,6 +13733,8 @@ export namespace Prisma {
     country?: StringNullableFilter<"Company"> | string | null
     website?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    brandColor?: StringNullableFilter<"Company"> | string | null
+    coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -13721,6 +13753,8 @@ export namespace Prisma {
     country?: SortOrderInput | SortOrder
     website?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    brandColor?: SortOrderInput | SortOrder
+    coverPhotoUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -13742,6 +13776,8 @@ export namespace Prisma {
     country?: StringNullableWithAggregatesFilter<"Company"> | string | null
     website?: StringNullableWithAggregatesFilter<"Company"> | string | null
     estimateNotice?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    brandColor?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    coverPhotoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -14628,6 +14664,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -14646,6 +14684,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -14664,6 +14704,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -14682,6 +14724,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14700,6 +14744,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14715,6 +14761,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14730,6 +14778,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15800,6 +15850,8 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    brandColor?: SortOrder
+    coverPhotoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15815,6 +15867,8 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    brandColor?: SortOrder
+    coverPhotoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15830,6 +15884,8 @@ export namespace Prisma {
     country?: SortOrder
     website?: SortOrder
     estimateNotice?: SortOrder
+    brandColor?: SortOrder
+    coverPhotoUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17919,6 +17975,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -17936,6 +17994,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -17969,6 +18029,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -17986,6 +18048,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18163,6 +18227,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -18180,6 +18246,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -18389,6 +18457,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -18406,6 +18476,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18572,6 +18644,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -18589,6 +18663,8 @@ export namespace Prisma {
     country?: string | null
     website?: string | null
     estimateNotice?: string | null
+    brandColor?: string | null
+    coverPhotoUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -18779,6 +18855,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -18796,6 +18874,8 @@ export namespace Prisma {
     country?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    brandColor?: NullableStringFieldUpdateOperationsInput | string | null
+    coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput

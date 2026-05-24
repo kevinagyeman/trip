@@ -81,6 +81,14 @@ export const companyRouter = createTRPCRouter({
 					.url("Enter a valid URL")
 					.optional()
 					.or(z.literal("")),
+				brandColor: z
+					.string()
+					.regex(/^#[0-9a-fA-F]{6}$/)
+					.optional()
+					.or(z.literal(""))
+					.nullable(),
+				logoUrl: z.string().url().optional().or(z.literal("")).nullable(),
+				coverPhotoUrl: z.string().url().optional().or(z.literal("")).nullable(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -91,6 +99,9 @@ export const companyRouter = createTRPCRouter({
 				data: {
 					...input,
 					website: input.website || null,
+					logoUrl: input.logoUrl || null,
+					coverPhotoUrl: input.coverPhotoUrl || null,
+					brandColor: input.brandColor || null,
 				},
 			});
 		}),

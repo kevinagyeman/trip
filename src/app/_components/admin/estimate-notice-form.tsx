@@ -31,14 +31,7 @@ export function EstimateNoticeForm({ currentValue }: { currentValue: string }) {
 			]),
 		),
 	);
-	const [saved, setSaved] = useState(false);
-
-	const update = api.user.updateEstimateNotice.useMutation({
-		onSuccess: () => {
-			setSaved(true);
-			setTimeout(() => setSaved(false), 2000);
-		},
-	});
+	const update = api.user.updateEstimateNotice.useMutation();
 
 	return (
 		<div className="space-y-4">
@@ -65,7 +58,7 @@ export function EstimateNoticeForm({ currentValue }: { currentValue: string }) {
 				isLoading={update.isPending}
 				onClick={() => update.mutate({ notices })}
 			>
-				{saved ? t("saved") : t("save")}
+				{t("save")}
 			</LoadingButton>
 		</div>
 	);

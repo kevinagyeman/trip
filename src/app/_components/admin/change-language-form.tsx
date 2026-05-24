@@ -56,11 +56,6 @@ export function ChangeLanguageForm({
 					))}
 				</select>
 			</div>
-			{success && (
-				<p className="text-sm text-green-600 dark:text-green-400">
-					{t("languageUpdated")}
-				</p>
-			)}
 			<LoadingButton type="submit" isLoading={changeLanguage.isPending} />
 		</form>
 	);

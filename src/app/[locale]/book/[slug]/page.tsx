@@ -12,7 +12,7 @@ export default async function BookingPortalPage({
 
 	const company = await db.company.findUnique({
 		where: { slug, isActive: true },
-		select: { name: true, slug: true, logoUrl: true },
+		select: { name: true, slug: true, logoUrl: true, coverPhotoUrl: true },
 	});
 
 	if (!company) {
@@ -20,8 +20,21 @@ export default async function BookingPortalPage({
 	}
 
 	return (
-		<div className="min-h-[calc(100vh-65px)] p-4">
-			<div className="mx-auto max-w-2xl py-8 space-y-6">
+		<div>
+			{company.coverPhotoUrl && (
+				<div className="relative h-48 w-full overflow-hidden sm:h-64">
+					<Image
+						src={company.coverPhotoUrl}
+						alt=""
+						fill
+						unoptimized
+						className="object-cover"
+						priority
+					/>
+					<div className="absolute inset-0 bg-black/30" />
+				</div>
+			)}
+			<div className="mx-auto max-w-2xl px-4 py-8 space-y-6">
 				<div className="text-center space-y-3">
 					{company.logoUrl && (
 						<Image
@@ -29,6 +42,7 @@ export default async function BookingPortalPage({
 							alt={company.name}
 							width={200}
 							height={80}
+							unoptimized
 							className="mx-auto h-20 w-auto object-contain"
 						/>
 					)}

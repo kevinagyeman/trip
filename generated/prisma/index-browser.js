@@ -132,6 +132,8 @@ exports.Prisma.CompanyScalarFieldEnum = {
   country: 'country',
   website: 'website',
   estimateNotice: 'estimateNotice',
+  brandColor: 'brandColor',
+  coverPhotoUrl: 'coverPhotoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -291,7 +293,9 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   address: 'address',
   country: 'country',
   website: 'website',
-  estimateNotice: 'estimateNotice'
+  estimateNotice: 'estimateNotice',
+  brandColor: 'brandColor',
+  coverPhotoUrl: 'coverPhotoUrl'
 };
 
 exports.Prisma.DriverOrderByRelevanceFieldEnum = {

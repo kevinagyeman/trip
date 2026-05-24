@@ -15,6 +15,9 @@ type CompanyDetailsValues = {
 	address: string;
 	country: string;
 	website: string;
+	brandColor: string;
+	logoUrl: string;
+	coverPhotoUrl: string;
 };
 
 export function CompanyDetailsForm({
@@ -26,6 +29,9 @@ export function CompanyDetailsForm({
 		address?: string | null;
 		country?: string | null;
 		website?: string | null;
+		brandColor?: string | null;
+		logoUrl?: string | null;
+		coverPhotoUrl?: string | null;
 	};
 }) {
 	const t = useTranslations("settings");
@@ -39,6 +45,9 @@ export function CompanyDetailsForm({
 				address: initialValues.address ?? "",
 				country: initialValues.country ?? "",
 				website: initialValues.website ?? "",
+				brandColor: initialValues.brandColor ?? "#000000",
+				logoUrl: initialValues.logoUrl ?? "",
+				coverPhotoUrl: initialValues.coverPhotoUrl ?? "",
 			},
 		});
 
@@ -49,6 +58,9 @@ export function CompanyDetailsForm({
 			address: initialValues.address ?? "",
 			country: initialValues.country ?? "",
 			website: initialValues.website ?? "",
+			brandColor: initialValues.brandColor ?? "#000000",
+			logoUrl: initialValues.logoUrl ?? "",
+			coverPhotoUrl: initialValues.coverPhotoUrl ?? "",
 		});
 	}, [initialValues.name]);
 
@@ -98,14 +110,39 @@ export function CompanyDetailsForm({
 				placeholder="https://yourcompany.com"
 				inputProps={{ ...register("website") }}
 			/>
+			<CustomInput
+				labelText={t("logoUrl")}
+				inputType="url"
+				placeholder="https://yourcompany.com/logo.png"
+				inputProps={{ ...register("logoUrl") }}
+			/>
+			<CustomInput
+				labelText={t("coverPhotoUrl")}
+				inputType="url"
+				placeholder="https://yourcompany.com/cover.jpg"
+				inputProps={{ ...register("coverPhotoUrl") }}
+			/>
+			<div className="space-y-2">
+				<label className="text-sm font-medium">{t("brandColor")}</label>
+				<div className="flex items-center gap-3">
+					<input
+						type="color"
+						value={watch("brandColor")}
+						onChange={(e) => setValue("brandColor", e.target.value)}
+						className="h-10 w-16 cursor-pointer rounded-md border border-input bg-transparent p-1"
+					/>
+					<input
+						type="text"
+						{...register("brandColor")}
+						className="h-10 w-28 rounded-md border border-input bg-transparent px-3 font-mono text-sm"
+						placeholder="#000000"
+						maxLength={7}
+					/>
+				</div>
+			</div>
 			{updateMyCompany.error && (
 				<p className="text-sm text-destructive">
 					{updateMyCompany.error.message}
-				</p>
-			)}
-			{success && (
-				<p className="text-sm text-green-600 dark:text-green-400">
-					{t("saved")}
 				</p>
 			)}
 			<LoadingButton type="submit" isLoading={updateMyCompany.isPending} />

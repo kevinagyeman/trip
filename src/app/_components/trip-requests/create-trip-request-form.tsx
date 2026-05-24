@@ -185,7 +185,7 @@ export function CreateTripRequestForm({
 														setValue(`routes.${index}.flightNumber`, "");
 													}
 												}}
-												className={`rounded-lg border-2 px-4 py-1.5 text-sm font-medium transition-colors ${
+												className={`rounded-lg border-2 px-4 py-1.5 text-sm font-medium cursor-pointer transition-colors ${
 													isSelected
 														? "border-primary bg-primary/5 text-primary"
 														: "border-border text-muted-foreground hover:border-primary/50"
@@ -223,8 +223,8 @@ export function CreateTripRequestForm({
 											}
 											className={`flex items-center gap-1.5 rounded-lg border-2 px-3 py-1.5 text-sm font-medium transition-colors ${
 												routeType === opt.value
-													? "border-primary bg-primary/5 text-primary"
-													: "border-border text-muted-foreground hover:border-primary/50"
+													? "border-primary cursor-pointer bg-primary/5 text-primary"
+													: "border-border cursor-pointer text-muted-foreground hover:border-primary/50"
 											}`}
 										>
 											<opt.icon className="h-4 w-4" />
