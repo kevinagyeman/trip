@@ -126,7 +126,8 @@ const TRANSLATIONS = {
 			button: "View Details",
 		},
 		newMessage: {
-			subject: (o: string) => `${o} - New message on your request`,
+			subject: (o: string, name: string) =>
+				`${o} - New message on your request | ${name}`,
 			preview: "You have a new message",
 			title: (firstName: string) =>
 				`Dear ${firstName}, the operator sent you a new message.`,
@@ -184,7 +185,8 @@ const TRANSLATIONS = {
 			button: "Visualizza Dettagli",
 		},
 		newMessage: {
-			subject: (o: string) => `Nuovo messaggio sulla tua richiesta ${o}`,
+			subject: (o: string, name: string) =>
+				`${o} - Nuovo messaggio sulla tua richiesta | ${name}`,
 			preview: "Hai un nuovo messaggio",
 			title: (firstName: string) =>
 				`Gentile ${firstName}, l'operatore ti ha inviato un nuovo messaggio.`,
@@ -316,10 +318,12 @@ export async function sendPickupInfoToCustomer(t: CustomerTarget) {
 
 export async function sendAdminMessageToCustomer(t: CustomerTarget) {
 	const o = order(t.orderNumber);
+	const companyName =
+		(await resolveCompanyName(t.companyId)) ?? `${t.firstName} ${t.lastName}`;
 	const c = tr(t.language).newMessage;
 	await sendEmail({
 		to: t.customerEmail,
-		subject: c.subject(o),
+		subject: c.subject(o, companyName),
 		react: createElement(GenericEmail, {
 			data: {
 				preview: c.preview,
