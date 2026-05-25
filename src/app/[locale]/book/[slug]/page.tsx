@@ -1,4 +1,5 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
+import { SectionCard } from "@/app/_components/ui/section-card";
 import { db } from "@/server/db";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -12,17 +13,25 @@ export default async function BookingPortalPage({
 
 	const company = await db.company.findUnique({
 		where: { slug, isActive: true },
-		select: { name: true, slug: true, logoUrl: true, coverPhotoUrl: true },
+		select: {
+			name: true,
+			slug: true,
+			logoUrl: true,
+			coverPhotoUrl: true,
+			brandColor: true,
+		},
 	});
 
 	if (!company) {
 		notFound();
 	}
 
+	const brandColor = company.brandColor ?? null;
+
 	return (
-		<div>
+		<div style={brandColor ? { backgroundColor: brandColor } : undefined}>
 			{company.coverPhotoUrl && (
-				<div className="relative h-48 w-full overflow-hidden sm:h-64">
+				<div className="relative h-64 w-full overflow-hidden">
 					<Image
 						src={company.coverPhotoUrl}
 						alt=""
@@ -35,7 +44,7 @@ export default async function BookingPortalPage({
 				</div>
 			)}
 			<div className="mx-auto max-w-2xl px-4 py-8 space-y-6">
-				<div className="text-center space-y-3">
+				<SectionCard contentClassName="space-y-4 pt-0">
 					{company.logoUrl && (
 						<Image
 							src={company.logoUrl}
@@ -46,8 +55,10 @@ export default async function BookingPortalPage({
 							className="mx-auto h-20 w-auto object-contain"
 						/>
 					)}
-					<h1 className="text-3xl font-bold">{company.name}</h1>
-				</div>
+					<h1 className="sm:text-3xl text-lg font-bold text-center">
+						{company.name}
+					</h1>
+				</SectionCard>
 
 				<div>
 					<CreateTripRequestForm companySlug={slug} />

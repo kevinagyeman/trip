@@ -129,8 +129,7 @@ export function CreateTripRequestForm({
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 			{/* Routes */}
-			<div className="space-y-3">
-				<h3 className="text-lg font-semibold">{t("routes")}</h3>
+			<div className="space-y-6">
 				{/* <TripRequestAlert /> */}
 
 				{routeFields.map((field, index) => {
@@ -306,16 +305,17 @@ export function CreateTripRequestForm({
 						</SectionCard>
 					);
 				})}
-
-				<Button
-					type="button"
-					variant="outline"
-					className="w-full"
-					onClick={() => appendRoute({ pickup: "", destination: "" })}
-				>
-					<Plus />
-					{t("addRoute")}
-				</Button>
+				<div className="bg-card rounded-md">
+					<Button
+						type="button"
+						variant="outline"
+						className="w-full"
+						onClick={() => appendRoute({ pickup: "", destination: "" })}
+					>
+						<Plus />
+						{t("addRoute")}
+					</Button>
+				</div>
 
 				{errors.routes?.root?.message && (
 					<p className="text-sm text-destructive">
@@ -596,51 +596,52 @@ export function CreateTripRequestForm({
 				/>
 			</SectionCard>
 
-			{/* Privacy Policy */}
-			<Controller
-				name="privacyAccepted"
-				control={control}
-				render={({ field }) => (
-					<CustomCheckbox
-						id="privacyAccepted"
-						checked={field.value}
-						onCheckedChange={field.onChange}
-						label={
-							<span>
-								{t("privacyPolicyAccept")}{" "}
-								<a
-									href="https://www.iubenda.com/privacy-policy/61494361"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
-								>
-									{t("privacyPolicyLink")}
-								</a>
-								<span className="ml-1">
-									<RequiredLabel />
+			<SectionCard contentClassName="space-y-4 pt-0">
+				{/* Privacy Policy */}
+				<Controller
+					name="privacyAccepted"
+					control={control}
+					render={({ field }) => (
+						<CustomCheckbox
+							id="privacyAccepted"
+							checked={field.value}
+							onCheckedChange={field.onChange}
+							label={
+								<span>
+									{t("privacyPolicyAccept")}{" "}
+									<a
+										href="https://www.iubenda.com/privacy-policy/61494361"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
+									>
+										{t("privacyPolicyLink")}
+									</a>
+									<span className="ml-1">
+										<RequiredLabel />
+									</span>
 								</span>
-							</span>
-						}
-						error={errors.privacyAccepted?.message}
-					/>
+							}
+							error={errors.privacyAccepted?.message}
+						/>
+					)}
+				/>
+				<LoadingButton
+					type="submit"
+					isLoading={createRequest.isPending}
+					className="w-full"
+					size={"lg"}
+					variant={"default"}
+				>
+					{t("submitRequest")}
+				</LoadingButton>
+
+				{createRequest.error && (
+					<p className="text-sm text-destructive">
+						{createRequest.error.message}
+					</p>
 				)}
-			/>
-
-			<LoadingButton
-				type="submit"
-				isLoading={createRequest.isPending}
-				className="w-full"
-				size={"lg"}
-				variant={"default"}
-			>
-				{t("submitRequest")}
-			</LoadingButton>
-
-			{createRequest.error && (
-				<p className="text-sm text-destructive">
-					{createRequest.error.message}
-				</p>
-			)}
+			</SectionCard>
 		</form>
 	);
 }
