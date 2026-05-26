@@ -6,7 +6,7 @@ import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/server/auth";
-import { LogIn, Settings, Zap } from "lucide-react";
+import { Settings } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 
@@ -28,7 +28,7 @@ export async function Navigation() {
 						<div className="flex items-center gap-3">
 							<LanguageSwitcher />
 							<ThemeToggle />
-							{!hideAuthButtons && (
+							{/* {!hideAuthButtons && (
 								<>
 									<Link href="/auth/signin">
 										<Button variant="outline" size="sm">
@@ -41,7 +41,7 @@ export async function Navigation() {
 										</Button>
 									</Link>
 								</>
-							)}
+							)} */}
 						</div>
 					</div>
 				</div>

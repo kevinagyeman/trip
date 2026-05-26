@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
 import { format } from "date-fns";
-import { CalendarPlus, Copy } from "lucide-react";
-import { useState } from "react";
+import { CalendarPlus, Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 interface Props {
 	routeType?: string | null;
@@ -50,20 +50,20 @@ export function RouteDepartureSection({
 	return (
 		<div className="space-y-3 text-base">
 			<div className="flex items-center gap-2">
-				<p>
+				<div className="flex items-center gap-2 flex-wrap">
 					<span className="text-muted-foreground">{depLabel} </span>
 
 					{scheduledDate && (
 						<span>{format(new Date(scheduledDate), "d MMM yyyy")}</span>
 					)}
 
-					{scheduledTime && <span> - {scheduledTime}</span>}
+					{scheduledTime && <span>{scheduledTime}</span>}
 
-					{flightNumber && <span> - {flightNumber}</span>}
-				</p>
-				{showCopyFlight && flightNumber && (
-					<CopyFlightButton flightNumber={flightNumber} />
-				)}
+					{flightNumber && !showCopyFlight && <span>{flightNumber}</span>}
+					{showCopyFlight && flightNumber && (
+						<CopyFlightButton flightNumber={flightNumber} />
+					)}
+				</div>
 			</div>
 			{showCalendar && scheduledDate && pickup && destination && (
 				<AddToCalendarButton
@@ -90,14 +90,17 @@ function CopyFlightButton({ flightNumber }: { flightNumber: string }) {
 	};
 
 	return (
-		<button
+		<Button
 			type="button"
+			size="xs"
+			variant={"outline"}
 			onClick={handleCopy}
-			className="text-muted-foreground hover:text-foreground transition-colors"
 			title="Copy flight number"
+			className="text-base font-normal"
 		>
-			<Copy className={`h-3.5 w-3.5 ${copied ? "text-green-500" : ""}`} />
-		</button>
+			{flightNumber}
+			{copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+		</Button>
 	);
 }
 

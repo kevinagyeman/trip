@@ -4,8 +4,8 @@ import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { useTranslations } from "next-intl";
 import { Menu, Settings, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 interface MobileMenuProps {
@@ -21,7 +21,7 @@ export function MobileMenu({ userName, role }: MobileMenuProps) {
 	return (
 		<div className="relative md:hidden">
 			<Button
-				variant="ghost"
+				variant="secondary"
 				size="icon"
 				onClick={() => setOpen((prev) => !prev)}
 				aria-label="Toggle menu"
@@ -59,23 +59,18 @@ export function MobileMenu({ userName, role }: MobileMenuProps) {
 						)}
 					</div>
 
-					{role === "ADMIN" && (
-						<Link
-							href="/admin/settings"
-							onClick={close}
-							className="block border-t"
-						>
-							<Button
-								variant="ghost"
-								className="w-full justify-start gap-2 px-3 py-2"
-							>
-								<Settings className="h-4 w-4" />
-								{t("settings")}
-							</Button>
-						</Link>
-					)}
-
 					<div className="flex items-center justify-between border-t p-3">
+						{role === "ADMIN" && (
+							<Link
+								href="/admin/settings"
+								onClick={close}
+								className="block border-t"
+							>
+								<Button variant="ghost" size={"icon"}>
+									<Settings />
+								</Button>
+							</Link>
+						)}
 						<ThemeToggle />
 						<SignOutButton />
 					</div>
