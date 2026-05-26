@@ -4,27 +4,19 @@ import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { Menu, Settings, X } from "lucide-react";
 import { useState } from "react";
 
 interface MobileMenuProps {
 	userName: string;
-	isAdmin: boolean;
-	isSuperAdmin?: boolean;
-	myTripsLabel: string;
-	adminLabel: string;
-	adminStatsLabel: string;
+	role: "ADMIN" | "SUPER_ADMIN";
 }
 
-export function MobileMenu({
-	userName,
-	isAdmin,
-	isSuperAdmin = false,
-	myTripsLabel,
-	adminLabel,
-	adminStatsLabel,
-}: MobileMenuProps) {
+export function MobileMenu({ userName, role }: MobileMenuProps) {
+	const t = useTranslations("navigation");
 	const [open, setOpen] = useState(false);
+	const close = () => setOpen(false);
 
 	return (
 		<div className="relative md:hidden">
@@ -42,40 +34,35 @@ export function MobileMenu({
 					<div className="border-b px-4 py-3">
 						<p className="truncate text-sm text-muted-foreground">{userName}</p>
 					</div>
+
 					<div className="flex flex-col gap-1 p-2">
-						{!isAdmin && !isSuperAdmin && (
-							<Link href="/dashboard" onClick={() => setOpen(false)}>
-								<Button variant="ghost" className="w-full justify-start">
-									{myTripsLabel}
-								</Button>
-							</Link>
-						)}
-						{isAdmin && (
+						{role === "ADMIN" && (
 							<>
-								<Link href="/admin" onClick={() => setOpen(false)}>
+								<Link href="/admin" onClick={close}>
 									<Button variant="ghost" className="w-full justify-start">
-										{adminLabel}
+										{t("adminDashboard")}
 									</Button>
 								</Link>
-								<Link href="/admin/stats" onClick={() => setOpen(false)}>
+								<Link href="/admin/stats" onClick={close}>
 									<Button variant="ghost" className="w-full justify-start">
-										{adminStatsLabel}
+										{t("adminStats")}
 									</Button>
 								</Link>
 							</>
 						)}
-						{isSuperAdmin && (
-							<Link href="/super-admin" onClick={() => setOpen(false)}>
+						{role === "SUPER_ADMIN" && (
+							<Link href="/super-admin" onClick={close}>
 								<Button variant="ghost" className="w-full justify-start">
-									{adminLabel}
+									{t("adminDashboard")}
 								</Button>
 							</Link>
 						)}
 					</div>
-					{isAdmin && (
+
+					{role === "ADMIN" && (
 						<Link
 							href="/admin/settings"
-							onClick={() => setOpen(false)}
+							onClick={close}
 							className="block border-t"
 						>
 							<Button
@@ -83,10 +70,11 @@ export function MobileMenu({
 								className="w-full justify-start gap-2 px-3 py-2"
 							>
 								<Settings className="h-4 w-4" />
-								Settings
+								{t("settings")}
 							</Button>
 						</Link>
 					)}
+
 					<div className="flex items-center justify-between border-t p-3">
 						<ThemeToggle />
 						<SignOutButton />

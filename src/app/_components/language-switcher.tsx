@@ -1,18 +1,19 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { ChevronDown } from "lucide-react";
 import { useLocale } from "next-intl";
 
 const locales = [
 	{ code: "en", label: "EN" },
-	{ code: "it", label: "IT" },
+	{ code: "it", label: "🇮IT" },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -21,20 +22,24 @@ export function LanguageSwitcher() {
 	const pathname = usePathname();
 
 	return (
-		<Select
-			value={locale}
-			onValueChange={(value) => router.replace(pathname, { locale: value })}
-		>
-			<SelectTrigger className="w-20">
-				<SelectValue />
-			</SelectTrigger>
-			<SelectContent>
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button variant="secondary" size="sm" className="gap-1 font-extralight">
+					{locale.toUpperCase()}
+					<ChevronDown className="h-3 w-3 opacity-50" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
 				{locales.map((l) => (
-					<SelectItem key={l.code} value={l.code} className="cursor-pointer">
+					<DropdownMenuItem
+						key={l.code}
+						onClick={() => router.replace(pathname, { locale: l.code })}
+						className={locale === l.code ? "font-semibold" : ""}
+					>
 						{l.label}
-					</SelectItem>
+					</DropdownMenuItem>
 				))}
-			</SelectContent>
-		</Select>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	);
 }

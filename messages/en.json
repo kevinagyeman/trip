@@ -3,7 +3,10 @@
 		"brand": "dantrip.com",
 		"myTrips": "My Trips",
 		"adminDashboard": "Dashboard",
-		"adminStats": "Stats"
+		"adminStats": "Stats",
+		"signIn": "Sign In",
+		"register": "Register",
+		"settings": "Settings"
 	},
 	"landing": {
 		"heroBadge": "Transfer Management Platform",

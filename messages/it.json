@@ -3,7 +3,10 @@
 		"brand": "dantrip.com",
 		"myTrips": "I Miei Viaggi",
 		"adminDashboard": "Pannello di controllo",
-		"adminStats": "Statistiche"
+		"adminStats": "Statistiche",
+		"signIn": "Accedi",
+		"register": "Registrati",
+		"settings": "Impostazioni"
 	},
 	"landing": {
 		"heroBadge": "Piattaforma di Gestione Trasferimenti",

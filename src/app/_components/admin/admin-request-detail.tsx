@@ -171,6 +171,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								pickup={route.pickup}
 								destination={route.destination}
 								showCalendar={!locked}
+								showCopyFlight
 							/>
 
 							{!locked && (

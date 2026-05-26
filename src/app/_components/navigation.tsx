@@ -6,14 +6,20 @@ import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/server/auth";
-import { Settings } from "lucide-react";
+import { LogIn, Settings, Zap } from "lucide-react";
 import { getTranslations } from "next-intl/server";
+import { headers } from "next/headers";
 
 export async function Navigation() {
 	const session = await auth();
 	const t = await getTranslations("navigation");
 
+	// ── Unauthenticated ──────────────────────────────────────────────────────
 	if (!session?.user) {
+		const headersList = await headers();
+		const pathname = headersList.get("x-pathname") ?? "";
+		const hideAuthButtons = /\/(book|request)\//.test(pathname);
+
 		return (
 			<nav className="sticky top-0 z-50 border-b bg-background">
 				<div className="container mx-auto px-4 py-4">
@@ -22,6 +28,20 @@ export async function Navigation() {
 						<div className="flex items-center gap-3">
 							<LanguageSwitcher />
 							<ThemeToggle />
+							{!hideAuthButtons && (
+								<>
+									<Link href="/auth/signin">
+										<Button variant="outline" size="sm">
+											{t("signIn")} <LogIn className="h-4 w-4" />
+										</Button>
+									</Link>
+									<Link href="/register-company">
+										<Button size="sm">
+											<Zap className="h-4 w-4" /> {t("register")}
+										</Button>
+									</Link>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
@@ -29,30 +49,21 @@ export async function Navigation() {
 		);
 	}
 
-	const userName = session.user.name ?? session.user.email ?? "";
-	const role = session.user.role;
+	const { role } = session.user;
 	const isAdmin = role === "ADMIN";
 	const isSuperAdmin = role === "SUPER_ADMIN";
-	const logoHref = isAdmin
-		? "/admin"
-		: isSuperAdmin
-			? "/super-admin"
-			: "/dashboard";
+	const userName = session.user.name ?? session.user.email ?? "";
+	const logoHref = isSuperAdmin ? "/super-admin" : "/admin";
 
+	// ── Admin / Super-admin ──────────────────────────────────────────────────
 	return (
 		<nav className="sticky top-0 z-50 border-b bg-background">
 			<div className="container mx-auto px-4 py-4">
 				<div className="flex items-center justify-between">
-					{/* Brand + desktop nav links */}
 					<div className="flex items-center gap-6">
 						<BrandLogo label={t("brand")} href={logoHref} />
 
 						<div className="hidden items-center gap-2 md:flex">
-							{!isAdmin && !isSuperAdmin && (
-								<Link href="/dashboard">
-									<Button variant="ghost">{t("myTrips")}</Button>
-								</Link>
-							)}
 							{isAdmin && (
 								<>
 									<Link href="/admin">
@@ -66,13 +77,11 @@ export async function Navigation() {
 						</div>
 					</div>
 
-					{/* Right side */}
 					<div className="flex items-center gap-3">
-						<LanguageSwitcher />
-
 						<span className="hidden text-sm text-muted-foreground md:block">
 							{userName}
 						</span>
+						<LanguageSwitcher />
 						<ThemeToggle className="hidden md:flex" />
 						{isAdmin && (
 							<Link href="/admin/settings" className="hidden md:block">
@@ -84,18 +93,10 @@ export async function Navigation() {
 						<div className="hidden md:block">
 							<SignOutButton />
 						</div>
-
-						{/* Mobile burger */}
-						{(isAdmin || isSuperAdmin) && (
-							<MobileMenu
-								userName={userName}
-								isAdmin={isAdmin}
-								isSuperAdmin={isSuperAdmin}
-								myTripsLabel={t("myTrips")}
-								adminLabel={t("adminDashboard")}
-								adminStatsLabel={t("adminStats")}
-							/>
-						)}
+						<MobileMenu
+							userName={userName}
+							role={role as "ADMIN" | "SUPER_ADMIN"}
+						/>
 					</div>
 				</div>
 			</div>

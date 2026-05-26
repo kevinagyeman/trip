@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
 import { format } from "date-fns";
-import { CalendarPlus } from "lucide-react";
+import { CalendarPlus, Copy } from "lucide-react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 interface Props {
@@ -14,6 +15,7 @@ interface Props {
 	pickup?: string;
 	destination?: string;
 	showCalendar?: boolean;
+	showCopyFlight?: boolean;
 }
 
 export function RouteDepartureSection({
@@ -24,6 +26,7 @@ export function RouteDepartureSection({
 	pickup,
 	destination,
 	showCalendar = false,
+	showCopyFlight = false,
 }: Props) {
 	const t = useTranslations("common");
 
@@ -46,17 +49,22 @@ export function RouteDepartureSection({
 
 	return (
 		<div className="space-y-3 text-base">
-			<p>
-				<span className="text-muted-foreground">{depLabel} </span>
+			<div className="flex items-center gap-2">
+				<p>
+					<span className="text-muted-foreground">{depLabel} </span>
 
-				{scheduledDate && (
-					<span>{format(new Date(scheduledDate), "d MMM yyyy")}</span>
+					{scheduledDate && (
+						<span>{format(new Date(scheduledDate), "d MMM yyyy")}</span>
+					)}
+
+					{scheduledTime && <span> - {scheduledTime}</span>}
+
+					{flightNumber && <span> - {flightNumber}</span>}
+				</p>
+				{showCopyFlight && flightNumber && (
+					<CopyFlightButton flightNumber={flightNumber} />
 				)}
-
-				{scheduledTime && <span> - {scheduledTime}</span>}
-
-				{flightNumber && <span> - {flightNumber}</span>}
-			</p>
+			</div>
 			{showCalendar && scheduledDate && pickup && destination && (
 				<AddToCalendarButton
 					pickup={pickup}
@@ -68,6 +76,28 @@ export function RouteDepartureSection({
 				/>
 			)}
 		</div>
+	);
+}
+
+function CopyFlightButton({ flightNumber }: { flightNumber: string }) {
+	const [copied, setCopied] = useState(false);
+
+	const handleCopy = () => {
+		void navigator.clipboard.writeText(flightNumber).then(() => {
+			setCopied(true);
+			setTimeout(() => setCopied(false), 1500);
+		});
+	};
+
+	return (
+		<button
+			type="button"
+			onClick={handleCopy}
+			className="text-muted-foreground hover:text-foreground transition-colors"
+			title="Copy flight number"
+		>
+			<Copy className={`h-3.5 w-3.5 ${copied ? "text-green-500" : ""}`} />
+		</button>
 	);
 }
 
