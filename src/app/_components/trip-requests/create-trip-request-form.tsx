@@ -602,14 +602,18 @@ export function CreateTripRequestForm({
 			{isDemo ? (
 				<SectionCard contentClassName="space-y-3 pt-0 text-center">
 					<p className="text-muted-foreground text-sm">
-						Hai visto come funziona? Registra la tua azienda e inizia subito a
-						ricevere richieste dai tuoi clienti.
+						{t("demoCtaDescription")}
 					</p>
-					<a href="/register-company">
-						<Button size="lg" className="w-full">
-							Registra la tua azienda e inizia ora →
-						</Button>
-					</a>
+					<Button
+						type="button"
+						size="lg"
+						className="w-full"
+						onClick={() => {
+							window.location.href = "/register-company";
+						}}
+					>
+						{t("demoCtaButton")}
+					</Button>
 				</SectionCard>
 			) : (
 				<SectionCard contentClassName="space-y-4 pt-0">
