@@ -33,8 +33,10 @@ import { RequiredLabel } from "../ui/required-label";
 
 export function CreateTripRequestForm({
 	companySlug,
+	isDemo = false,
 }: {
 	companySlug: string;
+	isDemo?: boolean;
 }) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
@@ -102,6 +104,7 @@ export function CreateTripRequestForm({
 	});
 
 	const onSubmit = (values: CreateTripRequestFormValues) => {
+		if (isDemo) return;
 		createRequest.mutate({
 			companySlug,
 			email: values.email,
@@ -288,9 +291,6 @@ export function CreateTripRequestForm({
 											}}
 										/>
 									</div>
-									<p className="text-base text-muted-foreground">
-										{t("pickupTimeNote")}
-									</p>
 									{hasAirport && (
 										<CustomInput
 											labelText={t("routeFlightNumber")}
@@ -300,6 +300,9 @@ export function CreateTripRequestForm({
 											}}
 										/>
 									)}
+									<p className="text-base text-muted-foreground">
+										{t("pickupTimeNote")}
+									</p>
 								</>
 							)}
 						</SectionCard>
@@ -596,52 +599,66 @@ export function CreateTripRequestForm({
 				/>
 			</SectionCard>
 
-			<SectionCard contentClassName="space-y-4 pt-0">
-				{/* Privacy Policy */}
-				<Controller
-					name="privacyAccepted"
-					control={control}
-					render={({ field }) => (
-						<CustomCheckbox
-							id="privacyAccepted"
-							checked={field.value}
-							onCheckedChange={field.onChange}
-							label={
-								<span>
-									{t("privacyPolicyAccept")}{" "}
-									<a
-										href="https://www.iubenda.com/privacy-policy/61494361"
-										target="_blank"
-										rel="noopener noreferrer"
-										className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
-									>
-										{t("privacyPolicyLink")}
-									</a>
-									<span className="ml-1">
-										<RequiredLabel />
-									</span>
-								</span>
-							}
-							error={errors.privacyAccepted?.message}
-						/>
-					)}
-				/>
-				<LoadingButton
-					type="submit"
-					isLoading={createRequest.isPending}
-					className="w-full"
-					size={"lg"}
-					variant={"default"}
-				>
-					{t("submitRequest")}
-				</LoadingButton>
-
-				{createRequest.error && (
-					<p className="text-sm text-destructive">
-						{createRequest.error.message}
+			{isDemo ? (
+				<SectionCard contentClassName="space-y-3 pt-0 text-center">
+					<p className="text-muted-foreground text-sm">
+						Hai visto come funziona? Registra la tua azienda e inizia subito a
+						ricevere richieste dai tuoi clienti.
 					</p>
-				)}
-			</SectionCard>
+					<a href="/register-company">
+						<Button size="lg" className="w-full">
+							Registra la tua azienda e inizia ora →
+						</Button>
+					</a>
+				</SectionCard>
+			) : (
+				<SectionCard contentClassName="space-y-4 pt-0">
+					{/* Privacy Policy */}
+					<Controller
+						name="privacyAccepted"
+						control={control}
+						render={({ field }) => (
+							<CustomCheckbox
+								id="privacyAccepted"
+								checked={field.value}
+								onCheckedChange={field.onChange}
+								label={
+									<span>
+										{t("privacyPolicyAccept")}{" "}
+										<a
+											href="https://www.iubenda.com/privacy-policy/61494361"
+											target="_blank"
+											rel="noopener noreferrer"
+											className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
+										>
+											{t("privacyPolicyLink")}
+										</a>
+										<span className="ml-1">
+											<RequiredLabel />
+										</span>
+									</span>
+								}
+								error={errors.privacyAccepted?.message}
+							/>
+						)}
+					/>
+					<LoadingButton
+						type="submit"
+						isLoading={createRequest.isPending}
+						className="w-full"
+						size={"lg"}
+						variant={"default"}
+					>
+						{t("submitRequest")}
+					</LoadingButton>
+
+					{createRequest.error && (
+						<p className="text-sm text-destructive">
+							{createRequest.error.message}
+						</p>
+					)}
+				</SectionCard>
+			)}
 		</form>
 	);
 }

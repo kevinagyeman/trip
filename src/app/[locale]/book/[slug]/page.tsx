@@ -1,13 +1,44 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { db } from "@/server/db";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+type Params = Promise<{ slug: string }>;
+
+export async function generateMetadata({
+	params,
+}: {
+	params: Params;
+}): Promise<Metadata> {
+	const { slug } = await params;
+	const company = await db.company.findUnique({
+		where: { slug, isActive: true },
+		select: { name: true, coverPhotoUrl: true, logoUrl: true },
+	});
+
+	if (!company) return {};
+
+	const ogImage = company.coverPhotoUrl ?? company.logoUrl;
+	const title = `${company.name} – Prenota il tuo transfer`;
+	const description = `Richiedi un transfer con ${company.name}. Compila il modulo e ricevi un preventivo.`;
+
+	return {
+		title,
+		description,
+		openGraph: {
+			title,
+			description,
+			images: [{ url: ogImage ?? "/og-image.png" }],
+		},
+	};
+}
 
 export default async function BookingPortalPage({
 	params,
 }: {
-	params: Promise<{ slug: string }>;
+	params: Params;
 }) {
 	const { slug } = await params;
 
