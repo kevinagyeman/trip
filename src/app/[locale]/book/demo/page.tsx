@@ -17,11 +17,11 @@ export async function generateMetadata({
 	const { company, logo, coverphoto } = await searchParams;
 	const ogImage = coverphoto ?? logo;
 	const title = company
-		? `${company} – Richiedi un transfer`
-		: "Demo – Richiedi un transfer";
+		? `${company} – Book your transfer`
+		: "Demo – Book your transfer";
 	const description = company
-		? `Richiedi un transfer con ${company}`
-		: "Richiedi un transfer";
+		? `Request a transfer with ${company}. Fill in the form and receive a quote.`
+		: "Request a transfer. Fill in the form and receive a quote.";
 
 	return {
 		title,

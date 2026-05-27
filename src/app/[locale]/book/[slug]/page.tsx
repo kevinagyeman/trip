@@ -21,8 +21,8 @@ export async function generateMetadata({
 	if (!company) return {};
 
 	const ogImage = company.coverPhotoUrl ?? company.logoUrl;
-	const title = `${company.name} – Prenota il tuo transfer`;
-	const description = `Richiedi un transfer con ${company.name}. Compila il modulo e ricevi un preventivo.`;
+	const title = `${company.name} – Book your transfer`;
+	const description = `Request a transfer with ${company.name}. Fill in the form and receive a quote.`;
 
 	return {
 		title,
