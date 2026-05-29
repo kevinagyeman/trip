@@ -1,7 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
+import {
+	googleCalendarUrl,
+	toICSDateTime,
+	type TripCalendarInfo,
+} from "@/lib/calendar";
 import { format } from "date-fns";
 import { CalendarPlus, Check, Copy } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -16,6 +20,7 @@ interface Props {
 	destination?: string;
 	showCalendar?: boolean;
 	showCopyFlight?: boolean;
+	tripInfo?: TripCalendarInfo;
 }
 
 export function RouteDepartureSection({
@@ -27,6 +32,7 @@ export function RouteDepartureSection({
 	destination,
 	showCalendar = false,
 	showCopyFlight = false,
+	tripInfo,
 }: Props) {
 	const t = useTranslations("common");
 
@@ -67,11 +73,13 @@ export function RouteDepartureSection({
 			</div>
 			{showCalendar && scheduledDate && pickup && destination && (
 				<AddToCalendarButton
+					routeType={routeType}
 					pickup={pickup}
 					destination={destination}
 					scheduledDate={scheduledDate}
 					scheduledTime={scheduledTime}
 					flightNumber={flightNumber}
+					tripInfo={tripInfo}
 					t={t}
 				/>
 			)}
@@ -105,18 +113,22 @@ function CopyFlightButton({ flightNumber }: { flightNumber: string }) {
 }
 
 function AddToCalendarButton({
+	routeType,
 	pickup,
 	destination,
 	scheduledDate,
 	scheduledTime,
 	flightNumber,
+	tripInfo,
 	t,
 }: {
+	routeType?: string | null;
 	pickup: string;
 	destination: string;
 	scheduledDate: string;
 	scheduledTime?: string | null;
 	flightNumber?: string | null;
+	tripInfo?: TripCalendarInfo;
 	t: ReturnType<typeof useTranslations>;
 }) {
 	return (
@@ -126,10 +138,34 @@ function AddToCalendarButton({
 			onClick={() => {
 				const [hRaw, mRaw] = (scheduledTime ?? "00:00").split(":").map(Number);
 				const endH = ((hRaw ?? 0) + 1) % 24;
+				const isAirport =
+					routeType === "airport_in" || routeType === "airport_out";
+				const {
+					firstName,
+					lastName,
+					numberOfAdults,
+					numberOfChildren,
+					quotations,
+				} = tripInfo ?? {};
+				const accepted = quotations?.find((q) => q.status === "ACCEPTED");
+				const total = (numberOfAdults ?? 0) + (numberOfChildren ?? 0);
+				const summary = `${isAirport ? "APT: " : ""}${pickup} → ${destination}${total > 0 ? ` (${total})` : ""}`;
+				const description = [
+					firstName && lastName && `Client: ${firstName} ${lastName}`,
+					numberOfAdults &&
+						`Passengers: ${numberOfAdults} adult${numberOfAdults > 1 ? "s" : ""}${numberOfChildren ? `, ${numberOfChildren} child${numberOfChildren > 1 ? "ren" : ""}` : ""}`,
+					flightNumber && `Flight: ${flightNumber}`,
+					accepted &&
+						`Price: ${accepted.price.toString()} ${accepted.currency}${accepted.isPriceEachWay ? " (each way)" : ""}`,
+					accepted?.quotationAdditionalInfo &&
+						`Notes: ${accepted.quotationAdditionalInfo}`,
+				]
+					.filter(Boolean)
+					.join("\n");
 				window.open(
 					googleCalendarUrl({
-						summary: `${pickup} → ${destination}`,
-						description: flightNumber ? `Flight: ${flightNumber}` : "",
+						summary,
+						description,
 						location: pickup,
 						start: toICSDateTime(new Date(scheduledDate), scheduledTime),
 						end: toICSDateTime(

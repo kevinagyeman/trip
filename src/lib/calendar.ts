@@ -1,3 +1,17 @@
+export type TripCalendarInfo = {
+	firstName?: string | null;
+	lastName?: string | null;
+	numberOfAdults?: number | null;
+	numberOfChildren?: number | null;
+	quotations?: Array<{
+		status: string;
+		price: { toString(): string };
+		currency: string;
+		isPriceEachWay: boolean;
+		quotationAdditionalInfo?: string | null;
+	}>;
+};
+
 export function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);
 	if (timeStr) {

@@ -7,6 +7,7 @@ import type {
 } from "@/app/_components/admin/admin-pickup-edit-dialog";
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { RoutePickupSection } from "@/app/_components/ui/route-pickup-section";
+import type { TripCalendarInfo } from "@/lib/calendar";
 
 interface Props {
 	requestId: string;
@@ -19,6 +20,7 @@ interface Props {
 	warningTitle: string;
 	warningText: string;
 	disabled?: boolean;
+	tripInfo?: TripCalendarInfo;
 }
 
 export function PickupAdminBlock({
@@ -32,6 +34,7 @@ export function PickupAdminBlock({
 	warningTitle,
 	warningText,
 	disabled = false,
+	tripInfo,
 }: Props) {
 	const hasPickupData = !!(
 		route.meetingPoint ??
@@ -72,6 +75,9 @@ export function PickupAdminBlock({
 				beThereAtTime={route.beThereAtTime}
 				meetingPoint={route.meetingPoint}
 				additionalInfo={route.additionalInfo}
+				routeType={route.type}
+				flightNumber={route.flightNumber}
+				tripInfo={tripInfo}
 				isAdmin
 				disabled={disabled}
 			/>

@@ -2,7 +2,11 @@
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { Button } from "@/components/ui/button";
-import { googleCalendarUrl, toICSDateTime } from "@/lib/calendar";
+import {
+	googleCalendarUrl,
+	toICSDateTime,
+	type TripCalendarInfo,
+} from "@/lib/calendar";
 import { format } from "date-fns";
 import { CalendarPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -19,6 +23,9 @@ interface Props {
 	isAdmin?: boolean;
 	inBanner?: boolean;
 	disabled?: boolean;
+	routeType?: string | null;
+	flightNumber?: string | null;
+	tripInfo?: TripCalendarInfo;
 }
 
 export function RoutePickupSection({
@@ -33,6 +40,9 @@ export function RoutePickupSection({
 	isAdmin = false,
 	inBanner = false,
 	disabled = false,
+	routeType,
+	flightNumber,
+	tripInfo,
 }: Props) {
 	const t = useTranslations("common");
 
@@ -60,6 +70,9 @@ export function RoutePickupSection({
 						meetingPoint={meetingPoint}
 						beThereAtDate={beThereAtDate}
 						beThereAtTime={beThereAtTime}
+						routeType={routeType}
+						flightNumber={flightNumber}
+						tripInfo={tripInfo}
 						t={t}
 					/>
 				)}
@@ -69,22 +82,7 @@ export function RoutePickupSection({
 
 	// Customer: no data yet
 	if (!hasData) {
-		return (
-			// <div className="px-3 py-3">
-			// 	<AlertBanner
-			// 		variant="info"
-			// 		title={t("pickupScheduled")}
-			// 		description={
-			// 			<>
-			// 				{t("pickupTimeNote")}
-			// 				<br />
-			// 				{t("noPickupData")}
-			// 			</>
-			// 		}
-			// 	/>
-			// </div>
-			null
-		);
+		return null;
 	}
 
 	// Customer: data present
@@ -113,6 +111,9 @@ export function RoutePickupSection({
 						meetingPoint={meetingPoint}
 						beThereAtDate={beThereAtDate}
 						beThereAtTime={beThereAtTime}
+						routeType={routeType}
+						flightNumber={flightNumber}
+						tripInfo={tripInfo}
 						t={t}
 						inBanner={inBanner}
 					/>
@@ -186,6 +187,9 @@ function AddToCalendarButton({
 	meetingPoint,
 	beThereAtDate,
 	beThereAtTime,
+	routeType,
+	flightNumber,
+	tripInfo,
 	t,
 	inBanner = false,
 }: {
@@ -196,6 +200,9 @@ function AddToCalendarButton({
 	meetingPoint?: string | null;
 	beThereAtDate: string;
 	beThereAtTime?: string | null;
+	routeType?: string | null;
+	flightNumber?: string | null;
+	tripInfo?: TripCalendarInfo;
 	t: ReturnType<typeof useTranslations>;
 	inBanner?: boolean;
 }) {
@@ -209,15 +216,37 @@ function AddToCalendarButton({
 				const [h, m] = timeStr.split(":").map(Number);
 				const end = new Date(date);
 				end.setHours((h ?? 0) + 1, m ?? 0, 0, 0);
+				const isAirport =
+					routeType === "airport_in" || routeType === "airport_out";
+				const {
+					firstName,
+					lastName,
+					numberOfAdults,
+					numberOfChildren,
+					quotations,
+				} = tripInfo ?? {};
+				const accepted = quotations?.find((q) => q.status === "ACCEPTED");
+				const total = (numberOfAdults ?? 0) + (numberOfChildren ?? 0);
+				const summary = `${isAirport ? "APT: " : ""}${pickup} → ${destination}${total > 0 ? ` (${total})` : ""}`;
+				const description = [
+					firstName && lastName && `Client: ${firstName} ${lastName}`,
+					numberOfAdults &&
+						`Passengers: ${numberOfAdults} adult${numberOfAdults > 1 ? "s" : ""}${numberOfChildren ? `, ${numberOfChildren} child${numberOfChildren > 1 ? "ren" : ""}` : ""}`,
+					driverName && `Driver: ${driverName}`,
+					driverPhone && `Phone: ${driverPhone}`,
+					meetingPoint && `Meeting point: ${meetingPoint}`,
+					flightNumber && `Flight: ${flightNumber}`,
+					accepted &&
+						`Price: ${accepted.price.toString()} ${accepted.currency}${accepted.isPriceEachWay ? " (each way)" : ""}`,
+					accepted?.quotationAdditionalInfo &&
+						`Notes: ${accepted.quotationAdditionalInfo}`,
+				]
+					.filter(Boolean)
+					.join("\n");
 				window.open(
 					googleCalendarUrl({
-						summary: `${pickup} → ${destination}`,
-						description: [
-							driverName && `Driver: ${driverName}`,
-							driverPhone && `Phone: ${driverPhone}`,
-						]
-							.filter(Boolean)
-							.join("\n"),
+						summary,
+						description,
 						location: meetingPoint ?? pickup,
 						start: toICSDateTime(date, timeStr),
 						end: toICSDateTime(end),

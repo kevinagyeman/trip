@@ -238,6 +238,9 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 										beThereAtTime={route.beThereAtTime}
 										meetingPoint={route.meetingPoint}
 										additionalInfo={route.additionalInfo}
+										routeType={route.type}
+										flightNumber={route.flightNumber}
+										tripInfo={request}
 										inBanner={true}
 										disabled={isLocked}
 									/>

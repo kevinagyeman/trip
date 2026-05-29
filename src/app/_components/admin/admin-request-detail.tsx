@@ -172,6 +172,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								destination={route.destination}
 								showCalendar={!locked}
 								showCopyFlight
+								tripInfo={request}
 							/>
 
 							{!locked && (
@@ -205,6 +206,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										warningTitle={tCommon("pickupAdminWarningTitle")}
 										warningText={tCommon("pickupAdminTimeNote")}
 										disabled={locked}
+										tripInfo={request}
 									/>
 								</div>
 							)}
