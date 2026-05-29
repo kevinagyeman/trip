@@ -26,7 +26,7 @@ export function LanguageSwitcher() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="secondary" size="sm" className="gap-1 font-extralight">
+				<Button variant="secondary" size="sm" className="gap-1 font-light">
 					{current?.label ?? locale.toUpperCase()}
 					<ChevronDown className="h-3 w-3 opacity-50" />
 				</Button>
@@ -36,7 +36,7 @@ export function LanguageSwitcher() {
 					<DropdownMenuItem
 						key={l.code}
 						onClick={() => router.replace(pathname, { locale: l.code })}
-						className="font-extralight cursor-pointer"
+						className="font-light cursor-pointer"
 					>
 						{l.label}
 					</DropdownMenuItem>

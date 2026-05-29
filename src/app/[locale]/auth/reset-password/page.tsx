@@ -2,10 +2,7 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
-import {
-	resetPasswordSchema,
-	type ResetPasswordFormValues,
-} from "@/lib/schemas/auth";
+import { PageCenter } from "@/app/_components/ui/page-center";
 import {
 	Card,
 	CardContent,
@@ -14,6 +11,10 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Link } from "@/i18n/navigation";
+import {
+	resetPasswordSchema,
+	type ResetPasswordFormValues,
+} from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
@@ -115,7 +116,7 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
 	const t = useTranslations("auth");
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+		<PageCenter>
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
@@ -131,6 +132,6 @@ export default function ResetPasswordPage() {
 					</Suspense>
 				</CardContent>
 			</Card>
-		</div>
+		</PageCenter>
 	);
 }

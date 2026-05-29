@@ -17,7 +17,11 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import CustomInput from "@/app/_components/ui/custom-input";
+import { PageCenter } from "@/app/_components/ui/page-center";
 import { registerSchema, type RegisterFormValues } from "@/lib/schemas/auth";
+
+const gradientBg =
+	"bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800";
 
 function RegisterForm() {
 	const router = useRouter();
@@ -68,7 +72,7 @@ function RegisterForm() {
 	// No company slug → block registration
 	if (!companySlug) {
 		return (
-			<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+			<PageCenter className={gradientBg}>
 				<Card className="w-full max-w-md">
 					<CardHeader className="space-y-1">
 						<CardTitle className="text-center text-2xl font-bold">
@@ -86,13 +90,13 @@ function RegisterForm() {
 						</Link>
 					</CardContent>
 				</Card>
-			</div>
+			</PageCenter>
 		);
 	}
 
 	if (success) {
 		return (
-			<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+			<PageCenter className={gradientBg}>
 				<Card className="w-full max-w-md">
 					<CardHeader className="space-y-1">
 						<CardTitle className="text-center text-2xl font-bold text-green-600">
@@ -122,12 +126,12 @@ function RegisterForm() {
 						</div>
 					</CardContent>
 				</Card>
-			</div>
+			</PageCenter>
 		);
 	}
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+		<PageCenter className={gradientBg}>
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
@@ -192,7 +196,7 @@ function RegisterForm() {
 					</form>
 				</CardContent>
 			</Card>
-		</div>
+		</PageCenter>
 	);
 }
 

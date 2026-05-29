@@ -1,12 +1,13 @@
+import { PageCenter } from "@/app/_components/ui/page-center";
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardHeader,
 	CardTitle,
-	CardDescription,
 } from "@/components/ui/card";
-import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Mail } from "lucide-react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export default async function PendingApprovalPage({
 	params,
@@ -18,7 +19,7 @@ export default async function PendingApprovalPage({
 	const t = await getTranslations("registerCompany");
 
 	return (
-		<div className="min-h-[calc(100vh-65px)] p-4">
+		<PageCenter>
 			<div className="mx-auto max-w-2xl py-8">
 				<Card className="w-full max-w-md">
 					<CardHeader className="text-center">
@@ -34,6 +35,6 @@ export default async function PendingApprovalPage({
 					</CardContent>
 				</Card>
 			</div>
-		</div>
+		</PageCenter>
 	);
 }

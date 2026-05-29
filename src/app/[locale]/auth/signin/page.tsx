@@ -2,10 +2,12 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PageCenter } from "@/app/_components/ui/page-center";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { signInSchema, type SignInFormValues } from "@/lib/schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LogIn, Zap } from "lucide-react";
 import { getSession, signIn } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -64,7 +66,7 @@ function SignInForm() {
 	};
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center p-4">
+		<PageCenter>
 			<div className="w-full max-w-sm">
 				<div className="mb-8">
 					<h1 className="text-2xl font-bold">{t("welcomeBack")}</h1>
@@ -113,7 +115,7 @@ function SignInForm() {
 						className="w-full"
 						isLoading={isSubmitting}
 					>
-						{t("signIn")}
+						{t("signIn")} <LogIn />
 					</LoadingButton>
 					<div className="text-center text-sm">
 						<Link
@@ -132,12 +134,14 @@ function SignInForm() {
 							type="button"
 							asChild
 						>
-							<Link href="/register-company">{t("registerCompanyLink")}</Link>
+							<Link href="/register-company">
+								<Zap /> {t("registerCompanyLink")}
+							</Link>
 						</Button>
 					</div>
 				</form>
 			</div>
-		</div>
+		</PageCenter>
 	);
 }
 

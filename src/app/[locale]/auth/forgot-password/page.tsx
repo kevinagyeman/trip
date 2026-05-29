@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/_components/ui/custom-input";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PageCenter } from "@/app/_components/ui/page-center";
 import {
 	forgotPasswordSchema,
 	type ForgotPasswordFormValues,
@@ -53,7 +54,7 @@ export default function ForgotPasswordPage() {
 	};
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4 dark:from-gray-900 dark:to-gray-800">
+		<PageCenter className="bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
 			<Card className="w-full max-w-md">
 				<CardHeader className="space-y-1">
 					<CardTitle className="text-center text-2xl font-bold">
@@ -113,6 +114,6 @@ export default function ForgotPasswordPage() {
 					)}
 				</CardContent>
 			</Card>
-		</div>
+		</PageCenter>
 	);
 }

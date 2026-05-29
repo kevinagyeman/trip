@@ -61,11 +61,7 @@ export function MobileMenu({ userName, role }: MobileMenuProps) {
 
 					<div className="flex items-center justify-between border-t p-3">
 						{role === "ADMIN" && (
-							<Link
-								href="/admin/settings"
-								onClick={close}
-								className="block border-t"
-							>
+							<Link href="/admin/settings" onClick={close} className="block">
 								<Button variant="ghost" size={"icon"}>
 									<Settings />
 								</Button>

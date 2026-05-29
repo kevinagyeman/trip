@@ -90,6 +90,8 @@
 }
 
 :root {
+	--navbar-height: 69px;
+	--footer-height: 69px;
 	--radius:
 		0.625rem;
 	--background:
@@ -228,4 +230,8 @@
   body {
     @apply bg-background text-foreground;
 	}
+}
+
+@utility min-h-page {
+  min-height: calc(100vh - var(--navbar-height) - var(--footer-height));
 }

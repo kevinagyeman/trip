@@ -1,4 +1,5 @@
 import { RegisterCompanyForm } from "@/app/_components/register/register-company-form";
+import { PageCenter } from "@/app/_components/ui/page-center";
 import { auth } from "@/server/auth";
 import { setRequestLocale } from "next-intl/server";
 import { redirect } from "next/navigation";
@@ -15,10 +16,10 @@ export default async function RegisterCompanyPage({
 	if (session) redirect("/dashboard");
 
 	return (
-		<div className="flex min-h-[calc(100vh-65px)] items-center justify-center p-4">
+		<PageCenter>
 			<div className="w-full max-w-2xl py-8">
 				<RegisterCompanyForm />
 			</div>
-		</div>
+		</PageCenter>
 	);
 }
