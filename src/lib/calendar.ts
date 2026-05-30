@@ -12,6 +12,7 @@ export type TripCalendarInfo = {
 	lastName?: string | null;
 	numberOfAdults?: number | null;
 	numberOfChildren?: number | null;
+	additionalInfo?: string | null;
 	quotations?: Array<{
 		status: string;
 		price: { toString(): string };
@@ -20,6 +21,68 @@ export type TripCalendarInfo = {
 		quotationAdditionalInfo?: string | null;
 	}>;
 };
+
+export function buildCalendarEvent({
+	routeType,
+	pickup,
+	destination,
+	flightNumber,
+	tripInfo,
+	driverName,
+	driverPhone,
+	meetingPoint,
+}: {
+	routeType?: string | null;
+	pickup: string;
+	destination: string;
+	flightNumber?: string | null;
+	tripInfo?: TripCalendarInfo;
+	driverName?: string;
+	driverPhone?: string | null;
+	meetingPoint?: string | null;
+}): { summary: string; description: string } {
+	const isAirport = routeType === "airport_in" || routeType === "airport_out";
+	const {
+		firstName,
+		lastName,
+		numberOfAdults,
+		numberOfChildren,
+		additionalInfo,
+		quotations,
+	} = tripInfo ?? {};
+	const accepted = quotations?.find((q) => q.status === "ACCEPTED");
+	const total = (numberOfAdults ?? 0) + (numberOfChildren ?? 0);
+	const summary = `${isAirport ? "APT: " : ""}${pickup} → ${destination}${flightNumber ? ` · ${flightNumber}` : ""}${total > 0 ? ` (${total} people)` : ""}${accepted ? ` (${accepted.price.toString()} ${accepted.currency})` : ""}`;
+	const tripInfoLines = [
+		firstName && lastName && `Client: ${firstName} ${lastName}`,
+		numberOfAdults && `Adults: ${numberOfAdults}`,
+		numberOfChildren && `Children: ${numberOfChildren}`,
+		flightNumber && `Flight: ${flightNumber}`,
+		additionalInfo && `Notes: ${additionalInfo}`,
+	].filter(Boolean);
+
+	const pickupLines = [
+		driverName && `Driver: ${driverName}`,
+		driverPhone && `Phone: ${driverPhone}`,
+		meetingPoint && `Meeting point: ${meetingPoint}`,
+	].filter(Boolean);
+
+	const quotationLines = [
+		accepted &&
+			`Price: ${accepted.price.toString()} ${accepted.currency}${accepted.isPriceEachWay ? " (each way)" : ""}`,
+		accepted?.quotationAdditionalInfo &&
+			`Notes: ${accepted.quotationAdditionalInfo}`,
+	].filter(Boolean);
+
+	const sections = [
+		tripInfoLines.length > 0 && `TRIP INFO\n${tripInfoLines.join("\n")}`,
+		pickupLines.length > 0 && `PICKUP POINT\n${pickupLines.join("\n")}`,
+		quotationLines.length > 0 && `QUOTATION\n${quotationLines.join("\n")}`,
+	].filter(Boolean);
+
+	const description = sections.join("\n\n");
+	return { summary, description };
+}
 
 export function toICSDateTime(date: Date, timeStr?: string | null): string {
 	const d = new Date(date);

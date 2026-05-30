@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import {
+	buildCalendarEvent,
 	googleCalendarUrl,
 	toICSDateTime,
 	type RouteCalendarInfo,
@@ -33,30 +34,13 @@ export function DepartureCalendarButton({
 				} = route;
 				const [hRaw, mRaw] = (scheduledTime ?? "00:00").split(":").map(Number);
 				const endH = ((hRaw ?? 0) + 1) % 24;
-				const isAirport =
-					routeType === "airport_in" || routeType === "airport_out";
-				const {
-					firstName,
-					lastName,
-					numberOfAdults,
-					numberOfChildren,
-					quotations,
-				} = tripInfo ?? {};
-				const accepted = quotations?.find((q) => q.status === "ACCEPTED");
-				const total = (numberOfAdults ?? 0) + (numberOfChildren ?? 0);
-				const summary = `${isAirport ? "APT: " : ""}${pickup} → ${destination}${flightNumber ? ` · ${flightNumber}` : ""}${total > 0 ? ` (${total} people)` : ""}${accepted ? ` (${accepted.price.toString()} ${accepted.currency})` : ""}`;
-				const description = [
-					firstName && lastName && `Client: ${firstName} ${lastName}`,
-					numberOfAdults &&
-						`Passengers: ${numberOfAdults} adult${numberOfAdults > 1 ? "s" : ""}${numberOfChildren ? `, ${numberOfChildren} child${numberOfChildren > 1 ? "ren" : ""}` : ""}`,
-					flightNumber && `Flight: ${flightNumber}`,
-					accepted &&
-						`Price: ${accepted.price.toString()} ${accepted.currency}${accepted.isPriceEachWay ? " (each way)" : ""}`,
-					accepted?.quotationAdditionalInfo &&
-						`Notes: ${accepted.quotationAdditionalInfo}`,
-				]
-					.filter(Boolean)
-					.join("\n");
+				const { summary, description } = buildCalendarEvent({
+					routeType,
+					pickup,
+					destination,
+					flightNumber,
+					tripInfo,
+				});
 				window.open(
 					googleCalendarUrl({
 						summary,
