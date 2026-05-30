@@ -4,7 +4,7 @@ import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { LogIn, Menu, Settings, X, Zap } from "lucide-react";
+import { Home, LogIn, Menu, Settings, Tag, X, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -26,17 +26,29 @@ export function GuestMobileMenu() {
 
 			{open && (
 				<div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-md border bg-background shadow-lg">
-					<div className="flex flex-col gap-3 p-2">
+					<div className="flex flex-col gap-1 p-2">
 						<Link href="/auth/signin" onClick={close}>
-							<Button variant="outline" className="w-full justify-start">
+							<Button variant="ghost" className="w-full justify-start">
 								<LogIn className="h-4 w-4" />
 								{t("signIn")}
 							</Button>
 						</Link>
 						<Link href="/register-company" onClick={close}>
-							<Button className="w-full justify-start">
+							<Button variant="ghost" className="w-full justify-start">
 								<Zap className="h-4 w-4" />
 								{t("register")}
+							</Button>
+						</Link>
+						<Link href="/pricing" onClick={close}>
+							<Button variant="ghost" className="w-full justify-start">
+								<Tag className="h-4 w-4" />
+								{t("pricing")}
+							</Button>
+						</Link>
+						<Link href="/" onClick={close}>
+							<Button variant="ghost" className="w-full justify-start">
+								<Home className="h-4 w-4" />
+								{t("home")}
 							</Button>
 						</Link>
 					</div>

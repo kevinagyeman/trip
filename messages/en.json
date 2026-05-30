@@ -6,7 +6,30 @@
 		"adminStats": "Stats",
 		"signIn": "Sign In",
 		"register": "Register",
-		"settings": "Settings"
+		"settings": "Settings",
+		"pricing": "Pricing",
+		"home": "Home"
+	},
+	"pricing": {
+		"badge": "Pricing",
+		"title": "Simple, transparent pricing",
+		"subtitle": "Everything you need to manage your transfer business. Free, forever.",
+		"planLabel": "Free plan",
+		"planPrice": "€0",
+		"planPriceSuffix": "/ month",
+		"planDesc": "No credit card required. Start in minutes.",
+		"cta": "Get started for free",
+		"feature1": "Unlimited trip requests",
+		"feature2": "Multi-route trips (outbound + return)",
+		"feature3": "Customer portal with unique shareable link",
+		"feature4": "Quotation system with accept / reject",
+		"feature5": "Pickup details: driver, meeting point, time",
+		"feature6": "In-app messaging with customers",
+		"feature7": "Email notifications to admin and customer",
+		"feature8": "Google Calendar export",
+		"feature9": "Multi-language support (EN, IT)",
+		"faqTitle": "No hidden fees. No surprises.",
+		"faqDesc": "The free plan covers everything a transfer company needs to run day-to-day operations. Paid tiers with advanced features may be introduced in the future — existing users will always be notified in advance."
 	},
 	"landing": {
 		"heroBadge": "Transfer Management Platform",

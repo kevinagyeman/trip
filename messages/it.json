@@ -6,7 +6,30 @@
 		"adminStats": "Statistiche",
 		"signIn": "Accedi",
 		"register": "Registrati",
-		"settings": "Impostazioni"
+		"settings": "Impostazioni",
+		"pricing": "Prezzi",
+		"home": "Home"
+	},
+	"pricing": {
+		"badge": "Prezzi",
+		"title": "Prezzi semplici e trasparenti",
+		"subtitle": "Tutto ciò di cui hai bisogno per gestire la tua attività di trasferimento. Gratis, per sempre.",
+		"planLabel": "Piano gratuito",
+		"planPrice": "€0",
+		"planPriceSuffix": "/ mese",
+		"planDesc": "Nessuna carta di credito richiesta. Inizia in pochi minuti.",
+		"cta": "Inizia gratuitamente",
+		"feature1": "Richieste di viaggio illimitate",
+		"feature2": "Viaggi multi-tratta (andata + ritorno)",
+		"feature3": "Portale clienti con link univoco condivisibile",
+		"feature4": "Sistema di preventivi con accetta / rifiuta",
+		"feature5": "Dettagli pickup: autista, punto di incontro, orario",
+		"feature6": "Messaggistica in-app con i clienti",
+		"feature7": "Notifiche email ad admin e cliente",
+		"feature8": "Esportazione su Google Calendar",
+		"feature9": "Supporto multilingua (EN, IT)",
+		"faqTitle": "Nessun costo nascosto. Nessuna sorpresa.",
+		"faqDesc": "Il piano gratuito copre tutto ciò di cui un'azienda di trasferimento ha bisogno per le operazioni quotidiane. In futuro potranno essere introdotti piani a pagamento con funzionalità avanzate — gli utenti esistenti saranno sempre avvisati in anticipo."
 	},
 	"landing": {
 		"heroBadge": "Piattaforma di Gestione Trasferimenti",
