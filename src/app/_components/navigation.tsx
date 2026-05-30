@@ -1,12 +1,12 @@
 import { BrandLogo } from "@/app/_components/brand-logo";
 import { LanguageSwitcher } from "@/app/_components/language-switcher";
-import { MobileMenu } from "@/app/_components/mobile-menu";
+import { GuestMobileMenu, MobileMenu } from "@/app/_components/mobile-menu";
 import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { auth } from "@/server/auth";
-import { Settings } from "lucide-react";
+import { LogIn, Settings, Zap } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 
@@ -28,20 +28,23 @@ export async function Navigation() {
 						<div className="flex items-center gap-3">
 							<LanguageSwitcher />
 							<ThemeToggle />
-							{/* {!hideAuthButtons && (
+							{!hideAuthButtons && (
 								<>
-									<Link href="/auth/signin">
-										<Button variant="outline" size="sm">
-											{t("signIn")} <LogIn className="h-4 w-4" />
-										</Button>
-									</Link>
-									<Link href="/register-company">
-										<Button size="sm">
-											<Zap className="h-4 w-4" /> {t("register")}
-										</Button>
-									</Link>
+									<div className="hidden md:flex items-center gap-2">
+										<Link href="/auth/signin">
+											<Button variant="outline" size="sm">
+												{t("signIn")} <LogIn className="h-4 w-4" />
+											</Button>
+										</Link>
+										<Link href="/register-company">
+											<Button size="sm">
+												<Zap className="h-4 w-4" /> {t("register")}
+											</Button>
+										</Link>
+									</div>
+									<GuestMobileMenu />
 								</>
-							)} */}
+							)}
 						</div>
 					</div>
 				</div>

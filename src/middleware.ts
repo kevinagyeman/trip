@@ -80,7 +80,9 @@ export default auth((req) => {
 		}
 	}
 
-	return intlMiddleware(req as NextRequest);
+	const response = intlMiddleware(req as NextRequest);
+	response.headers.set("x-pathname", pathname);
+	return response;
 });
 
 export const config = {

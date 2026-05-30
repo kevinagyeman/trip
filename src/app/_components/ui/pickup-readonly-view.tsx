@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { useTranslations } from "next-intl";
+import type { useTranslations } from "next-intl";
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
 	return (
