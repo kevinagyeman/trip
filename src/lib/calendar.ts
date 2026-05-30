@@ -1,3 +1,12 @@
+export type RouteCalendarInfo = {
+	routeType?: string | null;
+	pickup: string;
+	destination: string;
+	scheduledDate?: string | null;
+	scheduledTime?: string | null;
+	flightNumber?: string | null;
+};
+
 export type TripCalendarInfo = {
 	firstName?: string | null;
 	lastName?: string | null;
