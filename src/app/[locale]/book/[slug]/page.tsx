@@ -61,19 +61,17 @@ export default async function BookingPortalPage({
 
 	return (
 		<div style={brandColor ? { backgroundColor: brandColor } : undefined}>
-			{company.coverPhotoUrl && (
-				<div className="relative h-64 w-full overflow-hidden">
-					<Image
-						src={company.coverPhotoUrl}
-						alt=""
-						fill
-						unoptimized
-						className="object-cover"
-						priority
-					/>
-					<div className="absolute inset-0 bg-black/30" />
-				</div>
-			)}
+			<div className="relative h-64 w-full overflow-hidden">
+				<Image
+					src={company.coverPhotoUrl ?? "/cover-demo.png"}
+					alt=""
+					fill
+					unoptimized
+					className="object-cover"
+					priority
+				/>
+				<div className="absolute inset-0 bg-black/30" />
+			</div>
 			<div className="mx-auto max-w-2xl px-4 py-8 space-y-6">
 				<SectionCard contentClassName="space-y-4 pt-0">
 					{company.logoUrl && (

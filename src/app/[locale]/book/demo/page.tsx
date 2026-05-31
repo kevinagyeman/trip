@@ -43,19 +43,17 @@ export default async function DemoBookingPage({
 
 	return (
 		<div>
-			{coverphoto && (
-				<div className="relative h-64 w-full overflow-hidden">
-					<Image
-						src={coverphoto}
-						alt=""
-						fill
-						unoptimized
-						className="object-cover"
-						priority
-					/>
-					<div className="absolute inset-0 bg-black/30" />
-				</div>
-			)}
+			<div className="relative h-64 w-full overflow-hidden">
+				<Image
+					src={coverphoto ?? "/cover-demo.png"}
+					alt=""
+					fill
+					unoptimized
+					className="object-cover"
+					priority
+				/>
+				<div className="absolute inset-0 bg-black/30" />
+			</div>
 			<div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
 				<SectionCard contentClassName="space-y-4 pt-0">
 					{logo && (
