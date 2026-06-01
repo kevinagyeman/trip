@@ -4,7 +4,7 @@ import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { Home, LogIn, Menu, Settings, Tag, X, Zap } from "lucide-react";
+import { Home, LogIn, Menu, Play, Settings, Tag, X, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -43,6 +43,12 @@ export function GuestMobileMenu() {
 							<Button variant="ghost" className="w-full justify-start">
 								<Tag className="h-4 w-4" />
 								{t("pricing")}
+							</Button>
+						</Link>
+						<Link href="/book/demo" onClick={close}>
+							<Button variant="ghost" className="w-full justify-start">
+								<Play className="h-4 w-4" />
+								{t("demo")}
 							</Button>
 						</Link>
 						<Link href="/" onClick={close}>

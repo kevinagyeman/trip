@@ -42,8 +42,8 @@ export default async function DemoBookingPage({
 	const { company, logo, coverphoto } = await searchParams;
 
 	return (
-		<div>
-			<div className="relative h-64 w-full overflow-hidden">
+		<div className="mx-auto max-w-2xl space-y-6 p-4">
+			<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9]">
 				<Image
 					src={coverphoto ?? "/cover-demo.png"}
 					alt=""
@@ -52,30 +52,23 @@ export default async function DemoBookingPage({
 					className="object-cover"
 					priority
 				/>
-				<div className="absolute inset-0 bg-black/30" />
 			</div>
-			<div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
-				<SectionCard contentClassName="space-y-4 pt-0">
-					{logo && (
-						<Image
-							src={logo}
-							alt={company ?? "Company"}
-							width={200}
-							height={80}
-							unoptimized
-							className="mx-auto h-20 w-auto object-contain"
-						/>
-					)}
-					{company && (
-						<h1 className="text-center text-lg font-bold sm:text-3xl">
-							{company}
-						</h1>
-					)}
-				</SectionCard>
+			<SectionCard contentClassName="space-y-4 pt-0">
+				<Image
+					src={logo ?? "/logo-sample.png"}
+					alt={company ?? "Company"}
+					width={200}
+					height={80}
+					unoptimized
+					className="mx-auto h-20 w-auto object-contain"
+				/>
+				<h1 className="text-center text-lg font-bold sm:text-3xl">
+					{company ?? "Transfer Booking Demo"}
+				</h1>
+			</SectionCard>
 
-				<div>
-					<CreateTripRequestForm companySlug="demo" isDemo />
-				</div>
+			<div>
+				<CreateTripRequestForm companySlug="demo" isDemo />
 			</div>
 		</div>
 	);

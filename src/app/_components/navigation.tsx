@@ -34,6 +34,9 @@ export async function Navigation() {
 									<Link href="/pricing">
 										<Button variant="ghost">{t("pricing")}</Button>
 									</Link>
+									<Link href="/book/demo">
+										<Button variant="ghost">{t("demo")}</Button>
+									</Link>
 								</div>
 							)}
 						</div>

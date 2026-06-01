@@ -5,7 +5,6 @@ import {
 	Bell,
 	CheckCircle,
 	Globe,
-	LogIn,
 	MessageSquare,
 	Send,
 	Shield,
@@ -33,16 +32,15 @@ export async function LandingPage() {
 					<p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
 						{t("heroSubtitle")}
 					</p>
-					<div className="flex flex-row items-center justify-center gap-3">
+					<div className="flex flex-row items-center justify-center gap-3 flex-wrap">
 						<Link href="/register-company">
 							<Button size="lg" className="gap-2 px-8 text-base">
-								{t("ctaStart")} <Zap />
+								{t("ctaStart")}
 							</Button>
 						</Link>
-						<Link href="/auth/signin">
+						<Link href="/book/demo">
 							<Button size="lg" variant="outline" className="px-8 text-base">
-								{t("ctaSignIn")}
-								<LogIn />
+								{t("ctaDemo")}
 							</Button>
 						</Link>
 					</div>

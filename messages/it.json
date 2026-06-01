@@ -8,7 +8,8 @@
 		"register": "Registrati",
 		"settings": "Impostazioni",
 		"pricing": "Prezzi",
-		"home": "Home"
+		"home": "Home",
+		"demo": "Visualizza la demo"
 	},
 	"pricing": {
 		"badge": "Prezzi",
@@ -38,6 +39,7 @@
 		"heroSubtitle": "dantrip.com aiuta le aziende di trasporti a gestire le richieste dei clienti, inviare preventivi professionali e confermare le prenotazioni — tutto in un unico posto, senza attrito.",
 		"ctaStart": "Inizia Ora",
 		"ctaSignIn": "Accedi",
+		"ctaDemo": "Visualizza la demo",
 		"trustLabel": "La fiducia delle aziende di trasporto in tutta Europa",
 		"spotlight1Label": "Portale prenotazioni",
 		"spotlight1Title": "Un portale brandizzato che i tuoi clienti useranno davvero",

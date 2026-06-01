@@ -8,7 +8,8 @@
 		"register": "Register",
 		"settings": "Settings",
 		"pricing": "Pricing",
-		"home": "Home"
+		"home": "Home",
+		"demo": "View demo"
 	},
 	"pricing": {
 		"badge": "Pricing",
@@ -38,6 +39,7 @@
 		"heroSubtitle": "dantrip.com helps transport companies handle customer transfer requests, send professional quotations, and confirm bookings — all in one place, with zero friction.",
 		"ctaStart": "Get Started",
 		"ctaSignIn": "Sign In",
+		"ctaDemo": "View demo",
 		"trustLabel": "Trusted by transport companies across Europe",
 		"spotlight1Label": "Booking portal",
 		"spotlight1Title": "A branded portal your customers will actually use",

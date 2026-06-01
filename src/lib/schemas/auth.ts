@@ -26,7 +26,8 @@ export const registerCompanySchema = z
 		slug: z
 			.string()
 			.min(1, "Slug is required")
-			.regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and hyphens only"),
+			.regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and hyphens only")
+			.refine((v) => v !== "demo", "This slug is reserved"),
 		vat: z.string().min(1, "VAT number is required"),
 		email: z.string().email("Invalid email address"),
 		password: z.string().min(8, "Password must be at least 8 characters"),
