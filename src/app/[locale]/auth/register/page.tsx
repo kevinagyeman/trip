@@ -158,16 +158,6 @@ function RegisterForm() {
 							inputProps={{ ...register("password"), disabled: isSubmitting }}
 						/>
 
-						<CustomInput
-							labelText={t("confirmPassword")}
-							inputType="password"
-							error={errors.confirmPassword?.message}
-							inputProps={{
-								...register("confirmPassword"),
-								disabled: isSubmitting,
-							}}
-						/>
-
 						{serverError && (
 							<div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
 								{serverError}

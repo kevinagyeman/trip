@@ -130,17 +130,6 @@ export function RegisterCompanyForm() {
 					error={errors.password?.message}
 					inputProps={{ ...register("password"), disabled: isSubmitting }}
 				/>
-				<CustomInput
-					required
-					labelText={t("confirmPassword")}
-					inputType="password"
-					error={errors.confirmPassword?.message}
-					inputProps={{
-						...register("confirmPassword"),
-						disabled: isSubmitting,
-					}}
-				/>
-
 				{/* Privacy policy */}
 				<Controller
 					name="privacyAccepted"

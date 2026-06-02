@@ -601,9 +601,7 @@ export function CreateTripRequestForm({
 
 			{isDemo ? (
 				<SectionCard contentClassName="space-y-3 pt-0 text-center">
-					<p className="text-muted-foreground text-sm">
-						{t("demoCtaDescription")}
-					</p>
+					<p className="text-muted-foreground">{t("demoCtaDescription")}</p>
 					<Button
 						type="button"
 						size="lg"

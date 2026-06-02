@@ -7,39 +7,27 @@ export const signInSchema = z.object({
 
 export type SignInFormValues = z.infer<typeof signInSchema>;
 
-export const registerSchema = z
-	.object({
-		email: z.string().email("Invalid email address"),
-		password: z.string().min(8, "Password must be at least 8 characters"),
-		confirmPassword: z.string().min(1, "Please confirm your password"),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords do not match",
-		path: ["confirmPassword"],
-	});
+export const registerSchema = z.object({
+	email: z.string().email("Invalid email address"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
 export type RegisterFormValues = z.infer<typeof registerSchema>;
 
-export const registerCompanySchema = z
-	.object({
-		companyName: z.string().min(1, "Company name is required"),
-		slug: z
-			.string()
-			.min(1, "Slug is required")
-			.regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and hyphens only")
-			.refine((v) => v !== "demo", "This slug is reserved"),
-		vat: z.string().min(1, "VAT number is required"),
-		email: z.string().email("Invalid email address"),
-		password: z.string().min(8, "Password must be at least 8 characters"),
-		confirmPassword: z.string().min(1, "Please confirm your password"),
-		privacyAccepted: z.literal(true, {
-			errorMap: () => ({ message: "You must accept the privacy policy" }),
-		}),
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords do not match",
-		path: ["confirmPassword"],
-	});
+export const registerCompanySchema = z.object({
+	companyName: z.string().min(1, "Company name is required"),
+	slug: z
+		.string()
+		.min(1, "Slug is required")
+		.regex(/^[a-z0-9-]+$/, "Lowercase letters, numbers and hyphens only")
+		.refine((v) => v !== "demo", "This slug is reserved"),
+	vat: z.string().min(1, "VAT number is required"),
+	email: z.string().email("Invalid email address"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
+	privacyAccepted: z.literal(true, {
+		errorMap: () => ({ message: "You must accept the privacy policy" }),
+	}),
+});
 
 export type RegisterCompanyFormValues = z.infer<typeof registerCompanySchema>;
 
