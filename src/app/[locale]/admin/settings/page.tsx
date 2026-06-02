@@ -72,11 +72,13 @@ export default async function AdminSettingsPage({
 						<DriversManager />
 					</div>
 				)}
-				<SectionCard title={t("languageTitle")}>
-					<ChangeLanguageForm
-						currentLanguage={dbUser?.preferredLanguage ?? "en"}
-					/>
-				</SectionCard>
+				{session.user.role !== "SUPER_ADMIN" && (
+					<SectionCard title={t("languageTitle")}>
+						<ChangeLanguageForm
+							currentLanguage={dbUser?.preferredLanguage ?? "en"}
+						/>
+					</SectionCard>
+				)}
 				{company && (
 					<div id="estimate-notice">
 						<SectionCard title={t("estimateNoticeTitle")}>

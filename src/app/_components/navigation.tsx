@@ -101,7 +101,7 @@ export async function Navigation() {
 						</span>
 						<LanguageSwitcher />
 						<ThemeToggle className="hidden md:flex" />
-						{isAdmin && (
+						{(isAdmin || isSuperAdmin) && (
 							<Link href="/admin/settings" className="hidden md:block">
 								<Button variant="ghost" size="icon">
 									<Settings className="h-4 w-4" />

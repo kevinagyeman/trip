@@ -116,7 +116,7 @@ export function MobileMenu({ userName, role }: MobileMenuProps) {
 					</div>
 
 					<div className="flex items-center justify-between border-t p-3">
-						{role === "ADMIN" && (
+						{(role === "ADMIN" || role === "SUPER_ADMIN") && (
 							<Link href="/admin/settings" onClick={close} className="block">
 								<Button variant="ghost" size={"icon"}>
 									<Settings />
