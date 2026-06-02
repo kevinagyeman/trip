@@ -6,6 +6,7 @@ import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { COUNTRIES } from "@/lib/countries";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -116,12 +117,35 @@ export function CompanyDetailsForm({
 				placeholder="https://yourcompany.com/logo.png"
 				inputProps={{ ...register("logoUrl") }}
 			/>
+			{watch("logoUrl") && (
+				<div className="flex justify-center rounded-xl border p-4 bg-white">
+					<Image
+						src={watch("logoUrl")}
+						alt="Logo preview"
+						width={200}
+						height={80}
+						unoptimized
+						className="h-20 w-auto object-contain"
+					/>
+				</div>
+			)}
 			<CustomInput
 				labelText={t("coverPhotoUrl")}
 				inputType="url"
 				placeholder="https://yourcompany.com/cover.jpg"
 				inputProps={{ ...register("coverPhotoUrl") }}
 			/>
+			{watch("coverPhotoUrl") && (
+				<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9] border">
+					<Image
+						src={watch("coverPhotoUrl")}
+						alt="Cover preview"
+						fill
+						unoptimized
+						className="object-cover"
+					/>
+				</div>
+			)}
 			<div className="space-y-2">
 				<label className="text-sm font-medium">{t("brandColor")}</label>
 				<div className="flex items-center gap-3">

@@ -1,5 +1,4 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
-import { SectionCard } from "@/app/_components/ui/section-card";
 import type { Metadata } from "next";
 import Image from "next/image";
 
@@ -53,7 +52,7 @@ export default async function DemoBookingPage({
 					priority
 				/>
 			</div>
-			<SectionCard contentClassName="space-y-4 pt-0">
+			<div className="space-y-4 rounded-xl border bg-white p-6">
 				<Image
 					src={logo ?? "/logo-sample.png"}
 					alt={company ?? "Company"}
@@ -62,10 +61,10 @@ export default async function DemoBookingPage({
 					unoptimized
 					className="mx-auto h-20 w-auto object-contain"
 				/>
-				<h1 className="text-center text-lg font-bold sm:text-3xl">
+				<h1 className="text-center text-lg font-bold sm:text-3xl text-black">
 					{company ?? "Transfer Booking Demo"}
 				</h1>
-			</SectionCard>
+			</div>
 
 			<div>
 				<CreateTripRequestForm companySlug="demo" isDemo />
