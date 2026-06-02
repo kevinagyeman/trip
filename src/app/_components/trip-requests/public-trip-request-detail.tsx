@@ -16,6 +16,7 @@ import { SectionCard } from "@/app/_components/ui/section-card";
 import { api } from "@/trpc/react";
 import { Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
@@ -82,6 +83,27 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	return (
 		<div className="space-y-6">
+			{/* Company */}
+			{request.company && (
+				<div className="space-y-4">
+					{request.company.logoUrl && (
+						<div className="mx-auto w-fit rounded-xl bg-white p-4">
+							<Image
+								src={request.company.logoUrl}
+								alt={request.company.name}
+								width={200}
+								height={80}
+								unoptimized
+								className="h-20 w-auto object-contain"
+							/>
+						</div>
+					)}
+					<h1 className="text-center text-lg font-bold sm:text-2xl">
+						{request.company.name}
+					</h1>
+				</div>
+			)}
+
 			<AlertBanner
 				variant="info"
 				description={t("emailNotice", { email: request.fromEmail })}

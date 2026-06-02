@@ -596,6 +596,9 @@ export const tripRequestRouter = createTRPCRouter({
 						orderBy: { createdAt: "desc" },
 					},
 					routes: { orderBy: { position: "asc" } },
+					company: {
+						select: { name: true, logoUrl: true },
+					},
 				},
 			});
 

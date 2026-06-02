@@ -118,7 +118,7 @@ export function CompanyDetailsForm({
 				inputProps={{ ...register("logoUrl") }}
 			/>
 			{watch("logoUrl") && (
-				<div className="flex justify-center rounded-xl border p-4 bg-white">
+				<div className="mx-auto w-fit rounded-xl border p-4 bg-white">
 					<Image
 						src={watch("logoUrl")}
 						alt="Logo preview"
