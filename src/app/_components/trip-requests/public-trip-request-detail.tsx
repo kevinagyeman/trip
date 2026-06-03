@@ -1,6 +1,9 @@
 "use client";
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+import { Zap } from "lucide-react";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
@@ -79,10 +82,26 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	const routes = request.routes;
 	const isLocked = isRequestLocked(request.status);
-	const canEdit = canEditRequest(request.status);
+	const canEdit = canEditRequest(request.status) && !!request.company;
 
 	return (
 		<div className="space-y-6">
+			{/* Dantrip promo — only for public requests */}
+			{!request.company && (
+				<SectionCard
+					title={t("dantripPromoTitle")}
+					subtitle={t("dantripPromoDescription")}
+					contentClassName="pt-0"
+				>
+					<Link href="/register-company">
+						<Button className="w-full" size="lg">
+							<Zap className="h-4 w-4" />
+							{t("dantripPromoCta")}
+						</Button>
+					</Link>
+				</SectionCard>
+			)}
+
 			{/* Company */}
 			{request.company && (
 				<div className="space-y-4">
@@ -104,10 +123,12 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 				</div>
 			)}
 
-			<AlertBanner
-				variant="info"
-				description={t("emailNotice", { email: request.fromEmail })}
-			/>
+			{request.company && (
+				<AlertBanner
+					variant="info"
+					description={t("emailNotice", { email: request.fromEmail })}
+				/>
+			)}
 
 			{/* Header */}
 			<RequestHeaderCard
@@ -292,9 +313,34 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			/>
 
 			{/* Messages */}
-			<SectionCard title={tMessages("title")} subtitle={t("messagesSubtitle")}>
-				<TripMessageThread mode="customer" token={token} disabled={isLocked} />
-			</SectionCard>
+			{request.company && (
+				<SectionCard
+					title={tMessages("title")}
+					subtitle={t("messagesSubtitle")}
+				>
+					<TripMessageThread
+						mode="customer"
+						token={token}
+						disabled={isLocked}
+					/>
+				</SectionCard>
+			)}
+
+			{/* Dantrip promo — only for public requests */}
+			{!request.company && (
+				<SectionCard
+					title={t("dantripPromoTitle")}
+					subtitle={t("dantripPromoDescription")}
+					contentClassName="pt-0"
+				>
+					<Link href="/register-company">
+						<Button className="w-full" size="lg">
+							<Zap className="h-4 w-4" />
+							{t("dantripPromoCta")}
+						</Button>
+					</Link>
+				</SectionCard>
+			)}
 		</div>
 	);
 }

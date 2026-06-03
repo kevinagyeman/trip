@@ -27,6 +27,48 @@ const routeSchema = z.object({
 });
 
 export const tripRequestRouter = createTRPCRouter({
+	// PUBLIC: Create trip request without a company (shareable link)
+	createPublic: publicProcedure
+		.input(
+			z.object({
+				email: z.string().email(),
+				routes: z.array(routeSchema).min(1),
+				language: z.enum(["en", "it"]),
+				firstName: z.string().min(1),
+				lastName: z.string().min(1),
+				phone: z.string().min(1),
+				numberOfAdults: z.number().int().min(1),
+				areThereChildren: z.boolean(),
+				numberOfChildren: z.number().int().optional(),
+				ageOfChildren: z.string().optional(),
+				numberOfChildSeats: z.number().int().optional(),
+				additionalInfo: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { routes, email, ...rest } = input;
+			const tripRequest = await ctx.db.tripRequest.create({
+				data: {
+					...rest,
+					customerEmail: email,
+					status: TripRequestStatus.PENDING,
+					privacyAcceptedAt: new Date(),
+					routes: {
+						create: routes.map((r, i) => ({
+							position: i,
+							type: r.type ?? "standard",
+							pickup: r.pickup,
+							destination: r.destination,
+							scheduledDate: r.departureDate ?? null,
+							scheduledTime: r.departureTime ?? null,
+							flightNumber: r.flightNumber ?? null,
+						})),
+					},
+				},
+			});
+			return { token: tripRequest.token };
+		}),
+
 	// PUBLIC: Create new trip request (anonymous)
 	create: publicProcedure
 		.input(

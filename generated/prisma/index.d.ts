@@ -9151,7 +9151,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     userId: string | null
-    companyId: string
+    companyId: string | null
     _count: TripRequestCountAggregateOutputType | null
     _avg: TripRequestAvgAggregateOutputType | null
     _sum: TripRequestSumAggregateOutputType | null
@@ -9202,7 +9202,7 @@ export namespace Prisma {
     userId?: boolean
     companyId?: boolean
     user?: boolean | TripRequest$userArgs<ExtArgs>
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     routes?: boolean | TripRequest$routesArgs<ExtArgs>
@@ -9244,7 +9244,7 @@ export namespace Prisma {
   export type TripRequestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "orderNumber" | "status" | "customerEmail" | "language" | "firstName" | "lastName" | "phone" | "numberOfAdults" | "areThereChildren" | "numberOfChildren" | "ageOfChildren" | "numberOfChildSeats" | "additionalInfo" | "internalNotes" | "privacyAcceptedAt" | "lastViewedAt" | "confirmedAt" | "departureDetailsRequestedAt" | "pickupInfoNotifiedAt" | "lastCustomerActivityAt" | "adminViewedAt" | "createdAt" | "updatedAt" | "userId" | "companyId", ExtArgs["result"]["tripRequest"]>
   export type TripRequestInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | TripRequest$userArgs<ExtArgs>
-    company?: boolean | CompanyDefaultArgs<ExtArgs>
+    company?: boolean | TripRequest$companyArgs<ExtArgs>
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     routes?: boolean | TripRequest$routesArgs<ExtArgs>
@@ -9255,7 +9255,7 @@ export namespace Prisma {
     name: "TripRequest"
     objects: {
       user: Prisma.$UserPayload<ExtArgs> | null
-      company: Prisma.$CompanyPayload<ExtArgs>
+      company: Prisma.$CompanyPayload<ExtArgs> | null
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
       messages: Prisma.$TripMessagePayload<ExtArgs>[]
       routes: Prisma.$RoutePayload<ExtArgs>[]
@@ -9287,7 +9287,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       userId: string | null
-      companyId: string
+      companyId: string | null
     }, ExtArgs["result"]["tripRequest"]>
     composites: {}
   }
@@ -9629,7 +9629,7 @@ export namespace Prisma {
   export interface Prisma__TripRequestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends TripRequest$userArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    company<T extends CompanyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CompanyDefaultArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    company<T extends TripRequest$companyArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$companyArgs<ExtArgs>>): Prisma__CompanyClient<$Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     quotations<T extends TripRequest$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messages<T extends TripRequest$messagesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     routes<T extends TripRequest$routesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$routesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10048,6 +10048,25 @@ export namespace Prisma {
      */
     include?: UserInclude<ExtArgs> | null
     where?: UserWhereInput
+  }
+
+  /**
+   * TripRequest.company
+   */
+  export type TripRequest$companyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Company
+     */
+    select?: CompanySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Company
+     */
+    omit?: CompanyOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CompanyInclude<ExtArgs> | null
+    where?: CompanyWhereInput
   }
 
   /**
@@ -14223,9 +14242,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringFilter<"TripRequest"> | string
+    companyId?: StringNullableFilter<"TripRequest"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
     routes?: RouteListRelationFilter
@@ -14258,7 +14277,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
-    companyId?: SortOrder
+    companyId?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
     company?: CompanyOrderByWithRelationInput
     quotations?: QuotationOrderByRelationAggregateInput
@@ -14297,9 +14316,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringFilter<"TripRequest"> | string
+    companyId?: StringNullableFilter<"TripRequest"> | string | null
     user?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    company?: XOR<CompanyScalarRelationFilter, CompanyWhereInput>
+    company?: XOR<CompanyNullableScalarRelationFilter, CompanyWhereInput> | null
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
     routes?: RouteListRelationFilter
@@ -14332,7 +14351,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     userId?: SortOrderInput | SortOrder
-    companyId?: SortOrder
+    companyId?: SortOrderInput | SortOrder
     _count?: TripRequestCountOrderByAggregateInput
     _avg?: TripRequestAvgOrderByAggregateInput
     _max?: TripRequestMaxOrderByAggregateInput
@@ -14370,7 +14389,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TripRequest"> | Date | string
     userId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
-    companyId?: StringWithAggregatesFilter<"TripRequest"> | string
+    companyId?: StringNullableWithAggregatesFilter<"TripRequest"> | string | null
   }
 
   export type RouteWhereInput = {
@@ -15250,7 +15269,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company: CompanyCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
@@ -15283,7 +15302,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId: string
+    companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
@@ -15315,7 +15334,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
@@ -15348,7 +15367,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
@@ -15381,7 +15400,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId: string
+    companyId?: string | null
   }
 
   export type TripRequestUpdateManyMutationInput = {
@@ -15438,7 +15457,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type RouteCreateInput = {
@@ -17205,10 +17224,12 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTripRequestsInput, UserUpdateWithoutTripRequestsInput>, UserUncheckedUpdateWithoutTripRequestsInput>
   }
 
-  export type CompanyUpdateOneRequiredWithoutTripRequestsNestedInput = {
+  export type CompanyUpdateOneWithoutTripRequestsNestedInput = {
     create?: XOR<CompanyCreateWithoutTripRequestsInput, CompanyUncheckedCreateWithoutTripRequestsInput>
     connectOrCreate?: CompanyCreateOrConnectWithoutTripRequestsInput
     upsert?: CompanyUpsertWithoutTripRequestsInput
+    disconnect?: CompanyWhereInput | boolean
+    delete?: CompanyWhereInput | boolean
     connect?: CompanyWhereUniqueInput
     update?: XOR<XOR<CompanyUpdateToOneWithWhereWithoutTripRequestsInput, CompanyUpdateWithoutTripRequestsInput>, CompanyUncheckedUpdateWithoutTripRequestsInput>
   }
@@ -17931,7 +17952,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"TripRequest"> | Date | string
     updatedAt?: DateTimeFilter<"TripRequest"> | Date | string
     userId?: StringNullableFilter<"TripRequest"> | string | null
-    companyId?: StringFilter<"TripRequest"> | string
+    companyId?: StringNullableFilter<"TripRequest"> | string | null
   }
 
   export type DriverUpsertWithWhereUniqueWithoutCompanyInput = {
@@ -18347,7 +18368,7 @@ export namespace Prisma {
     adminViewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    company: CompanyCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
@@ -18379,7 +18400,7 @@ export namespace Prisma {
     adminViewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    companyId: string
+    companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
@@ -18992,7 +19013,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company: CompanyCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
   }
@@ -19024,7 +19045,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId: string
+    companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
   }
@@ -19071,7 +19092,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
   }
@@ -19103,7 +19124,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
   }
@@ -19135,7 +19156,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company: CompanyCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
   }
@@ -19167,7 +19188,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId: string
+    companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
   }
@@ -19214,7 +19235,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
   }
@@ -19246,7 +19267,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
   }
@@ -19278,7 +19299,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user?: UserCreateNestedOneWithoutTripRequestsInput
-    company: CompanyCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
   }
@@ -19310,7 +19331,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userId?: string | null
-    companyId: string
+    companyId?: string | null
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
   }
@@ -19394,7 +19415,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneWithoutTripRequestsNestedInput
-    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
   }
@@ -19426,7 +19447,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: NullableStringFieldUpdateOperationsInput | string | null
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
   }
@@ -19738,7 +19759,7 @@ export namespace Prisma {
     adminViewedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    companyId: string
+    companyId?: string | null
   }
 
   export type QuotationCreateManyCreatedByInput = {
@@ -19844,7 +19865,7 @@ export namespace Prisma {
     adminViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    company?: CompanyUpdateOneRequiredWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
@@ -19876,7 +19897,7 @@ export namespace Prisma {
     adminViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
@@ -19908,7 +19929,7 @@ export namespace Prisma {
     adminViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    companyId?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuotationUpdateWithoutCreatedByInput = {

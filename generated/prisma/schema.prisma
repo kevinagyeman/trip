@@ -184,8 +184,8 @@ model TripRequest {
 
   userId     String?
   user       User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
-  companyId  String
-  company    Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId  String?
+  company    Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)
   quotations Quotation[]
   messages   TripMessage[]
   routes     Route[]

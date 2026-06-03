@@ -18,14 +18,18 @@ export async function Navigation() {
 	if (!session?.user) {
 		const headersList = await headers();
 		const pathname = headersList.get("x-pathname") ?? "";
-		const hideAuthButtons = /\/(book|request)\//.test(pathname);
+		const hideAuthButtons =
+			/\/(book|request)\//.test(pathname) || /\/book$/.test(pathname);
 
 		return (
 			<nav className="sticky top-0 z-50 border-b bg-background">
 				<div className="container mx-auto px-4 py-4">
 					<div className="flex items-center justify-between">
 						<div className="flex items-center gap-6">
-							<BrandLogo label={t("brand")} />
+							<BrandLogo
+								label={t("brand")}
+								href={hideAuthButtons ? pathname : "/"}
+							/>
 							{!hideAuthButtons && (
 								<div className="hidden md:flex items-center gap-2">
 									<Link href="/">

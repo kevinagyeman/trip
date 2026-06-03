@@ -244,7 +244,10 @@
 		"statusCancelled": "Annullato",
 		"call": "Chiama",
 		"pickupTimeNote": "Dopo la conferma del transfer, in base all'orario che hai indicato, calcoleremo l'orario di ritiro in base a traffico e distanza.",
-		"messagesSubtitle": "Usa questa chat per tutto ciò che non puoi comunicare tramite il modulo qui sopra."
+		"messagesSubtitle": "Usa questa chat per tutto ciò che non puoi comunicare tramite il modulo qui sopra.",
+		"dantripPromoTitle": "Generato con dantrip",
+		"dantripPromoDescription": "Gestisci transfer? Con dantrip puoi ricevere richieste come questa, inviare preventivi e confermare prenotazioni — completamente gratis.",
+		"dantripPromoCta": "Registra la tua azienda gratuitamente"
 	},
 	"messages": {
 		"title": "Messaggi",
@@ -521,5 +524,26 @@
 		"notifyAdminSuffix": "e Notifica l'Admin",
 		"toastEmailSent": "Email inviata al cliente",
 		"toastEmailSentToAdmin": "Email inviata all'admin"
+	},
+	"publicQuote": {
+		"title": "Richiedi un transfer",
+		"subtitle": "Compila i dettagli e condividi la richiesta con qualsiasi azienda di transfer.",
+		"shareTitle": "La tua richiesta è pronta!",
+		"shareSubtitle": "Condividila via WhatsApp, copia il testo per i gruppi Facebook o invia il link direttamente.",
+		"copyText": "Copia testo",
+		"copied": "Copiato!",
+		"shareWhatsapp": "Condividi su WhatsApp",
+		"copyLink": "Copia link",
+		"linkCopied": "Link copiato!",
+		"newRequest": "Nuova richiesta",
+		"shareIntro": "Ciao, vorrei richiedere un transfer. Ecco i dettagli:",
+		"shareName": "Nome: {name}",
+		"shareTextTemplate": "Richiesta transfer — {name}\n\n{routes}\nPasseggeri: {passengers}\n{additionalInfo}Dettagli completi: {url}\n\n— Generato con dantrip",
+		"routeLine": "Tratta {n}: {pickup} → {destination}",
+		"routeDate": "Data: {date}",
+		"routeFlight": "Volo: {flight}",
+		"adultsOnly": "{n} adulti",
+		"adultsAndChildren": "{adults} adulti, {children} bambini",
+		"additionalInfoLabel": "Note: {info}\n"
 	}
 }

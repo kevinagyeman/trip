@@ -24,22 +24,38 @@ import {
 } from "@/lib/schemas/trip-request";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Minus, PlaneLanding, PlaneTakeoff, Plus, X } from "lucide-react";
+import {
+	Check,
+	Copy,
+	Minus,
+	PlaneLanding,
+	PlaneTakeoff,
+	Plus,
+	X,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { RequiredLabel } from "../ui/required-label";
 
 export function CreateTripRequestForm({
 	companySlug,
 	isDemo = false,
+	isPublic = false,
 }: {
 	companySlug: string;
 	isDemo?: boolean;
+	isPublic?: boolean;
 }) {
 	const router = useRouter();
 	const t = useTranslations("tripRequest");
+	const tq = useTranslations("publicQuote");
+	const [shareData, setShareData] = useState<{
+		token: string;
+		values: CreateTripRequestFormValues;
+	} | null>(null);
+	const [textCopied, setTextCopied] = useState(false);
 
 	const {
 		register,
@@ -48,6 +64,7 @@ export function CreateTripRequestForm({
 		watch,
 		getValues,
 		setValue,
+		reset,
 		formState: { errors },
 	} = useForm<CreateTripRequestFormValues>({
 		resolver: zodResolver(createTripRequestSchema),
@@ -103,8 +120,55 @@ export function CreateTripRequestForm({
 		},
 	});
 
+	const createPublic = api.tripRequest.createPublic.useMutation({
+		onSuccess: (data) => {
+			setShareData({ token: data.token, values: getValues() });
+		},
+	});
+
+	const buildShareText = (
+		token: string,
+		values: CreateTripRequestFormValues,
+	) => {
+		const name = `${values.firstName} ${values.lastName}`;
+		const url = `${window.location.origin}/request/${token}`;
+		const routeLines = values.routes
+			.map((r, i) => {
+				const lines = [`Route ${i + 1}: ${r.pickup} → ${r.destination}`];
+				if (r.departureDate) lines.push(`Date: ${r.departureDate}`);
+				if (r.flightNumber) lines.push(`Flight: ${r.flightNumber}`);
+				return lines.join("\n");
+			})
+			.join("\n\n");
+		return `${tq("shareIntro")}\n\n${tq("shareName", { name })}\n\n${routeLines}\n\nView all details: ${url}\n\n— Generated with dantrip`;
+	};
+
 	const onSubmit = (values: CreateTripRequestFormValues) => {
 		if (isDemo) return;
+		if (isPublic) {
+			createPublic.mutate({
+				email: values.email,
+				routes: values.routes,
+				language: values.language,
+				firstName: values.firstName,
+				lastName: values.lastName,
+				phone: `${values.phoneCountryCode} ${values.phoneNumber}`,
+				numberOfAdults: values.numberOfAdults,
+				areThereChildren: values.areThereChildren,
+				numberOfChildren: values.areThereChildren
+					? values.numberOfChildren
+					: undefined,
+				ageOfChildren:
+					values.areThereChildren && values.childrenAges?.length
+						? values.childrenAges.map((c) => `${c.age} ${c.unit}`).join(", ")
+						: undefined,
+				numberOfChildSeats: values.areThereChildren
+					? values.numberOfChildSeats
+					: undefined,
+				additionalInfo: values.additionalInfo || undefined,
+			});
+			return;
+		}
 		createRequest.mutate({
 			companySlug,
 			email: values.email,
@@ -599,7 +663,95 @@ export function CreateTripRequestForm({
 				/>
 			</SectionCard>
 
-			{isDemo ? (
+			{isPublic && shareData ? (
+				<SectionCard
+					title={tq("shareTitle")}
+					subtitle={tq("shareSubtitle")}
+					contentClassName="space-y-3 pt-0"
+				>
+					<Button
+						type="button"
+						className="w-full"
+						onClick={async () => {
+							await navigator.clipboard.writeText(
+								buildShareText(shareData.token, shareData.values),
+							);
+							setTextCopied(true);
+							setTimeout(() => setTextCopied(false), 2000);
+						}}
+					>
+						{textCopied ? (
+							<>
+								<Check className="h-4 w-4" /> {tq("copied")}
+							</>
+						) : (
+							<>
+								<Copy className="h-4 w-4" /> {tq("copyText")}
+							</>
+						)}
+					</Button>
+					<div className="rounded-xl border bg-muted/40 p-4">
+						<pre className="whitespace-pre-wrap text-sm text-muted-foreground font-sans">
+							{buildShareText(shareData.token, shareData.values)}
+						</pre>
+					</div>
+					<Button
+						type="button"
+						variant="outline"
+						className="w-full"
+						onClick={() => {
+							setShareData(null);
+							reset();
+						}}
+					>
+						{tq("newRequest")}
+					</Button>
+				</SectionCard>
+			) : isPublic ? (
+				<SectionCard contentClassName="space-y-4 pt-0">
+					<Controller
+						name="privacyAccepted"
+						control={control}
+						render={({ field }) => (
+							<CustomCheckbox
+								id="privacyAccepted"
+								checked={field.value}
+								onCheckedChange={field.onChange}
+								label={
+									<span>
+										{t("privacyPolicyAccept")}{" "}
+										<a
+											href="https://www.iubenda.com/privacy-policy/61494361"
+											target="_blank"
+											rel="noopener noreferrer"
+											className="iubenda-nostyle no-brand iubenda-noiframe iubenda-embed underline"
+										>
+											{t("privacyPolicyLink")}
+										</a>
+										<span className="ml-1">
+											<RequiredLabel />
+										</span>
+									</span>
+								}
+								error={errors.privacyAccepted?.message}
+							/>
+						)}
+					/>
+					<LoadingButton
+						type="submit"
+						isLoading={createPublic.isPending}
+						className="w-full"
+						size="lg"
+					>
+						{tq("title")}
+					</LoadingButton>
+					{createPublic.error && (
+						<p className="text-sm text-destructive mt-2">
+							{createPublic.error.message}
+						</p>
+					)}
+				</SectionCard>
+			) : isDemo ? (
 				<SectionCard contentClassName="space-y-3 pt-0 text-center">
 					<p className="text-muted-foreground">{t("demoCtaDescription")}</p>
 					<Button

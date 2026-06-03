@@ -82,7 +82,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		if (!request) return;
 		const link = `${window.location.origin}/request/${request.token}`;
 		const orderNum = String(request.orderNumber).padStart(6, "0");
-		const company = request.company.name;
+		const company = request.company?.name ?? "dantrip";
 		const msg =
 			request.language === "it"
 				? `Siamo ${company} e la stiamo contattando riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta, può visualizzarla qui:\n${link}`
