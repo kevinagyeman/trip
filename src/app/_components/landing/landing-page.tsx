@@ -43,6 +43,11 @@ export async function LandingPage() {
 								{t("ctaDemo")}
 							</Button>
 						</Link>
+						<a href="#how-it-works">
+							<Button size="lg" variant="ghost" className="px-8 text-base">
+								{t("ctaHowItWorks")}
+							</Button>
+						</a>
 					</div>
 				</div>
 
@@ -143,6 +148,16 @@ export async function LandingPage() {
 									</li>
 								))}
 							</ul>
+							<div className="flex flex-wrap gap-3 mt-8">
+								<a href="#how-it-works">
+									<Button size="sm">{t("ctaHowItWorks")}</Button>
+								</a>
+								<Link href="/book/demo">
+									<Button size="sm" variant="outline">
+										{t("ctaDemo")}
+									</Button>
+								</Link>
+							</div>
 						</div>
 						<div className="overflow-hidden rounded-2xl border-2 shadow-xl">
 							<Image
@@ -210,6 +225,16 @@ export async function LandingPage() {
 									</li>
 								))}
 							</ul>
+							<div className="flex flex-wrap gap-3 mt-8">
+								<a href="#how-it-works">
+									<Button size="sm">{t("ctaHowItWorks")}</Button>
+								</a>
+								<Link href="/book/demo">
+									<Button size="sm" variant="outline">
+										{t("ctaDemo")}
+									</Button>
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -241,6 +266,16 @@ export async function LandingPage() {
 									</li>
 								))}
 							</ul>
+							<div className="flex flex-wrap gap-3 mt-8">
+								<a href="#how-it-works">
+									<Button size="sm">{t("ctaHowItWorks")}</Button>
+								</a>
+								<Link href="/book/demo">
+									<Button size="sm" variant="outline">
+										{t("ctaDemo")}
+									</Button>
+								</Link>
+							</div>
 						</div>
 						<div className="overflow-hidden rounded-2xl border-2 shadow-xl">
 							<Image
@@ -349,7 +384,7 @@ export async function LandingPage() {
 			</section>
 
 			{/* ── How it works ── */}
-			<section className="bg-muted/40 px-6 py-28">
+			<section id="how-it-works" className="bg-muted/40 px-6 py-28">
 				<div className="mx-auto max-w-4xl">
 					<div className="mb-16 text-center">
 						<h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">

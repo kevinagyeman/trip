@@ -5,7 +5,7 @@
 		"adminDashboard": "Pannello di controllo",
 		"adminStats": "Statistiche",
 		"signIn": "Accedi",
-		"register": "Registrati",
+		"register": "Inizia ora",
 		"settings": "Impostazioni",
 		"pricing": "Prezzi",
 		"home": "Home",
@@ -40,6 +40,7 @@
 		"ctaStart": "Inizia Ora",
 		"ctaSignIn": "Accedi",
 		"ctaDemo": "Visualizza la demo",
+		"ctaHowItWorks": "Come funziona",
 		"trustLabel": "La fiducia delle aziende di trasporto in tutta Europa",
 		"spotlight1Label": "Portale prenotazioni",
 		"spotlight1Title": "Un portale brandizzato che i tuoi clienti useranno davvero",
@@ -441,7 +442,7 @@
 		"reviewAndActivate": "Rivedi e Attiva"
 	},
 	"registerCompany": {
-		"title": "Registra la tua azienda",
+		"title": "Registra la tua azienda (è gratis!)",
 		"subtitle": "Crea il tuo account dantrip.com e inizia a gestire i viaggi",
 		"companyName": "Nome Azienda",
 		"companyNamePlaceholder": "La Mia Azienda di Trasporti",

@@ -5,7 +5,7 @@
 		"adminDashboard": "Dashboard",
 		"adminStats": "Stats",
 		"signIn": "Sign In",
-		"register": "Register",
+		"register": "Get Started",
 		"settings": "Settings",
 		"pricing": "Pricing",
 		"home": "Home",
@@ -40,6 +40,7 @@
 		"ctaStart": "Get Started",
 		"ctaSignIn": "Sign In",
 		"ctaDemo": "View demo",
+		"ctaHowItWorks": "How it works",
 		"trustLabel": "Trusted by transport companies across Europe",
 		"spotlight1Label": "Booking portal",
 		"spotlight1Title": "A branded portal your customers will actually use",
@@ -438,7 +439,7 @@
 		"reviewAndActivate": "Review & Activate"
 	},
 	"registerCompany": {
-		"title": "Register your company",
+		"title": "Register your company (it's free!)",
 		"subtitle": "Create your dantrip.com account and start managing trips",
 		"companyName": "Company Name",
 		"companyNamePlaceholder": "My Transport Company",
