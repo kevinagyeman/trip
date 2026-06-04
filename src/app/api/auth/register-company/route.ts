@@ -1,4 +1,5 @@
 import { GenericEmail } from "@/emails/generic-email";
+import { LOCALE_ENUM } from "@/lib/constants";
 import { registerCompanySchema } from "@/lib/schemas/auth";
 import { db } from "@/server/db";
 import { APP_URL, resolveSuperAdminEmails, sendEmail } from "@/server/email";
@@ -22,7 +23,8 @@ export async function POST(request: Request) {
 		const { companyName, slug, vat, email, password } = parsed.data;
 
 		const locale =
-			typeof body.locale === "string" && ["en", "it"].includes(body.locale)
+			typeof body.locale === "string" &&
+			(LOCALE_ENUM as readonly string[]).includes(body.locale)
 				? body.locale
 				: "en";
 

@@ -2,14 +2,10 @@
 
 import CustomSelect from "@/app/_components/ui/custom-select";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { LANGUAGES } from "@/lib/constants";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-
-const LANGUAGES = [
-	{ value: "en", label: "en" },
-	{ value: "it", label: "it" },
-];
 
 export function ChangeLanguageForm({
 	currentLanguage,

@@ -1,8 +1,5 @@
-import {
-	adminProcedure,
-	createTRPCRouter,
-	protectedProcedure,
-} from "@/server/api/trpc";
+import { LOCALE_ENUM } from "@/lib/constants";
+import { adminProcedure, createTRPCRouter } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
@@ -47,7 +44,7 @@ export const userRouter = createTRPCRouter({
 		}),
 
 	changeLanguage: adminProcedure
-		.input(z.object({ language: z.enum(["en", "it"]) }))
+		.input(z.object({ language: z.enum(LOCALE_ENUM) }))
 		.mutation(async ({ ctx, input }) => {
 			await ctx.db.user.update({
 				where: { id: ctx.session.user.id },

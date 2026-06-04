@@ -2,7 +2,7 @@
 
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
-import { LANGUAGES } from "@/lib/quick-fill";
+import { LANGUAGES } from "@/lib/constants";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -57,9 +57,7 @@ export function EstimateNoticeForm({ currentValue }: { currentValue: string }) {
 				type="button"
 				isLoading={update.isPending}
 				onClick={() => update.mutate({ notices })}
-			>
-				{t("save")}
-			</LoadingButton>
+			/>
 		</div>
 	);
 }

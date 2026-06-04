@@ -42,7 +42,7 @@ export function ChangePasswordForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="max-w-sm space-y-4">
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<CustomInput
 				labelText={t("currentPassword")}
 				inputType="password"

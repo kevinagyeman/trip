@@ -1,3 +1,5 @@
+import { LOCALE_ENUM } from "@/lib/constants";
+import type { TripEvent } from "@/lib/trip-events";
 import {
 	adminProcedure,
 	createTRPCRouter,
@@ -15,7 +17,6 @@ import {
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { type Prisma, TripRequestStatus } from "../../../../generated/prisma";
-import type { TripEvent, EventType, EventActor } from "@/lib/trip-events";
 
 const routeSchema = z.object({
 	pickup: z.string().min(1),
@@ -33,7 +34,7 @@ export const tripRequestRouter = createTRPCRouter({
 			z.object({
 				email: z.string().email(),
 				routes: z.array(routeSchema).min(1),
-				language: z.enum(["en", "it"]),
+				language: z.enum(LOCALE_ENUM),
 				firstName: z.string().min(1),
 				lastName: z.string().min(1),
 				phone: z.string().min(1),
@@ -76,7 +77,7 @@ export const tripRequestRouter = createTRPCRouter({
 				companySlug: z.string().min(1),
 				email: z.string().email(),
 				routes: z.array(routeSchema).min(1),
-				language: z.enum(["en", "it"]),
+				language: z.enum(LOCALE_ENUM),
 				firstName: z.string().min(1),
 				lastName: z.string().min(1),
 				phone: z.string().min(1),

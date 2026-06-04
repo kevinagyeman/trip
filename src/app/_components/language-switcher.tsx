@@ -8,20 +8,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { LANGUAGES } from "@/lib/constants";
 import { ChevronDown } from "lucide-react";
 import { useLocale } from "next-intl";
-
-const locales = [
-	{ value: "en", label: "en" },
-	{ value: "it", label: "it" },
-] as const;
 
 export function LanguageSwitcher() {
 	const locale = useLocale();
 	const router = useRouter();
 	const pathname = usePathname();
 
-	const current = locales.find((l) => l.value === locale);
+	const current = LANGUAGES.find((l) => l.value === locale);
 
 	return (
 		<DropdownMenu>
@@ -32,7 +28,7 @@ export function LanguageSwitcher() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
-				{locales.map((l) => (
+				{LANGUAGES.map((l) => (
 					<DropdownMenuItem
 						key={l.value}
 						onClick={() => router.replace(pathname, { locale: l.value })}

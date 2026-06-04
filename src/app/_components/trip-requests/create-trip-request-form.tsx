@@ -17,7 +17,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { LANGUAGES } from "@/lib/quick-fill";
+import { LANGUAGES } from "@/lib/constants";
 import {
 	createTripRequestSchema,
 	type CreateTripRequestFormValues,

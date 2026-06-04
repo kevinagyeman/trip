@@ -39,7 +39,7 @@ export function ChangeEmailForm({ currentEmail }: { currentEmail: string }) {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="max-w-sm space-y-4">
+		<form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 			<p className="text-sm text-muted-foreground">
 				{t("currentEmail")}:{" "}
 				<span className="font-medium text-foreground">{currentEmail}</span>

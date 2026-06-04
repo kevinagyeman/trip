@@ -1,7 +1,7 @@
 "use client";
 
 import { SectionCard } from "@/app/_components/ui/section-card";
-import { LANGUAGE_LABELS } from "@/lib/quick-fill";
+import { LANGUAGE_LABELS } from "@/lib/constants";
 import { Globe, Mail, MessageCircle, Phone, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 
