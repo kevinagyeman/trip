@@ -525,6 +525,11 @@
 		"toastEmailSent": "Email inviata al cliente",
 		"toastEmailSentToAdmin": "Email inviata all'admin"
 	},
+	"bookingDemo": {
+		"previewBanner": "Ecco come apparirà la tua pagina di prenotazione ai tuoi clienti.",
+		"coverLabel": "La tua copertina",
+		"companyNamePlaceholder": "Il nome della tua azienda"
+	},
 	"publicQuote": {
 		"title": "Richiedi un transfer",
 		"subtitle": "Compila i dettagli e condividi la richiesta con qualsiasi azienda di transfer.",

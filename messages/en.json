@@ -522,6 +522,11 @@
 		"toastEmailSent": "Email sent to customer",
 		"toastEmailSentToAdmin": "Email sent to admin"
 	},
+	"bookingDemo": {
+		"previewBanner": "This is a preview of how your booking page will look to your customers.",
+		"coverLabel": "Your cover photo",
+		"companyNamePlaceholder": "Your company name"
+	},
 	"publicQuote": {
 		"title": "Request a transfer",
 		"subtitle": "Fill in the details and share the request with any transfer company.",

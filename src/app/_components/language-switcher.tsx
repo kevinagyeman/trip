@@ -12,8 +12,8 @@ import { ChevronDown } from "lucide-react";
 import { useLocale } from "next-intl";
 
 const locales = [
-	{ code: "en", label: "🇬🇧 EN" },
-	{ code: "it", label: "🇮🇹 IT" },
+	{ value: "en", label: "en" },
+	{ value: "it", label: "it" },
 ] as const;
 
 export function LanguageSwitcher() {
@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
 	const router = useRouter();
 	const pathname = usePathname();
 
-	const current = locales.find((l) => l.code === locale);
+	const current = locales.find((l) => l.value === locale);
 
 	return (
 		<DropdownMenu>
@@ -34,8 +34,8 @@ export function LanguageSwitcher() {
 			<DropdownMenuContent align="end">
 				{locales.map((l) => (
 					<DropdownMenuItem
-						key={l.code}
-						onClick={() => router.replace(pathname, { locale: l.code })}
+						key={l.value}
+						onClick={() => router.replace(pathname, { locale: l.value })}
 						className="font-light cursor-pointer"
 					>
 						{l.label}

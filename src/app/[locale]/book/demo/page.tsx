@@ -1,6 +1,8 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
 
 type SearchParams = Promise<{
@@ -8,6 +10,8 @@ type SearchParams = Promise<{
 	logo?: string;
 	coverphoto?: string;
 }>;
+
+type Params = Promise<{ locale: string }>;
 
 export async function generateMetadata({
 	searchParams,
@@ -35,14 +39,22 @@ export async function generateMetadata({
 }
 
 export default async function DemoBookingPage({
+	params,
 	searchParams,
 }: {
+	params: Params;
 	searchParams: SearchParams;
 }) {
+	const { locale } = await params;
+	setRequestLocale(locale);
+
 	const { company, logo, coverphoto } = await searchParams;
+	const t = await getTranslations("bookingDemo");
 
 	return (
 		<div className="mx-auto max-w-2xl space-y-6 p-4">
+			<AlertBanner variant="info" description={t("previewBanner")} />
+
 			<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9]">
 				<Image
 					src={coverphoto ?? "/cover-demo.png"}
@@ -52,7 +64,16 @@ export default async function DemoBookingPage({
 					className="object-cover"
 					priority
 				/>
+				{/* Overlay */}
+				{!coverphoto && (
+					<div className="absolute inset-0 flex items-center justify-center bg-gray-600/70">
+						<span className="text-white text-lg font-semibold drop-shadow">
+							{t("coverLabel")}
+						</span>
+					</div>
+				)}
 			</div>
+
 			<SectionCard contentClassName="space-y-4">
 				<div className="mx-auto w-fit rounded-xl bg-white p-4">
 					<Image
@@ -64,8 +85,8 @@ export default async function DemoBookingPage({
 						className="h-20 w-auto object-contain"
 					/>
 				</div>
-				<h1 className="text-center text-lg font-bold sm:text-3xl ">
-					{company ?? "Transfer Booking Demo"}
+				<h1 className="text-center text-lg font-bold sm:text-3xl">
+					{company ?? t("companyNamePlaceholder")}
 				</h1>
 			</SectionCard>
 
