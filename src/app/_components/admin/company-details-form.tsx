@@ -134,6 +134,7 @@ export function CompanyDetailsForm({
 				inputType="url"
 				placeholder="https://yourcompany.com/cover.jpg"
 				inputProps={{ ...register("coverPhotoUrl") }}
+				hint={t("coverPhotoUrlHint")}
 			/>
 			{watch("coverPhotoUrl") && (
 				<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9] border">

@@ -2,6 +2,7 @@
 
 import { AppDialog } from "@/app/_components/ui/app-dialog";
 import CustomInput from "@/app/_components/ui/custom-input";
+import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
@@ -131,17 +132,23 @@ export function DriversManager() {
 							<p className="text-muted-foreground text-sm">{d.email}</p>
 						</div>
 						<div className="mt-2 flex gap-1">
-							<Button size="icon" variant="ghost" onClick={() => openEdit(d)}>
-								<Pencil className="h-4 w-4" />
-							</Button>
 							<Button
-								size="icon"
-								variant="ghost"
-								className="text-destructive hover:text-destructive"
+								size="icon-sm"
+								variant="outline"
+								onClick={() => openEdit(d)}
+							>
+								<Pencil />
+							</Button>
+							<LoadingButton
+								size="icon-sm"
+								variant="error"
+								isLoading={
+									deleteDriver.isPending && deleteDriver.variables?.id === d.id
+								}
 								onClick={() => deleteDriver.mutate({ id: d.id })}
 							>
-								<Trash2 className="h-4 w-4" />
-							</Button>
+								<Trash2 />
+							</LoadingButton>
 						</div>
 					</div>
 				))}
