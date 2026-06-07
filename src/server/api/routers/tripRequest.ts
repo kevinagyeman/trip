@@ -676,6 +676,15 @@ export const tripRequestRouter = createTRPCRouter({
 	markAsViewedByAdmin: adminProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id: input.id },
+				select: { companyId: true },
+			});
+			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 			await ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { adminViewedAt: new Date() },
@@ -753,6 +762,15 @@ export const tripRequestRouter = createTRPCRouter({
 	updateInternalNotes: adminProcedure
 		.input(z.object({ id: z.string(), internalNotes: z.string() }))
 		.mutation(async ({ ctx, input }) => {
+			const tripRequest = await ctx.db.tripRequest.findUnique({
+				where: { id: input.id },
+				select: { companyId: true },
+			});
+			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
+			const { companyId } = ctx.session.user;
+			if (companyId && tripRequest.companyId !== companyId) {
+				throw new TRPCError({ code: "FORBIDDEN" });
+			}
 			return ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { internalNotes: input.internalNotes || null },
