@@ -1,10 +1,9 @@
 "use client";
 
 import { SectionCard } from "@/app/_components/ui/section-card";
-import type { TripEvent } from "@/lib/trip-events";
-import { format } from "date-fns";
+import type { EventType, TripEvent } from "@/lib/trip-events";
+import { formatDateTime } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import type { EventType } from "@/lib/trip-events";
 
 interface Props {
 	events: TripEvent[];
@@ -55,7 +54,7 @@ export function EventsTimeline({ events, adminViewedAt }: Props) {
 									<span className="font-medium">{labelMap[event.type]}</span>
 								</p>
 								<span className="shrink-0 text-xs text-muted-foreground">
-									{format(new Date(event.at), "d MMM HH:mm")}
+									{formatDateTime(event.at)}
 								</span>
 							</div>
 						</div>

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
-import { format } from "date-fns";
+import { formatDate } from "@/lib/utils";
 import { ArrowRight, Loader2, MoveRight, Tag, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
@@ -237,10 +237,7 @@ export function AllTripRequests() {
 																	·
 																</span>
 																<span className="shrink-0 tabular-nums">
-																	{format(
-																		new Date(`${route.scheduledDate}T12:00:00`),
-																		"d MMM",
-																	)}
+																	{formatDate(route.scheduledDate)}
 																</span>
 																{diff !== null && diff >= 0 && diff <= 14 && (
 																	<span

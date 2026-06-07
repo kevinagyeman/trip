@@ -9,8 +9,8 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "@/i18n/navigation";
+import { formatDateTime } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { formatDistanceToNow } from "date-fns";
 import { Bell } from "lucide-react";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -94,9 +94,7 @@ export function NotificationBell() {
 									{n.customerName} · #{n.orderNumber}
 								</span>
 								<span className="text-xs text-muted-foreground">
-									{formatDistanceToNow(new Date(n.createdAt), {
-										addSuffix: true,
-									})}
+									{formatDateTime(n.createdAt)}
 								</span>
 							</DropdownMenuItem>
 						))

@@ -4,10 +4,9 @@ import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { format } from "date-fns";
-import { enUS, it as itLocale } from "date-fns/locale";
+import { formatDateTime } from "@/lib/utils";
 import { ArrowRight, MessagesSquare } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { MessageSenderType } from "../../../../generated/prisma";
 
@@ -29,8 +28,6 @@ type Props =
 
 export function TripMessageThread(props: Props) {
 	const t = useTranslations("messages");
-	const locale = useLocale();
-	const dateFnsLocale = locale === "it" ? itLocale : enUS;
 	const utils = api.useUtils();
 	const [body, setBody] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -128,9 +125,7 @@ export function TripMessageThread(props: Props) {
 									<p className="whitespace-pre-wrap">{msg.body}</p>
 								</div>
 								<p className="mt-1 text-xs text-muted-foreground">
-									{format(new Date(msg.createdAt), "MMM d, HH:mm", {
-										locale: dateFnsLocale,
-									})}
+									{formatDateTime(msg.createdAt)}
 								</p>
 							</div>
 						);

@@ -3,7 +3,7 @@
 import { CopyFlightButton } from "@/app/_components/ui/copy-flight-button";
 import { DepartureCalendarButton } from "@/app/_components/ui/departure-calendar-button";
 import type { TripCalendarInfo } from "@/lib/calendar";
-import { format } from "date-fns";
+import { formatDate } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
 interface Props {
@@ -54,9 +54,7 @@ export function RouteDepartureSection({
 				<div className="flex items-center gap-2 flex-wrap">
 					<span className="text-muted-foreground">{depLabel} </span>
 
-					{scheduledDate && (
-						<span>{format(new Date(scheduledDate), "d MMM yyyy")}</span>
-					)}
+					{scheduledDate && <span>{formatDate(scheduledDate)}</span>}
 
 					{scheduledTime && <span>{scheduledTime}</span>}
 

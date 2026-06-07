@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { formatDate } from "@/lib/utils";
 import type { useTranslations } from "next-intl";
 
 function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
@@ -37,7 +37,7 @@ export function PickupReadOnlyView({
 					label={t("pickupInfoBeThereAt")}
 					value={
 						<>
-							{beThereAtDate && format(new Date(beThereAtDate), "d MMM yyyy")}
+							{beThereAtDate && formatDate(beThereAtDate)}
 							{beThereAtDate && beThereAtTime && " - "}
 							{beThereAtTime}
 						</>
