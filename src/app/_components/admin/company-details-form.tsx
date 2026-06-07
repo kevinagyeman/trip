@@ -121,7 +121,7 @@ export function CompanyDetailsForm({
 				placeholder={t("countryPlaceholder")}
 				value={watch("country")}
 				onValueChange={(v) => setValue("country", v)}
-				options={COUNTRIES.map((c) => ({ value: c, label: c }))}
+				options={COUNTRIES.map((c) => ({ value: c.code, label: c.name }))}
 			/>
 			<CustomInput
 				labelText={t("website")}
