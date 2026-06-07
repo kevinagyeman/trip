@@ -43,6 +43,7 @@ export default async function AdminSettingsPage({
 						estimateNotice: true,
 						name: true,
 						vat: true,
+						phone: true,
 						address: true,
 						country: true,
 						website: true,

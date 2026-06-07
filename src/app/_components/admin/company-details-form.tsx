@@ -3,6 +3,7 @@
 import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { COUNTRIES } from "@/lib/countries";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
@@ -13,6 +14,8 @@ import { useForm } from "react-hook-form";
 type CompanyDetailsValues = {
 	name: string;
 	vat: string;
+	phoneCountryCode: string;
+	phoneNumber: string;
 	address: string;
 	country: string;
 	website: string;
@@ -27,6 +30,7 @@ export function CompanyDetailsForm({
 	initialValues: {
 		name: string;
 		vat?: string | null;
+		phone?: string | null;
 		address?: string | null;
 		country?: string | null;
 		website?: string | null;
@@ -43,6 +47,9 @@ export function CompanyDetailsForm({
 			defaultValues: {
 				name: initialValues.name,
 				vat: initialValues.vat ?? "",
+				phoneCountryCode:
+					initialValues.phone?.match(/^(\+\d+)\s/)?.[1] ?? "+39",
+				phoneNumber: initialValues.phone?.match(/^(\+\d+)\s(.+)$/)?.[2] ?? "",
 				address: initialValues.address ?? "",
 				country: initialValues.country ?? "",
 				website: initialValues.website ?? "",
@@ -56,6 +63,8 @@ export function CompanyDetailsForm({
 		reset({
 			name: initialValues.name,
 			vat: initialValues.vat ?? "",
+			phoneCountryCode: initialValues.phone?.match(/^(\+\d+)\s/)?.[1] ?? "+39",
+			phoneNumber: initialValues.phone?.match(/^(\+\d+)\s(.+)$/)?.[2] ?? "",
 			address: initialValues.address ?? "",
 			country: initialValues.country ?? "",
 			website: initialValues.website ?? "",
@@ -72,7 +81,9 @@ export function CompanyDetailsForm({
 
 	const onSubmit = (values: CompanyDetailsValues) => {
 		setSuccess(false);
-		updateMyCompany.mutate(values);
+		const { phoneCountryCode, phoneNumber, ...rest } = values;
+		const phone = phoneNumber ? `${phoneCountryCode} ${phoneNumber}` : "";
+		updateMyCompany.mutate({ ...rest, phone });
 	};
 
 	return (
@@ -92,6 +103,13 @@ export function CompanyDetailsForm({
 					readOnly: true,
 					disabled: true,
 				}}
+			/>
+			<PhoneInput
+				labelText={t("phone")}
+				countryCode={watch("phoneCountryCode")}
+				onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
+				phoneNumber={watch("phoneNumber")}
+				onPhoneNumberChange={(v) => setValue("phoneNumber", v)}
 			/>
 			<CustomInput
 				labelText={t("address")}
