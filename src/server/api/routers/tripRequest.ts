@@ -14,6 +14,8 @@ import {
 	sendRequestReceivedToCustomer,
 	sendTripConfirmedToCustomer,
 } from "@/server/emails/trip-emails";
+import { isEmailEnabled } from "@/server/email-preferences";
+import { createNotificationsForAdmins } from "@/server/notifications";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { type Prisma, TripRequestStatus } from "../../../../generated/prisma";
@@ -124,14 +126,20 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 
+			const [adminEmailEnabled] = await Promise.all([
+				isEmailEnabled(tripRequest.companyId, "newTripRequest"),
+			]);
+
 			await Promise.all([
-				sendNewTripRequestToAdmins({
-					id: tripRequest.id,
-					companyId: tripRequest.companyId,
-					firstName: tripRequest.firstName,
-					lastName: tripRequest.lastName,
-					orderNumber: tripRequest.orderNumber,
-				}),
+				adminEmailEnabled
+					? sendNewTripRequestToAdmins({
+							id: tripRequest.id,
+							companyId: tripRequest.companyId,
+							firstName: tripRequest.firstName,
+							lastName: tripRequest.lastName,
+							orderNumber: tripRequest.orderNumber,
+						})
+					: Promise.resolve(),
 				sendRequestReceivedToCustomer({
 					customerEmail: email,
 					firstName: tripRequest.firstName,
@@ -721,12 +729,23 @@ export const tripRequestRouter = createTRPCRouter({
 				}),
 			]);
 
-			void sendDepartureDetailsUpdatedToAdmins({
-				id: tripRequest.id,
-				companyId: tripRequest.companyId,
+			void (async () => {
+				if (await isEmailEnabled(tripRequest.companyId, "tripDetailsUpdated")) {
+					await sendDepartureDetailsUpdatedToAdmins({
+						id: tripRequest.id,
+						companyId: tripRequest.companyId,
+						orderNumber: tripRequest.orderNumber,
+						firstName: tripRequest.firstName,
+						lastName: tripRequest.lastName,
+					});
+				}
+			})();
+
+			void createNotificationsForAdmins(tripRequest.companyId, {
+				type: "TRIP_DETAILS_UPDATED",
+				tripRequestId: tripRequest.id,
 				orderNumber: tripRequest.orderNumber,
-				firstName: tripRequest.firstName,
-				lastName: tripRequest.lastName,
+				customerName: `${tripRequest.firstName} ${tripRequest.lastName}`,
 			});
 		}),
 

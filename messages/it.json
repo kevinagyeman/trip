@@ -422,7 +422,19 @@
 		"logoUrl": "URL Logo",
 		"coverPhotoUrl": "URL Foto di Copertina",
 		"coverPhotoUrlHint": "Dimensione consigliata: 1200x675px (rapporto 16:9)",
-		"brandColor": "Colore Brand"
+		"brandColor": "Colore Brand",
+		"emailPreferencesTitle": "Preferenze Email",
+		"emailPreferencesDesc": "Scegli quali eventi attivano una notifica email agli admin.",
+		"emailPrefNewTripRequest": "Nuova richiesta di viaggio",
+		"emailPrefNewTripRequestDesc": "Quando un cliente invia una nuova richiesta di viaggio",
+		"emailPrefQuotationAccepted": "Preventivo accettato",
+		"emailPrefQuotationAcceptedDesc": "Quando un cliente accetta un preventivo",
+		"emailPrefQuotationRejected": "Preventivo rifiutato",
+		"emailPrefQuotationRejectedDesc": "Quando un cliente rifiuta un preventivo",
+		"emailPrefCustomerMessage": "Messaggio cliente",
+		"emailPrefCustomerMessageDesc": "Quando un cliente invia un messaggio",
+		"emailPrefTripDetailsUpdated": "Dettagli viaggio aggiornati",
+		"emailPrefTripDetailsUpdatedDesc": "Quando un cliente aggiorna la data di partenza, l'orario o il numero di volo"
 	},
 	"superAdmin": {
 		"notFound": "Not found",

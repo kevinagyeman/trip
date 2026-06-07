@@ -7,6 +7,8 @@ import {
 	sendAdminMessageToCustomer,
 	sendCustomerMessageToAdmins,
 } from "@/server/emails/trip-emails";
+import { isEmailEnabled } from "@/server/email-preferences";
+import { createNotificationsForAdmins } from "@/server/notifications";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { MessageSenderType } from "../../../../generated/prisma";
@@ -66,12 +68,23 @@ export const tripMessageRouter = createTRPCRouter({
 				},
 			});
 
-			void sendCustomerMessageToAdmins({
-				id: request.id,
-				companyId: request.companyId,
-				firstName: request.firstName,
-				lastName: request.lastName,
+			void (async () => {
+				if (await isEmailEnabled(request.companyId, "customerMessage")) {
+					await sendCustomerMessageToAdmins({
+						id: request.id,
+						companyId: request.companyId,
+						firstName: request.firstName,
+						lastName: request.lastName,
+						orderNumber: request.orderNumber,
+					});
+				}
+			})();
+
+			void createNotificationsForAdmins(request.companyId, {
+				type: "NEW_MESSAGE",
+				tripRequestId: request.id,
 				orderNumber: request.orderNumber,
+				customerName: `${request.firstName} ${request.lastName}`,
 			});
 
 			return message;

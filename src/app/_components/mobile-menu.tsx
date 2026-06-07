@@ -1,5 +1,6 @@
 "use client";
 
+import { LanguageSwitcher } from "@/app/_components/language-switcher";
 import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -123,6 +124,7 @@ export function MobileMenu({ userName, role }: MobileMenuProps) {
 								</Button>
 							</Link>
 						)}
+						{role === "ADMIN" && <LanguageSwitcher />}
 						<ThemeToggle />
 						<SignOutButton />
 					</div>

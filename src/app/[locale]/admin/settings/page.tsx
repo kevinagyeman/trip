@@ -4,6 +4,7 @@ import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form
 import { ChangePasswordForm } from "@/app/_components/admin/change-password-form";
 import { CompanyDetailsForm } from "@/app/_components/admin/company-details-form";
 import { DriversManager } from "@/app/_components/admin/drivers-manager";
+import { EmailPreferencesForm } from "@/app/_components/admin/email-preferences-form";
 import { EstimateNoticeForm } from "@/app/_components/admin/estimate-notice-form";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { env } from "@/env";
@@ -85,6 +86,11 @@ export default async function AdminSettingsPage({
 							<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
 						</SectionCard>
 					</div>
+				)}
+				{session.user.role !== "SUPER_ADMIN" && (
+					<SectionCard title={t("emailPreferencesTitle")}>
+						<EmailPreferencesForm />
+					</SectionCard>
 				)}
 				<SectionCard title={t("changeEmailTitle")} subtitle={t("emailNotice")}>
 					<ChangeEmailForm currentEmail={session.user.email ?? ""} />

@@ -68,6 +68,11 @@ export type TripMessage = $Result.DefaultSelection<Prisma.$TripMessagePayload>
  * 
  */
 export type Quotation = $Result.DefaultSelection<Prisma.$QuotationPayload>
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = $Result.DefaultSelection<Prisma.$NotificationPayload>
 
 /**
  * Enums
@@ -120,6 +125,16 @@ export const RouteType: {
 
 export type RouteType = (typeof RouteType)[keyof typeof RouteType]
 
+
+export const NotificationType: {
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  TRIP_DETAILS_UPDATED: 'TRIP_DETAILS_UPDATED',
+  QUOTATION_ACCEPTED: 'QUOTATION_ACCEPTED',
+  QUOTATION_REJECTED: 'QUOTATION_REJECTED'
+};
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
 }
 
 export type UserRole = $Enums.UserRole
@@ -141,6 +156,10 @@ export const MessageSenderType: typeof $Enums.MessageSenderType
 export type RouteType = $Enums.RouteType
 
 export const RouteType: typeof $Enums.RouteType
+
+export type NotificationType = $Enums.NotificationType
+
+export const NotificationType: typeof $Enums.NotificationType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -369,6 +388,16 @@ export class PrismaClient<
     * ```
     */
   get quotation(): Prisma.QuotationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.notification`: Exposes CRUD operations for the **Notification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Notifications
+    * const notifications = await prisma.notification.findMany()
+    * ```
+    */
+  get notification(): Prisma.NotificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -820,7 +849,8 @@ export namespace Prisma {
     TripRequest: 'TripRequest',
     Route: 'Route',
     TripMessage: 'TripMessage',
-    Quotation: 'Quotation'
+    Quotation: 'Quotation',
+    Notification: 'Notification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -839,7 +869,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "company" | "driver" | "account" | "session" | "user" | "verificationToken" | "passwordResetToken" | "tripRequest" | "route" | "tripMessage" | "quotation"
+      modelProps: "company" | "driver" | "account" | "session" | "user" | "verificationToken" | "passwordResetToken" | "tripRequest" | "route" | "tripMessage" | "quotation" | "notification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1569,6 +1599,72 @@ export namespace Prisma {
           }
         }
       }
+      Notification: {
+        payload: Prisma.$NotificationPayload<ExtArgs>
+        fields: Prisma.NotificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findFirst: {
+            args: Prisma.NotificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          findMany: {
+            args: Prisma.NotificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+          }
+          create: {
+            args: Prisma.NotificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          createMany: {
+            args: Prisma.NotificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.NotificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          update: {
+            args: Prisma.NotificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.NotificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NotificationPayload>
+          }
+          aggregate: {
+            args: Prisma.NotificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNotification>
+          }
+          groupBy: {
+            args: Prisma.NotificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NotificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NotificationCountArgs<ExtArgs>
+            result: $Utils.Optional<NotificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1676,6 +1772,7 @@ export namespace Prisma {
     route?: RouteOmit
     tripMessage?: TripMessageOmit
     quotation?: QuotationOmit
+    notification?: NotificationOmit
   }
 
   /* Types for Logging */
@@ -1809,6 +1906,7 @@ export namespace Prisma {
     sessions: number
     tripRequests: number
     quotations: number
+    notifications: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1816,6 +1914,7 @@ export namespace Prisma {
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     tripRequests?: boolean | UserCountOutputTypeCountTripRequestsArgs
     quotations?: boolean | UserCountOutputTypeCountQuotationsArgs
+    notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1857,6 +1956,13 @@ export namespace Prisma {
     where?: QuotationWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+  }
+
 
   /**
    * Count Type TripRequestCountOutputType
@@ -1866,12 +1972,14 @@ export namespace Prisma {
     quotations: number
     messages: number
     routes: number
+    notifications: number
   }
 
   export type TripRequestCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     quotations?: boolean | TripRequestCountOutputTypeCountQuotationsArgs
     messages?: boolean | TripRequestCountOutputTypeCountMessagesArgs
     routes?: boolean | TripRequestCountOutputTypeCountRoutesArgs
+    notifications?: boolean | TripRequestCountOutputTypeCountNotificationsArgs
   }
 
   // Custom InputTypes
@@ -1904,6 +2012,13 @@ export namespace Prisma {
    */
   export type TripRequestCountOutputTypeCountRoutesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RouteWhereInput
+  }
+
+  /**
+   * TripRequestCountOutputType without action
+   */
+  export type TripRequestCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
   }
 
 
@@ -1968,6 +2083,7 @@ export namespace Prisma {
     estimateNotice: number
     brandColor: number
     coverPhotoUrl: number
+    emailPreferences: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2021,6 +2137,7 @@ export namespace Prisma {
     estimateNotice?: true
     brandColor?: true
     coverPhotoUrl?: true
+    emailPreferences?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2111,6 +2228,7 @@ export namespace Prisma {
     estimateNotice: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
+    emailPreferences: JsonValue | null
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -2145,6 +2263,7 @@ export namespace Prisma {
     estimateNotice?: boolean
     brandColor?: boolean
     coverPhotoUrl?: boolean
+    emailPreferences?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -2168,11 +2287,12 @@ export namespace Prisma {
     estimateNotice?: boolean
     brandColor?: boolean
     coverPhotoUrl?: boolean
+    emailPreferences?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "brandColor" | "coverPhotoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "estimateNotice" | "brandColor" | "coverPhotoUrl" | "emailPreferences" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -2200,6 +2320,7 @@ export namespace Prisma {
       estimateNotice: string | null
       brandColor: string | null
       coverPhotoUrl: string | null
+      emailPreferences: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2586,6 +2707,7 @@ export namespace Prisma {
     readonly estimateNotice: FieldRef<"Company", 'String'>
     readonly brandColor: FieldRef<"Company", 'String'>
     readonly coverPhotoUrl: FieldRef<"Company", 'String'>
+    readonly emailPreferences: FieldRef<"Company", 'Json'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -6165,6 +6287,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     tripRequests?: boolean | User$tripRequestsArgs<ExtArgs>
     quotations?: boolean | User$quotationsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -6190,6 +6313,7 @@ export namespace Prisma {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     tripRequests?: boolean | User$tripRequestsArgs<ExtArgs>
     quotations?: boolean | User$quotationsArgs<ExtArgs>
+    notifications?: boolean | User$notificationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6201,6 +6325,7 @@ export namespace Prisma {
       sessions: Prisma.$SessionPayload<ExtArgs>[]
       tripRequests: Prisma.$TripRequestPayload<ExtArgs>[]
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6558,6 +6683,7 @@ export namespace Prisma {
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     tripRequests<T extends User$tripRequestsArgs<ExtArgs> = {}>(args?: Subset<T, User$tripRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     quotations<T extends User$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, User$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7052,6 +7178,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QuotationScalarFieldEnum | QuotationScalarFieldEnum[]
+  }
+
+  /**
+   * User.notifications
+   */
+  export type User$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -9206,6 +9356,7 @@ export namespace Prisma {
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     routes?: boolean | TripRequest$routesArgs<ExtArgs>
+    notifications?: boolean | TripRequest$notificationsArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["tripRequest"]>
 
@@ -9248,6 +9399,7 @@ export namespace Prisma {
     quotations?: boolean | TripRequest$quotationsArgs<ExtArgs>
     messages?: boolean | TripRequest$messagesArgs<ExtArgs>
     routes?: boolean | TripRequest$routesArgs<ExtArgs>
+    notifications?: boolean | TripRequest$notificationsArgs<ExtArgs>
     _count?: boolean | TripRequestCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -9259,6 +9411,7 @@ export namespace Prisma {
       quotations: Prisma.$QuotationPayload<ExtArgs>[]
       messages: Prisma.$TripMessagePayload<ExtArgs>[]
       routes: Prisma.$RoutePayload<ExtArgs>[]
+      notifications: Prisma.$NotificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -9633,6 +9786,7 @@ export namespace Prisma {
     quotations<T extends TripRequest$quotationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     messages<T extends TripRequest$messagesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TripMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     routes<T extends TripRequest$routesArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$routesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoutePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    notifications<T extends TripRequest$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, TripRequest$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10139,6 +10293,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RouteScalarFieldEnum | RouteScalarFieldEnum[]
+  }
+
+  /**
+   * TripRequest.notifications
+   */
+  export type TripRequest$notificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    cursor?: NotificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
   }
 
   /**
@@ -13251,6 +13429,1025 @@ export namespace Prisma {
 
 
   /**
+   * Model Notification
+   */
+
+  export type AggregateNotification = {
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  export type NotificationAvgAggregateOutputType = {
+    orderNumber: number | null
+  }
+
+  export type NotificationSumAggregateOutputType = {
+    orderNumber: number | null
+  }
+
+  export type NotificationMinAggregateOutputType = {
+    id: string | null
+    type: $Enums.NotificationType | null
+    orderNumber: number | null
+    customerName: string | null
+    read: boolean | null
+    createdAt: Date | null
+    userId: string | null
+    tripRequestId: string | null
+  }
+
+  export type NotificationMaxAggregateOutputType = {
+    id: string | null
+    type: $Enums.NotificationType | null
+    orderNumber: number | null
+    customerName: string | null
+    read: boolean | null
+    createdAt: Date | null
+    userId: string | null
+    tripRequestId: string | null
+  }
+
+  export type NotificationCountAggregateOutputType = {
+    id: number
+    type: number
+    orderNumber: number
+    customerName: number
+    read: number
+    createdAt: number
+    userId: number
+    tripRequestId: number
+    _all: number
+  }
+
+
+  export type NotificationAvgAggregateInputType = {
+    orderNumber?: true
+  }
+
+  export type NotificationSumAggregateInputType = {
+    orderNumber?: true
+  }
+
+  export type NotificationMinAggregateInputType = {
+    id?: true
+    type?: true
+    orderNumber?: true
+    customerName?: true
+    read?: true
+    createdAt?: true
+    userId?: true
+    tripRequestId?: true
+  }
+
+  export type NotificationMaxAggregateInputType = {
+    id?: true
+    type?: true
+    orderNumber?: true
+    customerName?: true
+    read?: true
+    createdAt?: true
+    userId?: true
+    tripRequestId?: true
+  }
+
+  export type NotificationCountAggregateInputType = {
+    id?: true
+    type?: true
+    orderNumber?: true
+    customerName?: true
+    read?: true
+    createdAt?: true
+    userId?: true
+    tripRequestId?: true
+    _all?: true
+  }
+
+  export type NotificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notification to aggregate.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Notifications
+    **/
+    _count?: true | NotificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: NotificationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: NotificationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NotificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type GetNotificationAggregateType<T extends NotificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateNotification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNotification[P]>
+      : GetScalarType<T[P], AggregateNotification[P]>
+  }
+
+
+
+
+  export type NotificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NotificationWhereInput
+    orderBy?: NotificationOrderByWithAggregationInput | NotificationOrderByWithAggregationInput[]
+    by: NotificationScalarFieldEnum[] | NotificationScalarFieldEnum
+    having?: NotificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NotificationCountAggregateInputType | true
+    _avg?: NotificationAvgAggregateInputType
+    _sum?: NotificationSumAggregateInputType
+    _min?: NotificationMinAggregateInputType
+    _max?: NotificationMaxAggregateInputType
+  }
+
+  export type NotificationGroupByOutputType = {
+    id: string
+    type: $Enums.NotificationType
+    orderNumber: number | null
+    customerName: string | null
+    read: boolean
+    createdAt: Date
+    userId: string
+    tripRequestId: string | null
+    _count: NotificationCountAggregateOutputType | null
+    _avg: NotificationAvgAggregateOutputType | null
+    _sum: NotificationSumAggregateOutputType | null
+    _min: NotificationMinAggregateOutputType | null
+    _max: NotificationMaxAggregateOutputType | null
+  }
+
+  type GetNotificationGroupByPayload<T extends NotificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NotificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NotificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+            : GetScalarType<T[P], NotificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NotificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    orderNumber?: boolean
+    customerName?: boolean
+    read?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    tripRequestId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    tripRequest?: boolean | Notification$tripRequestArgs<ExtArgs>
+  }, ExtArgs["result"]["notification"]>
+
+
+
+  export type NotificationSelectScalar = {
+    id?: boolean
+    type?: boolean
+    orderNumber?: boolean
+    customerName?: boolean
+    read?: boolean
+    createdAt?: boolean
+    userId?: boolean
+    tripRequestId?: boolean
+  }
+
+  export type NotificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "orderNumber" | "customerName" | "read" | "createdAt" | "userId" | "tripRequestId", ExtArgs["result"]["notification"]>
+  export type NotificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    tripRequest?: boolean | Notification$tripRequestArgs<ExtArgs>
+  }
+
+  export type $NotificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Notification"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      tripRequest: Prisma.$TripRequestPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      type: $Enums.NotificationType
+      orderNumber: number | null
+      customerName: string | null
+      read: boolean
+      createdAt: Date
+      userId: string
+      tripRequestId: string | null
+    }, ExtArgs["result"]["notification"]>
+    composites: {}
+  }
+
+  type NotificationGetPayload<S extends boolean | null | undefined | NotificationDefaultArgs> = $Result.GetResult<Prisma.$NotificationPayload, S>
+
+  type NotificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NotificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NotificationCountAggregateInputType | true
+    }
+
+  export interface NotificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Notification'], meta: { name: 'Notification' } }
+    /**
+     * Find zero or one Notification that matches the filter.
+     * @param {NotificationFindUniqueArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NotificationFindUniqueArgs>(args: SelectSubset<T, NotificationFindUniqueArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Notification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NotificationFindUniqueOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NotificationFindUniqueOrThrowArgs>(args: SelectSubset<T, NotificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NotificationFindFirstArgs>(args?: SelectSubset<T, NotificationFindFirstArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Notification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindFirstOrThrowArgs} args - Arguments to find a Notification
+     * @example
+     * // Get one Notification
+     * const notification = await prisma.notification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NotificationFindFirstOrThrowArgs>(args?: SelectSubset<T, NotificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Notifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Notifications
+     * const notifications = await prisma.notification.findMany()
+     * 
+     * // Get first 10 Notifications
+     * const notifications = await prisma.notification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const notificationWithIdOnly = await prisma.notification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NotificationFindManyArgs>(args?: SelectSubset<T, NotificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Notification.
+     * @param {NotificationCreateArgs} args - Arguments to create a Notification.
+     * @example
+     * // Create one Notification
+     * const Notification = await prisma.notification.create({
+     *   data: {
+     *     // ... data to create a Notification
+     *   }
+     * })
+     * 
+     */
+    create<T extends NotificationCreateArgs>(args: SelectSubset<T, NotificationCreateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Notifications.
+     * @param {NotificationCreateManyArgs} args - Arguments to create many Notifications.
+     * @example
+     * // Create many Notifications
+     * const notification = await prisma.notification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NotificationCreateManyArgs>(args?: SelectSubset<T, NotificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Notification.
+     * @param {NotificationDeleteArgs} args - Arguments to delete one Notification.
+     * @example
+     * // Delete one Notification
+     * const Notification = await prisma.notification.delete({
+     *   where: {
+     *     // ... filter to delete one Notification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NotificationDeleteArgs>(args: SelectSubset<T, NotificationDeleteArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Notification.
+     * @param {NotificationUpdateArgs} args - Arguments to update one Notification.
+     * @example
+     * // Update one Notification
+     * const notification = await prisma.notification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NotificationUpdateArgs>(args: SelectSubset<T, NotificationUpdateArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Notifications.
+     * @param {NotificationDeleteManyArgs} args - Arguments to filter Notifications to delete.
+     * @example
+     * // Delete a few Notifications
+     * const { count } = await prisma.notification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NotificationDeleteManyArgs>(args?: SelectSubset<T, NotificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Notifications
+     * const notification = await prisma.notification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NotificationUpdateManyArgs>(args: SelectSubset<T, NotificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Notification.
+     * @param {NotificationUpsertArgs} args - Arguments to update or create a Notification.
+     * @example
+     * // Update or create a Notification
+     * const notification = await prisma.notification.upsert({
+     *   create: {
+     *     // ... data to create a Notification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Notification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NotificationUpsertArgs>(args: SelectSubset<T, NotificationUpsertArgs<ExtArgs>>): Prisma__NotificationClient<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Notifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationCountArgs} args - Arguments to filter Notifications to count.
+     * @example
+     * // Count the number of Notifications
+     * const count = await prisma.notification.count({
+     *   where: {
+     *     // ... the filter for the Notifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends NotificationCountArgs>(
+      args?: Subset<T, NotificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NotificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NotificationAggregateArgs>(args: Subset<T, NotificationAggregateArgs>): Prisma.PrismaPromise<GetNotificationAggregateType<T>>
+
+    /**
+     * Group by Notification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NotificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NotificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NotificationGroupByArgs['orderBy'] }
+        : { orderBy?: NotificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NotificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNotificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Notification model
+   */
+  readonly fields: NotificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Notification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NotificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tripRequest<T extends Notification$tripRequestArgs<ExtArgs> = {}>(args?: Subset<T, Notification$tripRequestArgs<ExtArgs>>): Prisma__TripRequestClient<$Result.GetResult<Prisma.$TripRequestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Notification model
+   */
+  interface NotificationFieldRefs {
+    readonly id: FieldRef<"Notification", 'String'>
+    readonly type: FieldRef<"Notification", 'NotificationType'>
+    readonly orderNumber: FieldRef<"Notification", 'Int'>
+    readonly customerName: FieldRef<"Notification", 'String'>
+    readonly read: FieldRef<"Notification", 'Boolean'>
+    readonly createdAt: FieldRef<"Notification", 'DateTime'>
+    readonly userId: FieldRef<"Notification", 'String'>
+    readonly tripRequestId: FieldRef<"Notification", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Notification findUnique
+   */
+  export type NotificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findUniqueOrThrow
+   */
+  export type NotificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification findFirst
+   */
+  export type NotificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findFirstOrThrow
+   */
+  export type NotificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notification to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Notifications.
+     */
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification findMany
+   */
+  export type NotificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter, which Notifications to fetch.
+     */
+    where?: NotificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Notifications to fetch.
+     */
+    orderBy?: NotificationOrderByWithRelationInput | NotificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Notifications.
+     */
+    cursor?: NotificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Notifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Notifications.
+     */
+    skip?: number
+    distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Notification create
+   */
+  export type NotificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Notification.
+     */
+    data: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+  }
+
+  /**
+   * Notification createMany
+   */
+  export type NotificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Notifications.
+     */
+    data: NotificationCreateManyInput | NotificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Notification update
+   */
+  export type NotificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Notification.
+     */
+    data: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+    /**
+     * Choose, which Notification to update.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification updateMany
+   */
+  export type NotificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Notifications.
+     */
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyInput>
+    /**
+     * Filter which Notifications to update
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification upsert
+   */
+  export type NotificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Notification to update in case it exists.
+     */
+    where: NotificationWhereUniqueInput
+    /**
+     * In case the Notification found by the `where` argument doesn't exist, create a new Notification with this data.
+     */
+    create: XOR<NotificationCreateInput, NotificationUncheckedCreateInput>
+    /**
+     * In case the Notification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NotificationUpdateInput, NotificationUncheckedUpdateInput>
+  }
+
+  /**
+   * Notification delete
+   */
+  export type NotificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+    /**
+     * Filter which Notification to delete.
+     */
+    where: NotificationWhereUniqueInput
+  }
+
+  /**
+   * Notification deleteMany
+   */
+  export type NotificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Notifications to delete
+     */
+    where?: NotificationWhereInput
+    /**
+     * Limit how many Notifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Notification.tripRequest
+   */
+  export type Notification$tripRequestArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TripRequest
+     */
+    select?: TripRequestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TripRequest
+     */
+    omit?: TripRequestOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TripRequestInclude<ExtArgs> | null
+    where?: TripRequestWhereInput
+  }
+
+  /**
+   * Notification without action
+   */
+  export type NotificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Notification
+     */
+    select?: NotificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Notification
+     */
+    omit?: NotificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: NotificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13277,6 +14474,7 @@ export namespace Prisma {
     estimateNotice: 'estimateNotice',
     brandColor: 'brandColor',
     coverPhotoUrl: 'coverPhotoUrl',
+    emailPreferences: 'emailPreferences',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13450,12 +14648,51 @@ export namespace Prisma {
   export type QuotationScalarFieldEnum = (typeof QuotationScalarFieldEnum)[keyof typeof QuotationScalarFieldEnum]
 
 
+  export const NotificationScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    orderNumber: 'orderNumber',
+    customerName: 'customerName',
+    read: 'read',
+    createdAt: 'createdAt',
+    userId: 'userId',
+    tripRequestId: 'tripRequestId'
+  };
+
+  export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const QueryMode: {
+    default: 'default',
+    insensitive: 'insensitive'
+  };
+
+  export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
   export const NullsOrder: {
@@ -13609,6 +14846,16 @@ export namespace Prisma {
   export type QuotationOrderByRelevanceFieldEnum = (typeof QuotationOrderByRelevanceFieldEnum)[keyof typeof QuotationOrderByRelevanceFieldEnum]
 
 
+  export const NotificationOrderByRelevanceFieldEnum: {
+    id: 'id',
+    customerName: 'customerName',
+    userId: 'userId',
+    tripRequestId: 'tripRequestId'
+  };
+
+  export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -13625,6 +14872,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -13685,6 +14946,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'NotificationType'
+   */
+  export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -13710,6 +14978,7 @@ export namespace Prisma {
     estimateNotice?: StringNullableFilter<"Company"> | string | null
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
+    emailPreferences?: JsonNullableFilter<"Company">
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -13730,6 +14999,7 @@ export namespace Prisma {
     estimateNotice?: SortOrderInput | SortOrder
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
+    emailPreferences?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -13754,6 +15024,7 @@ export namespace Prisma {
     estimateNotice?: StringNullableFilter<"Company"> | string | null
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
+    emailPreferences?: JsonNullableFilter<"Company">
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -13774,6 +15045,7 @@ export namespace Prisma {
     estimateNotice?: SortOrderInput | SortOrder
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
+    emailPreferences?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -13797,6 +15069,7 @@ export namespace Prisma {
     estimateNotice?: StringNullableWithAggregatesFilter<"Company"> | string | null
     brandColor?: StringNullableWithAggregatesFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    emailPreferences?: JsonNullableWithAggregatesFilter<"Company">
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -14041,6 +15314,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     tripRequests?: TripRequestListRelationFilter
     quotations?: QuotationListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -14059,6 +15333,7 @@ export namespace Prisma {
     sessions?: SessionOrderByRelationAggregateInput
     tripRequests?: TripRequestOrderByRelationAggregateInput
     quotations?: QuotationOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -14081,6 +15356,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     tripRequests?: TripRequestListRelationFilter
     quotations?: QuotationListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -14248,6 +15524,7 @@ export namespace Prisma {
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
     routes?: RouteListRelationFilter
+    notifications?: NotificationListRelationFilter
   }
 
   export type TripRequestOrderByWithRelationInput = {
@@ -14283,6 +15560,7 @@ export namespace Prisma {
     quotations?: QuotationOrderByRelationAggregateInput
     messages?: TripMessageOrderByRelationAggregateInput
     routes?: RouteOrderByRelationAggregateInput
+    notifications?: NotificationOrderByRelationAggregateInput
     _relevance?: TripRequestOrderByRelevanceInput
   }
 
@@ -14322,6 +15600,7 @@ export namespace Prisma {
     quotations?: QuotationListRelationFilter
     messages?: TripMessageListRelationFilter
     routes?: RouteListRelationFilter
+    notifications?: NotificationListRelationFilter
   }, "id" | "token" | "orderNumber">
 
   export type TripRequestOrderByWithAggregationInput = {
@@ -14672,6 +15951,82 @@ export namespace Prisma {
     createdById?: StringWithAggregatesFilter<"Quotation"> | string
   }
 
+  export type NotificationWhereInput = {
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    orderNumber?: IntNullableFilter<"Notification"> | number | null
+    customerName?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    userId?: StringFilter<"Notification"> | string
+    tripRequestId?: StringNullableFilter<"Notification"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    tripRequest?: XOR<TripRequestNullableScalarRelationFilter, TripRequestWhereInput> | null
+  }
+
+  export type NotificationOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    orderNumber?: SortOrderInput | SortOrder
+    customerName?: SortOrderInput | SortOrder
+    read?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    tripRequestId?: SortOrderInput | SortOrder
+    user?: UserOrderByWithRelationInput
+    tripRequest?: TripRequestOrderByWithRelationInput
+    _relevance?: NotificationOrderByRelevanceInput
+  }
+
+  export type NotificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: NotificationWhereInput | NotificationWhereInput[]
+    OR?: NotificationWhereInput[]
+    NOT?: NotificationWhereInput | NotificationWhereInput[]
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    orderNumber?: IntNullableFilter<"Notification"> | number | null
+    customerName?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    userId?: StringFilter<"Notification"> | string
+    tripRequestId?: StringNullableFilter<"Notification"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    tripRequest?: XOR<TripRequestNullableScalarRelationFilter, TripRequestWhereInput> | null
+  }, "id">
+
+  export type NotificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    orderNumber?: SortOrderInput | SortOrder
+    customerName?: SortOrderInput | SortOrder
+    read?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    tripRequestId?: SortOrderInput | SortOrder
+    _count?: NotificationCountOrderByAggregateInput
+    _avg?: NotificationAvgOrderByAggregateInput
+    _max?: NotificationMaxOrderByAggregateInput
+    _min?: NotificationMinOrderByAggregateInput
+    _sum?: NotificationSumOrderByAggregateInput
+  }
+
+  export type NotificationScalarWhereWithAggregatesInput = {
+    AND?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    OR?: NotificationScalarWhereWithAggregatesInput[]
+    NOT?: NotificationScalarWhereWithAggregatesInput | NotificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Notification"> | string
+    type?: EnumNotificationTypeWithAggregatesFilter<"Notification"> | $Enums.NotificationType
+    orderNumber?: IntNullableWithAggregatesFilter<"Notification"> | number | null
+    customerName?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+    read?: BoolWithAggregatesFilter<"Notification"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Notification"> | Date | string
+    userId?: StringWithAggregatesFilter<"Notification"> | string
+    tripRequestId?: StringNullableWithAggregatesFilter<"Notification"> | string | null
+  }
+
   export type CompanyCreateInput = {
     id?: string
     name: string
@@ -14685,6 +16040,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -14705,6 +16061,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -14725,6 +16082,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -14745,6 +16103,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -14765,6 +16124,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14782,6 +16142,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14799,6 +16160,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15053,6 +16415,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
     quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -15070,6 +16433,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
     quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -15087,6 +16451,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
     quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -15104,6 +16469,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
     quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -15273,6 +16639,7 @@ export namespace Prisma {
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateInput = {
@@ -15306,6 +16673,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUpdateInput = {
@@ -15338,6 +16706,7 @@ export namespace Prisma {
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateInput = {
@@ -15371,6 +16740,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestCreateManyInput = {
@@ -15771,6 +17141,81 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
   }
 
+  export type NotificationCreateInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+    tripRequest?: TripRequestCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    userId: string
+    tripRequestId?: string | null
+  }
+
+  export type NotificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+    tripRequest?: TripRequestUpdateOneWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    tripRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificationCreateManyInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    userId: string
+    tripRequestId?: string | null
+  }
+
+  export type NotificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+    tripRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -15804,6 +17249,29 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -15871,6 +17339,7 @@ export namespace Prisma {
     estimateNotice?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
+    emailPreferences?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15951,6 +17420,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -16180,6 +17675,12 @@ export namespace Prisma {
     none?: QuotationWhereInput
   }
 
+  export type NotificationListRelationFilter = {
+    every?: NotificationWhereInput
+    some?: NotificationWhereInput
+    none?: NotificationWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16189,6 +17690,10 @@ export namespace Prisma {
   }
 
   export type QuotationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type NotificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16764,6 +18269,75 @@ export namespace Prisma {
     _max?: NestedEnumQuotationStatusFilter<$PrismaModel>
   }
 
+  export type EnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type TripRequestNullableScalarRelationFilter = {
+    is?: TripRequestWhereInput | null
+    isNot?: TripRequestWhereInput | null
+  }
+
+  export type NotificationOrderByRelevanceInput = {
+    fields: NotificationOrderByRelevanceFieldEnum | NotificationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type NotificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    orderNumber?: SortOrder
+    customerName?: SortOrder
+    read?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
+  export type NotificationAvgOrderByAggregateInput = {
+    orderNumber?: SortOrder
+  }
+
+  export type NotificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    orderNumber?: SortOrder
+    customerName?: SortOrder
+    read?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
+  export type NotificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    orderNumber?: SortOrder
+    customerName?: SortOrder
+    read?: SortOrder
+    createdAt?: SortOrder
+    userId?: SortOrder
+    tripRequestId?: SortOrder
+  }
+
+  export type NotificationSumOrderByAggregateInput = {
+    orderNumber?: SortOrder
+  }
+
+  export type EnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
   export type UserCreateNestedManyWithoutCompanyInput = {
     create?: XOR<UserCreateWithoutCompanyInput, UserUncheckedCreateWithoutCompanyInput> | UserCreateWithoutCompanyInput[] | UserUncheckedCreateWithoutCompanyInput[]
     connectOrCreate?: UserCreateOrConnectWithoutCompanyInput | UserCreateOrConnectWithoutCompanyInput[]
@@ -16990,6 +18564,13 @@ export namespace Prisma {
     connect?: QuotationWhereUniqueInput | QuotationWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -17016,6 +18597,13 @@ export namespace Prisma {
     connectOrCreate?: QuotationCreateOrConnectWithoutCreatedByInput | QuotationCreateOrConnectWithoutCreatedByInput[]
     createMany?: QuotationCreateManyCreatedByInputEnvelope
     connect?: QuotationWhereUniqueInput | QuotationWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
@@ -17092,6 +18680,20 @@ export namespace Prisma {
     deleteMany?: QuotationScalarWhereInput | QuotationScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -17148,6 +18750,20 @@ export namespace Prisma {
     deleteMany?: QuotationScalarWhereInput | QuotationScalarWhereInput[]
   }
 
+  export type NotificationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput> | NotificationCreateWithoutUserInput[] | NotificationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutUserInput | NotificationCreateOrConnectWithoutUserInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutUserInput | NotificationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: NotificationCreateManyUserInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutUserInput | NotificationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutUserInput | NotificationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutTripRequestsInput = {
     create?: XOR<UserCreateWithoutTripRequestsInput, UserUncheckedCreateWithoutTripRequestsInput>
     connectOrCreate?: UserCreateOrConnectWithoutTripRequestsInput
@@ -17181,6 +18797,13 @@ export namespace Prisma {
     connect?: RouteWhereUniqueInput | RouteWhereUniqueInput[]
   }
 
+  export type NotificationCreateNestedManyWithoutTripRequestInput = {
+    create?: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput> | NotificationCreateWithoutTripRequestInput[] | NotificationUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutTripRequestInput | NotificationCreateOrConnectWithoutTripRequestInput[]
+    createMany?: NotificationCreateManyTripRequestInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
   export type QuotationUncheckedCreateNestedManyWithoutTripRequestInput = {
     create?: XOR<QuotationCreateWithoutTripRequestInput, QuotationUncheckedCreateWithoutTripRequestInput> | QuotationCreateWithoutTripRequestInput[] | QuotationUncheckedCreateWithoutTripRequestInput[]
     connectOrCreate?: QuotationCreateOrConnectWithoutTripRequestInput | QuotationCreateOrConnectWithoutTripRequestInput[]
@@ -17200,6 +18823,13 @@ export namespace Prisma {
     connectOrCreate?: RouteCreateOrConnectWithoutTripRequestInput | RouteCreateOrConnectWithoutTripRequestInput[]
     createMany?: RouteCreateManyTripRequestInputEnvelope
     connect?: RouteWhereUniqueInput | RouteWhereUniqueInput[]
+  }
+
+  export type NotificationUncheckedCreateNestedManyWithoutTripRequestInput = {
+    create?: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput> | NotificationCreateWithoutTripRequestInput[] | NotificationUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutTripRequestInput | NotificationCreateOrConnectWithoutTripRequestInput[]
+    createMany?: NotificationCreateManyTripRequestInputEnvelope
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
   export type EnumTripRequestStatusFieldUpdateOperationsInput = {
@@ -17276,6 +18906,20 @@ export namespace Prisma {
     deleteMany?: RouteScalarWhereInput | RouteScalarWhereInput[]
   }
 
+  export type NotificationUpdateManyWithoutTripRequestNestedInput = {
+    create?: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput> | NotificationCreateWithoutTripRequestInput[] | NotificationUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutTripRequestInput | NotificationCreateOrConnectWithoutTripRequestInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutTripRequestInput | NotificationUpsertWithWhereUniqueWithoutTripRequestInput[]
+    createMany?: NotificationCreateManyTripRequestInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutTripRequestInput | NotificationUpdateWithWhereUniqueWithoutTripRequestInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutTripRequestInput | NotificationUpdateManyWithWhereWithoutTripRequestInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
   export type QuotationUncheckedUpdateManyWithoutTripRequestNestedInput = {
     create?: XOR<QuotationCreateWithoutTripRequestInput, QuotationUncheckedCreateWithoutTripRequestInput> | QuotationCreateWithoutTripRequestInput[] | QuotationUncheckedCreateWithoutTripRequestInput[]
     connectOrCreate?: QuotationCreateOrConnectWithoutTripRequestInput | QuotationCreateOrConnectWithoutTripRequestInput[]
@@ -17316,6 +18960,20 @@ export namespace Prisma {
     update?: RouteUpdateWithWhereUniqueWithoutTripRequestInput | RouteUpdateWithWhereUniqueWithoutTripRequestInput[]
     updateMany?: RouteUpdateManyWithWhereWithoutTripRequestInput | RouteUpdateManyWithWhereWithoutTripRequestInput[]
     deleteMany?: RouteScalarWhereInput | RouteScalarWhereInput[]
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutTripRequestNestedInput = {
+    create?: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput> | NotificationCreateWithoutTripRequestInput[] | NotificationUncheckedCreateWithoutTripRequestInput[]
+    connectOrCreate?: NotificationCreateOrConnectWithoutTripRequestInput | NotificationCreateOrConnectWithoutTripRequestInput[]
+    upsert?: NotificationUpsertWithWhereUniqueWithoutTripRequestInput | NotificationUpsertWithWhereUniqueWithoutTripRequestInput[]
+    createMany?: NotificationCreateManyTripRequestInputEnvelope
+    set?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    disconnect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    delete?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+    update?: NotificationUpdateWithWhereUniqueWithoutTripRequestInput | NotificationUpdateWithWhereUniqueWithoutTripRequestInput[]
+    updateMany?: NotificationUpdateManyWithWhereWithoutTripRequestInput | NotificationUpdateManyWithWhereWithoutTripRequestInput[]
+    deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
   export type TripRequestCreateNestedOneWithoutRoutesInput = {
@@ -17396,6 +19054,40 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutQuotationsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQuotationsInput, UserUpdateWithoutQuotationsInput>, UserUncheckedUpdateWithoutQuotationsInput>
+  }
+
+  export type UserCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type TripRequestCreateNestedOneWithoutNotificationsInput = {
+    create?: XOR<TripRequestCreateWithoutNotificationsInput, TripRequestUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: TripRequestCreateOrConnectWithoutNotificationsInput
+    connect?: TripRequestWhereUniqueInput
+  }
+
+  export type EnumNotificationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.NotificationType
+  }
+
+  export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
+    create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
+    upsert?: UserUpsertWithoutNotificationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutNotificationsInput, UserUpdateWithoutNotificationsInput>, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type TripRequestUpdateOneWithoutNotificationsNestedInput = {
+    create?: XOR<TripRequestCreateWithoutNotificationsInput, TripRequestUncheckedCreateWithoutNotificationsInput>
+    connectOrCreate?: TripRequestCreateOrConnectWithoutNotificationsInput
+    upsert?: TripRequestUpsertWithoutNotificationsInput
+    disconnect?: TripRequestWhereInput | boolean
+    delete?: TripRequestWhereInput | boolean
+    connect?: TripRequestWhereUniqueInput
+    update?: XOR<XOR<TripRequestUpdateToOneWithWhereWithoutNotificationsInput, TripRequestUpdateWithoutNotificationsInput>, TripRequestUncheckedUpdateWithoutNotificationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -17508,6 +19200,29 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue
+    lte?: InputJsonValue
+    gt?: InputJsonValue
+    gte?: InputJsonValue
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -17728,6 +19443,23 @@ export namespace Prisma {
     _max?: NestedEnumQuotationStatusFilter<$PrismaModel>
   }
 
+  export type NestedEnumNotificationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeFilter<$PrismaModel> | $Enums.NotificationType
+  }
+
+  export type NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.NotificationType | EnumNotificationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.NotificationType[]
+    notIn?: $Enums.NotificationType[]
+    not?: NestedEnumNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.NotificationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumNotificationTypeFilter<$PrismaModel>
+    _max?: NestedEnumNotificationTypeFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutCompanyInput = {
     id?: string
     name?: string | null
@@ -17742,6 +19474,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
     quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCompanyInput = {
@@ -17758,6 +19491,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
     quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCompanyInput = {
@@ -17800,6 +19534,7 @@ export namespace Prisma {
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutCompanyInput = {
@@ -17832,6 +19567,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutCompanyInput = {
@@ -17998,6 +19734,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -18017,6 +19754,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -18052,6 +19790,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -18071,6 +19810,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18091,6 +19831,7 @@ export namespace Prisma {
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
     quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -18107,6 +19848,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
     quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -18139,6 +19881,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
     quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -18155,6 +19898,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
     quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -18171,6 +19915,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
     quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -18187,6 +19932,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
     quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -18219,6 +19965,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
     quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -18235,6 +19982,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
     quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CompanyCreateWithoutUsersInput = {
@@ -18250,6 +19998,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -18269,6 +20018,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -18372,6 +20122,7 @@ export namespace Prisma {
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutUserInput = {
@@ -18404,6 +20155,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutUserInput = {
@@ -18456,6 +20208,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    tripRequest?: TripRequestCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    tripRequestId?: string | null
+  }
+
+  export type NotificationCreateOrConnectWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationCreateManyUserInputEnvelope = {
+    data: NotificationCreateManyUserInput | NotificationCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CompanyUpsertWithoutUsersInput = {
     update: XOR<CompanyUpdateWithoutUsersInput, CompanyUncheckedUpdateWithoutUsersInput>
     create: XOR<CompanyCreateWithoutUsersInput, CompanyUncheckedCreateWithoutUsersInput>
@@ -18480,6 +20262,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -18499,6 +20282,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18617,6 +20401,36 @@ export namespace Prisma {
     createdById?: StringFilter<"Quotation"> | string
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+    create: XOR<NotificationCreateWithoutUserInput, NotificationUncheckedCreateWithoutUserInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutUserInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutUserInput, NotificationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutUserInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type NotificationScalarWhereInput = {
+    AND?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    OR?: NotificationScalarWhereInput[]
+    NOT?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+    id?: StringFilter<"Notification"> | string
+    type?: EnumNotificationTypeFilter<"Notification"> | $Enums.NotificationType
+    orderNumber?: IntNullableFilter<"Notification"> | number | null
+    customerName?: StringNullableFilter<"Notification"> | string | null
+    read?: BoolFilter<"Notification"> | boolean
+    createdAt?: DateTimeFilter<"Notification"> | Date | string
+    userId?: StringFilter<"Notification"> | string
+    tripRequestId?: StringNullableFilter<"Notification"> | string | null
+  }
+
   export type UserCreateWithoutTripRequestsInput = {
     id?: string
     name?: string | null
@@ -18631,6 +20445,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTripRequestsInput = {
@@ -18647,6 +20462,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTripRequestsInput = {
@@ -18667,6 +20483,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -18686,6 +20503,7 @@ export namespace Prisma {
     estimateNotice?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -18811,6 +20629,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type NotificationCreateWithoutTripRequestInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutNotificationsInput
+  }
+
+  export type NotificationUncheckedCreateWithoutTripRequestInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    userId: string
+  }
+
+  export type NotificationCreateOrConnectWithoutTripRequestInput = {
+    where: NotificationWhereUniqueInput
+    create: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput>
+  }
+
+  export type NotificationCreateManyTripRequestInputEnvelope = {
+    data: NotificationCreateManyTripRequestInput | NotificationCreateManyTripRequestInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutTripRequestsInput = {
     update: XOR<UserUpdateWithoutTripRequestsInput, UserUncheckedUpdateWithoutTripRequestsInput>
     create: XOR<UserCreateWithoutTripRequestsInput, UserUncheckedCreateWithoutTripRequestsInput>
@@ -18836,6 +20684,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTripRequestsInput = {
@@ -18852,6 +20701,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CompanyUpsertWithoutTripRequestsInput = {
@@ -18878,6 +20728,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -18897,6 +20748,7 @@ export namespace Prisma {
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    emailPreferences?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -18986,6 +20838,22 @@ export namespace Prisma {
     tripRequestId?: StringFilter<"Route"> | string
   }
 
+  export type NotificationUpsertWithWhereUniqueWithoutTripRequestInput = {
+    where: NotificationWhereUniqueInput
+    update: XOR<NotificationUpdateWithoutTripRequestInput, NotificationUncheckedUpdateWithoutTripRequestInput>
+    create: XOR<NotificationCreateWithoutTripRequestInput, NotificationUncheckedCreateWithoutTripRequestInput>
+  }
+
+  export type NotificationUpdateWithWhereUniqueWithoutTripRequestInput = {
+    where: NotificationWhereUniqueInput
+    data: XOR<NotificationUpdateWithoutTripRequestInput, NotificationUncheckedUpdateWithoutTripRequestInput>
+  }
+
+  export type NotificationUpdateManyWithWhereWithoutTripRequestInput = {
+    where: NotificationScalarWhereInput
+    data: XOR<NotificationUpdateManyMutationInput, NotificationUncheckedUpdateManyWithoutTripRequestInput>
+  }
+
   export type TripRequestCreateWithoutRoutesInput = {
     id?: string
     token?: string
@@ -19016,6 +20884,7 @@ export namespace Prisma {
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutRoutesInput = {
@@ -19048,6 +20917,7 @@ export namespace Prisma {
     companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutRoutesInput = {
@@ -19095,6 +20965,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutRoutesInput = {
@@ -19127,6 +20998,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestCreateWithoutMessagesInput = {
@@ -19159,6 +21031,7 @@ export namespace Prisma {
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     quotations?: QuotationCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutMessagesInput = {
@@ -19191,6 +21064,7 @@ export namespace Prisma {
     companyId?: string | null
     quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutMessagesInput = {
@@ -19238,6 +21112,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutMessagesInput = {
@@ -19270,6 +21145,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestCreateWithoutQuotationsInput = {
@@ -19302,6 +21178,7 @@ export namespace Prisma {
     company?: CompanyCreateNestedOneWithoutTripRequestsInput
     messages?: TripMessageCreateNestedManyWithoutTripRequestInput
     routes?: RouteCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestUncheckedCreateWithoutQuotationsInput = {
@@ -19334,6 +21211,7 @@ export namespace Prisma {
     companyId?: string | null
     messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
     routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutTripRequestInput
   }
 
   export type TripRequestCreateOrConnectWithoutQuotationsInput = {
@@ -19355,6 +21233,7 @@ export namespace Prisma {
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuotationsInput = {
@@ -19371,6 +21250,7 @@ export namespace Prisma {
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuotationsInput = {
@@ -19418,6 +21298,7 @@ export namespace Prisma {
     company?: CompanyUpdateOneWithoutTripRequestsNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutQuotationsInput = {
@@ -19450,6 +21331,7 @@ export namespace Prisma {
     companyId?: NullableStringFieldUpdateOperationsInput | string | null
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type UserUpsertWithoutQuotationsInput = {
@@ -19477,6 +21359,7 @@ export namespace Prisma {
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuotationsInput = {
@@ -19493,6 +21376,238 @@ export namespace Prisma {
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    password?: string | null
+    image?: string | null
+    role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
+    company?: CompanyCreateNestedOneWithoutUsersInput
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    tripRequests?: TripRequestCreateNestedManyWithoutUserInput
+    quotations?: QuotationCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    password?: string | null
+    image?: string | null
+    role?: $Enums.UserRole
+    privacyAcceptedAt?: Date | string | null
+    preferredLanguage?: string
+    companyId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    tripRequests?: TripRequestUncheckedCreateNestedManyWithoutUserInput
+    quotations?: QuotationUncheckedCreateNestedManyWithoutCreatedByInput
+  }
+
+  export type UserCreateOrConnectWithoutNotificationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type TripRequestCreateWithoutNotificationsInput = {
+    id?: string
+    token?: string
+    orderNumber?: number
+    status?: $Enums.TripRequestStatus
+    customerEmail: string
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    internalNotes?: string | null
+    privacyAcceptedAt?: Date | string | null
+    lastViewedAt?: Date | string | null
+    confirmedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
+    lastCustomerActivityAt?: Date | string | null
+    adminViewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user?: UserCreateNestedOneWithoutTripRequestsInput
+    company?: CompanyCreateNestedOneWithoutTripRequestsInput
+    quotations?: QuotationCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageCreateNestedManyWithoutTripRequestInput
+    routes?: RouteCreateNestedManyWithoutTripRequestInput
+  }
+
+  export type TripRequestUncheckedCreateWithoutNotificationsInput = {
+    id?: string
+    token?: string
+    orderNumber?: number
+    status?: $Enums.TripRequestStatus
+    customerEmail: string
+    language: string
+    firstName: string
+    lastName: string
+    phone: string
+    numberOfAdults: number
+    areThereChildren?: boolean
+    numberOfChildren?: number | null
+    ageOfChildren?: string | null
+    numberOfChildSeats?: number | null
+    additionalInfo?: string | null
+    internalNotes?: string | null
+    privacyAcceptedAt?: Date | string | null
+    lastViewedAt?: Date | string | null
+    confirmedAt?: Date | string | null
+    departureDetailsRequestedAt?: Date | string | null
+    pickupInfoNotifiedAt?: Date | string | null
+    lastCustomerActivityAt?: Date | string | null
+    adminViewedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userId?: string | null
+    companyId?: string | null
+    quotations?: QuotationUncheckedCreateNestedManyWithoutTripRequestInput
+    messages?: TripMessageUncheckedCreateNestedManyWithoutTripRequestInput
+    routes?: RouteUncheckedCreateNestedManyWithoutTripRequestInput
+  }
+
+  export type TripRequestCreateOrConnectWithoutNotificationsInput = {
+    where: TripRequestWhereUniqueInput
+    create: XOR<TripRequestCreateWithoutNotificationsInput, TripRequestUncheckedCreateWithoutNotificationsInput>
+  }
+
+  export type UserUpsertWithoutNotificationsInput = {
+    update: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutNotificationsInput, UserUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type UserUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    company?: CompanyUpdateOneWithoutUsersNestedInput
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
+    quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
+    quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+  }
+
+  export type TripRequestUpsertWithoutNotificationsInput = {
+    update: XOR<TripRequestUpdateWithoutNotificationsInput, TripRequestUncheckedUpdateWithoutNotificationsInput>
+    create: XOR<TripRequestCreateWithoutNotificationsInput, TripRequestUncheckedCreateWithoutNotificationsInput>
+    where?: TripRequestWhereInput
+  }
+
+  export type TripRequestUpdateToOneWithWhereWithoutNotificationsInput = {
+    where?: TripRequestWhereInput
+    data: XOR<TripRequestUpdateWithoutNotificationsInput, TripRequestUncheckedUpdateWithoutNotificationsInput>
+  }
+
+  export type TripRequestUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    customerEmail?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCustomerActivityAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneWithoutTripRequestsNestedInput
+    company?: CompanyUpdateOneWithoutTripRequestsNestedInput
+    quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
+    routes?: RouteUpdateManyWithoutTripRequestNestedInput
+  }
+
+  export type TripRequestUncheckedUpdateWithoutNotificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    orderNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumTripRequestStatusFieldUpdateOperationsInput | $Enums.TripRequestStatus
+    customerEmail?: StringFieldUpdateOperationsInput | string
+    language?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    numberOfAdults?: IntFieldUpdateOperationsInput | number
+    areThereChildren?: BoolFieldUpdateOperationsInput | boolean
+    numberOfChildren?: NullableIntFieldUpdateOperationsInput | number | null
+    ageOfChildren?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfChildSeats?: NullableIntFieldUpdateOperationsInput | number | null
+    additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
+    internalNotes?: NullableStringFieldUpdateOperationsInput | string | null
+    privacyAcceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    confirmedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    departureDetailsRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pickupInfoNotifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    lastCustomerActivityAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    adminViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    companyId?: NullableStringFieldUpdateOperationsInput | string | null
+    quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
+    messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
+    routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type UserCreateManyCompanyInput = {
@@ -19560,6 +21675,7 @@ export namespace Prisma {
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUpdateManyWithoutUserNestedInput
     quotations?: QuotationUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCompanyInput = {
@@ -19576,6 +21692,7 @@ export namespace Prisma {
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tripRequests?: TripRequestUncheckedUpdateManyWithoutUserNestedInput
     quotations?: QuotationUncheckedUpdateManyWithoutCreatedByNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateManyWithoutCompanyInput = {
@@ -19619,6 +21736,7 @@ export namespace Prisma {
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutCompanyInput = {
@@ -19651,6 +21769,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateManyWithoutCompanyInput = {
@@ -19777,6 +21896,16 @@ export namespace Prisma {
     tripRequestId: string
   }
 
+  export type NotificationCreateManyUserInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    tripRequestId?: string | null
+  }
+
   export type AccountUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
@@ -19869,6 +21998,7 @@ export namespace Prisma {
     quotations?: QuotationUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateWithoutUserInput = {
@@ -19901,6 +22031,7 @@ export namespace Prisma {
     quotations?: QuotationUncheckedUpdateManyWithoutTripRequestNestedInput
     messages?: TripMessageUncheckedUpdateManyWithoutTripRequestNestedInput
     routes?: RouteUncheckedUpdateManyWithoutTripRequestNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutTripRequestNestedInput
   }
 
   export type TripRequestUncheckedUpdateManyWithoutUserInput = {
@@ -19977,6 +22108,36 @@ export namespace Prisma {
     tripRequestId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type NotificationUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequest?: TripRequestUpdateOneWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tripRequestId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type QuotationCreateManyTripRequestInput = {
     id?: string
     price: Decimal | DecimalJsLike | number | string
@@ -20017,6 +22178,16 @@ export namespace Prisma {
     additionalInfo?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type NotificationCreateManyTripRequestInput = {
+    id?: string
+    type: $Enums.NotificationType
+    orderNumber?: number | null
+    customerName?: string | null
+    read?: boolean
+    createdAt?: Date | string
+    userId: string
   }
 
   export type QuotationUpdateWithoutTripRequestInput = {
@@ -20143,6 +22314,36 @@ export namespace Prisma {
     additionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NotificationUpdateWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutNotificationsNestedInput
+  }
+
+  export type NotificationUncheckedUpdateWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type NotificationUncheckedUpdateManyWithoutTripRequestInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
+    orderNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    customerName?: NullableStringFieldUpdateOperationsInput | string | null
+    read?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
 

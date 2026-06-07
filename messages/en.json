@@ -419,7 +419,19 @@
 		"logoUrl": "Logo URL",
 		"coverPhotoUrl": "Cover Photo URL",
 		"coverPhotoUrlHint": "Recommended size: 1200x675px (16:9 ratio)",
-		"brandColor": "Brand Color"
+		"brandColor": "Brand Color",
+		"emailPreferencesTitle": "Email Preferences",
+		"emailPreferencesDesc": "Choose which events trigger an email notification to admins.",
+		"emailPrefNewTripRequest": "New trip request",
+		"emailPrefNewTripRequestDesc": "When a customer submits a new trip request",
+		"emailPrefQuotationAccepted": "Quotation accepted",
+		"emailPrefQuotationAcceptedDesc": "When a customer accepts a quotation",
+		"emailPrefQuotationRejected": "Quotation rejected",
+		"emailPrefQuotationRejectedDesc": "When a customer rejects a quotation",
+		"emailPrefCustomerMessage": "Customer message",
+		"emailPrefCustomerMessageDesc": "When a customer sends a message",
+		"emailPrefTripDetailsUpdated": "Trip details updated",
+		"emailPrefTripDetailsUpdatedDesc": "When a customer updates departure date, time or flight number"
 	},
 	"superAdmin": {
 		"notFound": "Not found",

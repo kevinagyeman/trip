@@ -4,6 +4,10 @@ import {
 	adminProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
+import {
+	EMAIL_PREFERENCE_DEFAULTS,
+	type EmailPreferences,
+} from "@/server/email-preferences";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -103,6 +107,41 @@ export const companyRouter = createTRPCRouter({
 					coverPhotoUrl: input.coverPhotoUrl || null,
 					brandColor: input.brandColor || null,
 				},
+			});
+		}),
+
+	// ADMIN: Get own company email preferences
+	getEmailPreferences: adminProcedure.query(async ({ ctx }) => {
+		const companyId = ctx.session.user.companyId;
+		if (!companyId) return EMAIL_PREFERENCE_DEFAULTS;
+
+		const company = await ctx.db.company.findUnique({
+			where: { id: companyId },
+			select: { emailPreferences: true },
+		});
+
+		const stored = (company?.emailPreferences ??
+			{}) as Partial<EmailPreferences>;
+		return { ...EMAIL_PREFERENCE_DEFAULTS, ...stored };
+	}),
+
+	// ADMIN: Update own company email preferences
+	updateEmailPreferences: adminProcedure
+		.input(
+			z.object({
+				newTripRequest: z.boolean(),
+				quotationAccepted: z.boolean(),
+				quotationRejected: z.boolean(),
+				customerMessage: z.boolean(),
+				tripDetailsUpdated: z.boolean(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const companyId = ctx.session.user.companyId;
+			if (!companyId) throw new TRPCError({ code: "FORBIDDEN" });
+			return ctx.db.company.update({
+				where: { id: companyId },
+				data: { emailPreferences: input },
 			});
 		}),
 

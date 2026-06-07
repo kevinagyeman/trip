@@ -134,6 +134,7 @@ exports.Prisma.CompanyScalarFieldEnum = {
   estimateNotice: 'estimateNotice',
   brandColor: 'brandColor',
   coverPhotoUrl: 'coverPhotoUrl',
+  emailPreferences: 'emailPreferences',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -274,9 +275,36 @@ exports.Prisma.QuotationScalarFieldEnum = {
   createdById: 'createdById'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  orderNumber: 'orderNumber',
+  customerName: 'customerName',
+  read: 'read',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  tripRequestId: 'tripRequestId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -393,6 +421,13 @@ exports.Prisma.QuotationOrderByRelevanceFieldEnum = {
   tripRequestId: 'tripRequestId',
   createdById: 'createdById'
 };
+
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  customerName: 'customerName',
+  userId: 'userId',
+  tripRequestId: 'tripRequestId'
+};
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -426,6 +461,13 @@ exports.QuotationStatus = exports.$Enums.QuotationStatus = {
   REJECTED: 'REJECTED'
 };
 
+exports.NotificationType = exports.$Enums.NotificationType = {
+  NEW_MESSAGE: 'NEW_MESSAGE',
+  TRIP_DETAILS_UPDATED: 'TRIP_DETAILS_UPDATED',
+  QUOTATION_ACCEPTED: 'QUOTATION_ACCEPTED',
+  QUOTATION_REJECTED: 'QUOTATION_REJECTED'
+};
+
 exports.Prisma.ModelName = {
   Company: 'Company',
   Driver: 'Driver',
@@ -437,7 +479,8 @@ exports.Prisma.ModelName = {
   TripRequest: 'TripRequest',
   Route: 'Route',
   TripMessage: 'TripMessage',
-  Quotation: 'Quotation'
+  Quotation: 'Quotation',
+  Notification: 'Notification'
 };
 
 /**

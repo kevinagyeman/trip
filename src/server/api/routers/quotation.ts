@@ -9,6 +9,8 @@ import {
 	sendQuotationRejectedToAdmins,
 	sendQuotationToCustomer,
 } from "@/server/emails/trip-emails";
+import { isEmailEnabled } from "@/server/email-preferences";
+import { createNotificationsForAdmins } from "@/server/notifications";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
@@ -241,12 +243,26 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			await sendQuotationAcceptedToAdmins({
-				id: quotation.tripRequestId,
-				companyId: quotation.tripRequest.companyId,
-				firstName: quotation.tripRequest.firstName,
-				lastName: quotation.tripRequest.lastName,
+			if (
+				await isEmailEnabled(
+					quotation.tripRequest.companyId,
+					"quotationAccepted",
+				)
+			) {
+				await sendQuotationAcceptedToAdmins({
+					id: quotation.tripRequestId,
+					companyId: quotation.tripRequest.companyId,
+					firstName: quotation.tripRequest.firstName,
+					lastName: quotation.tripRequest.lastName,
+					orderNumber: quotation.tripRequest.orderNumber,
+				});
+			}
+
+			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+				type: "QUOTATION_ACCEPTED",
+				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
+				customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 			});
 
 			return updated;
@@ -298,12 +314,26 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			await sendQuotationAcceptedToAdmins({
-				id: quotation.tripRequestId,
-				companyId: quotation.tripRequest.companyId,
-				firstName: quotation.tripRequest.firstName,
-				lastName: quotation.tripRequest.lastName,
+			if (
+				await isEmailEnabled(
+					quotation.tripRequest.companyId,
+					"quotationAccepted",
+				)
+			) {
+				await sendQuotationAcceptedToAdmins({
+					id: quotation.tripRequestId,
+					companyId: quotation.tripRequest.companyId,
+					firstName: quotation.tripRequest.firstName,
+					lastName: quotation.tripRequest.lastName,
+					orderNumber: quotation.tripRequest.orderNumber,
+				});
+			}
+
+			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+				type: "QUOTATION_ACCEPTED",
+				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
+				customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 			});
 
 			return updated;
@@ -355,12 +385,26 @@ export const quotationRouter = createTRPCRouter({
 				return result;
 			});
 
-			await sendQuotationRejectedToAdmins({
-				id: quotation.tripRequestId,
-				companyId: quotation.tripRequest.companyId,
-				firstName: quotation.tripRequest.firstName,
-				lastName: quotation.tripRequest.lastName,
+			if (
+				await isEmailEnabled(
+					quotation.tripRequest.companyId,
+					"quotationRejected",
+				)
+			) {
+				await sendQuotationRejectedToAdmins({
+					id: quotation.tripRequestId,
+					companyId: quotation.tripRequest.companyId,
+					firstName: quotation.tripRequest.firstName,
+					lastName: quotation.tripRequest.lastName,
+					orderNumber: quotation.tripRequest.orderNumber,
+				});
+			}
+
+			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+				type: "QUOTATION_REJECTED",
+				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
+				customerName: `${quotation.tripRequest.firstName} ${quotation.tripRequest.lastName}`,
 			});
 
 			return updated;

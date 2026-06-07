@@ -45,6 +45,13 @@ enum RouteType {
     standard
 }
 
+enum NotificationType {
+    NEW_MESSAGE
+    TRIP_DETAILS_UPDATED
+    QUOTATION_ACCEPTED
+    QUOTATION_REJECTED
+}
+
 model Company {
     id               String   @id @default(cuid())
     name             String
@@ -55,11 +62,12 @@ model Company {
     address          String?
     country          String?
     website          String?
-    estimateNotice   String?  @db.Text
-    brandColor       String?
-    coverPhotoUrl    String?
-    createdAt        DateTime @default(now())
-    updatedAt        DateTime @updatedAt
+    estimateNotice    String?  @db.Text
+    brandColor        String?
+    coverPhotoUrl     String?
+    emailPreferences  Json?
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
 
     users        User[]
     tripRequests TripRequest[]
@@ -126,6 +134,7 @@ model User {
     sessions      Session[]
     tripRequests  TripRequest[]
     quotations    Quotation[]
+    notifications Notification[]
 
     @@index([companyId])
 }
@@ -186,9 +195,10 @@ model TripRequest {
     user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
     companyId  String?
     company    Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
-    quotations Quotation[]
-    messages   TripMessage[]
-    routes Route[]
+    quotations    Quotation[]
+    messages      TripMessage[]
+    routes        Route[]
+    notifications Notification[]
 
     @@index([userId])
     @@index([companyId])
@@ -263,4 +273,21 @@ model Quotation {
     @@index([tripRequestId])
     @@index([status])
     @@index([createdAt])
+}
+
+model Notification {
+    id           String           @id @default(cuid())
+    type         NotificationType
+    orderNumber  Int?
+    customerName String?
+    read         Boolean          @default(false)
+    createdAt    DateTime         @default(now())
+
+    userId        String
+    user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    tripRequestId String?
+    tripRequest   TripRequest? @relation(fields: [tripRequestId], references: [id], onDelete: SetNull)
+
+    @@index([userId, read, createdAt])
+    @@index([tripRequestId])
 }

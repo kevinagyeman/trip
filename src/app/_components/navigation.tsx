@@ -1,6 +1,7 @@
 import { BrandLogo } from "@/app/_components/brand-logo";
 import { LanguageSwitcher } from "@/app/_components/language-switcher";
 import { GuestMobileMenu, MobileMenu } from "@/app/_components/mobile-menu";
+import { NotificationBell } from "@/app/_components/notification-bell";
 import { SignOutButton } from "@/app/_components/sign-out-button";
 import { ThemeToggle } from "@/app/_components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -103,8 +104,11 @@ export async function Navigation() {
 						<span className="hidden text-sm text-muted-foreground md:block">
 							{userName}
 						</span>
-						<LanguageSwitcher />
+						<div className="hidden md:block">
+							<LanguageSwitcher />
+						</div>
 						<ThemeToggle className="hidden md:flex" />
+						{isAdmin && <NotificationBell />}
 						{(isAdmin || isSuperAdmin) && (
 							<Link href="/admin/settings" className="hidden md:block">
 								<Button variant="ghost" size="icon">
