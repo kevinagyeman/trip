@@ -116,7 +116,7 @@ export function CreateTripRequestForm({
 
 	const createRequest = api.tripRequest.create.useMutation({
 		onSuccess: (data) => {
-			router.push(`/request/${data.token}`);
+			router.push(`/request/${data.token}?new=1`);
 		},
 	});
 

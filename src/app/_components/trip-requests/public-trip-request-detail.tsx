@@ -1,8 +1,9 @@
 "use client";
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { AppDialog } from "@/app/_components/ui/app-dialog";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { Zap } from "lucide-react";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
@@ -20,7 +21,8 @@ import { api } from "@/trpc/react";
 import { Check, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
 import { TripMessageThread } from "./trip-message-thread";
@@ -36,6 +38,16 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const t = useTranslations("requestDetail");
 	const tCommon = useTranslations("common");
 	const tMessages = useTranslations("messages");
+	const searchParams = useSearchParams();
+	const isNew = searchParams.get("new") === "1";
+	const [emailDialogOpen, setEmailDialogOpen] = useState(isNew);
+	const router = useRouter();
+	const pathname = usePathname();
+
+	function closeEmailDialog() {
+		setEmailDialogOpen(false);
+		router.replace(pathname);
+	}
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
 	const utils = api.useUtils();
 
@@ -124,10 +136,23 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			)}
 
 			{request.company && (
-				<AlertBanner
-					variant="info"
-					description={t("emailNotice", { email: request.fromEmail })}
-				/>
+				<AppDialog
+					open={emailDialogOpen}
+					onOpenChange={(open) => {
+						if (!open) closeEmailDialog();
+					}}
+					title={t("emailNoticeTitle2")}
+					onSave={closeEmailDialog}
+					saveLabel={t("emailNoticeConfirm")}
+				>
+					<AlertBanner
+						variant="warning"
+						description={t("emailNoticeBody", {
+							customerEmail: request.customerEmail,
+							fromEmail: request.fromEmail,
+						})}
+					/>
+				</AppDialog>
 			)}
 
 			{/* Header */}

@@ -207,7 +207,9 @@
 	"requestDetail": {
 		"notFound": "Not found",
 		"error": "Failed to load request",
-		"emailNotice": "All communications regarding this trip (quotations, confirmations, updates) will be sent to your email. Check your inbox and spam folder for messages from {email}.",
+		"emailNoticeTitle2": "Check your inbox",
+		"emailNoticeConfirm": "Got it",
+		"emailNoticeBody": "We just sent a confirmation to {customerEmail} (check also your spam folder).\n\nCheck your inbox — the sender is {fromEmail}. \n\nIf it's in spam, mark it as not spam so you don't miss your quotation and trip updates.",
 		"routes": "Routes",
 		"pickup": "Pickup",
 		"destination": "Destination",

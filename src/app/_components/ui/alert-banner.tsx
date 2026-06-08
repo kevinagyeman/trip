@@ -54,7 +54,9 @@ export function AlertBanner({
 		>
 			{title && <p className={s.title}>{title}</p>}
 			{description && (
-				<p className={`${title ? "mt-1" : ""} ${s.description}`}>
+				<p
+					className={`${title ? "mt-1" : ""} ${s.description} whitespace-pre-wrap`}
+				>
 					{description}
 				</p>
 			)}
