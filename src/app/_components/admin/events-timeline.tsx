@@ -16,6 +16,7 @@ export function EventsTimeline({ events, adminViewedAt }: Props) {
 	const labelMap: Record<EventType, string> = {
 		request_submitted: t("eventRequestSubmitted"),
 		quotation_sent: t("eventQuotationSent"),
+		quotation_viewed: t("eventQuotationViewed"),
 		quotation_accepted: t("eventQuotationAccepted"),
 		quotation_rejected: t("eventQuotationRejected"),
 		trip_confirmed: t("eventTripConfirmed"),

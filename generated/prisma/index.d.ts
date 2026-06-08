@@ -12413,6 +12413,7 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     notifiedAt: Date | null
+    quotationViewedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12429,6 +12430,7 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus | null
     notifiedAt: Date | null
+    quotationViewedAt: Date | null
     respondedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -12445,6 +12447,7 @@ export namespace Prisma {
     quotationAdditionalInfo: number
     status: number
     notifiedAt: number
+    quotationViewedAt: number
     respondedAt: number
     createdAt: number
     updatedAt: number
@@ -12471,6 +12474,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     notifiedAt?: true
+    quotationViewedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -12487,6 +12491,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     notifiedAt?: true
+    quotationViewedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -12503,6 +12508,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: true
     status?: true
     notifiedAt?: true
+    quotationViewedAt?: true
     respondedAt?: true
     createdAt?: true
     updatedAt?: true
@@ -12606,6 +12612,7 @@ export namespace Prisma {
     quotationAdditionalInfo: string | null
     status: $Enums.QuotationStatus
     notifiedAt: Date | null
+    quotationViewedAt: Date | null
     respondedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -12641,6 +12648,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     notifiedAt?: boolean
+    quotationViewedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12661,6 +12669,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: boolean
     status?: boolean
     notifiedAt?: boolean
+    quotationViewedAt?: boolean
     respondedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12668,7 +12677,7 @@ export namespace Prisma {
     createdById?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "notifiedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "notifiedAt" | "quotationViewedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -12689,6 +12698,7 @@ export namespace Prisma {
       quotationAdditionalInfo: string | null
       status: $Enums.QuotationStatus
       notifiedAt: Date | null
+      quotationViewedAt: Date | null
       respondedAt: Date | null
       createdAt: Date
       updatedAt: Date
@@ -13073,6 +13083,7 @@ export namespace Prisma {
     readonly quotationAdditionalInfo: FieldRef<"Quotation", 'String'>
     readonly status: FieldRef<"Quotation", 'QuotationStatus'>
     readonly notifiedAt: FieldRef<"Quotation", 'DateTime'>
+    readonly quotationViewedAt: FieldRef<"Quotation", 'DateTime'>
     readonly respondedAt: FieldRef<"Quotation", 'DateTime'>
     readonly createdAt: FieldRef<"Quotation", 'DateTime'>
     readonly updatedAt: FieldRef<"Quotation", 'DateTime'>
@@ -14650,6 +14661,7 @@ export namespace Prisma {
     quotationAdditionalInfo: 'quotationAdditionalInfo',
     status: 'status',
     notifiedAt: 'notifiedAt',
+    quotationViewedAt: 'quotationViewedAt',
     respondedAt: 'respondedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -15880,6 +15892,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -15898,6 +15911,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     notifiedAt?: SortOrderInput | SortOrder
+    quotationViewedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15920,6 +15934,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -15938,6 +15953,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrderInput | SortOrder
     status?: SortOrder
     notifiedAt?: SortOrderInput | SortOrder
+    quotationViewedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15962,6 +15978,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusWithAggregatesFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
+    quotationViewedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
@@ -17065,6 +17082,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17081,6 +17099,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17097,6 +17116,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17113,6 +17133,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17129,6 +17150,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17145,6 +17167,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17159,6 +17182,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18216,6 +18240,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     notifiedAt?: SortOrder
+    quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18236,6 +18261,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     notifiedAt?: SortOrder
+    quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18252,6 +18278,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: SortOrder
     status?: SortOrder
     notifiedAt?: SortOrder
+    quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20211,6 +20238,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20226,6 +20254,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20430,6 +20459,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: StringNullableFilter<"Quotation"> | string | null
     status?: EnumQuotationStatusFilter<"Quotation"> | $Enums.QuotationStatus
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
@@ -20562,6 +20592,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -20577,6 +20608,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -21930,6 +21962,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22112,6 +22145,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22127,6 +22161,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22142,6 +22177,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22187,6 +22223,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: string | null
     status?: $Enums.QuotationStatus
     notifiedAt?: Date | string | null
+    quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22239,6 +22276,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22254,6 +22292,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22269,6 +22308,7 @@ export namespace Prisma {
     quotationAdditionalInfo?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumQuotationStatusFieldUpdateOperationsInput | $Enums.QuotationStatus
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

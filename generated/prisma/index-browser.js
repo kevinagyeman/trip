@@ -269,6 +269,7 @@ exports.Prisma.QuotationScalarFieldEnum = {
   quotationAdditionalInfo: 'quotationAdditionalInfo',
   status: 'status',
   notifiedAt: 'notifiedAt',
+  quotationViewedAt: 'quotationViewedAt',
   respondedAt: 'respondedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

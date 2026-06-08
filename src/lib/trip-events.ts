@@ -8,6 +8,7 @@ export type EventType =
 	| "trip_confirmed"
 	| "pickup_info_sent"
 	| "departure_updated"
+	| "quotation_viewed"
 	| "confirmation_viewed"
 	| "pickup_info_viewed";
 

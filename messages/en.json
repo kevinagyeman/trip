@@ -340,6 +340,7 @@
 		"confirmModalConfirm": "Yes, confirm trip",
 		"events": "Events",
 		"eventQuotationSent": "Quotation sent",
+		"eventQuotationViewed": "Quotation viewed",
 		"eventQuotationAccepted": "Quotation accepted",
 		"eventQuotationRejected": "Quotation rejected",
 		"actorAdmin": "Admin",

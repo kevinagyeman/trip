@@ -261,6 +261,7 @@ model Quotation {
   quotationAdditionalInfo String?         @db.Text
   status                  QuotationStatus @default(PENDING)
   notifiedAt              DateTime?
+  quotationViewedAt       DateTime?
   respondedAt             DateTime?
   createdAt               DateTime        @default(now())
   updatedAt               DateTime        @updatedAt

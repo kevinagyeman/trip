@@ -512,6 +512,12 @@ export const tripRequestRouter = createTRPCRouter({
 						actor: "admin",
 						at: q.notifiedAt,
 					});
+				if (q.quotationViewedAt)
+					rawEvents.push({
+						type: "quotation_viewed",
+						actor: "customer",
+						at: q.quotationViewedAt,
+					});
 				if (q.respondedAt)
 					rawEvents.push({
 						type:
@@ -664,13 +670,36 @@ export const tripRequestRouter = createTRPCRouter({
 	markAsViewed: publicProcedure
 		.input(z.object({ token: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			await ctx.db.tripRequest.updateMany({
+			const now = new Date();
+
+			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { token: input.token },
-				data: {
-					lastViewedAt: new Date(),
-					lastCustomerActivityAt: new Date(),
+				select: {
+					id: true,
+					quotations: {
+						where: { notifiedAt: { not: null }, quotationViewedAt: null },
+						select: { id: true },
+						take: 1,
+					},
 				},
 			});
+
+			if (!tripRequest) return;
+
+			await ctx.db.tripRequest.update({
+				where: { id: tripRequest.id },
+				data: {
+					lastViewedAt: now,
+					lastCustomerActivityAt: now,
+				},
+			});
+
+			if (tripRequest.quotations[0]) {
+				await ctx.db.quotation.update({
+					where: { id: tripRequest.quotations[0].id },
+					data: { quotationViewedAt: now },
+				});
+			}
 		}),
 
 	markAsViewedByAdmin: adminProcedure
