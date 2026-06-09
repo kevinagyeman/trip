@@ -143,7 +143,7 @@ export function CompanyDetailsForm({
 						width={200}
 						height={80}
 						unoptimized
-						className="h-20 w-auto object-contain"
+						className="h-20 object-contain"
 					/>
 				</div>
 			)}

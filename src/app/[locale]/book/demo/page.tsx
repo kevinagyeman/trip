@@ -82,7 +82,7 @@ export default async function DemoBookingPage({
 						width={200}
 						height={80}
 						unoptimized
-						className="h-20 w-auto object-contain"
+						className="h-20 object-contain"
 					/>
 				</div>
 				<h1 className="text-center text-lg font-bold sm:text-3xl">

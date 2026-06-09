@@ -207,7 +207,7 @@
 	"requestDetail": {
 		"notFound": "Non trovato",
 		"error": "Impossibile caricare la richiesta",
-		"emailNoticeTitle2": "Controlla la posta in arrivo",
+		"emailNoticeTitle2": "Controlla la posta in arrivo (anche in spam)",
 		"emailNoticeConfirm": "Ho capito",
 		"emailNoticeBody": "Abbiamo appena inviato una conferma a {customerEmail} (controlla anche anche la spam).\n\nControlla la posta in arrivo — il mittente è {fromEmail}.\n\nSe è nello spam, segnalala come non spam per non perdere il preventivo e gli aggiornamenti sul tuo viaggio.",
 		"routes": "Percorsi",

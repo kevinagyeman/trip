@@ -1,12 +1,9 @@
 "use client";
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
-import { AppDialog } from "@/app/_components/ui/app-dialog";
-import { Button } from "@/components/ui/button";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
-import { Zap } from "lucide-react";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { NoticeDialog } from "@/app/_components/ui/notice-dialog";
 import { PassengersCard } from "@/app/_components/ui/passengers-card";
 import { RequestHeaderCard } from "@/app/_components/ui/request-header-card";
 import { RouteCardWrapper } from "@/app/_components/ui/route-card-wrapper";
@@ -17,12 +14,14 @@ import {
 	RouteTypeLabel,
 } from "@/app/_components/ui/route-type-label";
 import { SectionCard } from "@/app/_components/ui/section-card";
+import { Button } from "@/components/ui/button";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { api } from "@/trpc/react";
-import { Check, Loader2, X } from "lucide-react";
+import { Check, Loader2, X, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
 import { TripMessageThread } from "./trip-message-thread";
@@ -125,7 +124,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								width={200}
 								height={80}
 								unoptimized
-								className="h-20 w-auto object-contain"
+								className="h-20 object-contain"
 							/>
 						</div>
 					)}
@@ -136,14 +135,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 			)}
 
 			{request.company && (
-				<AppDialog
+				<NoticeDialog
 					open={emailDialogOpen}
-					onOpenChange={(open) => {
-						if (!open) closeEmailDialog();
-					}}
 					title={t("emailNoticeTitle2")}
-					onSave={closeEmailDialog}
-					saveLabel={t("emailNoticeConfirm")}
+					confirmLabel={t("emailNoticeConfirm")}
+					onConfirm={closeEmailDialog}
 				>
 					<AlertBanner
 						variant="warning"
@@ -152,7 +148,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 							fromEmail: request.fromEmail,
 						})}
 					/>
-				</AppDialog>
+				</NoticeDialog>
 			)}
 
 			{/* Header */}
