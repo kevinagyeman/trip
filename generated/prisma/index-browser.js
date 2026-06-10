@@ -271,6 +271,7 @@ exports.Prisma.QuotationScalarFieldEnum = {
   notifiedAt: 'notifiedAt',
   quotationViewedAt: 'quotationViewedAt',
   respondedAt: 'respondedAt',
+  rejectionReason: 'rejectionReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   tripRequestId: 'tripRequestId',
@@ -421,6 +422,7 @@ exports.Prisma.QuotationOrderByRelevanceFieldEnum = {
   id: 'id',
   currency: 'currency',
   quotationAdditionalInfo: 'quotationAdditionalInfo',
+  rejectionReason: 'rejectionReason',
   tripRequestId: 'tripRequestId',
   createdById: 'createdById'
 };

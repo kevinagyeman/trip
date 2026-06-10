@@ -97,6 +97,7 @@ export const quotationRouter = createTRPCRouter({
 								status: QuotationStatus.PENDING,
 								notifiedAt: now,
 								respondedAt: null,
+								rejectionReason: null,
 							},
 						})
 					: await tx.quotation.create({
@@ -175,6 +176,7 @@ export const quotationRouter = createTRPCRouter({
 						notifiedAt: new Date(),
 						status: QuotationStatus.PENDING,
 						respondedAt: null,
+						rejectionReason: null,
 					},
 				});
 				await tx.tripRequest.update({
@@ -341,7 +343,13 @@ export const quotationRouter = createTRPCRouter({
 
 	// PUBLIC: Reject quotation by token (anonymous customers)
 	rejectByToken: publicProcedure
-		.input(z.object({ id: z.string(), token: z.string() }))
+		.input(
+			z.object({
+				id: z.string(),
+				token: z.string(),
+				rejectionReason: z.string().optional(),
+			}),
+		)
 		.mutation(async ({ ctx, input }) => {
 			const quotation = await ctx.db.quotation.findUnique({
 				where: { id: input.id },
@@ -359,7 +367,11 @@ export const quotationRouter = createTRPCRouter({
 			const updated = await ctx.db.$transaction(async (tx) => {
 				const result = await tx.quotation.update({
 					where: { id: input.id },
-					data: { status: QuotationStatus.REJECTED, respondedAt: new Date() },
+					data: {
+						status: QuotationStatus.REJECTED,
+						respondedAt: new Date(),
+						rejectionReason: input.rejectionReason ?? null,
+					},
 					select: {
 						id: true,
 						price: true,
@@ -370,6 +382,7 @@ export const quotationRouter = createTRPCRouter({
 						status: true,
 						notifiedAt: true,
 						respondedAt: true,
+						rejectionReason: true,
 						createdAt: true,
 						updatedAt: true,
 						tripRequestId: true,

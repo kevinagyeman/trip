@@ -12415,6 +12415,7 @@ export namespace Prisma {
     notifiedAt: Date | null
     quotationViewedAt: Date | null
     respondedAt: Date | null
+    rejectionReason: string | null
     createdAt: Date | null
     updatedAt: Date | null
     tripRequestId: string | null
@@ -12432,6 +12433,7 @@ export namespace Prisma {
     notifiedAt: Date | null
     quotationViewedAt: Date | null
     respondedAt: Date | null
+    rejectionReason: string | null
     createdAt: Date | null
     updatedAt: Date | null
     tripRequestId: string | null
@@ -12449,6 +12451,7 @@ export namespace Prisma {
     notifiedAt: number
     quotationViewedAt: number
     respondedAt: number
+    rejectionReason: number
     createdAt: number
     updatedAt: number
     tripRequestId: number
@@ -12476,6 +12479,7 @@ export namespace Prisma {
     notifiedAt?: true
     quotationViewedAt?: true
     respondedAt?: true
+    rejectionReason?: true
     createdAt?: true
     updatedAt?: true
     tripRequestId?: true
@@ -12493,6 +12497,7 @@ export namespace Prisma {
     notifiedAt?: true
     quotationViewedAt?: true
     respondedAt?: true
+    rejectionReason?: true
     createdAt?: true
     updatedAt?: true
     tripRequestId?: true
@@ -12510,6 +12515,7 @@ export namespace Prisma {
     notifiedAt?: true
     quotationViewedAt?: true
     respondedAt?: true
+    rejectionReason?: true
     createdAt?: true
     updatedAt?: true
     tripRequestId?: true
@@ -12614,6 +12620,7 @@ export namespace Prisma {
     notifiedAt: Date | null
     quotationViewedAt: Date | null
     respondedAt: Date | null
+    rejectionReason: string | null
     createdAt: Date
     updatedAt: Date
     tripRequestId: string
@@ -12650,6 +12657,7 @@ export namespace Prisma {
     notifiedAt?: boolean
     quotationViewedAt?: boolean
     respondedAt?: boolean
+    rejectionReason?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tripRequestId?: boolean
@@ -12671,13 +12679,14 @@ export namespace Prisma {
     notifiedAt?: boolean
     quotationViewedAt?: boolean
     respondedAt?: boolean
+    rejectionReason?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     tripRequestId?: boolean
     createdById?: boolean
   }
 
-  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "notifiedAt" | "quotationViewedAt" | "respondedAt" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
+  export type QuotationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "price" | "currency" | "isPriceEachWay" | "areCarSeatsIncluded" | "quotationAdditionalInfo" | "status" | "notifiedAt" | "quotationViewedAt" | "respondedAt" | "rejectionReason" | "createdAt" | "updatedAt" | "tripRequestId" | "createdById", ExtArgs["result"]["quotation"]>
   export type QuotationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tripRequest?: boolean | TripRequestDefaultArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -12700,6 +12709,7 @@ export namespace Prisma {
       notifiedAt: Date | null
       quotationViewedAt: Date | null
       respondedAt: Date | null
+      rejectionReason: string | null
       createdAt: Date
       updatedAt: Date
       tripRequestId: string
@@ -13085,6 +13095,7 @@ export namespace Prisma {
     readonly notifiedAt: FieldRef<"Quotation", 'DateTime'>
     readonly quotationViewedAt: FieldRef<"Quotation", 'DateTime'>
     readonly respondedAt: FieldRef<"Quotation", 'DateTime'>
+    readonly rejectionReason: FieldRef<"Quotation", 'String'>
     readonly createdAt: FieldRef<"Quotation", 'DateTime'>
     readonly updatedAt: FieldRef<"Quotation", 'DateTime'>
     readonly tripRequestId: FieldRef<"Quotation", 'String'>
@@ -14663,6 +14674,7 @@ export namespace Prisma {
     notifiedAt: 'notifiedAt',
     quotationViewedAt: 'quotationViewedAt',
     respondedAt: 'respondedAt',
+    rejectionReason: 'rejectionReason',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     tripRequestId: 'tripRequestId',
@@ -14864,6 +14876,7 @@ export namespace Prisma {
     id: 'id',
     currency: 'currency',
     quotationAdditionalInfo: 'quotationAdditionalInfo',
+    rejectionReason: 'rejectionReason',
     tripRequestId: 'tripRequestId',
     createdById: 'createdById'
   };
@@ -15894,6 +15907,7 @@ export namespace Prisma {
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Quotation"> | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
@@ -15913,6 +15927,7 @@ export namespace Prisma {
     notifiedAt?: SortOrderInput | SortOrder
     quotationViewedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
@@ -15936,6 +15951,7 @@ export namespace Prisma {
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Quotation"> | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
@@ -15955,6 +15971,7 @@ export namespace Prisma {
     notifiedAt?: SortOrderInput | SortOrder
     quotationViewedAt?: SortOrderInput | SortOrder
     respondedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
@@ -15980,6 +15997,7 @@ export namespace Prisma {
     notifiedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     quotationViewedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableWithAggregatesFilter<"Quotation"> | Date | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"Quotation"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Quotation"> | Date | string
     tripRequestId?: StringWithAggregatesFilter<"Quotation"> | string
@@ -17084,6 +17102,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequest: TripRequestCreateNestedOneWithoutQuotationsInput
@@ -17101,6 +17120,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
@@ -17118,6 +17138,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequest?: TripRequestUpdateOneRequiredWithoutQuotationsNestedInput
@@ -17135,6 +17156,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -17152,6 +17174,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
@@ -17169,6 +17192,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17184,6 +17208,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -18242,6 +18267,7 @@ export namespace Prisma {
     notifiedAt?: SortOrder
     quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
+    rejectionReason?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
@@ -18263,6 +18289,7 @@ export namespace Prisma {
     notifiedAt?: SortOrder
     quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
+    rejectionReason?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
@@ -18280,6 +18307,7 @@ export namespace Prisma {
     notifiedAt?: SortOrder
     quotationViewedAt?: SortOrder
     respondedAt?: SortOrder
+    rejectionReason?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     tripRequestId?: SortOrder
@@ -20240,6 +20268,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequest: TripRequestCreateNestedOneWithoutQuotationsInput
@@ -20256,6 +20285,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
@@ -20461,6 +20491,7 @@ export namespace Prisma {
     notifiedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     quotationViewedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
     respondedAt?: DateTimeNullableFilter<"Quotation"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"Quotation"> | string | null
     createdAt?: DateTimeFilter<"Quotation"> | Date | string
     updatedAt?: DateTimeFilter<"Quotation"> | Date | string
     tripRequestId?: StringFilter<"Quotation"> | string
@@ -20594,6 +20625,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutQuotationsInput
@@ -20610,6 +20642,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
@@ -21964,6 +21997,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequestId: string
@@ -22147,6 +22181,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequest?: TripRequestUpdateOneRequiredWithoutQuotationsNestedInput
@@ -22163,6 +22198,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -22179,6 +22215,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequestId?: StringFieldUpdateOperationsInput | string
@@ -22225,6 +22262,7 @@ export namespace Prisma {
     notifiedAt?: Date | string | null
     quotationViewedAt?: Date | string | null
     respondedAt?: Date | string | null
+    rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdById: string
@@ -22278,6 +22316,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutQuotationsNestedInput
@@ -22294,6 +22333,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
@@ -22310,6 +22350,7 @@ export namespace Prisma {
     notifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     quotationViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     respondedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string

@@ -230,7 +230,11 @@ export function AdminQuotationCard({ requestId, request }: Props) {
 						<AlertBanner
 							variant="error"
 							title={t("quotationRejectedAdminTitle")}
-							description={t("quotationRejectedAdminNotice")}
+							description={
+								quotation.rejectionReason
+									? `${t("quotationRejectedAdminNotice")}\n${t("rejectionReasonLabel", { reason: quotation.rejectionReason })}`
+									: t("quotationRejectedAdminNotice")
+							}
 						/>
 					)}
 

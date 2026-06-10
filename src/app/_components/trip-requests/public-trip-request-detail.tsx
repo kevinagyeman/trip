@@ -24,6 +24,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { CustomerDepartureEditDialog } from "./customer-departure-edit-dialog";
+import { RejectionReasonDialog } from "./rejection-reason-dialog";
 import { TripMessageThread } from "./trip-message-thread";
 
 import {
@@ -40,6 +41,8 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const searchParams = useSearchParams();
 	const isNew = searchParams.get("new") === "1";
 	const [emailDialogOpen, setEmailDialogOpen] = useState(isNew);
+	const [rejectionDialogOpen, setRejectionDialogOpen] = useState(false);
+	const [pendingRejectId, setPendingRejectId] = useState<string | null>(null);
 	const router = useRouter();
 	const pathname = usePathname();
 
@@ -71,9 +74,25 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 	const rejectQuotation = api.quotation.rejectByToken.useMutation({
 		onSuccess: async () => {
 			await utils.tripRequest.getByToken.invalidate({ token });
+			setRejectionDialogOpen(false);
+			setPendingRejectId(null);
 			toast.success(tCommon("toastEmailSentToAdmin"));
 		},
 	});
+
+	function handleRejectClick(quotationId: string) {
+		setPendingRejectId(quotationId);
+		setRejectionDialogOpen(true);
+	}
+
+	function handleRejectConfirm(reason: string) {
+		if (!pendingRejectId) return;
+		rejectQuotation.mutate({
+			id: pendingRejectId,
+			token,
+			rejectionReason: reason || undefined,
+		});
+	}
 
 	const updateRoutes = api.tripRequest.updateRoutes.useMutation({
 		onSuccess: async () => {
@@ -230,9 +249,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 								<LoadingButton
 									variant="danger"
 									className="w-full sm:w-auto"
-									onClick={() =>
-										rejectQuotation.mutate({ id: quotation.id, token })
-									}
+									onClick={() => handleRejectClick(quotation.id)}
 									isLoading={rejectQuotation.isPending}
 									disabled={acceptQuotation.isPending}
 									notifyAdmin
@@ -362,6 +379,13 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 					</Link>
 				</SectionCard>
 			)}
+
+			<RejectionReasonDialog
+				open={rejectionDialogOpen}
+				onOpenChange={setRejectionDialogOpen}
+				onConfirm={handleRejectConfirm}
+				isLoading={rejectQuotation.isPending}
+			/>
 		</div>
 	);
 }

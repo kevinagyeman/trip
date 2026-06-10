@@ -263,6 +263,7 @@ model Quotation {
   notifiedAt              DateTime?
   quotationViewedAt       DateTime?
   respondedAt             DateTime?
+  rejectionReason         String?
   createdAt               DateTime        @default(now())
   updatedAt               DateTime        @updatedAt
 
