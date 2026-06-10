@@ -10,6 +10,7 @@ import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
 import { formatDate } from "@/lib/utils";
 import { ArrowRight, Loader2, MoveRight, Tag, Users } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -156,8 +157,26 @@ export function AllTripRequests() {
 			</div>
 
 			{isLoading ? (
-				<div className="flex justify-center py-8">
-					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+				<div className="space-y-3">
+					{Array.from({ length: 6 }).map((_, i) => (
+						<div key={i} className="rounded-lg border p-4 space-y-3">
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-2">
+									<Skeleton className="h-5 w-16 rounded-full" />
+									<Skeleton className="h-4 w-28" />
+								</div>
+								<Skeleton className="h-5 w-20 rounded-full" />
+							</div>
+							<div className="space-y-1.5">
+								<Skeleton className="h-4 w-48" />
+								<Skeleton className="h-3 w-36" />
+							</div>
+							<div className="flex items-center justify-between">
+								<Skeleton className="h-3 w-32" />
+								<Skeleton className="h-8 w-8 rounded-md" />
+							</div>
+						</div>
+					))}
 				</div>
 			) : !items.length ? (
 				myCompany?.slug ? (

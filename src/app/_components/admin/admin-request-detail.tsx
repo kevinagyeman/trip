@@ -22,7 +22,7 @@ import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { isRequestLocked } from "@/lib/trip-utils";
 import { api } from "@/trpc/react";
-import { Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -94,8 +94,32 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	if (isLoading)
 		return (
-			<div className="flex justify-center py-8">
-				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			<div className="space-y-4">
+				<Skeleton className="h-8 w-24" />
+				<div className="rounded-lg border p-4 space-y-3">
+					<div className="flex items-center justify-between">
+						<Skeleton className="h-6 w-40" />
+						<Skeleton className="h-8 w-28 rounded-md" />
+					</div>
+					<Skeleton className="h-4 w-32" />
+				</div>
+				<div className="rounded-lg border p-4 space-y-3">
+					<Skeleton className="h-5 w-24" />
+					<Skeleton className="h-16 w-full" />
+					<Skeleton className="h-8 w-36 rounded-md" />
+				</div>
+				{Array.from({ length: 2 }).map((_, i) => (
+					<div key={i} className="rounded-lg border p-4 space-y-3">
+						<Skeleton className="h-5 w-20" />
+						<Skeleton className="h-4 w-full" />
+						<Skeleton className="h-4 w-3/4" />
+					</div>
+				))}
+				<div className="rounded-lg border p-4 space-y-2">
+					<Skeleton className="h-5 w-28" />
+					<Skeleton className="h-4 w-48" />
+					<Skeleton className="h-4 w-36" />
+				</div>
 			</div>
 		);
 	if (!request) return <div>{t("notFound")}</div>;

@@ -17,7 +17,8 @@ import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { api } from "@/trpc/react";
-import { Check, Loader2, X, Zap } from "lucide-react";
+import { Check, X, Zap } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -103,8 +104,35 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	if (isLoading)
 		return (
-			<div className="flex justify-center py-8">
-				<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+			<div className="space-y-6">
+				<div className="flex flex-col items-center gap-3">
+					<Skeleton className="h-24 w-48 rounded-xl" />
+					<Skeleton className="h-6 w-40" />
+				</div>
+				<div className="rounded-lg border p-4 space-y-2">
+					<div className="flex items-center justify-between">
+						<Skeleton className="h-6 w-32" />
+						<Skeleton className="h-5 w-20 rounded-full" />
+					</div>
+				</div>
+				<div className="rounded-lg border p-4 space-y-3">
+					<Skeleton className="h-5 w-24" />
+					<Skeleton className="h-8 w-28" />
+					<div className="flex gap-2">
+						<Skeleton className="h-9 w-28 rounded-md" />
+						<Skeleton className="h-9 w-28 rounded-md" />
+					</div>
+				</div>
+				<div className="rounded-lg border p-4 space-y-2">
+					<Skeleton className="h-5 w-16" />
+					<Skeleton className="h-4 w-full" />
+					<Skeleton className="h-4 w-3/4" />
+				</div>
+				<div className="rounded-lg border p-4 space-y-2">
+					<Skeleton className="h-5 w-28" />
+					<Skeleton className="h-4 w-48" />
+					<Skeleton className="h-4 w-36" />
+				</div>
 			</div>
 		);
 	if (isError) return <div>{t("error")}</div>;

@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { driverSchema, type DriverFormValues } from "@/lib/schemas/driver";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -115,8 +116,22 @@ export function DriversManager() {
 			</Button>
 
 			{isLoading && (
-				<div className="flex justify-center py-4">
-					<Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+				<div className="space-y-2 mt-4">
+					{Array.from({ length: 3 }).map((_, i) => (
+						<div
+							key={i}
+							className="flex items-center justify-between rounded-lg border p-3"
+						>
+							<div className="space-y-1.5">
+								<Skeleton className="h-4 w-32" />
+								<Skeleton className="h-3 w-48" />
+							</div>
+							<div className="flex gap-2">
+								<Skeleton className="h-8 w-8 rounded-md" />
+								<Skeleton className="h-8 w-8 rounded-md" />
+							</div>
+						</div>
+					))}
 				</div>
 			)}
 
