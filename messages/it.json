@@ -239,7 +239,7 @@
 		"rejectionReasonFoundOtherProvider": "Ho trovato un altro fornitore",
 		"rejectionReasonChangedDates": "Ho cambiato le date di viaggio",
 		"rejectionReasonOther": "Altro",
-		"rejectionReasonOtherPlaceholder": "Dicci di più (opzionale)",
+		"rejectionReasonOtherPlaceholder": "Dicci di più",
 		"quotationAccepted": "Preventivo Accettato",
 		"quotationAcceptedNotice": "Hai accettato questo preventivo. Il trasferimento non è ancora confermato — l'operatore deve ancora revisionare e confermare la tua prenotazione. Riceverai una notifica una volta confermato.",
 		"quotationRejected": "Preventivo Rifiutato",

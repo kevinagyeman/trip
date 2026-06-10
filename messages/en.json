@@ -239,7 +239,7 @@
 		"rejectionReasonFoundOtherProvider": "Found another provider",
 		"rejectionReasonChangedDates": "Changed travel dates",
 		"rejectionReasonOther": "Other",
-		"rejectionReasonOtherPlaceholder": "Tell us more (optional)",
+		"rejectionReasonOtherPlaceholder": "Tell us more",
 		"quotationAccepted": "Quotation Accepted",
 		"quotationAcceptedNotice": "You accepted this quotation. Your transfer is not yet confirmed — the operator still needs to review and confirm your booking. You will receive a notification once confirmed.",
 		"quotationRejected": "Quotation Rejected",
