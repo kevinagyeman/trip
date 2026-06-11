@@ -779,7 +779,7 @@ export const tripRequestRouter = createTRPCRouter({
 				}
 			})();
 
-			void createNotificationsForAdmins(tripRequest.companyId, {
+			await createNotificationsForAdmins(tripRequest.companyId, {
 				type: "TRIP_DETAILS_UPDATED",
 				tripRequestId: tripRequest.id,
 				orderNumber: tripRequest.orderNumber,

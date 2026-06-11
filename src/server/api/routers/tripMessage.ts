@@ -80,7 +80,7 @@ export const tripMessageRouter = createTRPCRouter({
 				}
 			})();
 
-			void createNotificationsForAdmins(request.companyId, {
+			await createNotificationsForAdmins(request.companyId, {
 				type: "NEW_MESSAGE",
 				tripRequestId: request.id,
 				orderNumber: request.orderNumber,

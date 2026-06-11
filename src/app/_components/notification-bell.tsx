@@ -24,10 +24,15 @@ export function NotificationBell() {
 	const router = useRouter();
 	const utils = api.useUtils();
 
-	const { data: notifications = [] } = api.notification.getAll.useQuery(
-		undefined,
-		{ refetchInterval: 30_000 },
-	);
+	const { data: notifications = [], refetch } =
+		api.notification.getAll.useQuery(undefined, {
+			refetchInterval: 30_000,
+			refetchOnWindowFocus: true,
+		});
+
+	function handleOpenChange(open: boolean) {
+		if (open) void refetch();
+	}
 
 	const markRead = api.notification.markRead.useMutation({
 		onSuccess: () => void utils.notification.getAll.invalidate(),
@@ -44,7 +49,7 @@ export function NotificationBell() {
 	}
 
 	return (
-		<DropdownMenu>
+		<DropdownMenu onOpenChange={handleOpenChange}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" size="icon" className="relative">
 					<Bell className="h-4 w-4" />

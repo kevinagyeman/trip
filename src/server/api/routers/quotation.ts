@@ -260,7 +260,7 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+			await createNotificationsForAdmins(quotation.tripRequest.companyId, {
 				type: "QUOTATION_ACCEPTED",
 				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
@@ -331,7 +331,7 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+			await createNotificationsForAdmins(quotation.tripRequest.companyId, {
 				type: "QUOTATION_ACCEPTED",
 				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
@@ -413,7 +413,7 @@ export const quotationRouter = createTRPCRouter({
 				});
 			}
 
-			void createNotificationsForAdmins(quotation.tripRequest.companyId, {
+			await createNotificationsForAdmins(quotation.tripRequest.companyId, {
 				type: "QUOTATION_REJECTED",
 				tripRequestId: quotation.tripRequestId,
 				orderNumber: quotation.tripRequest.orderNumber,
