@@ -98,6 +98,7 @@ export const quotationRouter = createTRPCRouter({
 								notifiedAt: now,
 								respondedAt: null,
 								rejectionReason: null,
+								quotationViewedAt: null,
 							},
 						})
 					: await tx.quotation.create({
@@ -177,6 +178,7 @@ export const quotationRouter = createTRPCRouter({
 						status: QuotationStatus.PENDING,
 						respondedAt: null,
 						rejectionReason: null,
+						quotationViewedAt: null,
 					},
 				});
 				await tx.tripRequest.update({
