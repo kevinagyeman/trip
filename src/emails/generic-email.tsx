@@ -1,4 +1,4 @@
-import { Button, Section, Text } from "@react-email/components";
+import { Button, Link, Section, Text } from "@react-email/components";
 import { EmailLayout, emailStyles } from "./email-layout";
 import type { EmailData } from "./types";
 
@@ -18,6 +18,13 @@ export function GenericEmail({ data, href }: GenericEmailProps) {
 				<Button style={emailStyles.button} href={href}>
 					{data.buttonLabel}
 				</Button>
+				{data.secondaryLinkLabel && data.secondaryLinkHref && (
+					<Text style={secondaryLink}>
+						<Link href={data.secondaryLinkHref} style={secondaryLinkAnchor}>
+							{data.secondaryLinkLabel}
+						</Link>
+					</Text>
+				)}
 			</Section>
 			{data.secondaryText && <Text style={hint}>{data.secondaryText}</Text>}
 		</EmailLayout>
@@ -25,5 +32,21 @@ export function GenericEmail({ data, href }: GenericEmailProps) {
 }
 
 const hint = { color: "#888888", fontSize: "13px", lineHeight: "20px" };
+const secondaryLink = { textAlign: "center" as const, margin: "12px 0 0" };
+const secondaryLinkAnchor = { fontSize: "13px" };
 
-export default GenericEmail;
+const previewData: EmailData = {
+	preview: "Your trip request has been confirmed",
+	title: "Your booking is confirmed",
+	subtitle: "We look forward to seeing you on your trip.",
+	buttonLabel: "View your trip",
+	secondaryText: "If you have any questions, reply to this email.",
+	secondaryLinkLabel: "Visit dantrip.com",
+	secondaryLinkHref: "https://dantrip.com",
+};
+
+export default function GenericEmailPreview() {
+	return (
+		<GenericEmail data={previewData} href="https://dantrip.com/trip/123" />
+	);
+}

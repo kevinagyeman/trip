@@ -4,4 +4,6 @@ export interface EmailData {
 	subtitle?: string;
 	buttonLabel: string;
 	secondaryText?: string;
+	secondaryLinkLabel?: string;
+	secondaryLinkHref?: string;
 }

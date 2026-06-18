@@ -122,8 +122,10 @@ const TRANSLATIONS = {
 			preview: "Your trip is confirmed",
 			title: (firstName: string) =>
 				`Dear ${firstName}, your trip is confirmed!`,
-			subtitle: "The operator has confirmed your booking.",
-			button: "View Details",
+			subtitle:
+				"The operator has confirmed your booking. Enjoying dantrip.com? A quick review would mean a lot to us.",
+			button: "Leave a review",
+			secondaryLink: "View your booking details",
 		},
 		newMessage: {
 			subject: (o: string, name: string) =>
@@ -181,8 +183,10 @@ const TRANSLATIONS = {
 			preview: "Il tuo viaggio è confermato",
 			title: (firstName: string) =>
 				`Gentile ${firstName}, il tuo viaggio è confermato!`,
-			subtitle: "L'operatore ha confermato la tua prenotazione.",
-			button: "Visualizza Dettagli",
+			subtitle:
+				"L'operatore ha confermato la tua prenotazione. Ti sta piacendo dantrip.com? Una breve recensione per noi vale tanto.",
+			button: "Lascia una recensione",
+			secondaryLink: "Visualizza i dettagli della prenotazione",
 		},
 		newMessage: {
 			subject: (o: string, name: string) =>
@@ -288,8 +292,10 @@ export async function sendTripConfirmedToCustomer(t: CustomerTarget) {
 				title: c.title(t.firstName),
 				subtitle: c.subtitle,
 				buttonLabel: c.button,
+				secondaryLinkLabel: c.secondaryLink,
+				secondaryLinkHref: `${APP_URL}/request/${t.token}`,
 			},
-			href: `${APP_URL}/request/${t.token}`,
+			href: "https://trustpilot.com/evaluate/dantrip.com",
 		}),
 	});
 }
