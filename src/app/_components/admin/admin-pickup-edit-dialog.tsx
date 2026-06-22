@@ -97,10 +97,7 @@ export function AdminPickupEditDialog({
 	useEffect(() => {
 		if (!open) return;
 		setMeetingPoint(route.meetingPoint ?? "");
-		setBeThereAtDate(
-			route.beThereAtDate ??
-				(route.type === "airport_in" ? (route.scheduledDate ?? "") : ""),
-		);
+		setBeThereAtDate(route.beThereAtDate ?? (route.scheduledDate ?? ""));
 		setBeThereAtTime(
 			route.beThereAtTime ??
 				(route.type === "airport_in" ? (route.scheduledTime ?? "") : ""),
