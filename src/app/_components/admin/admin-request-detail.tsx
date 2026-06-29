@@ -1,5 +1,6 @@
 "use client";
 
+import { buildWhatsAppMessage } from "@/lib/constants";
 import { AdminMessagesCard } from "@/app/_components/admin/admin-messages-card";
 import { PickupAdminBlock } from "@/app/_components/admin/admin-pickup-block";
 import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card";
@@ -83,10 +84,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 		const link = `${window.location.origin}/request/${request.token}`;
 		const orderNum = String(request.orderNumber).padStart(6, "0");
 		const company = request.company?.name ?? "dantrip";
-		const msg =
-			request.language === "it"
-				? `Siamo ${company} e la stiamo contattando riguardo alla Sua richiesta di trasferimento #${orderNum}.\nAbbiamo aggiornato la Sua richiesta, può visualizzarla qui:\n${link}`
-				: `We are ${company} and we are writing to you about your transfer request #${orderNum}.\nWe have updated your request, you can view it here:\n${link}`;
+		const msg = buildWhatsAppMessage(request.language, company, orderNum, link);
 		setWhatsappHref(
 			`https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`,
 		);
