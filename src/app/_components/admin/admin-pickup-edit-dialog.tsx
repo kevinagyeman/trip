@@ -97,7 +97,7 @@ export function AdminPickupEditDialog({
 	useEffect(() => {
 		if (!open) return;
 		setMeetingPoint(route.meetingPoint ?? "");
-		setBeThereAtDate(route.beThereAtDate ?? (route.scheduledDate ?? ""));
+		setBeThereAtDate(route.beThereAtDate ?? route.scheduledDate ?? "");
 		setBeThereAtTime(
 			route.beThereAtTime ??
 				(route.type === "airport_in" ? (route.scheduledTime ?? "") : ""),
@@ -229,6 +229,28 @@ export function AdminPickupEditDialog({
 					</Link>
 				</div>
 
+				<CustomInput
+					labelText={tCommon("pickupInfoDriverName")}
+					required
+					placeholder={tCommon("pickupInfoDriverNamePlaceholder")}
+					error={pickupErrors.driverName}
+					inputProps={{
+						value: driverName,
+						onChange: (e) => setDriverName(e.target.value),
+					}}
+				/>
+				<PhoneInput
+					labelText={tCommon("pickupInfoDriverPhone")}
+					required
+					countryCode={driverPhoneCC}
+					onCountryCodeChange={setDriverPhoneCC}
+					phoneNumber={driverPhone}
+					onPhoneNumberChange={setDriverPhone}
+					error={
+						pickupErrors.driverPhone ?? pickupErrors.driverPhoneCountryCode
+					}
+				/>
+
 				<div className="space-y-4">
 					<CustomInput
 						labelText={tCommon("pickupInfoMeetingPoint")}
@@ -259,27 +281,6 @@ export function AdminPickupEditDialog({
 							value: beThereAtTime,
 							onChange: (e) => setBeThereAtTime(e.target.value),
 						}}
-					/>
-					<CustomInput
-						labelText={tCommon("pickupInfoDriverName")}
-						required
-						placeholder={tCommon("pickupInfoDriverNamePlaceholder")}
-						error={pickupErrors.driverName}
-						inputProps={{
-							value: driverName,
-							onChange: (e) => setDriverName(e.target.value),
-						}}
-					/>
-					<PhoneInput
-						labelText={tCommon("pickupInfoDriverPhone")}
-						required
-						countryCode={driverPhoneCC}
-						onCountryCodeChange={setDriverPhoneCC}
-						phoneNumber={driverPhone}
-						onPhoneNumberChange={setDriverPhone}
-						error={
-							pickupErrors.driverPhone ?? pickupErrors.driverPhoneCountryCode
-						}
 					/>
 					<CustomTextArea
 						labelText={tCommon("pickupInfoAdditionalInfo")}
