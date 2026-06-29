@@ -536,6 +536,7 @@
 		"pickupInfoAdditionalInfoPlaceholder": "Any notes for the customer...",
 		"pickupInfoSelectDriver": "Select driver",
 		"pickupInfoSelectDriverPlaceholder": "Choose from your drivers...",
+		"driverInfoDetails": "Driver details",
 		"pickupTimeNote": "After the transfer is confirmed, based on the time you indicated, we'll calculate the pickup time based on traffic and distance.",
 		"pickupAdminTimeNote": "Let the customer know the exact pickup time once you have all the necessary information (departure date/time, flight number, etc.)",
 		"noPickupData": "There are no pickup details for this route yet. You will receive an email when they are available.",

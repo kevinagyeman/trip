@@ -6,6 +6,7 @@ import CustomInput from "@/app/_components/ui/custom-input";
 import CustomSelect from "@/app/_components/ui/custom-select";
 import CustomTextArea from "@/app/_components/ui/custom-textarea";
 import { PhoneInput } from "@/app/_components/ui/phone-input";
+import { SectionDivider } from "@/app/_components/ui/section-divider";
 import { Button } from "@/components/ui/button";
 import { pickupSchema, type PickupFormValues } from "@/lib/schemas/pickup";
 import { MapPinned } from "lucide-react";
@@ -203,6 +204,48 @@ export function AdminPickupEditDialog({
 						description={tCommon("pickupAirportInAdminNotice")}
 					/>
 				)}
+
+				<CustomInput
+					labelText={tCommon("pickupInfoMeetingPoint")}
+					required
+					placeholder={tCommon("pickupInfoMeetingPointPlaceholder")}
+					error={pickupErrors.meetingPoint}
+					inputProps={{
+						value: meetingPoint,
+						onChange: (e) => setMeetingPoint(e.target.value),
+					}}
+				/>
+				<CustomInput
+					labelText={tCommon("pickupInfoBeThereAtDate")}
+					required
+					inputType="date"
+					error={pickupErrors.beThereAtDate}
+					inputProps={{
+						value: beThereAtDate,
+						onChange: (e) => setBeThereAtDate(e.target.value),
+					}}
+				/>
+				<CustomInput
+					labelText={tCommon("pickupInfoBeThereAtTime")}
+					required
+					inputType="time"
+					error={pickupErrors.beThereAtTime}
+					inputProps={{
+						value: beThereAtTime,
+						onChange: (e) => setBeThereAtTime(e.target.value),
+					}}
+				/>
+				<CustomTextArea
+					labelText={tCommon("pickupInfoAdditionalInfo")}
+					rows={3}
+					placeholder={tCommon("pickupInfoAdditionalInfoPlaceholder")}
+					textAreaProps={{
+						value: additionalInfo,
+						onChange: (e) => setAdditionalInfo(e.target.value),
+					}}
+				/>
+
+				<SectionDivider title={tCommon("driverInfoDetails")} />
 				<div className="space-y-1">
 					<CustomSelect
 						labelText={tCommon("pickupInfoSelectDriver")}
@@ -250,48 +293,6 @@ export function AdminPickupEditDialog({
 						pickupErrors.driverPhone ?? pickupErrors.driverPhoneCountryCode
 					}
 				/>
-
-				<div className="space-y-4">
-					<CustomInput
-						labelText={tCommon("pickupInfoMeetingPoint")}
-						required
-						placeholder={tCommon("pickupInfoMeetingPointPlaceholder")}
-						error={pickupErrors.meetingPoint}
-						inputProps={{
-							value: meetingPoint,
-							onChange: (e) => setMeetingPoint(e.target.value),
-						}}
-					/>
-					<CustomInput
-						labelText={tCommon("pickupInfoBeThereAtDate")}
-						required
-						inputType="date"
-						error={pickupErrors.beThereAtDate}
-						inputProps={{
-							value: beThereAtDate,
-							onChange: (e) => setBeThereAtDate(e.target.value),
-						}}
-					/>
-					<CustomInput
-						labelText={tCommon("pickupInfoBeThereAtTime")}
-						required
-						inputType="time"
-						error={pickupErrors.beThereAtTime}
-						inputProps={{
-							value: beThereAtTime,
-							onChange: (e) => setBeThereAtTime(e.target.value),
-						}}
-					/>
-					<CustomTextArea
-						labelText={tCommon("pickupInfoAdditionalInfo")}
-						rows={3}
-						placeholder={tCommon("pickupInfoAdditionalInfoPlaceholder")}
-						textAreaProps={{
-							value: additionalInfo,
-							onChange: (e) => setAdditionalInfo(e.target.value),
-						}}
-					/>
-				</div>
 			</div>
 		</AppDialog>
 	);

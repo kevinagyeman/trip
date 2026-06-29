@@ -539,6 +539,7 @@
 		"pickupInfoAdditionalInfoPlaceholder": "Note per il cliente...",
 		"pickupInfoSelectDriver": "Seleziona autista",
 		"pickupInfoSelectDriverPlaceholder": "Scegli tra i tuoi autisti...",
+		"driverInfoDetails": "Dettagli autista",
 		"pickupTimeNote": "Dopo la conferma del transfer, in base all'orario che hai indicato, calcoleremo l'orario di ritiro in base a traffico e distanza.",
 		"pickupAdminTimeNote": "Fai sapere al cliente l'orario di ritiro esatto una volta che hai tutte le informazioni necessarie (data/ora di partenza, numero di volo, ecc.)",
 		"noPickupData": "Non ci sono ancora informazioni di ritiro per questo percorso. Riceverai una email quando saranno disponibili",
