@@ -1,3 +1,4 @@
+import { BannerForm } from "@/app/_components/admin/banner-form";
 import { BookingLinkCard } from "@/app/_components/admin/booking-link-card";
 import { ChangeEmailForm } from "@/app/_components/admin/change-email-form";
 import { ChangeLanguageForm } from "@/app/_components/admin/change-language-form";
@@ -41,6 +42,7 @@ export default async function AdminSettingsPage({
 					select: {
 						slug: true,
 						estimateNotice: true,
+						bannerMessage: true,
 						name: true,
 						vat: true,
 						phone: true,
@@ -87,6 +89,11 @@ export default async function AdminSettingsPage({
 							<EstimateNoticeForm currentValue={company.estimateNotice ?? ""} />
 						</SectionCard>
 					</div>
+				)}
+				{company && (
+					<SectionCard title={t("bannerTitle")}>
+						<BannerForm currentValue={company.bannerMessage ?? ""} />
+					</SectionCard>
 				)}
 				{session.user.role !== "SUPER_ADMIN" && (
 					<SectionCard title={t("emailPreferencesTitle")}>

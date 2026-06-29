@@ -64,6 +64,7 @@ model Company {
   website          String?
   phone            String?
   estimateNotice   String?  @db.Text
+  bannerMessage    String?  @db.Text
   brandColor       String?
   coverPhotoUrl    String?
   emailPreferences Json?

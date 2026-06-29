@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { BannerDisplay } from "@/app/_components/ui/banner-display";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { NoticeDialog } from "@/app/_components/ui/notice-dialog";
@@ -144,6 +145,11 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 
 	return (
 		<div className="space-y-6">
+			{/* Company banner */}
+			{request.company?.bannerMessage && (
+				<BannerDisplay bannerMessage={request.company.bannerMessage} />
+			)}
+
 			{/* Dantrip promo — only for public requests */}
 			{!request.company && (
 				<SectionCard

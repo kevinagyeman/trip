@@ -2048,6 +2048,7 @@ export namespace Prisma {
     website: string | null
     phone: string | null
     estimateNotice: string | null
+    bannerMessage: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
     createdAt: Date | null
@@ -2066,6 +2067,7 @@ export namespace Prisma {
     website: string | null
     phone: string | null
     estimateNotice: string | null
+    bannerMessage: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
     createdAt: Date | null
@@ -2084,6 +2086,7 @@ export namespace Prisma {
     website: number
     phone: number
     estimateNotice: number
+    bannerMessage: number
     brandColor: number
     coverPhotoUrl: number
     emailPreferences: number
@@ -2105,6 +2108,7 @@ export namespace Prisma {
     website?: true
     phone?: true
     estimateNotice?: true
+    bannerMessage?: true
     brandColor?: true
     coverPhotoUrl?: true
     createdAt?: true
@@ -2123,6 +2127,7 @@ export namespace Prisma {
     website?: true
     phone?: true
     estimateNotice?: true
+    bannerMessage?: true
     brandColor?: true
     coverPhotoUrl?: true
     createdAt?: true
@@ -2141,6 +2146,7 @@ export namespace Prisma {
     website?: true
     phone?: true
     estimateNotice?: true
+    bannerMessage?: true
     brandColor?: true
     coverPhotoUrl?: true
     emailPreferences?: true
@@ -2233,6 +2239,7 @@ export namespace Prisma {
     website: string | null
     phone: string | null
     estimateNotice: string | null
+    bannerMessage: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
     emailPreferences: JsonValue | null
@@ -2269,6 +2276,7 @@ export namespace Prisma {
     website?: boolean
     phone?: boolean
     estimateNotice?: boolean
+    bannerMessage?: boolean
     brandColor?: boolean
     coverPhotoUrl?: boolean
     emailPreferences?: boolean
@@ -2294,6 +2302,7 @@ export namespace Prisma {
     website?: boolean
     phone?: boolean
     estimateNotice?: boolean
+    bannerMessage?: boolean
     brandColor?: boolean
     coverPhotoUrl?: boolean
     emailPreferences?: boolean
@@ -2301,7 +2310,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "phone" | "estimateNotice" | "brandColor" | "coverPhotoUrl" | "emailPreferences" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "phone" | "estimateNotice" | "bannerMessage" | "brandColor" | "coverPhotoUrl" | "emailPreferences" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -2328,6 +2337,7 @@ export namespace Prisma {
       website: string | null
       phone: string | null
       estimateNotice: string | null
+      bannerMessage: string | null
       brandColor: string | null
       coverPhotoUrl: string | null
       emailPreferences: Prisma.JsonValue | null
@@ -2716,6 +2726,7 @@ export namespace Prisma {
     readonly website: FieldRef<"Company", 'String'>
     readonly phone: FieldRef<"Company", 'String'>
     readonly estimateNotice: FieldRef<"Company", 'String'>
+    readonly bannerMessage: FieldRef<"Company", 'String'>
     readonly brandColor: FieldRef<"Company", 'String'>
     readonly coverPhotoUrl: FieldRef<"Company", 'String'>
     readonly emailPreferences: FieldRef<"Company", 'Json'>
@@ -14506,6 +14517,7 @@ export namespace Prisma {
     website: 'website',
     phone: 'phone',
     estimateNotice: 'estimateNotice',
+    bannerMessage: 'bannerMessage',
     brandColor: 'brandColor',
     coverPhotoUrl: 'coverPhotoUrl',
     emailPreferences: 'emailPreferences',
@@ -14750,6 +14762,7 @@ export namespace Prisma {
     website: 'website',
     phone: 'phone',
     estimateNotice: 'estimateNotice',
+    bannerMessage: 'bannerMessage',
     brandColor: 'brandColor',
     coverPhotoUrl: 'coverPhotoUrl'
   };
@@ -15015,6 +15028,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"Company"> | string | null
     phone?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    bannerMessage?: StringNullableFilter<"Company"> | string | null
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     emailPreferences?: JsonNullableFilter<"Company">
@@ -15037,6 +15051,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    bannerMessage?: SortOrderInput | SortOrder
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
     emailPreferences?: SortOrderInput | SortOrder
@@ -15063,6 +15078,7 @@ export namespace Prisma {
     website?: StringNullableFilter<"Company"> | string | null
     phone?: StringNullableFilter<"Company"> | string | null
     estimateNotice?: StringNullableFilter<"Company"> | string | null
+    bannerMessage?: StringNullableFilter<"Company"> | string | null
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     emailPreferences?: JsonNullableFilter<"Company">
@@ -15085,6 +15101,7 @@ export namespace Prisma {
     website?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
     estimateNotice?: SortOrderInput | SortOrder
+    bannerMessage?: SortOrderInput | SortOrder
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
     emailPreferences?: SortOrderInput | SortOrder
@@ -15110,6 +15127,7 @@ export namespace Prisma {
     website?: StringNullableWithAggregatesFilter<"Company"> | string | null
     phone?: StringNullableWithAggregatesFilter<"Company"> | string | null
     estimateNotice?: StringNullableWithAggregatesFilter<"Company"> | string | null
+    bannerMessage?: StringNullableWithAggregatesFilter<"Company"> | string | null
     brandColor?: StringNullableWithAggregatesFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
     emailPreferences?: JsonNullableWithAggregatesFilter<"Company">
@@ -16092,6 +16110,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16114,6 +16133,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16136,6 +16156,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16158,6 +16179,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16180,6 +16202,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16199,6 +16222,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -16218,6 +16242,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -17412,6 +17437,7 @@ export namespace Prisma {
     website?: SortOrder
     phone?: SortOrder
     estimateNotice?: SortOrder
+    bannerMessage?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
     emailPreferences?: SortOrder
@@ -17431,6 +17457,7 @@ export namespace Prisma {
     website?: SortOrder
     phone?: SortOrder
     estimateNotice?: SortOrder
+    bannerMessage?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
     createdAt?: SortOrder
@@ -17449,6 +17476,7 @@ export namespace Prisma {
     website?: SortOrder
     phone?: SortOrder
     estimateNotice?: SortOrder
+    bannerMessage?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
     createdAt?: SortOrder
@@ -19816,6 +19844,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -19837,6 +19866,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -19874,6 +19904,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -19895,6 +19926,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20084,6 +20116,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20105,6 +20138,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20354,6 +20388,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20375,6 +20410,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20579,6 +20615,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20600,6 +20637,7 @@ export namespace Prisma {
     website?: string | null
     phone?: string | null
     estimateNotice?: string | null
+    bannerMessage?: string | null
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20830,6 +20868,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
@@ -20851,6 +20890,7 @@ export namespace Prisma {
     website?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     estimateNotice?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerMessage?: NullableStringFieldUpdateOperationsInput | string | null
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue

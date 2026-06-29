@@ -126,6 +126,19 @@ export const companyRouter = createTRPCRouter({
 		return { ...EMAIL_PREFERENCE_DEFAULTS, ...stored };
 	}),
 
+	// ADMIN: Update own company banner (per-language JSON)
+	updateBanner: adminProcedure
+		.input(z.object({ messages: z.record(z.string()) }))
+		.mutation(async ({ ctx, input }) => {
+			const companyId = ctx.session.user.companyId;
+			if (!companyId) throw new TRPCError({ code: "FORBIDDEN" });
+			const hasAny = Object.values(input.messages).some((v) => v.trim() !== "");
+			return ctx.db.company.update({
+				where: { id: companyId },
+				data: { bannerMessage: hasAny ? JSON.stringify(input.messages) : null },
+			});
+		}),
+
 	// ADMIN: Update own company email preferences
 	updateEmailPreferences: adminProcedure
 		.input(

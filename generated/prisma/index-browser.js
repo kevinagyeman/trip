@@ -133,6 +133,7 @@ exports.Prisma.CompanyScalarFieldEnum = {
   website: 'website',
   phone: 'phone',
   estimateNotice: 'estimateNotice',
+  bannerMessage: 'bannerMessage',
   brandColor: 'brandColor',
   coverPhotoUrl: 'coverPhotoUrl',
   emailPreferences: 'emailPreferences',
@@ -326,6 +327,7 @@ exports.Prisma.CompanyOrderByRelevanceFieldEnum = {
   website: 'website',
   phone: 'phone',
   estimateNotice: 'estimateNotice',
+  bannerMessage: 'bannerMessage',
   brandColor: 'brandColor',
   coverPhotoUrl: 'coverPhotoUrl'
 };

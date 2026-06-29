@@ -1,11 +1,12 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
+import { BannerDisplay } from "@/app/_components/ui/banner-display";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { db } from "@/server/db";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-type Params = Promise<{ slug: string }>;
+type Params = Promise<{ slug: string; locale: string }>;
 
 export async function generateMetadata({
 	params,
@@ -50,6 +51,7 @@ export default async function BookingPortalPage({
 			logoUrl: true,
 			coverPhotoUrl: true,
 			brandColor: true,
+			bannerMessage: true,
 		},
 	});
 
@@ -62,7 +64,7 @@ export default async function BookingPortalPage({
 	return (
 		<div style={brandColor ? { backgroundColor: brandColor } : undefined}>
 			<div className="mx-auto max-w-2xl space-y-6 p-4">
-				<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9]">
+				<div className="relative w-full overflow-hidden rounded-xl aspect-video">
 					<Image
 						src={company.coverPhotoUrl ?? "/cover-demo.png"}
 						alt=""
@@ -88,6 +90,9 @@ export default async function BookingPortalPage({
 					<h1 className="sm:text-3xl text-lg font-bold text-center">
 						{company.name}
 					</h1>
+					{company.bannerMessage && (
+						<BannerDisplay bannerMessage={company.bannerMessage} />
+					)}
 				</SectionCard>
 
 				<div>
