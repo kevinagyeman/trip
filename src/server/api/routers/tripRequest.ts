@@ -484,7 +484,9 @@ export const tripRequestRouter = createTRPCRouter({
 				include: {
 					user: { select: { id: true, name: true, email: true, image: true } },
 					quotations: { orderBy: { createdAt: "desc" } },
-					company: { select: { estimateNotice: true, name: true } },
+					company: {
+						select: { estimateNotice: true, name: true, currency: true },
+					},
 					routes: { orderBy: { position: "asc" } },
 				},
 			});

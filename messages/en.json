@@ -428,6 +428,8 @@
 		"addressPlaceholder": "Via Roma 1, 00100 Rome",
 		"country": "Country",
 		"countryPlaceholder": "Select your country",
+		"currency": "Preferred Currency",
+		"currencyPlaceholder": "Select a currency",
 		"website": "Website",
 		"logoUrl": "Logo URL",
 		"coverPhotoUrl": "Cover Photo URL",

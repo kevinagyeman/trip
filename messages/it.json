@@ -431,6 +431,8 @@
 		"addressPlaceholder": "Via Roma 1, 00100 Roma",
 		"country": "Paese",
 		"countryPlaceholder": "Seleziona il paese",
+		"currency": "Valuta Preferita",
+		"currencyPlaceholder": "Seleziona una valuta",
 		"website": "Sito Web",
 		"logoUrl": "URL Logo",
 		"coverPhotoUrl": "URL Foto di Copertina",

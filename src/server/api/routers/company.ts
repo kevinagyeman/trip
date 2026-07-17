@@ -94,6 +94,7 @@ export const companyRouter = createTRPCRouter({
 					.nullable(),
 				logoUrl: z.string().url().optional().or(z.literal("")).nullable(),
 				coverPhotoUrl: z.string().url().optional().or(z.literal("")).nullable(),
+				currency: z.string().min(1).optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

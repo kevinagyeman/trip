@@ -11,4 +11,5 @@ export const CURRENCIES = [
 	{ value: "DKK", label: "DKK — Danish Krone" },
 	{ value: "AED", label: "AED — UAE Dirham" },
 	{ value: "CNY", label: "CNY — Chinese Yuan" },
+	{ value: "MYR", label: "MYR — Malaysian Ringgit" },
 ];

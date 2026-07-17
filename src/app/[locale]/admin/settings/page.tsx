@@ -52,6 +52,7 @@ export default async function AdminSettingsPage({
 						brandColor: true,
 						logoUrl: true,
 						coverPhotoUrl: true,
+						currency: true,
 					},
 				})
 			: null,

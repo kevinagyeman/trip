@@ -5,6 +5,7 @@ import CustomSelect from "@/app/_components/ui/custom-select";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { PhoneInput } from "@/app/_components/ui/phone-input";
 import { COUNTRIES } from "@/lib/countries";
+import { CURRENCIES } from "@/lib/currencies";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -22,6 +23,7 @@ type CompanyDetailsValues = {
 	brandColor: string;
 	logoUrl: string;
 	coverPhotoUrl: string;
+	currency: string;
 };
 
 export function CompanyDetailsForm({
@@ -37,6 +39,7 @@ export function CompanyDetailsForm({
 		brandColor?: string | null;
 		logoUrl?: string | null;
 		coverPhotoUrl?: string | null;
+		currency?: string | null;
 	};
 }) {
 	const t = useTranslations("settings");
@@ -56,6 +59,7 @@ export function CompanyDetailsForm({
 				brandColor: initialValues.brandColor ?? "#000000",
 				logoUrl: initialValues.logoUrl ?? "",
 				coverPhotoUrl: initialValues.coverPhotoUrl ?? "",
+				currency: initialValues.currency ?? "EUR",
 			},
 		});
 
@@ -71,6 +75,7 @@ export function CompanyDetailsForm({
 			brandColor: initialValues.brandColor ?? "#000000",
 			logoUrl: initialValues.logoUrl ?? "",
 			coverPhotoUrl: initialValues.coverPhotoUrl ?? "",
+			currency: initialValues.currency ?? "EUR",
 		});
 	}, [initialValues.name]);
 
@@ -122,6 +127,13 @@ export function CompanyDetailsForm({
 				value={watch("country")}
 				onValueChange={(v) => setValue("country", v)}
 				options={COUNTRIES.map((c) => ({ value: c.code, label: c.name }))}
+			/>
+			<CustomSelect
+				labelText={t("currency")}
+				placeholder={t("currencyPlaceholder")}
+				value={watch("currency")}
+				onValueChange={(v) => setValue("currency", v)}
+				options={CURRENCIES}
 			/>
 			<CustomInput
 				labelText={t("website")}

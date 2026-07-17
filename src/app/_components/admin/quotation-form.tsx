@@ -36,6 +36,7 @@ type QuotationData = {
 type Props = {
 	quotation: QuotationData | null | undefined;
 	estimateNotice?: string | null;
+	defaultCurrency?: string;
 	formId: string;
 	onSubmit: (values: QuotationFormValues) => void;
 };
@@ -43,6 +44,7 @@ type Props = {
 export function QuotationForm({
 	quotation,
 	estimateNotice,
+	defaultCurrency = "EUR",
 	formId,
 	onSubmit,
 }: Props) {
@@ -70,7 +72,7 @@ export function QuotationForm({
 		}
 		return {
 			price: undefined,
-			currency: "EUR",
+			currency: defaultCurrency,
 			priceType: undefined,
 			carSeatsStatus: undefined,
 			additionalInfo: estimateNotice ?? "",
@@ -97,6 +99,7 @@ export function QuotationForm({
 		quotation?.isPriceEachWay,
 		quotation?.areCarSeatsIncluded,
 		quotation?.quotationAdditionalInfo,
+		defaultCurrency,
 	]);
 
 	return (

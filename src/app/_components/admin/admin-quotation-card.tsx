@@ -280,6 +280,7 @@ export function AdminQuotationCard({ requestId, request }: Props) {
 							formId={QUOTATION_FORM_ID}
 							quotation={quotation}
 							estimateNotice={estimateNotice}
+							defaultCurrency={request.company?.currency ?? "EUR"}
 							onSubmit={(values) =>
 								saveAndSend.mutate(buildMutationInput(values))
 							}

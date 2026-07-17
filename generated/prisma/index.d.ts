@@ -2051,6 +2051,7 @@ export namespace Prisma {
     bannerMessage: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
+    currency: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2070,6 +2071,7 @@ export namespace Prisma {
     bannerMessage: string | null
     brandColor: string | null
     coverPhotoUrl: string | null
+    currency: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2090,6 +2092,7 @@ export namespace Prisma {
     brandColor: number
     coverPhotoUrl: number
     emailPreferences: number
+    currency: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2111,6 +2114,7 @@ export namespace Prisma {
     bannerMessage?: true
     brandColor?: true
     coverPhotoUrl?: true
+    currency?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2130,6 +2134,7 @@ export namespace Prisma {
     bannerMessage?: true
     brandColor?: true
     coverPhotoUrl?: true
+    currency?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2150,6 +2155,7 @@ export namespace Prisma {
     brandColor?: true
     coverPhotoUrl?: true
     emailPreferences?: true
+    currency?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2243,6 +2249,7 @@ export namespace Prisma {
     brandColor: string | null
     coverPhotoUrl: string | null
     emailPreferences: JsonValue | null
+    currency: string
     createdAt: Date
     updatedAt: Date
     _count: CompanyCountAggregateOutputType | null
@@ -2280,6 +2287,7 @@ export namespace Prisma {
     brandColor?: boolean
     coverPhotoUrl?: boolean
     emailPreferences?: boolean
+    currency?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     users?: boolean | Company$usersArgs<ExtArgs>
@@ -2306,11 +2314,12 @@ export namespace Prisma {
     brandColor?: boolean
     coverPhotoUrl?: boolean
     emailPreferences?: boolean
+    currency?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "phone" | "estimateNotice" | "bannerMessage" | "brandColor" | "coverPhotoUrl" | "emailPreferences" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+  export type CompanyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "logoUrl" | "isActive" | "vat" | "address" | "country" | "website" | "phone" | "estimateNotice" | "bannerMessage" | "brandColor" | "coverPhotoUrl" | "emailPreferences" | "currency" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
   export type CompanyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Company$usersArgs<ExtArgs>
     tripRequests?: boolean | Company$tripRequestsArgs<ExtArgs>
@@ -2341,6 +2350,7 @@ export namespace Prisma {
       brandColor: string | null
       coverPhotoUrl: string | null
       emailPreferences: Prisma.JsonValue | null
+      currency: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["company"]>
@@ -2730,6 +2740,7 @@ export namespace Prisma {
     readonly brandColor: FieldRef<"Company", 'String'>
     readonly coverPhotoUrl: FieldRef<"Company", 'String'>
     readonly emailPreferences: FieldRef<"Company", 'Json'>
+    readonly currency: FieldRef<"Company", 'String'>
     readonly createdAt: FieldRef<"Company", 'DateTime'>
     readonly updatedAt: FieldRef<"Company", 'DateTime'>
   }
@@ -14521,6 +14532,7 @@ export namespace Prisma {
     brandColor: 'brandColor',
     coverPhotoUrl: 'coverPhotoUrl',
     emailPreferences: 'emailPreferences',
+    currency: 'currency',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14764,7 +14776,8 @@ export namespace Prisma {
     estimateNotice: 'estimateNotice',
     bannerMessage: 'bannerMessage',
     brandColor: 'brandColor',
-    coverPhotoUrl: 'coverPhotoUrl'
+    coverPhotoUrl: 'coverPhotoUrl',
+    currency: 'currency'
   };
 
   export type CompanyOrderByRelevanceFieldEnum = (typeof CompanyOrderByRelevanceFieldEnum)[keyof typeof CompanyOrderByRelevanceFieldEnum]
@@ -15032,6 +15045,7 @@ export namespace Prisma {
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     emailPreferences?: JsonNullableFilter<"Company">
+    currency?: StringFilter<"Company"> | string
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -15055,6 +15069,7 @@ export namespace Prisma {
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
     emailPreferences?: SortOrderInput | SortOrder
+    currency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
@@ -15082,6 +15097,7 @@ export namespace Prisma {
     brandColor?: StringNullableFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableFilter<"Company"> | string | null
     emailPreferences?: JsonNullableFilter<"Company">
+    currency?: StringFilter<"Company"> | string
     createdAt?: DateTimeFilter<"Company"> | Date | string
     updatedAt?: DateTimeFilter<"Company"> | Date | string
     users?: UserListRelationFilter
@@ -15105,6 +15121,7 @@ export namespace Prisma {
     brandColor?: SortOrderInput | SortOrder
     coverPhotoUrl?: SortOrderInput | SortOrder
     emailPreferences?: SortOrderInput | SortOrder
+    currency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CompanyCountOrderByAggregateInput
@@ -15131,6 +15148,7 @@ export namespace Prisma {
     brandColor?: StringNullableWithAggregatesFilter<"Company"> | string | null
     coverPhotoUrl?: StringNullableWithAggregatesFilter<"Company"> | string | null
     emailPreferences?: JsonNullableWithAggregatesFilter<"Company">
+    currency?: StringWithAggregatesFilter<"Company"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Company"> | Date | string
   }
@@ -16114,6 +16132,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -16137,6 +16156,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -16160,6 +16180,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -16183,6 +16204,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -16206,6 +16228,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16226,6 +16249,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16246,6 +16270,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17441,6 +17466,7 @@ export namespace Prisma {
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
     emailPreferences?: SortOrder
+    currency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17460,6 +17486,7 @@ export namespace Prisma {
     bannerMessage?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
+    currency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17479,6 +17506,7 @@ export namespace Prisma {
     bannerMessage?: SortOrder
     brandColor?: SortOrder
     coverPhotoUrl?: SortOrder
+    currency?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19848,6 +19876,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -19870,6 +19899,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -19908,6 +19938,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -19930,6 +19961,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20120,6 +20152,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestCreateNestedManyWithoutCompanyInput
@@ -20142,6 +20175,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     tripRequests?: TripRequestUncheckedCreateNestedManyWithoutCompanyInput
@@ -20392,6 +20426,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUpdateManyWithoutCompanyNestedInput
@@ -20414,6 +20449,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tripRequests?: TripRequestUncheckedUpdateManyWithoutCompanyNestedInput
@@ -20619,6 +20655,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutCompanyInput
@@ -20641,6 +20678,7 @@ export namespace Prisma {
     brandColor?: string | null
     coverPhotoUrl?: string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutCompanyInput
@@ -20872,6 +20910,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutCompanyNestedInput
@@ -20894,6 +20933,7 @@ export namespace Prisma {
     brandColor?: NullableStringFieldUpdateOperationsInput | string | null
     coverPhotoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emailPreferences?: NullableJsonNullValueInput | InputJsonValue
+    currency?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutCompanyNestedInput
