@@ -751,21 +751,7 @@ export function CreateTripRequestForm({
 						</p>
 					)}
 				</SectionCard>
-			) : isDemo ? (
-				<SectionCard contentClassName="space-y-3 pt-0 text-center">
-					<p className="text-muted-foreground">{t("demoCtaDescription")}</p>
-					<Button
-						type="button"
-						size="lg"
-						className="w-full"
-						onClick={() => {
-							window.location.href = "/register-company";
-						}}
-					>
-						{t("demoCtaButton")}
-					</Button>
-				</SectionCard>
-			) : (
+			) : isDemo ? null : (
 				<SectionCard contentClassName="space-y-4 pt-0">
 					{/* Privacy Policy */}
 					<Controller

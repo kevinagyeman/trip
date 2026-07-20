@@ -557,9 +557,12 @@
 		"toastEmailSentToAdmin": "Email sent to admin"
 	},
 	"bookingDemo": {
-		"previewBanner": "This is a preview of how your booking page will look to your customers.",
 		"coverLabel": "Your cover photo",
-		"companyNamePlaceholder": "Your company name"
+		"companyNamePlaceholder": "Your company name",
+		"customerViewTitle": "What your customers see",
+		"adminViewTitle": "What you see",
+		"featuresTitle": "What you can do",
+		"discoverMore": "Discover all the benefits"
 	},
 	"publicQuote": {
 		"title": "Request a transfer",

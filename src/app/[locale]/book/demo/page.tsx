@@ -1,6 +1,9 @@
 import { CreateTripRequestForm } from "@/app/_components/trip-requests/create-trip-request-form";
-import { AlertBanner } from "@/app/_components/ui/alert-banner";
+import { DemoDashboardPreview } from "@/app/_components/trip-requests/demo-dashboard-preview";
 import { SectionCard } from "@/app/_components/ui/section-card";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+import { Check } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
@@ -50,10 +53,26 @@ export default async function DemoBookingPage({
 
 	const { company, logo, coverphoto } = await searchParams;
 	const t = await getTranslations("bookingDemo");
+	const tForm = await getTranslations("tripRequest");
+	const tPricing = await getTranslations("pricing");
+
+	const features: string[] = [
+		tPricing("feature1"),
+		tPricing("feature2"),
+		tPricing("feature3"),
+		tPricing("feature4"),
+		tPricing("feature5"),
+		tPricing("feature6"),
+		tPricing("feature7"),
+		tPricing("feature8"),
+		tPricing("feature9"),
+	];
 
 	return (
 		<div className="mx-auto max-w-2xl space-y-6 p-4">
-			<AlertBanner variant="info" description={t("previewBanner")} />
+			<h2 className="text-center text-lg font-bold sm:text-3xl">
+				{t("customerViewTitle")}
+			</h2>
 
 			<div className="relative w-full overflow-hidden rounded-xl aspect-[16/9]">
 				<Image
@@ -93,6 +112,40 @@ export default async function DemoBookingPage({
 			<div>
 				<CreateTripRequestForm companySlug="demo" isDemo />
 			</div>
+
+			<h2 className="text-center text-lg font-bold sm:text-3xl mt-6">
+				{t("adminViewTitle")}
+			</h2>
+
+			<DemoDashboardPreview />
+
+			<h2 className="text-center text-lg font-bold sm:text-3xl mt-6">
+				{t("featuresTitle")}
+			</h2>
+
+			<SectionCard contentClassName="pt-0">
+				<ul className="space-y-3">
+					{features.map((feature) => (
+						<li key={feature} className="flex items-start gap-3 text-sm">
+							<Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+							<span>{feature}</span>
+						</li>
+					))}
+				</ul>
+			</SectionCard>
+
+			<div className="text-center">
+				<Button asChild variant="link">
+					<Link href="/">{t("discoverMore")}</Link>
+				</Button>
+			</div>
+
+			<SectionCard contentClassName="space-y-3 pt-0 text-center">
+				<p className="text-muted-foreground">{tForm("demoCtaDescription")}</p>
+				<Button asChild size="lg" className="w-full">
+					<Link href="/register-company">{tForm("demoCtaButton")}</Link>
+				</Button>
+			</SectionCard>
 		</div>
 	);
 }

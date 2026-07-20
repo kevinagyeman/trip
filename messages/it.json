@@ -560,9 +560,12 @@
 		"toastEmailSentToAdmin": "Email inviata all'admin"
 	},
 	"bookingDemo": {
-		"previewBanner": "Ecco come apparirà la tua pagina di prenotazione ai tuoi clienti.",
 		"coverLabel": "La tua copertina",
-		"companyNamePlaceholder": "Il nome della tua azienda"
+		"companyNamePlaceholder": "Il nome della tua azienda",
+		"customerViewTitle": "Cosa vedono i tuoi clienti",
+		"adminViewTitle": "Cosa vedi tu",
+		"featuresTitle": "Cosa puoi fare",
+		"discoverMore": "Scopri tutti i vantaggi"
 	},
 	"publicQuote": {
 		"title": "Richiedi un transfer",
