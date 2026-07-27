@@ -25,6 +25,13 @@ export function GenericEmail({ data, href }: GenericEmailProps) {
 						</Link>
 					</Text>
 				)}
+				<Text style={fallbackHint}>
+					Button not working? Copy and paste this link into your browser:
+					<br />
+					<Link href={href} style={fallbackLinkAnchor}>
+						{href}
+					</Link>
+				</Text>
 			</Section>
 			{data.secondaryText && <Text style={hint}>{data.secondaryText}</Text>}
 		</EmailLayout>
@@ -34,6 +41,18 @@ export function GenericEmail({ data, href }: GenericEmailProps) {
 const hint = { color: "#888888", fontSize: "13px", lineHeight: "20px" };
 const secondaryLink = { textAlign: "center" as const, margin: "12px 0 0" };
 const secondaryLinkAnchor = { fontSize: "13px" };
+const fallbackHint = {
+	color: "#888888",
+	fontSize: "14px",
+	lineHeight: "20px",
+	textAlign: "center" as const,
+	margin: "16px 0 0",
+};
+const fallbackLinkAnchor = {
+	color: "#888888",
+	fontSize: "14px",
+	wordBreak: "break-all" as const,
+};
 
 const previewData: EmailData = {
 	preview: "Your trip request has been confirmed",
