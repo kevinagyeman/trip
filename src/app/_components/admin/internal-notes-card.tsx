@@ -10,9 +10,11 @@ import { useState } from "react";
 export function InternalNotesCard({
 	requestId,
 	initialNotes,
+	disabled = false,
 }: {
 	requestId: string;
 	initialNotes: string;
+	disabled?: boolean;
 }) {
 	const t = useTranslations("adminDetail");
 	const utils = api.useUtils();
@@ -29,11 +31,14 @@ export function InternalNotesCard({
 				value={notes}
 				onChange={(e) => setNotes(e.target.value)}
 				placeholder={t("internalNotesPlaceholder")}
+				disabled={disabled}
 			/>
-			<LoadingButton
-				isLoading={update.isPending}
-				onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
-			/>
+			{!disabled && (
+				<LoadingButton
+					isLoading={update.isPending}
+					onClick={() => update.mutate({ id: requestId, internalNotes: notes })}
+				/>
+			)}
 		</SectionCard>
 	);
 }

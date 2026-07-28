@@ -14,7 +14,10 @@ export default async function AdminRequestPage({
 
 	const session = await auth();
 
-	if (!session?.user || session.user.role !== "ADMIN") {
+	if (
+		!session?.user ||
+		(session.user.role !== "ADMIN" && session.user.role !== "SUPER_ADMIN")
+	) {
 		redirect(`/auth/signin?callbackUrl=/admin/requests/${id}`);
 	}
 
@@ -27,7 +30,10 @@ export default async function AdminRequestPage({
 	return (
 		<HydrateClient>
 			<div className="container mx-auto max-w-3xl p-4">
-				<AdminRequestDetail requestId={id} />
+				<AdminRequestDetail
+					requestId={id}
+					readOnly={session.user.role === "SUPER_ADMIN"}
+				/>
 			</div>
 		</HydrateClient>
 	);

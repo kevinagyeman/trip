@@ -470,7 +470,10 @@
 		"pendingApproval": "In Attesa di Approvazione",
 		"pendingBadge": "In attesa",
 		"activeCompanies": "Aziende Attive",
-		"reviewAndActivate": "Rivedi e Attiva"
+		"reviewAndActivate": "Rivedi e Attiva",
+		"viewRequests": "Visualizza Richieste",
+		"allCompanies": "Tutte le aziende",
+		"readOnlyBanner": "Stai visualizzando come super admin — questa vista è di sola lettura."
 	},
 	"registerCompany": {
 		"title": "Registra la tua azienda (è gratis!)",

@@ -187,3 +187,23 @@ export const superAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
 		},
 	});
 });
+
+/**
+ * Throws unless the current admin is allowed to WRITE data belonging to `targetCompanyId`.
+ * Super admins can browse every company's trip requests read-only, but have no companyId
+ * of their own to scope a write to — so they're never allowed past this check.
+ */
+export function assertCompanyWriteAccess(
+	user: { role: string; companyId: string | null },
+	targetCompanyId: string | null,
+) {
+	if (user.role === "SUPER_ADMIN") {
+		throw new TRPCError({
+			code: "FORBIDDEN",
+			message: "Super admins have read-only access to company requests",
+		});
+	}
+	if (user.companyId && targetCompanyId !== user.companyId) {
+		throw new TRPCError({ code: "FORBIDDEN" });
+	}
+}

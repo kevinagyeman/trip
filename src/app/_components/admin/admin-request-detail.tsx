@@ -7,6 +7,7 @@ import { AdminQuotationCard } from "@/app/_components/admin/admin-quotation-card
 import { AdminRouteEditDialog } from "@/app/_components/admin/admin-route-edit-dialog";
 import { EventsTimeline } from "@/app/_components/admin/events-timeline";
 import { InternalNotesCard } from "@/app/_components/admin/internal-notes-card";
+import { AlertBanner } from "@/app/_components/ui/alert-banner";
 import { ContactDetailsCard } from "@/app/_components/ui/contact-details-card";
 import { CopyLinkCard } from "@/app/_components/ui/copy-link-card";
 import CustomSelect from "@/app/_components/ui/custom-select";
@@ -30,10 +31,18 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { TripRequestStatus } from "../../../../generated/prisma";
 
-export function AdminRequestDetail({ requestId }: { requestId: string }) {
+export function AdminRequestDetail({
+	requestId,
+	readOnly = false,
+}: {
+	requestId: string;
+	/** SUPER_ADMIN viewers can browse a request but cannot edit it. */
+	readOnly?: boolean;
+}) {
 	const router = useRouter();
 	const t = useTranslations("adminDetail");
 	const tCommon = useTranslations("common");
+	const tSuperAdmin = useTranslations("superAdmin");
 	const utils = api.useUtils();
 
 	const { data: request, isLoading } = api.tripRequest.getByIdAdmin.useQuery({
@@ -42,8 +51,9 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 
 	const markAsViewedByAdmin = api.tripRequest.markAsViewedByAdmin.useMutation();
 	useEffect(() => {
+		if (readOnly) return;
 		markAsViewedByAdmin.mutate({ id: requestId });
-	}, [requestId]);
+	}, [requestId, readOnly]);
 
 	const [pendingStatus, setPendingStatus] = useState<TripRequestStatus | null>(
 		null,
@@ -131,6 +141,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				{t("backToDashboard")}
 			</Button>
 
+			{readOnly && (
+				<AlertBanner
+					variant="info"
+					description={tSuperAdmin("readOnlyBanner")}
+				/>
+			)}
+
 			{/* Header card */}
 			<RequestHeaderCard
 				orderNumber={request.orderNumber}
@@ -138,36 +155,44 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 				lastName={request.lastName}
 				status={request.status}
 				headerActions={
-					<>
-						{!locked && (
-							<CustomSelect
-								value={pendingStatus ?? ""}
-								onValueChange={(v) => setPendingStatus(v as TripRequestStatus)}
-								placeholder={t("markAs")}
-								options={[
-									{ value: "COMPLETED", label: t("statusCompleted") },
-									{ value: "CANCELLED", label: t("statusCancelled") },
-								]}
-							/>
-						)}
-						{pendingStatus && pendingStatus !== request.status && (
-							<LoadingButton
-								size="sm"
-								isLoading={updateStatus.isPending}
-								onClick={() => {
-									updateStatus.mutate(
-										{ id: requestId, status: pendingStatus },
-										{ onSuccess: () => setPendingStatus(null) },
-									);
-								}}
-							/>
-						)}
-					</>
+					!readOnly && (
+						<>
+							{!locked && (
+								<CustomSelect
+									value={pendingStatus ?? ""}
+									onValueChange={(v) =>
+										setPendingStatus(v as TripRequestStatus)
+									}
+									placeholder={t("markAs")}
+									options={[
+										{ value: "COMPLETED", label: t("statusCompleted") },
+										{ value: "CANCELLED", label: t("statusCancelled") },
+									]}
+								/>
+							)}
+							{pendingStatus && pendingStatus !== request.status && (
+								<LoadingButton
+									size="sm"
+									isLoading={updateStatus.isPending}
+									onClick={() => {
+										updateStatus.mutate(
+											{ id: requestId, status: pendingStatus },
+											{ onSuccess: () => setPendingStatus(null) },
+										);
+									}}
+								/>
+							)}
+						</>
+					)
 				}
 			/>
 
 			{/* Quotation */}
-			<AdminQuotationCard requestId={requestId} request={request} />
+			<AdminQuotationCard
+				requestId={requestId}
+				request={request}
+				readOnly={readOnly}
+			/>
 
 			{/* Routes */}
 			<SectionCard title={t("routes")} contentClassName="pt-0">
@@ -197,7 +222,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 								tripInfo={request}
 							/>
 
-							{!locked && (
+							{!locked && !readOnly && (
 								<AdminRouteEditDialog
 									requestId={requestId}
 									route={route}
@@ -227,7 +252,7 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 										onSave={handlePickupSave}
 										warningTitle={tCommon("pickupAdminWarningTitle")}
 										warningText={tCommon("pickupAdminTimeNote")}
-										disabled={locked}
+										disabled={locked || readOnly}
 										tripInfo={request}
 									/>
 								</div>
@@ -258,12 +283,13 @@ export function AdminRequestDetail({ requestId }: { requestId: string }) {
 			/>
 
 			{/* Messages */}
-			<AdminMessagesCard requestId={requestId} disabled={locked} />
+			<AdminMessagesCard requestId={requestId} disabled={locked || readOnly} />
 
 			{/* Internal Notes */}
 			<InternalNotesCard
 				requestId={requestId}
 				initialNotes={request.internalNotes ?? ""}
+				disabled={readOnly}
 			/>
 
 			{/* Customer link */}

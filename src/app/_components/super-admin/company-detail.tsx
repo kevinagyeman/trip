@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "@/i18n/navigation";
 import { api } from "@/trpc/react";
 import {
 	Building2,
@@ -109,19 +110,21 @@ export function CompanyDetail({ id }: { id: string }) {
 						</div>
 					</CardContent>
 				</Card>
-				<Card>
-					<CardContent className="flex items-center gap-3 pt-6">
-						<FileText className="h-8 w-8 text-muted-foreground" />
-						<div>
-							<p className="text-2xl font-bold">
-								{company._count.tripRequests}
-							</p>
-							<p className="text-xs text-muted-foreground">
-								{t("tripRequests")}
-							</p>
-						</div>
-					</CardContent>
-				</Card>
+				<Link href={`/super-admin/requests?company=${id}`}>
+					<Card className="transition-colors hover:bg-accent">
+						<CardContent className="flex items-center gap-3 pt-6">
+							<FileText className="h-8 w-8 text-muted-foreground" />
+							<div>
+								<p className="text-2xl font-bold">
+									{company._count.tripRequests}
+								</p>
+								<p className="text-xs text-muted-foreground">
+									{t("tripRequests")}
+								</p>
+							</div>
+						</CardContent>
+					</Card>
+				</Link>
 				<Card>
 					<CardContent className="flex items-center gap-3 pt-6">
 						<Globe className="h-8 w-8 text-muted-foreground" />

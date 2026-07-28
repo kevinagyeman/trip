@@ -1,5 +1,6 @@
 import {
 	adminProcedure,
+	assertCompanyWriteAccess,
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
@@ -70,10 +71,7 @@ export const quotationRouter = createTRPCRouter({
 				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId: adminCompanyId } = ctx.session.user;
-			if (adminCompanyId && tripRequest.companyId !== adminCompanyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, tripRequest.companyId);
 
 			const existing = await ctx.db.quotation.findFirst({
 				where: { tripRequestId },
@@ -163,6 +161,10 @@ export const quotationRouter = createTRPCRouter({
 					message: "No quotation found for this request",
 				});
 			}
+			assertCompanyWriteAccess(
+				ctx.session.user,
+				quotation.tripRequest.companyId,
+			);
 			if (quotation.status === QuotationStatus.ACCEPTED) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",
@@ -434,10 +436,10 @@ export const quotationRouter = createTRPCRouter({
 				include: { tripRequest: { select: { companyId: true } } },
 			});
 			if (!quotation) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && quotation.tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(
+				ctx.session.user,
+				quotation.tripRequest.companyId,
+			);
 			if (quotation.status === QuotationStatus.ACCEPTED) {
 				throw new TRPCError({
 					code: "BAD_REQUEST",

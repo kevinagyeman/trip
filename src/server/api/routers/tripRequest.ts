@@ -2,6 +2,7 @@ import { LOCALE_ENUM } from "@/lib/constants";
 import type { TripEvent } from "@/lib/trip-events";
 import {
 	adminProcedure,
+	assertCompanyWriteAccess,
 	createTRPCRouter,
 	protectedProcedure,
 	publicProcedure,
@@ -331,31 +332,45 @@ export const tripRequestRouter = createTRPCRouter({
 	}),
 
 	// ADMIN: Get all trip requests (scoped to company)
-	getStatusCounts: adminProcedure.query(async ({ ctx }) => {
-		const { companyId, role } = ctx.session.user;
-		if (role === "ADMIN" && !companyId) {
-			throw new TRPCError({
-				code: "FORBIDDEN",
-				message: "No company assigned",
+	getStatusCounts: adminProcedure
+		.input(
+			z
+				.object({
+					// SUPER_ADMIN only: scope counts to a specific company.
+					// Omitted entirely -> counts across every company (aggregate view).
+					companyId: z.string().optional(),
+				})
+				.optional(),
+		)
+		.query(async ({ ctx, input }) => {
+			const { role } = ctx.session.user;
+			if (role === "ADMIN" && !ctx.session.user.companyId) {
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "No company assigned",
+				});
+			}
+			const companyId =
+				role === "SUPER_ADMIN"
+					? (input?.companyId ?? null)
+					: ctx.session.user.companyId;
+			const counts = await ctx.db.tripRequest.groupBy({
+				by: ["status"],
+				where: companyId ? { companyId } : {},
+				_count: true,
 			});
-		}
-		const counts = await ctx.db.tripRequest.groupBy({
-			by: ["status"],
-			where: companyId ? { companyId } : {},
-			_count: true,
-		});
-		const map: Partial<Record<string, number>> = {};
-		for (const c of counts) map[c.status] = c._count;
-		return {
-			pending: map.PENDING ?? 0,
-			quoted: map.QUOTED ?? 0,
-			accepted: map.ACCEPTED ?? 0,
-			confirmed: map.CONFIRMED ?? 0,
-			rejected: map.REJECTED ?? 0,
-			completed: map.COMPLETED ?? 0,
-			cancelled: map.CANCELLED ?? 0,
-		};
-	}),
+			const map: Partial<Record<string, number>> = {};
+			for (const c of counts) map[c.status] = c._count;
+			return {
+				pending: map.PENDING ?? 0,
+				quoted: map.QUOTED ?? 0,
+				accepted: map.ACCEPTED ?? 0,
+				confirmed: map.CONFIRMED ?? 0,
+				rejected: map.REJECTED ?? 0,
+				completed: map.COMPLETED ?? 0,
+				cancelled: map.CANCELLED ?? 0,
+			};
+		}),
 
 	getAllRequests: adminProcedure
 		.input(
@@ -368,19 +383,26 @@ export const tripRequestRouter = createTRPCRouter({
 					search: z.string().optional(),
 					limit: z.number().min(1).max(100).default(20),
 					cursor: z.string().optional(),
+					// SUPER_ADMIN only: browse a specific company's requests read-only.
+					// Omitted entirely -> every company (aggregate view).
+					companyId: z.string().optional(),
 				})
 				.optional(),
 		)
 		.query(async ({ ctx, input }) => {
 			const limit = input?.limit ?? 20;
 			const cursor = input?.cursor;
-			const { companyId, role } = ctx.session.user;
-			if (role === "ADMIN" && !companyId) {
+			const { role } = ctx.session.user;
+			if (role === "ADMIN" && !ctx.session.user.companyId) {
 				throw new TRPCError({
 					code: "FORBIDDEN",
 					message: "No company assigned",
 				});
 			}
+			const companyId =
+				role === "SUPER_ADMIN"
+					? (input?.companyId ?? null)
+					: ctx.session.user.companyId;
 			const search = input?.search?.trim();
 
 			const dateRangeFilter = (() => {
@@ -447,6 +469,7 @@ export const tripRequestRouter = createTRPCRouter({
 					quotations: { orderBy: { createdAt: "desc" } },
 					messages: { orderBy: { createdAt: "desc" }, take: 1 },
 					routes: { orderBy: { position: "asc" } },
+					company: { select: { id: true, name: true } },
 				},
 			});
 
@@ -612,10 +635,7 @@ export const tripRequestRouter = createTRPCRouter({
 				select: { status: true, companyId: true },
 			});
 			if (!current) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && current.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, current.companyId);
 
 			const allowed = VALID_TRANSITIONS[current.status] ?? [];
 			if (!allowed.includes(input.status)) {
@@ -707,6 +727,10 @@ export const tripRequestRouter = createTRPCRouter({
 	markAsViewedByAdmin: adminProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
+			// Super admins browse read-only — don't let their view stamp
+			// adminViewedAt and hide an unread badge from the company's own admins.
+			if (ctx.session.user.role === "SUPER_ADMIN") return;
+
 			const tripRequest = await ctx.db.tripRequest.findUnique({
 				where: { id: input.id },
 				select: { companyId: true },
@@ -798,10 +822,7 @@ export const tripRequestRouter = createTRPCRouter({
 				select: { companyId: true },
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, tripRequest.companyId);
 			return ctx.db.tripRequest.update({
 				where: { id: input.id },
 				data: { internalNotes: input.internalNotes || null },
@@ -846,10 +867,7 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, tripRequest.companyId);
 
 			await Promise.all([
 				...input.routes.map((r, i) =>
@@ -912,10 +930,7 @@ export const tripRequestRouter = createTRPCRouter({
 				},
 			});
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, tripRequest.companyId);
 
 			await ctx.db.tripRequest.update({
 				where: { id: input.id },
@@ -942,10 +957,7 @@ export const tripRequestRouter = createTRPCRouter({
 			});
 
 			if (!tripRequest) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && tripRequest.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, tripRequest.companyId);
 
 			if (tripRequest.status === "CONFIRMED") {
 				throw new TRPCError({

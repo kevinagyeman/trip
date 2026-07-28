@@ -26,9 +26,14 @@ type Request = NonNullable<RouterOutputs["tripRequest"]["getByIdAdmin"]>;
 interface Props {
 	requestId: string;
 	request: Request;
+	readOnly?: boolean;
 }
 
-export function AdminQuotationCard({ requestId, request }: Props) {
+export function AdminQuotationCard({
+	requestId,
+	request,
+	readOnly = false,
+}: Props) {
 	const t = useTranslations("adminDetail");
 	const tCommon = useTranslations("common");
 	const utils = api.useUtils();
@@ -156,7 +161,7 @@ export function AdminQuotationCard({ requestId, request }: Props) {
 							</p>
 						</div>
 					)}
-					{!locked && (
+					{!locked && !readOnly && (
 						<div className="flex flex-wrap items-start gap-3">
 							<Button
 								size="sm"
@@ -238,29 +243,31 @@ export function AdminQuotationCard({ requestId, request }: Props) {
 						/>
 					)}
 
-					<div className="flex flex-wrap gap-3">
-						<Button
-							size="sm"
-							onClick={() => setQuotationOpen(true)}
-							className="w-full sm:w-auto"
-						>
-							<CircleDollarSign />
-							{quotation ? t("editQuotation") : t("createQuotation")}
-						</Button>
-						{quotation?.notifiedAt && !isQuotationRejected && (
-							<LoadingButton
+					{!readOnly && (
+						<div className="flex flex-wrap gap-3">
+							<Button
 								size="sm"
-								isLoading={notifyQuotation.isPending}
-								onClick={() =>
-									notifyQuotation.mutate({ tripRequestId: requestId })
-								}
+								onClick={() => setQuotationOpen(true)}
 								className="w-full sm:w-auto"
 							>
-								<BellDot />
-								{t("resendNotification")}
-							</LoadingButton>
-						)}
-					</div>
+								<CircleDollarSign />
+								{quotation ? t("editQuotation") : t("createQuotation")}
+							</Button>
+							{quotation?.notifiedAt && !isQuotationRejected && (
+								<LoadingButton
+									size="sm"
+									isLoading={notifyQuotation.isPending}
+									onClick={() =>
+										notifyQuotation.mutate({ tripRequestId: requestId })
+									}
+									className="w-full sm:w-auto"
+								>
+									<BellDot />
+									{t("resendNotification")}
+								</LoadingButton>
+							)}
+						</div>
+					)}
 
 					<AppDialog
 						open={quotationOpen}

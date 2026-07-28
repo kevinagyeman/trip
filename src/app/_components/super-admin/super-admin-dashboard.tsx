@@ -42,6 +42,15 @@ export function SuperAdminDashboard() {
 
 	return (
 		<div className="container mx-auto space-y-8 p-4">
+			<div className="flex justify-end">
+				<Link href="/super-admin/requests">
+					<Button variant="outline" size="sm">
+						<FileText className="h-4 w-4" />
+						{t("viewRequests")}
+					</Button>
+				</Link>
+			</div>
+
 			{/* Pending approvals */}
 			{pending.length > 0 && (
 				<div className="space-y-3">

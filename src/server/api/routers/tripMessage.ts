@@ -1,5 +1,6 @@
 import {
 	adminProcedure,
+	assertCompanyWriteAccess,
 	createTRPCRouter,
 	publicProcedure,
 } from "@/server/api/trpc";
@@ -110,10 +111,7 @@ export const tripMessageRouter = createTRPCRouter({
 				},
 			});
 			if (!request) throw new TRPCError({ code: "NOT_FOUND" });
-			const { companyId } = ctx.session.user;
-			if (companyId && request.companyId !== companyId) {
-				throw new TRPCError({ code: "FORBIDDEN" });
-			}
+			assertCompanyWriteAccess(ctx.session.user, request.companyId);
 
 			const adminName =
 				ctx.session.user.name ?? ctx.session.user.email ?? "Admin";

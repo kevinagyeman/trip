@@ -26,11 +26,34 @@ function getRelativeDays(dateStr: string): number {
 	return Math.round((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-export function AllTripRequests() {
+export function AllTripRequests({
+	companies,
+	initialCompanyId,
+}: {
+	/**
+	 * SUPER_ADMIN only: pass the full company list to enable aggregate mode —
+	 * a company filter plus a company label on every card. Omit for the normal
+	 * company-admin dashboard, which stays scoped to the caller's own company.
+	 */
+	companies?: { id: string; name: string }[];
+	/** Pre-select a company filter (e.g. when deep-linked from a company page). */
+	initialCompanyId?: string;
+} = {}) {
 	const t = useTranslations("adminRequests");
+	const tSuperAdmin = useTranslations("superAdmin");
 	const statusLabels = buildStatusLabels(t as (key: string) => string);
-	const { data: myCompany } = api.company.getMySlug.useQuery();
-	const { data: counts } = api.tripRequest.getStatusCounts.useQuery();
+	const [companyFilter, setCompanyFilter] = useState(initialCompanyId ?? "ALL");
+	const companyId = companies
+		? companyFilter === "ALL"
+			? undefined
+			: companyFilter
+		: undefined;
+	const { data: myCompany } = api.company.getMySlug.useQuery(undefined, {
+		enabled: !companies,
+	});
+	const { data: counts } = api.tripRequest.getStatusCounts.useQuery({
+		companyId,
+	});
 	const [statusFilter, setStatusFilter] = useState<TripRequestStatus | "ALL">(
 		"ALL",
 	);
@@ -53,6 +76,7 @@ export function AllTripRequests() {
 				dateRange: dateRange === "ALL" ? undefined : dateRange,
 				search: debouncedSearch || undefined,
 				limit: 20,
+				companyId,
 			},
 			{
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -73,6 +97,17 @@ export function AllTripRequests() {
 						onChange: (e) => handleSearch(e.target.value),
 					}}
 				/>
+				{companies && (
+					<CustomSelect
+						value={companyFilter}
+						onValueChange={setCompanyFilter}
+						placeholder={tSuperAdmin("companyName")}
+						options={[
+							{ value: "ALL", label: tSuperAdmin("allCompanies") },
+							...companies.map((c) => ({ value: c.id, label: c.name })),
+						]}
+					/>
+				)}
 				<CustomSelect
 					value={statusFilter}
 					onValueChange={(v) => setStatusFilter(v as TripRequestStatus | "ALL")}
@@ -121,7 +156,10 @@ export function AllTripRequests() {
 						{ value: "this_month", label: t("thisMonth") },
 					]}
 				/>
-				{(statusFilter !== "ALL" || dateRange !== "ALL" || search) && (
+				{(statusFilter !== "ALL" ||
+					dateRange !== "ALL" ||
+					search ||
+					companyFilter !== "ALL") && (
 					<Button
 						variant="secondary"
 						size="sm"
@@ -130,6 +168,7 @@ export function AllTripRequests() {
 							setDateRange("ALL");
 							setSearch("");
 							setDebouncedSearch("");
+							setCompanyFilter("ALL");
 						}}
 					>
 						{t("resetFilters")}
@@ -202,7 +241,7 @@ export function AllTripRequests() {
 							<CardContent>
 								<div className="flex items-start justify-between gap-3 min-w-0">
 									<div className="space-y-2 min-w-0 flex-1">
-										<div className="flex items-center gap-2">
+										<div className="flex flex-wrap items-center gap-2">
 											<p className="text-muted-foreground text-xs">
 												#{String(request.orderNumber).padStart(7, "0")}
 											</p>
@@ -211,6 +250,14 @@ export function AllTripRequests() {
 											>
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
+											{companies && request.company && (
+												<Badge
+													variant="outline"
+													className="px-1.5 py-0 text-xs"
+												>
+													{request.company.name}
+												</Badge>
+											)}
 										</div>
 
 										<div className="text-sm min-w-0">

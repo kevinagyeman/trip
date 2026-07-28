@@ -10,8 +10,10 @@ const driverInput = z.object({
 
 export const driverRouter = createTRPCRouter({
 	getAll: adminProcedure.query(async ({ ctx }) => {
+		const { companyId } = ctx.session.user;
+		if (!companyId) return [];
 		return ctx.db.driver.findMany({
-			where: { companyId: ctx.session.user.companyId! },
+			where: { companyId },
 			orderBy: { name: "asc" },
 		});
 	}),

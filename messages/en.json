@@ -467,7 +467,10 @@
 		"pendingApproval": "Pending Approval",
 		"pendingBadge": "Pending",
 		"activeCompanies": "Active Companies",
-		"reviewAndActivate": "Review & Activate"
+		"reviewAndActivate": "Review & Activate",
+		"viewRequests": "View Requests",
+		"allCompanies": "All companies",
+		"readOnlyBanner": "You're viewing as a super admin — this view is read-only."
 	},
 	"registerCompany": {
 		"title": "Register your company (it's free!)",
