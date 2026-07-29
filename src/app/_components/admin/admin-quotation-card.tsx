@@ -5,6 +5,7 @@ import { AppDialog } from "@/app/_components/ui/app-dialog";
 import { LoadingButton } from "@/app/_components/ui/loading-button";
 import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
+import { buildQuotationWhatsAppMessage } from "@/lib/constants";
 import type { QuotationFormValues } from "@/lib/schemas/quotation";
 import type { RouterOutputs } from "@/trpc/react";
 import { api } from "@/trpc/react";
@@ -13,9 +14,10 @@ import {
 	CalendarCheck,
 	CircleDollarSign,
 	FileQuestionMark,
+	MessageCircle,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AlertBanner } from "../ui/alert-banner";
 
@@ -83,6 +85,23 @@ export function AdminQuotationCard({
 	const locked = ["CONFIRMED", "COMPLETED", "CANCELLED"].includes(
 		request.status,
 	);
+
+	const [quotationWhatsappHref, setQuotationWhatsappHref] = useState("");
+	useEffect(() => {
+		const link = `${window.location.origin}/request/${request.token}`;
+		const orderNum = String(request.orderNumber).padStart(6, "0");
+		const company = request.company?.name ?? "dantrip";
+		const msg = buildQuotationWhatsAppMessage(
+			request.language,
+			request.firstName,
+			company,
+			orderNum,
+			link,
+		);
+		setQuotationWhatsappHref(
+			`https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`,
+		);
+	}, [request]);
 
 	const estimateNotice = (() => {
 		try {
@@ -265,6 +284,23 @@ export function AdminQuotationCard({
 									<BellDot />
 									{t("resendNotification")}
 								</LoadingButton>
+							)}
+							{quotation && !isQuotationRejected && (
+								<Button
+									asChild
+									variant="outline"
+									size="sm"
+									className="w-full sm:w-auto"
+								>
+									<a
+										href={quotationWhatsappHref}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										<MessageCircle />
+										{t("sendQuotationWhatsapp")}
+									</a>
+								</Button>
 							)}
 						</div>
 					)}

@@ -94,7 +94,13 @@ export function AdminRequestDetail({
 		const link = `${window.location.origin}/request/${request.token}`;
 		const orderNum = String(request.orderNumber).padStart(6, "0");
 		const company = request.company?.name ?? "dantrip";
-		const msg = buildWhatsAppMessage(request.language, company, orderNum, link);
+		const msg = buildWhatsAppMessage(
+			request.language,
+			request.firstName,
+			company,
+			orderNum,
+			link,
+		);
 		setWhatsappHref(
 			`https://wa.me/${request.phone.replace(/\D/g, "")}?text=${encodeURIComponent(msg)}`,
 		);
