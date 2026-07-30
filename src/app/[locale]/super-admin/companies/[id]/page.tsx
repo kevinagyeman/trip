@@ -2,7 +2,6 @@ import { CompanyDetail } from "@/app/_components/super-admin/company-detail";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { api, HydrateClient } from "@/trpc/server";
-import { getTranslations } from "next-intl/server";
 
 export default async function CompanyDetailPage({
 	params,
@@ -10,7 +9,6 @@ export default async function CompanyDetailPage({
 	params: Promise<{ id: string }>;
 }) {
 	const { id } = await params;
-	const t = await getTranslations("superAdmin");
 
 	void api.company.getById.prefetch({ id });
 
@@ -20,7 +18,7 @@ export default async function CompanyDetailPage({
 				<div className="mb-6">
 					<Link href="/super-admin">
 						<Button variant="outline" size="sm">
-							← {t("backToDashboard")}
+							← Back to Dashboard
 						</Button>
 					</Link>
 				</div>

@@ -454,22 +454,9 @@
 		"emailPrefTripDetailsUpdatedDesc": "When a customer updates departure date, time or flight number"
 	},
 	"superAdmin": {
-		"notFound": "Not found",
 		"backToDashboard": "Back to Dashboard",
-		"active": "Active",
-		"inactive": "Inactive",
-		"manage": "Manage",
 		"companyName": "Company Name",
-		"companyUsers": "Users",
 		"tripRequests": "Trip Requests",
-		"noUsers": "No users assigned yet.",
-		"activate": "Activate",
-		"deactivate": "Deactivate",
-		"pendingApproval": "Pending Approval",
-		"pendingBadge": "Pending",
-		"activeCompanies": "Active Companies",
-		"reviewAndActivate": "Review & Activate",
-		"viewRequests": "View Requests",
 		"allCompanies": "All companies",
 		"readOnlyBanner": "You're viewing as a super admin — this view is read-only."
 	},

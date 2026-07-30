@@ -457,22 +457,9 @@
 		"emailPrefTripDetailsUpdatedDesc": "Quando un cliente aggiorna la data di partenza, l'orario o il numero di volo"
 	},
 	"superAdmin": {
-		"notFound": "Not found",
 		"backToDashboard": "Back to Dashboard",
-		"active": "Active",
-		"inactive": "Inactive",
-		"manage": "Manage",
 		"companyName": "Company Name",
-		"companyUsers": "Utenti",
 		"tripRequests": "Richieste di Trasferimento",
-		"noUsers": "Nessun utente assegnato.",
-		"activate": "Activate",
-		"deactivate": "Deactivate",
-		"pendingApproval": "In Attesa di Approvazione",
-		"pendingBadge": "In attesa",
-		"activeCompanies": "Aziende Attive",
-		"reviewAndActivate": "Rivedi e Attiva",
-		"viewRequests": "Visualizza Richieste",
 		"allCompanies": "Tutte le aziende",
 		"readOnlyBanner": "Stai visualizzando come super admin — questa vista è di sola lettura."
 	},
