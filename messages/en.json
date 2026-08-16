@@ -296,6 +296,7 @@
 		"statMonthlyGrowthNote": "{last} last month"
 	},
 	"adminRequests": {
+		"quotationViewedChip": "Viewed",
 		"filterByStatus": "Filter by status",
 		"allRequests": "All Requests",
 		"statusPending": "Pending",
@@ -322,6 +323,7 @@
 		"legendPickupNotSet": "pickup info missing",
 		"legendPassengers": "total passengers",
 		"legendPrice": "quoted price",
+		"legendQuotationViewed": "quote viewed by customer",
 		"resetFilters": "Reset filters"
 	},
 	"adminDetail": {
@@ -370,6 +372,8 @@
 		"internalNotesPlaceholder": "Private notes visible only to admins — e.g. special instructions, pricing context, driver preferences...",
 		"markAs": "Mark as...",
 		"quotationSentLabel": "Sent",
+		"quotationViewedByCustomer": "Customer viewed the quote on {time}",
+		"quotationNotViewedByCustomer": "Customer hasn't viewed the quote yet",
 		"eventRequestSubmitted": "Request submitted",
 		"eventTripConfirmed": "Trip confirmed",
 		"eventConfirmationViewed": "Saw the confirmation",

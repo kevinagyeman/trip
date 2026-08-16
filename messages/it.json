@@ -296,6 +296,7 @@
 		"statMonthlyGrowthNote": "{last} il mese scorso"
 	},
 	"adminRequests": {
+		"quotationViewedChip": "Visualizzato",
 		"filterByStatus": "Filtra per stato",
 		"allRequests": "Tutte le Richieste",
 		"statusPending": "In Attesa",
@@ -322,6 +323,7 @@
 		"legendPickupNotSet": "info pickup mancanti",
 		"legendPassengers": "passeggeri totali",
 		"legendPrice": "prezzo preventivato",
+		"legendQuotationViewed": "preventivo visualizzato dal cliente",
 		"resetFilters": "Reimposta filtri"
 	},
 	"adminDetail": {
@@ -372,6 +374,8 @@
 		"chipPickupReady": "Ritiro pronto",
 		"chipPickupPending": "Ritiro in attesa",
 		"quotationSentLabel": "Inviato",
+		"quotationViewedByCustomer": "Il cliente ha visualizzato il preventivo il {time}",
+		"quotationNotViewedByCustomer": "Il cliente non ha ancora visualizzato il preventivo",
 		"messages": "Messaggi",
 		"eventRequestSubmitted": "Richiesta inviata",
 		"eventTripConfirmed": "Viaggio confermato",

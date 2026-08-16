@@ -6,11 +6,11 @@ import CustomSelect from "@/app/_components/ui/custom-select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
-import { api } from "@/trpc/react";
-import { formatDate } from "@/lib/utils";
-import { ArrowRight, Loader2, MoveRight, Tag, Users } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { buildStatusLabels, STATUS_COLORS } from "@/lib/trip-utils";
+import { formatDate } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { ArrowRight, Eye, Loader2, MoveRight, Tag, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -193,6 +193,10 @@ export function AllTripRequests({
 					<Tag className="h-3 w-3 shrink-0" />
 					{t("legendPrice")}
 				</span>
+				<span className="flex items-center gap-1.5">
+					<Eye className="h-3 w-3 shrink-0" />
+					{t("legendQuotationViewed")}
+				</span>
 			</div>
 
 			{isLoading ? (
@@ -250,6 +254,16 @@ export function AllTripRequests({
 											>
 												{statusLabels[request.status] ?? request.status}
 											</Badge>
+											{request.status === "QUOTED" &&
+												request.quotations[0]?.quotationViewedAt && (
+													<Badge
+														variant="secondary"
+														className="px-1 py-0 text-sky-500"
+														aria-label={t("quotationViewedChip")}
+													>
+														<Eye className="h-4 w-4" />
+													</Badge>
+												)}
 											{companies && request.company && (
 												<Badge
 													variant="outline"

@@ -7,12 +7,15 @@ import { SectionCard } from "@/app/_components/ui/section-card";
 import { Button } from "@/components/ui/button";
 import { buildQuotationWhatsAppMessage } from "@/lib/constants";
 import type { QuotationFormValues } from "@/lib/schemas/quotation";
+import { formatDateTime } from "@/lib/utils";
 import type { RouterOutputs } from "@/trpc/react";
 import { api } from "@/trpc/react";
 import {
 	BellDot,
 	CalendarCheck,
 	CircleDollarSign,
+	Eye,
+	EyeOff,
 	FileQuestionMark,
 	MessageCircle,
 } from "lucide-react";
@@ -248,6 +251,26 @@ export function AdminQuotationCard({
 								</div>
 							)}
 						</>
+					)}
+
+					{quotation?.notifiedAt && !isQuotationRejected && (
+						<div className="flex items-center gap-2 text-sm text-muted-foreground">
+							{quotation.quotationViewedAt ? (
+								<>
+									<Eye className="size-4 shrink-0" />
+									<span>
+										{t("quotationViewedByCustomer", {
+											time: formatDateTime(quotation.quotationViewedAt),
+										})}
+									</span>
+								</>
+							) : (
+								<>
+									<EyeOff className="size-4 shrink-0" />
+									<span>{t("quotationNotViewedByCustomer")}</span>
+								</>
+							)}
+						</div>
 					)}
 
 					{isQuotationRejected && (
