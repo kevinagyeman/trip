@@ -9,7 +9,7 @@ export function BannerDisplay({ bannerMessage }: { bannerMessage: string }) {
 	let text = "";
 	try {
 		const msgs = JSON.parse(bannerMessage) as Record<string, string>;
-		text = msgs[locale] || msgs["en"] || "";
+		text = msgs[locale] || msgs.en || "";
 	} catch {
 		// ignore
 	}
