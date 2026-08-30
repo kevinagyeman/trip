@@ -12,20 +12,20 @@ import { MessageSenderType } from "../../../../generated/prisma";
 
 type Props =
 	| {
-		mode: "customer";
-		token: string;
-		prefillMessage?: string;
-		prefillTrigger?: number;
-		disabled?: boolean;
-		companyPhone?: string | null;
-	}
+			mode: "customer";
+			token: string;
+			prefillMessage?: string;
+			prefillTrigger?: number;
+			disabled?: boolean;
+			companyPhone?: string | null;
+	  }
 	| {
-		mode: "admin";
-		requestId: string;
-		prefillMessage?: string;
-		prefillTrigger?: number;
-		disabled?: boolean;
-	};
+			mode: "admin";
+			requestId: string;
+			prefillMessage?: string;
+			prefillTrigger?: number;
+			disabled?: boolean;
+	  };
 
 export function TripMessageThread(props: Props) {
 	const t = useTranslations("messages");

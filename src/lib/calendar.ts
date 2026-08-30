@@ -11,8 +11,12 @@ export type TripCalendarInfo = {
 	orderNumber?: number | null;
 	firstName?: string | null;
 	lastName?: string | null;
+	phone?: string | null;
+	customerEmail?: string | null;
 	numberOfAdults?: number | null;
 	numberOfChildren?: number | null;
+	ageOfChildren?: string | null;
+	numberOfChildSeats?: number | null;
 	additionalInfo?: string | null;
 	quotations?: Array<{
 		status: string;
@@ -22,6 +26,29 @@ export type TripCalendarInfo = {
 		quotationAdditionalInfo?: string | null;
 	}>;
 };
+
+const EXCLUDED_FIELDS = new Set([
+	"id",
+	"token",
+	"areThereChildren",
+	"createdById",
+	"tripRequestId",
+	"companyId",
+]);
+
+function formatObjectLines(obj: Record<string, unknown> | undefined): string[] {
+	if (!obj) return [];
+	return Object.entries(obj)
+		.filter(
+			([key, value]) =>
+				!EXCLUDED_FIELDS.has(key) &&
+				value !== null &&
+				value !== undefined &&
+				value !== "" &&
+				typeof value !== "object",
+		)
+		.map(([key, value]) => `${key}: ${value}`);
+}
 
 export function buildCalendarEvent({
 	routeType,
@@ -46,29 +73,19 @@ export function buildCalendarEvent({
 		routeType === "airport_in" ? `Airport of: ${pickup}` : pickup;
 	const destinationLabel =
 		routeType === "airport_out" ? `Airport of: ${destination}` : destination;
-	const {
-		orderNumber,
-		firstName,
-		lastName,
-		numberOfAdults,
-		numberOfChildren,
-		additionalInfo,
-		quotations,
-	} = tripInfo ?? {};
-	const accepted = quotations?.find((q) => q.status === "ACCEPTED");
+	const { orderNumber, numberOfAdults, numberOfChildren } = tripInfo ?? {};
+	const accepted = tripInfo?.quotations?.find((q) => q.status === "ACCEPTED");
 	const total = (numberOfAdults ?? 0) + (numberOfChildren ?? 0);
 	const requestId = orderNumber
 		? `#${String(orderNumber).padStart(7, "0")}`
 		: null;
 	const summary = `${pickupLabel} → ${destinationLabel}${flightNumber ? ` · ${flightNumber}` : ""}${total > 0 ? ` (${total} people)` : ""}${accepted ? ` (${accepted.price.toString()} ${accepted.currency})` : ""}`;
-	const tripInfoLines = [
-		requestId && `Request: ${requestId}`,
-		firstName && lastName && `Client: ${firstName} ${lastName}`,
-		numberOfAdults && `Adults: ${numberOfAdults}`,
-		numberOfChildren && `Children: ${numberOfChildren}`,
-		flightNumber && `Flight: ${flightNumber}`,
-		additionalInfo && `Notes: ${additionalInfo}`,
-	].filter(Boolean);
+
+	const tripInfoLines = formatObjectLines({
+		flightNumber,
+		...tripInfo,
+		orderNumber: requestId,
+	});
 
 	const pickupLines = [
 		driverName && `Driver: ${driverName}`,
@@ -76,12 +93,9 @@ export function buildCalendarEvent({
 		meetingPoint && `Meeting point: ${meetingPoint}`,
 	].filter(Boolean);
 
-	const quotationLines = [
-		accepted &&
-			`Price: ${accepted.price.toString()} ${accepted.currency}${accepted.isPriceEachWay ? " (each way)" : ""}`,
-		accepted?.quotationAdditionalInfo &&
-			`Notes: ${accepted.quotationAdditionalInfo}`,
-	].filter(Boolean);
+	const quotationLines = accepted
+		? formatObjectLines({ ...accepted, price: accepted.price.toString() })
+		: [];
 
 	const sections = [
 		tripInfoLines.length > 0 && `TRIP INFO\n${tripInfoLines.join("\n")}`,
