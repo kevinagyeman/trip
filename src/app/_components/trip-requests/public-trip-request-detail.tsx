@@ -394,6 +394,7 @@ export function PublicTripRequestDetail({ token }: { token: string }) {
 						mode="customer"
 						token={token}
 						disabled={isLocked}
+						companyPhone={request.company.phone}
 					/>
 				</SectionCard>
 			)}

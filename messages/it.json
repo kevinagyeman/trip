@@ -263,7 +263,9 @@
 	},
 	"messages": {
 		"title": "Messaggi",
-		"inputPlaceholder": "Scrivi un messaggio..."
+		"inputPlaceholder": "Scrivi un messaggio...",
+		"callCompany": "Chiama {phone}",
+		"callUrgentOnly": "Chiami solo per questioni urgenti — per tutto il resto, usi la chat sopra."
 	},
 	"adminDashboard": {
 		"title": "Pannello di Controllo",
@@ -443,6 +445,7 @@
 		"coverPhotoUrl": "URL Foto di Copertina",
 		"coverPhotoUrlHint": "Dimensione consigliata: 1200x675px (rapporto 16:9)",
 		"phone": "Numero di Telefono",
+		"phoneHint": "Questo numero potrebbe essere usato dai clienti per chiamarti.",
 		"brandColor": "Colore Brand",
 		"bannerTitle": "Banner Clienti",
 		"bannerDesc": "Se impostato, questo messaggio apparirà in cima alla pagina di ogni cliente. Lascialo vuoto per nasconderlo.",

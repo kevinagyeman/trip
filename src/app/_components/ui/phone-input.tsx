@@ -20,6 +20,7 @@ interface PhoneInputProps {
 	error?: string;
 	placeholder?: string;
 	labelText?: string;
+	hint?: string;
 	required?: boolean;
 }
 
@@ -31,6 +32,7 @@ export function PhoneInput({
 	error,
 	placeholder,
 	labelText,
+	hint,
 	required,
 }: PhoneInputProps) {
 	const flag =
@@ -70,6 +72,7 @@ export function PhoneInput({
 					}}
 				/>
 			</div>
+			{hint && <p className="text-xs text-muted-foreground">{hint}</p>}
 			{error && <small className="text-xs text-destructive">{error}</small>}
 		</div>
 	);

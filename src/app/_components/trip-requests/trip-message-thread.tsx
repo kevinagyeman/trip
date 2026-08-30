@@ -1,30 +1,31 @@
 "use client";
 
 import { LoadingButton } from "@/app/_components/ui/loading-button";
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { cn, formatDateTime } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { formatDateTime } from "@/lib/utils";
-import { ArrowRight, MessagesSquare } from "lucide-react";
+import { ArrowRight, MessagesSquare, Phone } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { MessageSenderType } from "../../../../generated/prisma";
 
 type Props =
 	| {
-			mode: "customer";
-			token: string;
-			prefillMessage?: string;
-			prefillTrigger?: number;
-			disabled?: boolean;
-	  }
+		mode: "customer";
+		token: string;
+		prefillMessage?: string;
+		prefillTrigger?: number;
+		disabled?: boolean;
+		companyPhone?: string | null;
+	}
 	| {
-			mode: "admin";
-			requestId: string;
-			prefillMessage?: string;
-			prefillTrigger?: number;
-			disabled?: boolean;
-	  };
+		mode: "admin";
+		requestId: string;
+		prefillMessage?: string;
+		prefillTrigger?: number;
+		disabled?: boolean;
+	};
 
 export function TripMessageThread(props: Props) {
 	const t = useTranslations("messages");
@@ -159,6 +160,24 @@ export function TripMessageThread(props: Props) {
 						<ArrowRight className="h-4 w-4" />
 					</LoadingButton>
 				</div>
+			)}
+
+			{/* Emergency call */}
+			{props.mode === "customer" && props.companyPhone && (
+				<>
+					<hr className="mb-3 mt-10" />
+					<div className="space-y-3 flex flex-col items-center">
+						<Button variant="secondary" asChild size={"sm"}>
+							<a href={`tel:${props.companyPhone}`}>
+								<Phone className="h-4 w-4" />
+								{t("callCompany", { phone: props.companyPhone })}
+							</a>
+						</Button>
+						<p className="text-xs text-muted-foreground text-center">
+							{t("callUrgentOnly")}
+						</p>
+					</div>
+				</>
 			)}
 		</div>
 	);

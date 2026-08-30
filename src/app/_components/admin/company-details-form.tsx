@@ -111,6 +111,7 @@ export function CompanyDetailsForm({
 			/>
 			<PhoneInput
 				labelText={t("phone")}
+				hint={t("phoneHint")}
 				countryCode={watch("phoneCountryCode")}
 				onCountryCodeChange={(v) => setValue("phoneCountryCode", v)}
 				phoneNumber={watch("phoneNumber")}

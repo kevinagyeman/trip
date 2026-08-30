@@ -263,7 +263,9 @@
 	},
 	"messages": {
 		"title": "Messages",
-		"inputPlaceholder": "Write a message..."
+		"inputPlaceholder": "Write a message...",
+		"callCompany": "Call {phone}",
+		"callUrgentOnly": "Please only call for urgent matters — for anything else, use the chat above."
 	},
 	"adminDashboard": {
 		"title": "Dashboard",
@@ -440,6 +442,7 @@
 		"coverPhotoUrl": "Cover Photo URL",
 		"coverPhotoUrlHint": "Recommended size: 1200x675px (16:9 ratio)",
 		"phone": "Phone Number",
+		"phoneHint": "This number may be used by your customers to call you.",
 		"brandColor": "Brand Color",
 		"bannerTitle": "Customer Banner",
 		"bannerDesc": "If set, this message will appear at the top of every customer request page. Leave empty to hide it.",
